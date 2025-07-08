@@ -1,0 +1,176 @@
+﻿@model IEnumerable<LibrarySystemBBU.Models.Users>
+@{
+    ViewData["Title"] = "User Management";
+}
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.10), 0 2px 4px 0 rgba(0,0,0,0.12);
+        transition: transform .20s cubic-bezier(.39,.575,.565,1), box-shadow .2s;
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+    }
+
+    .card-3d:hover {
+        transform: translateY(-7px) scale(1.02);
+        box-shadow: 0 16px 32px 0 rgba(0, 126, 255, 0.20), 0 6px 12px 0 rgba(0,0,0,0.13);
+    }
+
+    .avatar-3d {
+        box-shadow: 0 4px 12px 0 rgba(52,144,220,0.18);
+        border: 3px solid #38bdf8;
+        transition: box-shadow .2s, border .2s;
+    }
+
+    .avatar-3d:hover {
+        box-shadow: 0 8px 24px 0 rgba(52,144,220,0.28);
+        border: 3px solid #2563eb;
+    }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.15);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        backdrop-filter: blur(2px);
+        transition: all 0.2s;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+    .btn-glass:hover {
+        background: #60a5fa;
+        color: #fff;
+        border: 1px solid #2563eb;
+    }
+
+    .text-gradient-primary {
+        background: linear-gradient(90deg,#38bdf8,#2563eb 80%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .search-input {
+        border-radius: 50px;
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,.08);
+        padding-left: 2.3rem;
+        font-size: 1rem;
+    }
+
+    .search-icon {
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #38bdf8;
+    }
+</style>
+
+<div class="row my-4">
+    <div class="col-12 text-center">
+        <h2 class="fw-bold text-gradient-primary mb-1" style="letter-spacing:2px;">
+            <i class="fa-solid fa-users fa-2x" style="color:#38bdf8;"></i> User Management
+        </h2>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4 col-sm-7 mx-auto">
+        <div class="position-relative">
+            <span class="position-absolute search-icon">
+                <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+            </span>
+            <input id="userSearch" type="text" class="form-control search-input ps-5" placeholder="Search by name, email or role..." autocomplete="off" />
+        </div>
+    </div>
+    <div class="col-md-4 offset-md-4 text-end mt-2 mt-md-0">
+        <a asp-action="Create" class="btn btn-glass shadow px-4">
+            <i class="fa-solid fa-user-plus fa-lg" style="color:#0ea5e9"></i> Add New User
+        </a>
+    </div>
+</div>
+
+<div class="row g-4" id="userCardList">
+    @foreach (var user in Model)
+    {
+        var hasPhoto = !string.IsNullOrWhiteSpace(user.ProfilePicturePath);
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 user-card"
+             data-firstname="@user.FirstName"
+             data-lastname="@user.LastName"
+             data-name="@user.UserName"
+             data-email="@user.Email"
+             data-role="@user.RoleName">
+            <div class="card card-3d h-100">
+                <div class="card-body text-center">
+                    <img src="@(hasPhoto
+                        ? user.ProfilePicturePath
+                        : "https://ui-avatars.com/api/?name=" + (user.FirstName + "+" + user.LastName) + "&background=60a5fa&color=fff&size=128")"
+                         class="rounded-circle avatar-3d mb-3"
+                         style="width:90px; height:90px; object-fit:cover; background:#e0f2fe"
+                         alt="User Photo" />
+                    <!-- Full Name (no icon) -->
+                    <h5 class="fw-bold mb-1 text-primary">
+                        @user.FirstName @user.LastName
+                    </h5>
+                    <!-- Username (no icon) -->
+                    <div class="text-muted mb-1">
+                        @user.UserName
+                    </div>
+                    <!-- Email (kept icon for clarity, remove if you want just email) -->
+                    <div class="text-muted mb-1">
+                        <i class="fa-solid fa-envelope fa-sm" style="color:#64748b"></i>
+                        @user.Email
+                    </div>
+                    <div>
+                        <span class="badge @(user.IsActive ? "bg-success" : "bg-secondary") px-2 py-1 rounded-pill" style="font-size:.97em">
+                            <i class="fa-solid @(user.IsActive ? "fa-circle-check" : "fa-circle-xmark") fa-sm"
+                               style="color:@(user.IsActive ? "#22c55e" : "#64748b")"></i>
+                            @(user.IsActive ? "Active" : "Inactive")
+                        </span>
+                    </div>
+                    <hr class="my-2" />
+                    <div class="d-flex justify-content-center gap-2">
+                        <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-glass btn-sm" title="Details">
+                            <i class="fa-solid fa-circle-info fa-lg" style="color:#0ea5e9"></i>
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-glass btn-sm" title="Edit">
+                            <i class="fa-solid fa-pen-to-square fa-lg" style="color:#eab308"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-glass btn-sm" title="Delete">
+                            <i class="fa-solid fa-trash fa-lg" style="color:#ef4444"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Live Search User Card, now also matches first and last name!
+        document.getElementById('userSearch').addEventListener('input', function () {
+            let q = this.value.toLowerCase();
+            document.querySelectorAll('.user-card').forEach(function (el) {
+                let firstname = el.getAttribute('data-firstname')?.toLowerCase() || "";
+                let lastname = el.getAttribute('data-lastname')?.toLowerCase() || "";
+                let name = el.getAttribute('data-name')?.toLowerCase() || "";
+                let email = el.getAttribute('data-email')?.toLowerCase() || "";
+                let role = el.getAttribute('data-role')?.toLowerCase() || "";
+                if (
+                    firstname.includes(q) ||
+                    lastname.includes(q) ||
+                    (firstname + " " + lastname).includes(q) ||
+                    name.includes(q) ||
+                    email.includes(q) ||
+                    role.includes(q)
+                ) {
+                    el.style.display = "";
+                } else {
+                    el.style.display = "none";
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,103 @@
+﻿@model LibrarySystemBBU.Models.Catalog
+
+@{
+    ViewData["Title"] = "Catalog Details";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.11), 0 2px 4px 0 rgba(0,0,0,0.13);
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+        .card-3d:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 16px 32px 0 rgba(0,126,255,0.17), 0 6px 12px 0 rgba(0,0,0,0.14);
+        }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.12);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        transition: all 0.2s;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+</style>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-7 col-lg-6">
+        <div class="card card-3d">
+            <div class="card-body p-5">
+                <h2 class="fw-bold text-primary text-center mb-4">
+                    <i class="fa-solid fa-circle-info"></i> Catalog Details
+                </h2>
+                <dl class="row small mb-4">
+                    <dt class="col-sm-4"><i class="fa-solid fa-barcode"></i> Barcode</dt>
+                    <dd class="col-sm-8">@Model.Barcode</dd>
+
+                    <dt class="col-sm-4"><i class="fa-solid fa-signal"></i> Status</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge @(Model.Status == "Available" ? "bg-success" : "bg-danger")">
+                            <i class="fa-solid @(Model.Status == "Available" ? "fa-circle-check" : "fa-circle-xmark")"></i> @Model.Status
+                        </span>
+                    </dd>
+
+                    <dt class="col-sm-4"><i class="fa-solid fa-location-dot"></i> Location</dt>
+                    <dd class="col-sm-8">@Model.Location</dd>
+
+                    <dt class="col-sm-4"><i class="fa-solid fa-calendar-plus"></i> Acquisition Date</dt>
+                    <dd class="col-sm-8">@Model.AcquisitionDate.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-sm-4"><i class="fa-solid fa-clock"></i> Created</dt>
+                    <dd class="col-sm-8">@Model.Created.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                    <dt class="col-sm-4"><i class="fa-solid fa-pen-to-square"></i> Modified</dt>
+                    <dd class="col-sm-8">@Model.Modified.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                    <dt class="col-sm-4"><i class="fa-solid fa-image"></i> Image</dt>
+                    <dd class="col-sm-8">
+                        @if (!string.IsNullOrEmpty(Model.ImagePath))
+                        {
+                            <img src="@Model.ImagePath" alt="Image" style="width:64px; border-radius:7px; box-shadow:0 2px 8px 0 rgba(0,0,0,0.08);" />
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4"><i class="fa-solid fa-file-pdf"></i> PDF</dt>
+                    <dd class="col-sm-8">
+                        @if (!string.IsNullOrEmpty(Model.PdfFilePath))
+                        {
+                            <a href="@Model.PdfFilePath" target="_blank" class="btn btn-glass btn-sm">
+                                <i class="fa-solid fa-file-pdf" style="color:#ef4444"></i> View PDF
+                            </a>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4"><i class="fa-solid fa-user-pen"></i> Author</dt>
+                    <dd class="col-sm-8">
+                        @(Model.Book != null ? Model.Book.Author : "")
+                    </dd>
+                </dl>
+                <div class="text-center mt-3">
+                    <a asp-action="Edit" asp-route-id="@Model.CatalogId" class="btn btn-primary btn-glass me-2">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                    </a>
+                    <a asp-action="Index" class="btn btn-glass">
+                        <i class="fa-solid fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,111 @@
+﻿@model LibrarySystemBBU.Models.Member
+
+@{
+    ViewData["Title"] = "Member Details";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.11), 0 2px 4px 0 rgba(0,0,0,0.13);
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+        margin-top: 32px;
+        max-width: 520px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .avatar-3d {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #38bdf8;
+        box-shadow: 0 4px 12px 0 rgba(52,144,220,0.18);
+        background: #e0f2fe;
+        margin-bottom: 1.4rem;
+    }
+
+    .badge-active {
+        background: #22c55e;
+    }
+
+    .badge-inactive {
+        background: #64748b;
+    }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.15);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.18s;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+
+    .details-label {
+        color: #2563eb;
+        font-weight: 600;
+        font-size: 1.02em;
+    }
+</style>
+
+<div class="card card-3d">
+    <div class="card-body px-4 py-4">
+        <div class="text-center mb-2">
+            <img src="@(string.IsNullOrWhiteSpace(Model.ProfilePicturePath)
+                                                  ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
+                                                  : Model.ProfilePicturePath)"
+                 class="avatar-3d"
+                 alt="Profile Picture" />
+            <h3 class="fw-bold text-primary mb-1">
+                <i class="fa-solid fa-user"></i> @Model.FullName
+            </h3>
+            <span class="badge @(Model.IsActive ? "badge-active" : "badge-inactive") px-3 py-2 mb-2">
+                <i class="fa-solid @(Model.IsActive ? "fa-circle-check" : "fa-circle-xmark")"></i>
+                @(Model.IsActive ? "Active" : "Inactive")
+            </span>
+        </div>
+        <dl class="row mb-0">
+            <dt class="col-4 details-label"><i class="fa-solid fa-venus-mars"></i> Gender</dt>
+            <dd class="col-8">@Model.Gender</dd>
+            <dt class="col-4 details-label"><i class="fa-solid fa-envelope"></i> Email</dt>
+            <dd class="col-8">@Model.Email</dd>
+            <dt class="col-4 details-label"><i class="fa-solid fa-phone"></i> Phone</dt>
+            <dd class="col-8">@Model.Phone</dd>
+            <dt class="col-4 details-label"><i class="fa-solid fa-location-dot"></i> Address</dt>
+            <dd class="col-8">@Model.Address</dd>
+            <dt class="col-4 details-label"><i class="fa-solid fa-id-card-clip"></i> Member Type</dt>
+            <dd class="col-8">@Model.MemberType</dd>
+            <dt class="col-4 details-label"><i class="fa-solid fa-calendar-plus"></i> Joined</dt>
+            <dd class="col-8">@Model.JoinDate.ToString("yyyy-MM-dd")</dd>
+            <dt class="col-4 details-label"><i class="fa-solid fa-clock"></i> Modified</dt>
+            <dd class="col-8">@Model.Modified.ToString("yyyy-MM-dd HH:mm")</dd>
+            <dt class="col-4 details-label"><i class="fa-solid fa-user-tie"></i> Linked User</dt>
+            <dd class="col-8">
+                @Model.Users?.UserName
+            </dd>
+            <dt class="col-4 details-label"><i class="fa-solid fa-user"></i> Created By</dt>
+            <dd class="col-8">@Model.CreatedBy</dd>
+            <dt class="col-4 details-label"><i class="fa-solid fa-note-sticky"></i> Notes</dt>
+            <dd class="col-8">@Model.Notes</dd>
+        </dl>
+        <div class="text-center mt-3">
+            <a asp-action="Edit" asp-route-id="@Model?.MemberId" class="btn btn-glass me-2 px-4">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+            </a>
+            <a asp-action="Index" class="btn btn-glass px-4">
+                <i class="fa-solid fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿@model LoginRequest
+@{
+    Layout = null;
+    ViewData["Title"] = "Login";
+}
+<link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4" style="width: 350px; border-radius: 15px;">
+        <div class="text-center mb-3">
+            <h3 class="fw-bold text-primary">Welcome</h3>
+            <p class="text-muted">Login to continue</p>
+        </div>
+        <form asp-action="Login" asp-route-ReturnUrl="@ViewBag.ReturnUrl">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="UserName" class="form-label"></label>
+                <input asp-for="UserName" class="form-control rounded-pill" placeholder="Enter your username" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" type="password" class="form-control rounded-pill" placeholder="Enter your password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="RememberMe" />
+                <label class="form-check-label">
+                    @Html.DisplayNameFor(model => model.RememberMe)
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm">
+                🚀 Login Now
+            </button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a asp-action="Register" class="text-decoration-none text-primary">
+                No Account yet? Register here
+            </a>
+        </div>
+    </div>
+</div>
+

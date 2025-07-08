@@ -1,0 +1,180 @@
+﻿@model LibrarySystemBBU.Models.Users
+@{
+    ViewData["Title"] = "Create User";
+}
+
+<div class="row justify-content-center my-5">
+    <div class="col-md-7 col-lg-6">
+        <div class="card card-3d">
+            <div class="card-body p-5">
+                <h2 class="fw-bold text-primary text-center mb-4">
+                    <i class="fa-solid fa-user-plus"></i> Create User
+                </h2>
+                <form asp-action="Create" enctype="multipart/form-data" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <div class="text-center mb-4">
+                        <img id="profilePreview" src="https://ui-avatars.com/api/?name=User&background=acd8fa&color=fff&size=128"
+                             class="img-thumbnail rounded-circle avatar-3d border" style="max-width: 110px;" alt="Profile Preview" />
+                        <label class="btn btn-glass btn-sm mt-2">
+                            <i class="fa fa-upload"></i> Choose Photo
+                            <input type="file" name="ProfilePicture" id="ProfilePicture" accept="image/*" hidden onchange="showPreview(event);" />
+                        </label>
+                        <span asp-validation-for="ProfilePicturePath" class="text-danger"></span>
+                    </div>
+                    <div class="row g-3">
+                        <!-- First Name -->
+                        <div class="col-md-6">
+                            <label asp-for="FirstName" class="form-label">First Name</label>
+                            <input asp-for="FirstName" class="form-control" placeholder="First Name" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <!-- Last Name -->
+                        <div class="col-md-6">
+                            <label asp-for="LastName" class="form-label">Last Name</label>
+                            <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <!-- Username -->
+                        <div class="col-md-6">
+                            <label asp-for="UserName" class="form-label"><i class="fa fa-user"></i> Username</label>
+                            <input asp-for="UserName" class="form-control" placeholder="Username" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                        <!-- Email -->
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label"><i class="fa fa-envelope"></i> Email</label>
+                            <input asp-for="Email" class="form-control" placeholder="Email address" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <!-- Password -->
+                        <div class="col-md-6">
+                            <label asp-for="Password" class="form-label"><i class="fa fa-lock"></i> Password</label>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <!-- Phone -->
+                        <div class="col-md-6">
+                            <label asp-for="Phone" class="form-label"><i class="fa fa-phone"></i> Phone</label>
+                            <input asp-for="Phone" class="form-control" placeholder="Phone number" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                        <!-- Address -->
+                        <div class="col-md-6">
+                            <label asp-for="Address" class="form-label"><i class="fa fa-location-dot"></i> Address</label>
+                            <input asp-for="Address" class="form-control" placeholder="Address" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <!-- Gender Dropdown (from ViewBag.Genders, no icon) -->
+                        <div class="col-md-6">
+                            <label asp-for="Gender" class="form-label">Gender</label>
+                            <select asp-for="Gender" class="form-select" asp-items="ViewBag.Genders">
+                                <option value="">-- Select Gender --</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                        <!-- Date of Birth -->
+                        <div class="col-md-6">
+                            <label asp-for="DateOfBirth" class="form-label"><i class="fa fa-calendar-days"></i> Date of Birth</label>
+                            <input asp-for="DateOfBirth" type="date" class="form-control" />
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                        </div>
+                        <!-- Role Dropdown -->
+                        <div class="col-md-6">
+                            <label asp-for="RoleName" class="form-label"><i class="fa fa-user-tag"></i> Role</label>
+                            <select asp-for="RoleName" class="form-select" asp-items="ViewBag.Roles">
+                                <option value="">-- Select Role --</option>
+                            </select>
+                            <span asp-validation-for="RoleName" class="text-danger"></span>
+                        </div>
+                        <!-- Notes -->
+                        <div class="col-md-12">
+                            <label asp-for="Notes" class="form-label"><i class="fa fa-note-sticky"></i> Notes</label>
+                            <input asp-for="Notes" class="form-control" placeholder="Notes" />
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+                        <!-- Active Checkbox -->
+                        <div class="col-md-12 d-flex align-items-center pt-2">
+                            <div class="form-check ms-2">
+                                <input class="form-check-input" asp-for="IsActive" id="IsActive" />
+                                <label class="form-check-label" for="IsActive">
+                                    <i class="fa fa-toggle-on"></i> Active
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-success px-5 py-2 rounded-pill fw-bold">
+                            <i class="fa-solid fa-circle-plus"></i> Create User
+                        </button>
+                        <a asp-action="Index" class="btn btn-glass ms-2 rounded-pill px-3">
+                            <i class="fa-solid fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function showPreview(event){
+            var input = event.target;
+            var reader = new FileReader();
+            reader.onload = function(){
+                var preview = document.getElementById('profilePreview');
+                preview.src = reader.result;
+            };
+            if(input.files && input.files[0]){
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.10), 0 2px 4px 0 rgba(0,0,0,0.12);
+        transition: transform .20s cubic-bezier(.39,.575,.565,1), box-shadow .2s;
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+    }
+
+        .card-3d:hover {
+            transform: translateY(-7px) scale(1.02);
+            box-shadow: 0 16px 32px 0 rgba(0, 126, 255, 0.20), 0 6px 12px 0 rgba(0,0,0,0.13);
+        }
+
+    .avatar-3d {
+        box-shadow: 0 4px 12px 0 rgba(52,144,220,0.18);
+        border: 3px solid #38bdf8;
+        transition: box-shadow .2s, border .2s;
+    }
+
+        .avatar-3d:hover {
+            box-shadow: 0 8px 24px 0 rgba(52,144,220,0.28);
+            border: 3px solid #2563eb;
+        }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.15);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        backdrop-filter: blur(2px);
+        transition: all 0.2s;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+</style>

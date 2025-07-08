@@ -1,0 +1,172 @@
+﻿@model IEnumerable<LibrarySystemBBU.Models.Adjustment>
+
+@{
+    ViewData["Title"] = "Adjustments";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.10), 0 2px 4px 0 rgba(0,0,0,0.12);
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+        .card-3d:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 16px 32px 0 rgba(0,126,255,0.17), 0 6px 12px 0 rgba(0,0,0,0.12);
+        }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.12);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        transition: all 0.2s;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+
+    .table thead tr th {
+        border-top-left-radius: 1.2rem !important;
+        border-top-right-radius: 1.2rem !important;
+    }
+
+    .table tbody tr {
+        transition: background .2s;
+    }
+
+        .table tbody tr:hover {
+            background: #e0f2fe !important;
+            box-shadow: 0 2px 14px 0 rgba(0,126,255,0.11);
+        }
+
+    /* Make table fill the card and allow horizontal drag/scroll */
+    .table-responsive {
+        overflow-x: auto;
+        min-height: .01%;
+        padding-bottom: 1px;
+    }
+
+    /* Remove padding left/right if AdminLTE main-content has */
+    .container-fluid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+</style>
+
+<div class="container-fluid px-0">
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card card-3d mb-4">
+                <div class="card-body px-4 py-4">
+                    <div class="row align-items-center mb-3">
+                        <div class="col-md-6">
+                            <h2 class="fw-bold text-primary mb-1" style="letter-spacing:2px;">
+                                <i class="fa-solid fa-arrows-rotate fa-2x me-2" style="color:#2563eb"></i>
+                                Adjustments List
+                            </h2>
+                        </div>
+                        <div class="col-md-4 my-1">
+                            <input type="text" id="searchInput" class="form-control"
+                                   placeholder="🔍 Search adjustments...">
+                        </div>
+                        <div class="col-md-2 text-end">
+                            <a asp-action="Create" class="btn btn-success btn-glass shadow px-4">
+                                <i class="fa-solid fa-plus"></i> Create New
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle table-hover mb-0 shadow-sm"
+                               style="border-radius:1.3rem;overflow:hidden;background:linear-gradient(135deg,#e0f2fe 0%,#f8fafc 100%);min-width:1100px;">
+                            <thead class="table-primary" style="font-size:1.07em;">
+                                <tr>
+                                    <th><i class="fa-solid fa-tag" style="color:#3b82f6"></i> Type</th>
+                                    <th><i class="fa-solid fa-arrow-right-arrow-left" style="color:#22c55e"></i> Qty Change</th>
+                                    <th><i class="fa-solid fa-calendar-day" style="color:#0891b2"></i> Date</th>
+                                    <th><i class="fa-solid fa-comment-dots" style="color:#eab308"></i> Reason</th>
+                                    <th><i class="fa-solid fa-user-plus" style="color:#64748b"></i> Created</th>
+                                    <th><i class="fa-solid fa-user-clock" style="color:#0ea5e9"></i> Modified</th>
+                                    <th><i class="fa-solid fa-barcode" style="color:#6366f1"></i> Barcode</th>
+                                    <th><i class="fa-solid fa-user" style="color:#f59e42"></i> Adjusted By</th>
+                                    <th class="text-center" style="border-top-right-radius:1.2rem;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody style="background:rgba(255,255,255,0.97);font-size:1.04em;">
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span class="badge bg-primary px-2 py-1">@item.AdjustmentType</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success px-2 py-1">@item.QuantityChange</span>
+                                        </td>
+                                        <td>
+                                            @item.AdjustmentDate.ToString("yyyy-MM-dd HH:mm")
+                                        </td>
+                                        <td class="text-truncate" style="max-width:140px;">
+                                            @item.Reason
+                                        </td>
+                                        <td>
+                                            <span class="text-dark">
+                                                @(item.Created.HasValue? item.Created.Value.ToString("yyyy-MM-dd") : "-")
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="text-dark">
+                                                @(item.Modified.HasValue? item.Modified.Value.ToString("yyyy-MM-dd") : "-")
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info text-dark px-2">@item.Catalog?.Barcode</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-warning text-dark px-2">@item.AdjustedByUser?.UserName</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <a asp-action="Edit" asp-route-id="@item.AdjustmentId" class="btn btn-glass btn-sm me-1" title="Edit">
+                                                <i class="fa-solid fa-pen-to-square" style="color:#eab308"></i>
+                                            </a>
+                                            <a asp-action="Details" asp-route-id="@item.AdjustmentId" class="btn btn-glass btn-sm me-1" title="Details">
+                                                <i class="fa-solid fa-circle-info" style="color:#0ea5e9"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.AdjustmentId" class="btn btn-glass btn-sm" title="Delete">
+                                                <i class="fa-solid fa-trash" style="color:#ef4444"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- card-body -->
+            </div> <!-- card-3d -->
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("searchInput");
+        const table = document.querySelector(".table tbody");
+        searchInput.addEventListener("keyup", function () {
+            const filter = searchInput.value.toLowerCase();
+            const rows = table.getElementsByTagName("tr");
+            for (let i = 0; i < rows.length; i++) {
+                let rowText = rows[i].innerText.toLowerCase();
+                rows[i].style.display = rowText.includes(filter) ? "" : "none";
+            }
+        });
+    });
+</script>

@@ -1,0 +1,95 @@
+﻿@model LibrarySystemBBU.Models.AdjustmentDetail
+
+@{
+    ViewData["Title"] = "Create Adjustment Detail";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 1.6rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.11), 0 2px 4px 0 rgba(0,0,0,0.13);
+        background: linear-gradient(135deg,#e0f2fe 0%,#f8fafc 100%);
+        overflow: hidden;
+        transition: box-shadow .15s;
+        margin-bottom: 1.6rem;
+    }
+
+        .card-3d:hover {
+            box-shadow: 0 18px 36px 0 rgba(52,144,220,0.18);
+        }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.13);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.2s;
+        box-shadow: 0 1px 6px rgba(52,144,220,0.07);
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+</style>
+
+<div class="row justify-content-center my-4">
+    <div class="col-md-8 col-lg-6">
+        <div class="card card-3d shadow-lg border-0">
+            <div class="card-header bg-gradient text-primary d-flex align-items-center"
+                 style="background: linear-gradient(90deg, #2563eb 70%, #38bdf8 100%);">
+                <i class="fa-solid fa-sliders fa-lg me-2"></i>
+                <span class="fw-bold fs-5 text-white">Create Adjustment Detail</span>
+            </div>
+            <div class="card-body px-4 py-4">
+                <form asp-action="Create" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <div class="mb-3">
+                        <label asp-for="AdjustmentId" class="form-label fw-bold">
+                            <i class="fa-solid fa-arrows-rotate"></i> Adjustment
+                        </label>
+                        <select asp-for="AdjustmentId" class="form-select" asp-items="ViewBag.AdjustmentId"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="CatalogId" class="form-label fw-bold">
+                            <i class="fa-solid fa-barcode"></i> Catalog
+                        </label>
+                        <select asp-for="CatalogId" class="form-select" asp-items="ViewBag.CatalogId"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="QuantityChanged" class="form-label fw-bold">
+                            <i class="fa-solid fa-arrow-right-arrow-left"></i> Quantity Changed
+                        </label>
+                        <input asp-for="QuantityChanged" class="form-control" />
+                        <span asp-validation-for="QuantityChanged" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Note" class="form-label fw-bold">
+                            <i class="fa-solid fa-comment-dots"></i> Note
+                        </label>
+                        <input asp-for="Note" class="form-control" />
+                        <span asp-validation-for="Note" class="text-danger small"></span>
+                    </div>
+                    <div class="d-flex justify-content-center gap-2 mt-4">
+                        <button type="submit" class="btn btn-success btn-glass px-5 fw-bold">
+                            <i class="fa-solid fa-plus"></i> Create
+                        </button>
+                        <a asp-action="Index" class="btn btn-glass btn-outline-secondary px-5">
+                            <i class="fa-solid fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

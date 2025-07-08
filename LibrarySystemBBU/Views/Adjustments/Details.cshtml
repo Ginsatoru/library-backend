@@ -1,0 +1,119 @@
+﻿@model LibrarySystemBBU.Models.Adjustment
+
+@{
+    ViewData["Title"] = "Adjustment Details";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.10), 0 2px 4px 0 rgba(0,0,0,0.12);
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+        .card-3d:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 16px 32px 0 rgba(0,126,255,0.17), 0 6px 12px 0 rgba(0,0,0,0.12);
+        }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.12);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        transition: all 0.2s;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+
+    .card-header.bg-primary {
+        background: linear-gradient(90deg,#2563eb 70%,#60a5fa 100%) !important;
+        border-top-left-radius: 2rem !important;
+        border-top-right-radius: 2rem !important;
+    }
+
+    .card-footer.bg-light {
+        background: linear-gradient(90deg,#e0f2fe 80%,#f8fafc 100%) !important;
+        border-bottom-left-radius: 2rem !important;
+        border-bottom-right-radius: 2rem !important;
+    }
+
+    dt {
+        font-weight: 500;
+    }
+
+    dd {
+        margin-bottom: 0.75rem;
+    }
+</style>
+
+<div class="row justify-content-center my-4">
+    <div class="col-md-7 col-lg-5">
+        <div class="card card-3d shadow-lg border-0">
+            <div class="card-header bg-primary text-white d-flex align-items-center">
+                <i class="fa-solid fa-arrows-rotate fa-2x me-2"></i>
+                <div>
+                    <h4 class="mb-0 fw-bold">Adjustment Details</h4>
+                    <small class="text-white-50" style="letter-spacing:1px;">@Model.AdjustmentType</small>
+                </div>
+            </div>
+            <div class="card-body py-4 px-5">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5 text-end"><i class="fa-solid fa-barcode text-primary"></i> Catalog</dt>
+                    <dd class="col-sm-7">@Model.Catalog?.Barcode</dd>
+
+                    <dt class="col-sm-5 text-end"><i class="fa-solid fa-tag text-info"></i> Type</dt>
+                    <dd class="col-sm-7">
+                        <span class="badge bg-primary">@Model.AdjustmentType</span>
+                    </dd>
+
+                    <dt class="col-sm-5 text-end"><i class="fa-solid fa-arrow-right-arrow-left text-success"></i> Qty Change</dt>
+                    <dd class="col-sm-7">
+                        <span class="badge bg-success">@Model.QuantityChange</span>
+                    </dd>
+
+                    <dt class="col-sm-5 text-end"><i class="fa-solid fa-calendar-day text-secondary"></i> Date</dt>
+                    <dd class="col-sm-7">@Model.AdjustmentDate.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                    <dt class="col-sm-5 text-end"><i class="fa-solid fa-comment-dots text-warning"></i> Reason</dt>
+                    <dd class="col-sm-7">@Model.Reason</dd>
+
+                    <dt class="col-sm-5 text-end"><i class="fa-solid fa-user text-warning"></i> Adjusted By</dt>
+                    <dd class="col-sm-7">
+                        <span class="badge bg-warning text-dark">@Model.AdjustedByUser?.UserName</span>
+                    </dd>
+
+                    <dt class="col-sm-5 text-end"><i class="fa-solid fa-user-plus text-muted"></i> Created</dt>
+                    <dd class="col-sm-7">
+                        @(Model.Created.HasValue? Model.Created.Value.ToString("yyyy-MM-dd") : "-")
+                    </dd>
+
+                    <dt class="col-sm-5 text-end"><i class="fa-solid fa-user-clock text-muted"></i> Modified</dt>
+                    <dd class="col-sm-7">
+                        @(Model.Modified.HasValue? Model.Modified.Value.ToString("yyyy-MM-dd") : "-")
+                    </dd>
+                </dl>
+            </div>
+            <div class="card-footer d-flex flex-wrap justify-content-between align-items-center gap-2 bg-light">
+                <a asp-action="Edit" asp-route-id="@Model.AdjustmentId" class="btn btn-warning btn-glass">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                </a>
+                <a asp-action="Delete" asp-route-id="@Model.AdjustmentId" class="btn btn-danger btn-glass">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </a>
+                <a asp-action="Index" class="btn btn-glass btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

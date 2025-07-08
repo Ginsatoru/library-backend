@@ -1,0 +1,23 @@
+﻿namespace LoanManagement.wwwroot.admin_lte.css
+{
+    public class app
+    {
+    }
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+    background-color: darkcyan;
+    align-items: center;
+    justify-content: center;
+}
+
+.login {
+    width: 60vh;
+    background-color: #ccc;
+    padding: 1rem;
+    border-radius: 1rem;
+}

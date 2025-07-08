@@ -1,0 +1,190 @@
+﻿@model IEnumerable<LibrarySystemBBU.Models.Catalog>
+
+@{
+    ViewData["Title"] = "Catalog List";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d-table {
+        border: none;
+        border-radius: 1.6rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.12),0 2px 4px 0 rgba(0,0,0,0.09);
+        background: linear-gradient(135deg,#e0f2fe 0%,#f8fafc 100%);
+        overflow: hidden;
+        margin-top: 2.2rem;
+    }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.15);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+
+    .search-input {
+        border-radius: 50px;
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,.07);
+        padding-left: 2.3rem;
+        font-size: 1rem;
+        margin-bottom: 0.7rem;
+    }
+
+    .search-icon {
+        left: 17px;
+        top: 53%;
+        transform: translateY(-50%);
+        color: #38bdf8;
+    }
+
+    .catalog-thumb {
+        width: 52px;
+        height: 52px;
+        object-fit: cover;
+        border-radius: 9px;
+        box-shadow: 0 3px 8px 0 rgba(51,146,210,0.09);
+        border: 2px solid #e0f2fe;
+        background: #fff;
+    }
+
+    .table-responsive {
+        border-radius: 1.1rem;
+        overflow: hidden;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+</style>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <h2 class="fw-bold text-primary mb-2" style="letter-spacing:2px;">
+            <i class="fa-solid fa-list fa-lg" style="color:#2563eb"></i> Catalog List
+        </h2>
+    </div>
+</div>
+
+<div class="row mb-2">
+    <div class="col-md-5 col-sm-7 mx-auto">
+        <div class="position-relative">
+            <span class="position-absolute search-icon">
+                <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+            </span>
+            <input id="catalogSearch" type="text" class="form-control search-input ps-5"
+                   placeholder="Search barcode, location, author, status..." autocomplete="off" />
+        </div>
+    </div>
+    <div class="col-md-4 offset-md-3 text-end mt-2 mt-md-0">
+        <a asp-action="Create" class="btn btn-success btn-glass shadow px-4">
+            <i class="fa-solid fa-plus"></i> Add Catalog
+        </a>
+    </div>
+</div>
+
+<div class="card card-3d-table">
+    <div class="table-responsive">
+        <table class="table align-middle table-hover mb-0">
+            <thead class="table-primary" style="font-size:1.08em;">
+                <tr>
+                    <th><i class="fa-solid fa-barcode" style="color:#2563eb"></i> Barcode</th>
+                    <th><i class="fa-solid fa-signal" style="color:#4ade80"></i> Status</th>
+                    <th><i class="fa-solid fa-location-dot" style="color:#0ea5e9"></i> Location</th>
+                    <th><i class="fa-solid fa-calendar-plus" style="color:#06b6d4"></i> Acquisition</th>
+                    <th><i class="fa-solid fa-clock" style="color:#64748b"></i> Created</th>
+                    <th><i class="fa-solid fa-pen-to-square" style="color:#eab308"></i> Modified</th>
+                    <th><i class="fa-solid fa-image" style="color:#14b8a6"></i> Image</th>
+                    <th><i class="fa-solid fa-file-pdf" style="color:#ef4444"></i> PDF</th>
+                    <th><i class="fa-solid fa-user-pen" style="color:#1d4ed8"></i> Author</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="catalog-row"
+                        data-barcode="@item.Barcode"
+                        data-location="@item.Location"
+                        data-status="@item.Status"
+                        data-author="@item.Book?.Author">
+                        <td class="fw-bold text-primary">@item.Barcode</td>
+                        <td>
+                            <span class="badge @(item.Status == "Available" ? "bg-success" : "bg-danger")">
+                                <i class="fa-solid @(item.Status == "Available" ? "fa-circle-check" : "fa-circle-xmark")"></i> @item.Status
+                            </span>
+                        </td>
+                        <td>@item.Location</td>
+                        <td>
+                            @item.AcquisitionDate.ToString("yyyy-MM-dd")
+                        </td>
+                        <td class="small text-secondary">
+                            @item.Created.ToString("yyyy-MM-dd HH:mm")
+                        </td>
+                        <td class="small text-secondary">
+                            @item.Modified.ToString("yyyy-MM-dd HH:mm")
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.ImagePath))
+                            {
+                                <img src="@item.ImagePath" class="catalog-thumb" alt="thumb" />
+                            }
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.PdfFilePath))
+                            {
+                                <a href="@item.PdfFilePath" class="btn btn-glass btn-sm" target="_blank">
+                                    <i class="fa-solid fa-file-pdf" style="color:#ef4444"></i>
+                                </a>
+                            }
+                        </td>
+                        <td>@(item.Book != null ? item.Book.Author : "")</td>
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@item.CatalogId" class="btn btn-glass btn-sm me-1" title="Edit">
+                                <i class="fa-solid fa-pen-to-square" style="color:#eab308"></i>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.CatalogId" class="btn btn-glass btn-sm me-1" title="Details">
+                                <i class="fa-solid fa-circle-info" style="color:#0ea5e9"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.CatalogId" class="btn btn-glass btn-sm" title="Delete">
+                                <i class="fa-solid fa-trash" style="color:#ef4444"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Live Search Filter (use event parameter, never the global 'event')
+        document.getElementById('catalogSearch').addEventListener('input', function (e) {
+            let q = this.value.toLowerCase();
+            document.querySelectorAll('.catalog-row').forEach(function (el) {
+                let barcode = el.getAttribute('data-barcode')?.toLowerCase() || "";
+                let location = el.getAttribute('data-location')?.toLowerCase() || "";
+                let status = el.getAttribute('data-status')?.toLowerCase() || "";
+                let author = el.getAttribute('data-author')?.toLowerCase() || "";
+                if (
+                    barcode.includes(q) ||
+                    location.includes(q) ||
+                    status.includes(q) ||
+                    author.includes(q)
+                ) {
+                    el.style.display = "";
+                } else {
+                    el.style.display = "none";
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,101 @@
+﻿@model IEnumerable<LibrarySystemBBU.Models.LoanReminder>
+
+@{
+    ViewData["Title"] = "Loan Reminders";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 antialiased p-8">
+    <div class="max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Sent Loan Reminders</h2>
+
+        <div class="mb-6">
+            <a asp-action="Send" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <i class="fas fa-paper-plane mr-2"></i> Send New Reminder
+            </a>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-md" role="alert">
+                <p class="font-bold">No Reminders Sent</p>
+                <p>There are no loan reminders logged in the system yet.</p>
+            </div>
+        }
+        else
+        {
+            <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="py-3 px-6">
+                                Reminder ID
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Loan ID
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Member
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Book Title
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Sent Date
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Reminder Type
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                <span class="sr-only">Actions</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    @Html.DisplayFor(modelItem => item.ReminderId)
+                                </th>
+                                <td class="py-4 px-6">
+                                    @Html.DisplayFor(modelItem => item.LoanId)
+                                </td>
+                                <td class="py-4 px-6">
+                                    @Html.DisplayFor(modelItem => item.Loan.LibraryMember.FullName)
+                                </td>
+                                <td class="py-4 px-6">
+                                    @Html.DisplayFor(modelItem => item.Loan.Book.Title)
+                                </td>
+                                <td class="py-4 px-6">
+                                    @Html.DisplayFor(modelItem => item.SentDate)
+                                </td>
+                                <td class="py-4 px-6">
+                                    @Html.DisplayFor(modelItem => item.ReminderType)
+                                </td>
+                                <td class="py-4 px-6 text-right">
+                                    @* Add action links if needed, e.g., details *@
+                                    <a href="#" class="font-medium text-indigo-600 dark:text-indigo-500 hover:underline">Details</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</body>
+</html>

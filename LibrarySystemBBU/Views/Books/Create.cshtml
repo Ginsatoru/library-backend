@@ -1,0 +1,108 @@
+﻿@model LibrarySystemBBU.Models.Book
+
+@{
+    ViewData["Title"] = "Create Book";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.10), 0 2px 4px 0 rgba(0,0,0,0.12);
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+        .card-3d:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 16px 32px 0 rgba(0,126,255,0.17), 0 6px 12px 0 rgba(0,0,0,0.12);
+        }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.12);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        transition: all 0.2s;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+</style>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-7 col-lg-6">
+        <div class="card card-3d">
+            <div class="card-body p-5">
+                <h2 class="fw-bold text-primary text-center mb-4">
+                    <i class="fa-solid fa-book fa-lg"></i> Create New Book
+                </h2>
+                <form asp-action="Create" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label">
+                            <i class="fa-solid fa-heading"></i> Title
+                        </label>
+                        <input asp-for="Title" class="form-control" placeholder="Book title..." />
+                        <span asp-validation-for="Title" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Author" class="form-label">
+                            <i class="fa-solid fa-user-pen"></i> Author
+                        </label>
+                        <input asp-for="Author" class="form-control" placeholder="Author name..." />
+                        <span asp-validation-for="Author" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="ISBN" class="form-label">
+                            <i class="fa-solid fa-barcode"></i> ISBN
+                        </label>
+                        <input asp-for="ISBN" class="form-control" placeholder="ISBN..." />
+                        <span asp-validation-for="ISBN" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Category" class="form-label">
+                            <i class="fa-solid fa-bookmark"></i> Category
+                        </label>
+                        <input asp-for="Category" class="form-control" placeholder="Book category..." />
+                        <span asp-validation-for="Category" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="TotalCopies" class="form-label">
+                            <i class="fa-solid fa-layer-group"></i> Total Copies
+                        </label>
+                        <input asp-for="TotalCopies" class="form-control" placeholder="Total copies..." />
+                        <span asp-validation-for="TotalCopies" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="AvailableCopies" class="form-label">
+                            <i class="fa-solid fa-box-open"></i> Available Copies
+                        </label>
+                        <input asp-for="AvailableCopies" class="form-control" placeholder="Available copies..." />
+                        <span asp-validation-for="AvailableCopies" class="text-danger small"></span>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-success btn-glass px-5 py-2 rounded-pill fw-bold">
+                            <i class="fa-solid fa-circle-plus"></i> Create Book
+                        </button>
+                        <a asp-action="Index" class="btn btn-glass ms-2 rounded-pill px-3">
+                            <i class="fa-solid fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

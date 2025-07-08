@@ -1,0 +1,209 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = LibrarySystemBBU
+build_property.RootNamespace = LibrarySystemBBU
+build_property.ProjectDir = D:\BBU Study\Year 4 S1\Library System BBU\LibrarySystem\LibrarySystemBBU\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = D:\BBU Study\Year 4 S1\Library System BBU\LibrarySystem\LibrarySystemBBU
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Account/AccessDenied.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxBY2Nlc3NEZW5pZWQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookLoans/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0xvYW5zXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookLoans/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0xvYW5zXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookLoans/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0xvYW5zXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookLoans/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0xvYW5zXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookLoans/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0xvYW5zXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookReturns/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va1JldHVybnNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookReturns/Record.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va1JldHVybnNcUmVjb3JkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookTypes/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va1R5cGVzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookTypes/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va1R5cGVzXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookTypes/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va1R5cGVzXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookTypes/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va1R5cGVzXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookTypes/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va1R5cGVzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LibraryBooks/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeUJvb2tzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LibraryBooks/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeUJvb2tzXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LibraryBooks/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeUJvb2tzXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LibraryBooks/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeUJvb2tzXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LibraryBooks/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeUJvb2tzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LibraryMembers/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeU1lbWJlcnNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LibraryMembers/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeU1lbWJlcnNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LibraryMembers/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeU1lbWJlcnNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LibraryMembers/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeU1lbWJlcnNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LibraryMembers/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeU1lbWJlcnNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LoanReminders/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9hblJlbWluZGVyc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LoanReminders/Send.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9hblJlbWluZGVyc1xTZW5kLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Roles/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Roles/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZXNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Roles/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZXNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Roles/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZXNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Roles/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Shared/_Footer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Gb290ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Shared/_Navbar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9OYXZiYXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Shared/_Sidebar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9TaWRlYmFyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Users/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Users/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Users/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Users/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Users/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 

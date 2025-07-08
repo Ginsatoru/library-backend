@@ -1,0 +1,114 @@
+﻿@model LibrarySystemBBU.Models.Adjustment
+
+@{
+    ViewData["Title"] = "Edit Adjustment";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.10), 0 2px 4px 0 rgba(0,0,0,0.12);
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.12);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+
+    .card-header.bg-primary {
+        background: linear-gradient(90deg,#2563eb 80%,#60a5fa 100%) !important;
+        border-top-left-radius: 2rem !important;
+        border-top-right-radius: 2rem !important;
+    }
+    
+
+    }
+</style>
+
+<div class="container-fluid px-0">
+    <div class="row justify-content-center my-4">
+        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+            <div class="card card-3d shadow-lg border-0">
+                <div class="card-header bg-primary text-white d-flex align-items-center">
+                    <i class="fa-solid fa-pen-to-square fa-lg me-2"></i>
+                    <h4 class="mb-0 fw-bold">Edit Adjustment</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" autocomplete="off">
+                        <input type="hidden" asp-for="AdjustmentId" />
+
+                        <div class="mb-3">
+                            <label asp-for="CatalogId" class="form-label fw-bold">
+                                <i class="fa-solid fa-barcode"></i> Catalog Item
+                            </label>
+                            <select asp-for="CatalogId" class="form-select" asp-items="ViewBag.CatalogId"></select>
+                            <span asp-validation-for="CatalogId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="AdjustmentType" class="form-label fw-bold">
+                                <i class="fa-solid fa-tag"></i> Adjustment Type
+                            </label>
+                            <input asp-for="AdjustmentType" class="form-control" placeholder="e.g. Addition, Removal" />
+                            <span asp-validation-for="AdjustmentType" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="QuantityChange" class="form-label fw-bold">
+                                <i class="fa-solid fa-arrow-right-arrow-left"></i> Quantity Change
+                            </label>
+                            <input asp-for="QuantityChange" class="form-control" type="number" placeholder="Enter the quantity" />
+                            <span asp-validation-for="QuantityChange" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Reason" class="form-label fw-bold">
+                                <i class="fa-solid fa-comment-dots"></i> Reason
+                            </label>
+                            <input asp-for="Reason" class="form-control" placeholder="Reason for adjustment" />
+                            <span asp-validation-for="Reason" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="AdjustedByUserId" class="form-label fw-bold">
+                                <i class="fa-solid fa-user"></i> Adjusted By
+                            </label>
+                            <select asp-for="AdjustedByUserId" class="form-select" asp-items="ViewBag.AdjustedByUserId"></select>
+                            <span asp-validation-for="AdjustedByUserId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-center gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-glass px-5 fw-bold">
+                                <i class="fa-solid fa-save"></i> Save
+                            </button>
+                            <a asp-action="Index" class="btn btn-glass px-5">
+                                <i class="fa-solid fa-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

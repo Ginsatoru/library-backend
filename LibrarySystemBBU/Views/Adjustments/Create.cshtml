@@ -1,0 +1,137 @@
+﻿@model LibrarySystemBBU.Models.Adjustment
+
+@{
+    ViewData["Title"] = "Create Adjustment";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.10), 0 2px 4px 0 rgba(0,0,0,0.12);
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+        .card-3d:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 16px 32px 0 rgba(0,126,255,0.17), 0 6px 12px 0 rgba(0,0,0,0.12);
+        }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.12);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        transition: all 0.2s;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+
+    .callout-info {
+        background: rgba(96, 165, 250, 0.15);
+        color: #1e3a8a;
+        border-left: 4px solid #38bdf8;
+        border-radius: 1rem;
+        padding: 1rem 1.2rem;
+    }
+</style>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-7 col-lg-5">
+        <div class="card card-3d">
+            <div class="card-body p-5">
+                <h2 class="fw-bold text-primary text-center mb-4">
+                    <i class="fa-solid fa-arrows-rotate fa-lg"></i> Create Adjustment
+                </h2>
+                <div class="callout callout-info mb-4 text-center">
+                    <i class="fa-solid fa-circle-info me-1"></i>
+                    Record a new inventory adjustment below.
+                </div>
+                <form asp-action="Create" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="CatalogId" class="form-label">
+                            <i class="fa-solid fa-barcode"></i> Catalog Item
+                        </label>
+                        <select asp-for="CatalogId" class="form-select">
+                            <option value="">-- Select Item --</option>
+                            @if (ViewBag.CatalogId != null)
+                            {
+                                foreach (var item in ViewBag.CatalogId as SelectList)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="CatalogId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="AdjustmentType" class="form-label">
+                            <i class="fa-solid fa-tag"></i> Adjustment Type
+                        </label>
+                        <input asp-for="AdjustmentType" class="form-control" placeholder="e.g. Addition, Removal" />
+                        <span asp-validation-for="AdjustmentType" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="QuantityChange" class="form-label">
+                            <i class="fa-solid fa-arrow-right-arrow-left"></i> Quantity Change
+                        </label>
+                        <input asp-for="QuantityChange" class="form-control" type="number" placeholder="Enter the quantity" />
+                        <span asp-validation-for="QuantityChange" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Reason" class="form-label">
+                            <i class="fa-solid fa-comment-dots"></i> Reason
+                        </label>
+                        <input asp-for="Reason" class="form-control" placeholder="Reason for adjustment" />
+                        <span asp-validation-for="Reason" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="AdjustedByUserId" class="form-label">
+                            <i class="fa-solid fa-user"></i> Adjusted By
+                        </label>
+                        <select asp-for="AdjustedByUserId" class="form-select">
+                            <option value="">-- Select User --</option>
+                            @if (ViewBag.AdjustedByUserId != null)
+                            {
+                                foreach (var user in ViewBag.AdjustedByUserId as SelectList)
+                                {
+                                    <option value="@user.Value">@user.Text</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="AdjustedByUserId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-success btn-glass px-5 py-2 rounded-pill fw-bold">
+                            <i class="fa-solid fa-plus"></i> Create Adjustment
+                        </button>
+                        <a asp-action="Index" class="btn btn-glass ms-2 rounded-pill px-3">
+                            <i class="fa-solid fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

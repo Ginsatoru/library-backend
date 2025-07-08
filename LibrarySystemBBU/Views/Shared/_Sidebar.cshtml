@@ -1,0 +1,157 @@
+﻿<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="/uploads/photo_2025-04-08_17-35-43.jpg" class="brand-link elevation-3">
+        <img src="/uploads/photo_2025-04-08_17-35-43.jpg" alt="BBU Logo" class="brand-image img-circle elevation-3 animated pulse" style="opacity:.86">
+        <span class="brand-text font-weight-light fw-bold ms-2">BBU Library</span>
+    </a>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar mt-0">
+        <nav class="mt-1">
+            <ul class="nav nav-pills nav-sidebar flex-column"
+                data-widget="treeview" role="menu" data-accordion="false"
+                style="font-size:1.13rem;">
+
+                <!-- Main Navigation -->
+                <li class="nav-item">
+                    <a class="nav-link elevation-2" asp-controller="Dashboard" asp-action="Index">
+                        <i class="nav-icon fas fa-tachometer-alt text-info"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link elevation-2" asp-controller="Home" asp-action="Index">
+                        <i class="nav-icon fas fa-home text-primary"></i>
+                        <p>Home</p>
+                    </a>
+                </li>
+
+                <!-- Books Management -->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link elevation-2">
+                        <i class="nav-icon fas fa-book text-primary"></i>
+                        <p>
+                            Books Management
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Books" asp-action="Index">
+                                <i class="fas fa-book-open nav-icon text-success"></i>
+                                <p>Books</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Catalogs" asp-action="Index">
+                                <i class="fas fa-barcode nav-icon text-info"></i>
+                                <p>Catalogs</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Purchases" asp-action="Index">
+                                <i class="fas fa-shopping-cart nav-icon text-danger"></i>
+                                <p>Purchases</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Adjustments" asp-action="Index">
+                                <i class="fas fa-tools nav-icon text-secondary"></i>
+                                <p>Adjustments</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Standalone Sections -->
+                <li class="nav-item">
+                    <a class="nav-link elevation-2" asp-controller="BookLoans" asp-action="Index">
+                        <i class="nav-icon fas fa-book-reader text-success"></i>
+                        <p>Book Loans</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link elevation-2" asp-controller="BookReturns" asp-action="Index">
+                        <i class="nav-icon fas fa-undo-alt text-info"></i>
+                        <p>Book Returns</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link elevation-2" asp-controller="LoanReminders" asp-action="Index">
+                        <i class="nav-icon fas fa-bell text-warning"></i>
+                        <p>Loan Reminders</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link elevation-2" asp-controller="Members" asp-action="Index">
+                        <i class="nav-icon fas fa-users text-danger"></i>
+                        <p>Members</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link elevation-2" asp-controller="Users" asp-action="Index">
+                        <i class="nav-icon fas fa-user-shield text-primary"></i>
+                        <p>Libraren</p>
+                    </a>
+                </li>
+                @* <li class="nav-item">
+                    <a class="nav-link elevation-2" asp-controller="Roles" asp-action="Index">
+                        <i class="nav-icon fas fa-user-tag text-info"></i>
+                        <p>Roles</p>
+                    </a>
+                </li> *@
+
+                <!-- More Submenu -->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link elevation-2">
+                        <i class="nav-icon fas fa-ellipsis-h text-secondary"></i>
+                        <p>More <i class="fas fa-angle-left right"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="AdjustmentDetails" asp-action="Index">
+                                <i class="fas fa-tasks nav-icon text-info"></i>
+                                <p>Adjustment Details</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="LoanBookDetails" asp-action="Index">
+                                <i class="fas fa-book-medical nav-icon text-primary"></i>
+                                <p>Loan Book Details</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="PurchaseDetails" asp-action="Index">
+                                <i class="fas fa-list nav-icon text-success"></i>
+                                <p>Purchase Details</p>
+                            </a>
+                        </li>
+                        @* <li class="nav-item">
+                            <a class="nav-link" asp-controller="Shared" asp-action="Index">
+                                <i class="fas fa-share-alt nav-icon text-warning"></i>
+                                <p>Shared</p>
+                            </a>
+                        </li> *@
+                    </ul>
+                </li>
+
+                <!-- Logout (always last) -->
+                <li class="nav-item mt-2">
+                    <a class="nav-link elevation-2 text-danger" asp-controller="Account" asp-action="Logout">
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>
+
+<style>
+    /* Sidebar Nav Active and Hover Effect */
+    .nav-sidebar .nav-link.active,
+    .nav-sidebar .nav-link:hover {
+        background: #0ea5e9 !important;
+        color: #fff !important;
+    }
+</style>

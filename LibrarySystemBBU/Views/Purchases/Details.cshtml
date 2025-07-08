@@ -1,0 +1,152 @@
+﻿@model LibrarySystemBBU.Models.Purchase
+
+@{
+    ViewData["Title"] = "Purchase Details";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.13), 0 2px 4px 0 rgba(0,0,0,0.13);
+        background: linear-gradient(135deg, #f0fdfa 0%, #f8fafc 100%);
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+        .card-3d:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 16px 32px 0 rgba(16,185,129,0.14), 0 6px 12px 0 rgba(0,0,0,0.13);
+        }
+
+    .badge-soft {
+        background-color: #e0f2fe;
+        color: #0ea5e9;
+        font-size: 1em;
+        border-radius: 1.3rem;
+        padding: 0.34em 1em;
+        margin-left: 4px;
+        font-weight: 500;
+        letter-spacing: 0.03em;
+    }
+
+    .main-book-title {
+        font-size: 1.45rem;
+        font-weight: 700;
+        color: #14b8a6;
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        letter-spacing: 0.5px;
+    }
+
+    .detail-label {
+        color: #2563eb;
+        font-weight: 600;
+        font-size: 1.08em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .detail-value {
+        font-weight: 500;
+        color: #334155;
+        font-size: 1.07em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .text-dash {
+        color: #a3a3a3;
+        font-style: italic;
+        letter-spacing: 0.03em;
+    }
+   
+</style>
+
+<div class="row justify-content-center my-4">
+    <div class="col-lg-8 col-md-10">
+        <div class="card card-3d shadow-lg border-0 p-4">
+            <div class="mb-4 pb-2 border-bottom border-info d-flex align-items-center gap-2">
+                <i class="fa-solid fa-circle-info fa-xl text-info"></i>
+                <h2 class="fw-bold mb-0 text-info" style="letter-spacing:1px;">Purchase Details</h2>
+            </div>
+            <div class="main-book-title mb-3">
+                <i class="fa-solid fa-book"></i>
+                <span>Book Title: <span class="fw-bold">@Model.Book?.Title ?? "N/A"</span></span>
+            </div>
+            <dl class="row mb-0">
+                <dt class="col-md-4 col-sm-6 detail-label">
+                    <i class="fa-solid fa-box text-success"></i> Quantity
+                </dt>
+                <dd class="col-md-8 col-sm-6 detail-value">
+                    @Model.Quantity
+                </dd>
+                <dt class="col-md-4 col-sm-6 detail-label">
+                    <i class="fa-solid fa-calendar-day text-info"></i> Purchase Date
+                </dt>
+                <dd class="col-md-8 col-sm-6 detail-value">
+                    <span class="badge-soft">
+                        @(Model.PurchaseDate == default(DateTime)
+                                                ? Html.Raw("<span class='text-dash'>-</span>")
+                                                : Model.PurchaseDate.ToString("yyyy-MM-dd"))
+                    </span>
+                </dd>
+                <dt class="col-md-4 col-sm-6 detail-label">
+                    <i class="fa-solid fa-user-tie text-primary"></i> Supplier
+                </dt>
+                <dd class="col-md-8 col-sm-6 detail-value">
+                    @(!string.IsNullOrWhiteSpace(Model.Supplier)
+                                        ? Model.Supplier
+                                        : Html.Raw("<span class='text-dash'>-</span>"))
+                </dd>
+                <dt class="col-md-4 col-sm-6 detail-label">
+                    <i class="fa-solid fa-dollar-sign text-warning"></i> Cost
+                </dt>
+                <dd class="col-md-8 col-sm-6 detail-value">
+                    <span class="badge-soft">
+                        @(Model.Cost > 0
+                                                ? Model.Cost.ToString("C")
+                                                : Html.Raw("<span class='text-dash'>-</span>"))
+                    </span>
+                </dd>
+                <dt class="col-md-4 col-sm-6 detail-label">
+                    <i class="fa-solid fa-file-alt text-secondary"></i> Notes
+                </dt>
+                <dd class="col-md-8 col-sm-6 detail-value">
+                    @(!string.IsNullOrWhiteSpace(Model.Notes)
+                                        ? Model.Notes
+                                        : Html.Raw("<span class='text-dash'>-</span>"))
+                </dd>
+                <dt class="col-md-4 col-sm-6 detail-label">
+                    <i class="fa-solid fa-clock text-dark"></i> Created
+                </dt>
+                <dd class="col-md-8 col-sm-6 detail-value">
+                    @(Model.Created == default(DateTime)
+                                        ? Html.Raw("<span class='text-dash'>-</span>")
+                                        : Model.Created.ToString("yyyy-MM-dd HH:mm"))
+                </dd>
+                <dt class="col-md-4 col-sm-6 detail-label">
+                    <i class="fa-solid fa-pen text-muted"></i> Modified
+                </dt>
+                <dd class="col-md-8 col-sm-6 detail-value">
+                    @(Model.Modified == default(DateTime) || Model.Modified == Model.Created
+                                        ? Html.Raw("<span class='text-dash'>-</span>")
+                                        : Model.Modified.ToString("yyyy-MM-dd HH:mm"))
+                </dd>
+            </dl>
+            <div class="mt-4 d-flex justify-content-end gap-2">
+                <a asp-action="Edit" asp-route-id="@Model.PurchaseId" class="btn btn-warning btn-glass">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                </a>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-glass">
+                    <i class="fa-solid fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

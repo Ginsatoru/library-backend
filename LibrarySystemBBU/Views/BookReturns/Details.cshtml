@@ -1,0 +1,85 @@
+﻿@model LibrarySystemBBU.Models.BookReturn
+
+@{
+    ViewData["Title"] = "Book Return Details";
+}
+
+<style>
+    .details-label {
+        font-weight: 600;
+        color: #2363A9;
+    }
+
+    .details-value {
+        font-weight: 500;
+    }
+
+    .glass-btn {
+        background: rgba(35,99,169,0.16);
+        color: #2363A9;
+        border: none;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: background 0.18s, color 0.18s, box-shadow 0.2s;
+        padding-left: 2em;
+        padding-right: 2em;
+    }
+
+        .glass-btn:hover, .glass-btn:focus {
+            background: #2363A9;
+            color: #fff;
+            box-shadow: 0 6px 32px 0 rgba(35,99,169,0.16);
+        }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card shadow rounded-4 border-0">
+                <div class="card-header" style="background:linear-gradient(90deg,#2363A9 0%, #57b5ff 100%); color:#fff; border-radius:1.5rem 1.5rem 0 0;">
+                    <h4 class="mb-0"><i class="fas fa-info-circle"></i> Book Return Details</h4>
+                </div>
+                <div class="card-body p-4">
+                    <dl class="row mb-4">
+                        <dt class="col-sm-4 details-label">Return Date</dt>
+                        <dd class="col-sm-8 details-value">@Model.ReturnDate.ToString("yyyy-MM-dd")</dd>
+
+                        <dt class="col-sm-4 details-label">Late Days</dt>
+                        <dd class="col-sm-8 details-value">@Model.LateDays</dd>
+
+                        <dt class="col-sm-4 details-label">Fine Amount</dt>
+                        <dd class="col-sm-8 details-value">
+                            $@Model.FineAmount.ToString("0.00")
+                        </dd>
+
+                        <dt class="col-sm-4 details-label">Amount Paid</dt>
+                        <dd class="col-sm-8 details-value">
+                            $@Model.AmountPaid.ToString("0.00")
+                        </dd>
+
+                        <dt class="col-sm-4 details-label">Refund Amount</dt>
+                        <dd class="col-sm-8 details-value">
+                            $@(Model.RefundAmount?.ToString("0.00") ?? "0.00")
+                        </dd>
+
+
+                        <dt class="col-sm-4 details-label">Condition On Return</dt>
+                        <dd class="col-sm-8 details-value">@Model.ConditionOnReturn</dd>
+
+                        <dt class="col-sm-4 details-label">Notes</dt>
+                        <dd class="col-sm-8 details-value">@Model.Notes</dd>
+
+                        <dt class="col-sm-4 details-label">Loan ID</dt>
+                        <dd class="col-sm-8 details-value">@Model.Loan?.LoanId</dd>
+                    </dl>
+                    <div class="d-flex gap-2">
+                        <a asp-action="Edit" asp-route-id="@Model?.ReturnId" class="glass-btn btn">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary rounded-pill">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

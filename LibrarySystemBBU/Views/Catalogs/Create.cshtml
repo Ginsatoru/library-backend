@@ -1,0 +1,161 @@
+﻿@model LibrarySystemBBU.Models.Catalog
+
+@{
+    ViewData["Title"] = "Create Catalog";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.11), 0 2px 4px 0 rgba(0,0,0,0.13);
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+        .card-3d:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 16px 32px 0 rgba(0,126,255,0.17), 0 6px 12px 0 rgba(0,0,0,0.14);
+        }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.12);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        transition: all 0.2s;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+
+    .form-label > .text-danger {
+        font-size: 1.1em;
+        vertical-align: top;
+    }
+
+    .img-preview {
+        display: block;
+        margin: 10px auto 5px auto;
+        max-width: 120px;
+        max-height: 120px;
+        border-radius: 12px;
+        box-shadow: 0 3px 8px 0 rgba(51,146,210,0.10);
+        background: #fff;
+        object-fit: cover;
+    }
+</style>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-7 col-lg-6">
+        <div class="card card-3d">
+            <div class="card-body p-5">
+                <h2 class="fw-bold text-primary text-center mb-4">
+                    <i class="fa-solid fa-layer-group fa-lg"></i> Create New Catalog
+                </h2>
+                <form asp-action="Create" enctype="multipart/form-data" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="BookId" class="form-label">
+                            <i class="fa-solid fa-book"></i> Book <span class="text-danger">*</span>
+                        </label>
+                        <select asp-for="BookId" class="form-control" asp-items="ViewBag.BookId"></select>
+                        <span asp-validation-for="BookId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Barcode" class="form-label">
+                            <i class="fa-solid fa-barcode"></i> Barcode <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Barcode" class="form-control" autofocus placeholder="Scan or type barcode..." />
+                        <span asp-validation-for="Barcode" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Status" class="form-label">
+                            <i class="fa-solid fa-signal"></i> Status <span class="text-danger">*</span>
+                        </label>
+                        <select asp-for="Status" class="form-control">
+                            <option value="">-- Select Status --</option>
+                            <option>Available</option>
+                            <option>Loaned</option>
+                            <option>Lost</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Location" class="form-label">
+                            <i class="fa-solid fa-location-dot"></i> Location
+                        </label>
+                        <input asp-for="Location" class="form-control" placeholder="Shelf/Room/Section..." />
+                        <span asp-validation-for="Location" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="AcquisitionDate" class="form-label">
+                            <i class="fa-solid fa-calendar-plus"></i> Acquisition Date <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="AcquisitionDate" type="date" class="form-control" />
+                        <span asp-validation-for="AcquisitionDate" class="text-danger small"></span>
+                    </div>
+
+                    <!-- IMAGE PREVIEW AND UPLOAD -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fa-solid fa-image"></i> Image Upload
+                        </label>
+                        <input type="file" name="ImageFile" class="form-control" accept="image/*" onchange="previewImage(event)" />
+                        <img id="imgPreview" class="img-preview mt-2" src="https://ui-avatars.com/api/?name=Book&background=acd8fa&color=fff&size=128" alt="Image Preview" />
+                        <span asp-validation-for="ImagePath" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fa-solid fa-file-pdf"></i> PDF Upload
+                        </label>
+                        <input type="file" name="PdfFile" class="form-control" accept="application/pdf" />
+                        <span asp-validation-for="PdfFilePath" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-success btn-glass px-5 py-2 rounded-pill fw-bold">
+                            <i class="fa-solid fa-circle-plus"></i> Create Catalog
+                        </button>
+                        <a asp-action="Index" class="btn btn-glass ms-2 rounded-pill px-3">
+                            <i class="fa-solid fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            const imgPreview = document.getElementById('imgPreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imgPreview.src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                imgPreview.src = "https://ui-avatars.com/api/?name=Book&background=acd8fa&color=fff&size=128";
+            }
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

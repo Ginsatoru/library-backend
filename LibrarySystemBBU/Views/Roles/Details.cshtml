@@ -1,0 +1,38 @@
+﻿@model LibrarySystemBBU.Models.Roles
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg rounded-4 border-0">
+                <div class="card-body p-4">
+                    <h2 class="card-title mb-3 fw-semibold">
+                        <i class="bi bi-info-circle"></i> Role Details
+                    </h2>
+                    <hr>
+                    <dl class="row mb-4">
+                        <dt class="col-sm-4 text-end">Role Name</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Name)</dd>
+                    </dl>
+                    <div class="d-flex gap-3">
+                        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary btn-lg rounded-3 shadow-sm px-4">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a>
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-lg rounded-3 shadow-sm px-4">
+                            <i class="bi bi-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- If you haven't already, load Bootstrap Icons in your _Layout.cshtml head:
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    -->
+}

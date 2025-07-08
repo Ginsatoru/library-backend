@@ -1,0 +1,90 @@
+﻿@model LibrarySystemBBU.Models.PurchaseDetail
+
+@{
+    ViewData["Title"] = "Delete Purchase Detail";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 1.5rem;
+        box-shadow: 0 8px 24px 0 rgba(220,38,38,0.11), 0 2px 6px 0 rgba(0,0,0,0.13);
+        background: linear-gradient(135deg, #fef2f2 0%, #fff 100%);
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+        .card-3d:hover {
+            transform: translateY(-4px) scale(1.012);
+            box-shadow: 0 16px 32px 0 rgba(220,38,38,0.14), 0 6px 12px 0 rgba(0,0,0,0.14);
+        }
+
+    .detail-label {
+        color: #dc2626;
+        font-weight: 600;
+        font-size: 1.08em;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .detail-value {
+        font-weight: 500;
+        color: #334155;
+        font-size: 1.07em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        word-break: break-word;
+    }
+</style>
+
+<div class="row justify-content-center my-4">
+    <div class="col-md-8 col-lg-6">
+        <div class="card card-3d shadow-lg border-0 p-4">
+            <div class="mb-3 pb-2 border-bottom border-danger d-flex align-items-center gap-2">
+                <i class="fa-solid fa-trash fa-xl text-danger"></i>
+                <h2 class="fw-bold mb-0 text-danger" style="letter-spacing:1px;">Delete Purchase Detail</h2>
+            </div>
+            <div class="mb-3 text-center text-danger fw-semibold">
+                <i class="fa-solid fa-triangle-exclamation"></i> Are you sure you want to delete this purchase detail?
+            </div>
+            <dl class="row mb-0">
+                <dt class="col-sm-4 detail-label"><i class="fa-solid fa-box"></i> Quantity</dt>
+                <dd class="col-sm-8 detail-value">@Model.Quantity</dd>
+
+                <dt class="col-sm-4 detail-label"><i class="fa-solid fa-dollar-sign"></i> Unit Price</dt>
+                <dd class="col-sm-8 detail-value">@Model.UnitPrice.ToString("C")</dd>
+
+                <dt class="col-sm-4 detail-label"><i class="fa-solid fa-calculator"></i> Line Total</dt>
+                <dd class="col-sm-8 detail-value">@Model.LineTotal.ToString("C")</dd>
+
+                <dt class="col-sm-4 detail-label"><i class="fa-solid fa-clock"></i> Created</dt>
+                <dd class="col-sm-8 detail-value">@(Model.Created.ToString("yyyy-MM-dd HH:mm"))</dd>
+
+                <dt class="col-sm-4 detail-label"><i class="fa-solid fa-pen"></i> Modified</dt>
+                <dd class="col-sm-8 detail-value">
+                    @(Model.Modified == default(DateTime) || Model.Modified == Model.Created
+                                        ? Html.Raw("<span class='text-muted'>-</span>")
+                                        : Model.Modified.ToString("yyyy-MM-dd HH:mm"))
+                </dd>
+
+                <dt class="col-sm-4 detail-label"><i class="fa-solid fa-file-invoice-dollar"></i> Purchase Supplier</dt>
+                <dd class="col-sm-8 detail-value">@Model.Purchase?.Supplier ?? "-" </dd>
+
+                <dt class="col-sm-4 detail-label"><i class="fa-solid fa-book"></i> Book Author</dt>
+                <dd class="col-sm-8 detail-value">@Model.Book?.Author ?? "-" </dd>
+            </dl>
+            <form asp-action="Delete" class="mt-4 d-flex justify-content-end gap-2">
+                <input type="hidden" asp-for="PurchaseDetailId" />
+                <button type="submit" class="btn btn-danger px-4 fw-bold">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-glass">
+                    <i class="fa-solid fa-arrow-left"></i> Cancel
+                </a>
+            </form>
+        </div>
+    </div>
+</div>

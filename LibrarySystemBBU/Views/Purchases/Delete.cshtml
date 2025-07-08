@@ -1,0 +1,185 @@
+﻿@model LibrarySystemBBU.Models.Purchase
+
+@{
+    ViewData["Title"] = "Delete Purchase";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.11), 0 2px 4px 0 rgba(0,0,0,0.13);
+        background: linear-gradient(135deg, #f8fafc 0%, #f0fdfa 100%);
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+        .card-3d:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 16px 32px 0 rgba(239,68,68,0.13), 0 6px 12px 0 rgba(0,0,0,0.10);
+        }
+
+    .detail-label {
+        color: #ef4444;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .detail-value {
+        font-weight: 500;
+        color: #334155;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .main-book-title {
+        font-size: 1.22rem;
+        font-weight: 700;
+        color: #dc2626;
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        letter-spacing: 0.5px;
+    }
+
+    .badge-soft {
+        background-color: #fef2f2;
+        color: #dc2626;
+        font-size: 0.98em;
+        border-radius: 1rem;
+        font-weight: 500;
+        padding: 0.25em 0.85em;
+        margin-left: 4px;
+    }
+
+    .btn-danger {
+        border-radius: 50px;
+        font-weight: 600;
+        padding: 0.65rem 2.5rem;
+        font-size: 1.07em;
+        box-shadow: 0 2px 12px 0 rgba(239,68,68,0.14);
+        transition: background .18s, color .18s;
+    }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            color: #fff;
+        }
+
+    .btn-secondary {
+        border-radius: 50px;
+        font-weight: 600;
+        padding: 0.65rem 1.8rem;
+        font-size: 1.07em;
+        background: #e5e7eb;
+        color: #374151;
+        border: none;
+        transition: background .18s, color .18s;
+    }
+
+        .btn-secondary:hover {
+            background: #f3f4f6;
+            color: #dc2626;
+        }
+
+    .text-dash {
+        color: #bdbdbd;
+        font-style: italic;
+        font-size: 1em;
+    }
+</style>
+
+<div class="row justify-content-center my-4">
+    <div class="col-lg-8 col-md-10">
+        <h1 class="mb-4 text-danger fw-bold">
+            <i class="fa-solid fa-trash"></i> Delete Purchase
+        </h1>
+
+        <div class="alert alert-danger border-danger mb-4 fw-semibold" style="border-radius:1.2rem;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            Are you sure you want to delete this purchase record?
+        </div>
+
+        <div class="card card-3d shadow-sm p-4 mb-4">
+            <div class="main-book-title">
+                <i class="fa-solid fa-book"></i>
+                <span>Book Title: <span class="fw-bold">@Model.Book?.Title ?? "N/A"</span></span>
+            </div>
+            <dl class="row mb-0">
+                <dt class="col-sm-4 detail-label">
+                    <i class="fa-solid fa-box text-success"></i> Quantity
+                </dt>
+                <dd class="col-sm-8 detail-value">@Model.Quantity</dd>
+
+                <dt class="col-sm-4 detail-label">
+                    <i class="fa-solid fa-calendar-day text-info"></i> Purchase Date
+                </dt>
+                <dd class="col-sm-8 detail-value">
+                    <span class="badge-soft">
+                        @(Model.PurchaseDate == default(DateTime)
+                                                ? Html.Raw("<span class='text-dash'>-</span>")
+                                                : Model.PurchaseDate.ToString("yyyy-MM-dd"))
+                    </span>
+                </dd>
+
+                <dt class="col-sm-4 detail-label">
+                    <i class="fa-solid fa-user-tie text-primary"></i> Supplier
+                </dt>
+                <dd class="col-sm-8 detail-value">
+                    @(!string.IsNullOrWhiteSpace(Model.Supplier) ? Model.Supplier : Html.Raw("<span class='text-dash'>-</span>"))
+                </dd>
+
+                <dt class="col-sm-4 detail-label">
+                    <i class="fa-solid fa-dollar-sign text-warning"></i> Cost
+                </dt>
+                <dd class="col-sm-8 detail-value">
+                    <span class="badge-soft">
+                        @(Model.Cost > 0
+                                                ? Model.Cost.ToString("C")
+                                                : Html.Raw("<span class='text-dash'>-</span>"))
+                    </span>
+                </dd>
+
+                <dt class="col-sm-4 detail-label">
+                    <i class="fa-solid fa-file-alt text-secondary"></i> Notes
+                </dt>
+                <dd class="col-sm-8 detail-value">
+                    @(!string.IsNullOrWhiteSpace(Model.Notes) ? Model.Notes : Html.Raw("<span class='text-dash'>-</span>"))
+                </dd>
+
+                <dt class="col-sm-4 detail-label">
+                    <i class="fa-solid fa-clock text-dark"></i> Created
+                </dt>
+                <dd class="col-sm-8 detail-value">
+                    @(Model.Created == default(DateTime)
+                                        ? Html.Raw("<span class='text-dash'>-</span>")
+                                        : Model.Created.ToString("yyyy-MM-dd HH:mm"))
+                </dd>
+
+                <dt class="col-sm-4 detail-label">
+                    <i class="fa-solid fa-pen text-muted"></i> Modified
+                </dt>
+                <dd class="col-sm-8 detail-value">
+                    @(Model.Modified == default(DateTime) || Model.Modified == Model.Created
+                                        ? Html.Raw("<span class='text-dash'>-</span>")
+                                        : Model.Modified.ToString("yyyy-MM-dd HH:mm"))
+                </dd>
+            </dl>
+        </div>
+
+        <form asp-action="Delete" method="post" class="d-flex flex-wrap gap-2">
+            <input type="hidden" asp-for="PurchaseId" />
+            <button type="submit" class="btn btn-danger me-2">
+                <i class="fa-solid fa-trash"></i> Confirm Delete
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Back to List
+            </a>
+        </form>
+    </div>
+</div>

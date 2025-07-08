@@ -1,0 +1,183 @@
+﻿@model LibrarySystemBBU.Models.Users
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.10), 0 2px 4px 0 rgba(0,0,0,0.12);
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+    }
+
+    .avatar-3d {
+        box-shadow: 0 4px 12px 0 rgba(52,144,220,0.18);
+        border: 3px solid #38bdf8;
+    }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.15);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        backdrop-filter: blur(2px);
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+</style>
+
+<div class="row justify-content-center my-5">
+    <div class="col-md-7 col-lg-6">
+        <div class="card card-3d">
+            <div class="card-body p-5">
+                <h2 class="fw-bold text-primary text-center mb-4">
+                    <i class="fa-solid fa-user-pen"></i> Edit User
+                </h2>
+                <form asp-action="Edit" enctype="multipart/form-data" method="post" autocomplete="off">
+                    <!-- Profile Picture Preview & Upload -->
+                    <div class="text-center mb-3">
+                        <img id="profilePreview"
+                             src="@(Model.ProfilePicturePath ?? ("https://ui-avatars.com/api/?name=" + (Model.FirstName + "+" + Model.LastName) + "&background=60a5fa&color=fff&size=128"))"
+                             class="rounded-circle avatar-3d"
+                             style="width: 110px; height: 110px; object-fit:cover;"
+                             alt="Profile Preview" />
+                        <label class="btn btn-glass btn-sm ms-2">
+                            <i class="fa fa-upload"></i> Change Photo
+                            <input type="file" name="ProfilePicture" id="ProfilePicture" accept="image/*" hidden onchange="showPreview(event);" />
+                        </label>
+                        <!-- Hidden field: preserves image path when NOT uploading new -->
+                        <input type="hidden" asp-for="ProfilePicturePath" />
+                        <div>
+                            <span asp-validation-for="ProfilePicturePath" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <div class="row g-3">
+                        <!-- First Name -->
+                        <div class="col-md-6">
+                            <label asp-for="FirstName" class="form-label">First Name</label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger small"></span>
+                        </div>
+                        <!-- Last Name -->
+                        <div class="col-md-6">
+                            <label asp-for="LastName" class="form-label">Last Name</label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger small"></span>
+                        </div>
+                        <!-- Username -->
+                        <div class="col-md-6">
+                            <label asp-for="UserName" class="form-label"><i class="fa fa-user"></i> Username</label>
+                            <input asp-for="UserName" class="form-control" />
+                            <span asp-validation-for="UserName" class="text-danger small"></span>
+                        </div>
+                        <!-- Email -->
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label"><i class="fa fa-envelope"></i> Email</label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        <!-- Password -->
+                        <div class="col-md-6">
+                            <label asp-for="Password" class="form-label"><i class="fa fa-lock"></i> Password</label>
+                            <input asp-for="Password" type="password" class="form-control" autocomplete="new-password" placeholder="Leave blank to keep current" value="" />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+                        <!-- Phone -->
+                        <div class="col-md-6">
+                            <label asp-for="Phone" class="form-label"><i class="fa fa-phone"></i> Phone</label>
+                            <input asp-for="Phone" class="form-control" />
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
+                        <!-- Address -->
+                        <div class="col-md-6">
+                            <label asp-for="Address" class="form-label"><i class="fa fa-location-dot"></i> Address</label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger small"></span>
+                        </div>
+                        <!-- Gender Dropdown (no icon) -->
+                        <div class="col-md-6">
+                            <label asp-for="Gender" class="form-label">Gender</label>
+                            <select asp-for="Gender" class="form-select" asp-items="ViewBag.Genders">
+                                <option value="">-- Select Gender --</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger small"></span>
+                        </div>
+                        <!-- Date of Birth -->
+                        <div class="col-md-6">
+                            <label asp-for="DateOfBirth" class="form-label"><i class="fa fa-calendar-days"></i> Date of Birth</label>
+                            <input asp-for="DateOfBirth" type="date" class="form-control" />
+                            <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+                        </div>
+                        <!-- Created -->
+                        <div class="col-md-6">
+                            <label asp-for="Created" class="form-label"><i class="fa fa-clock"></i> Created</label>
+                            <input asp-for="Created" class="form-control" readonly />
+                            <span asp-validation-for="Created" class="text-danger small"></span>
+                        </div>
+                        <!-- Role Dropdown -->
+                        <div class="col-md-6">
+                            <label asp-for="RoleName" class="form-label"><i class="fa fa-user-tag"></i> Role</label>
+                            <select asp-for="RoleName" class="form-select" asp-items="ViewBag.Roles">
+                                <option value="">-- Select Role --</option>
+                            </select>
+                            <span asp-validation-for="RoleName" class="text-danger"></span>
+                        </div>
+                        <!-- Notes -->
+                        <div class="col-md-6">
+                            <label asp-for="Notes" class="form-label"><i class="fa fa-note-sticky"></i> Notes</label>
+                            <input asp-for="Notes" class="form-control" />
+                            <span asp-validation-for="Notes" class="text-danger small"></span>
+                        </div>
+                        <!-- Active Checkbox -->
+                        <div class="col-md-6 d-flex align-items-center pt-3">
+                            <div class="form-check ms-2">
+                                <input class="form-check-input" asp-for="IsActive" id="IsActive" />
+                                <label class="form-check-label" for="IsActive">
+                                    <i class="fa fa-toggle-on"></i> Active
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-success px-5 py-2 rounded-pill fw-bold">
+                            <i class="fa-solid fa-floppy-disk"></i> Save
+                        </button>
+                        <a asp-action="Index" class="btn btn-glass ms-2 rounded-pill px-3">
+                            <i class="fa-solid fa-arrow-left"></i> Back
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        function showPreview(event){
+            var input = event.target;
+            var reader = new FileReader();
+            reader.onload = function(){
+                var preview = document.getElementById('profilePreview');
+                preview.src = reader.result;
+            };
+            if(input.files && input.files[0]){
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

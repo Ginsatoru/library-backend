@@ -1,0 +1,113 @@
+﻿@model LibrarySystemBBU.Models.Member
+
+@{
+    ViewData["Title"] = "Delete Member";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.11), 0 2px 4px 0 rgba(0,0,0,0.13);
+        background: linear-gradient(135deg,#e0f2fe 0%,#f8fafc 100%);
+        overflow: hidden;
+        max-width: 540px;
+        margin: 32px auto 0 auto;
+    }
+
+    .avatar-3d {
+        width: 96px;
+        height: 96px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #38bdf8;
+        box-shadow: 0 4px 12px 0 rgba(52,144,220,0.18);
+        margin-bottom: 1.2rem;
+        background: #e0f2fe;
+    }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.15);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.18s;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+</style>
+
+<div class="card card-3d">
+    <div class="card-body p-4">
+        <h2 class="fw-bold text-center text-danger mb-3">
+            <i class="fa-solid fa-triangle-exclamation"></i> Delete Member
+        </h2>
+        <p class="text-center text-muted mb-3">Are you sure you want to delete this member?</p>
+        <div class="text-center">
+            <img src="@(string.IsNullOrWhiteSpace(Model.ProfilePicturePath)
+                                                  ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
+                                                  : Model.ProfilePicturePath)"
+                 class="avatar-3d" alt="Profile" />
+            <h5 class="mt-2 fw-bold text-primary">@Model.FullName</h5>
+            <span class="badge bg-info text-dark">@Model.MemberType</span>
+        </div>
+        <hr class="my-3" />
+        <dl class="row small mb-2">
+            <dt class="col-5"><i class="fa-solid fa-envelope"></i> Email</dt>
+            <dd class="col-7">@Model.Email</dd>
+            <dt class="col-5"><i class="fa-solid fa-phone"></i> Phone</dt>
+            <dd class="col-7">@Model.Phone</dd>
+            <dt class="col-5"><i class="fa-solid fa-venus-mars"></i> Gender</dt>
+            <dd class="col-7">@Model.Gender</dd>
+            <dt class="col-5"><i class="fa-solid fa-location-dot"></i> Address</dt>
+            <dd class="col-7">@Model.Address</dd>
+            <dt class="col-5"><i class="fa-solid fa-calendar-plus"></i> Join Date</dt>
+            <dd class="col-7">@Model.JoinDate.ToString("yyyy-MM-dd")</dd>
+            <dt class="col-5"><i class="fa-solid fa-clock"></i> Modified</dt>
+            <dd class="col-7">@Model.Modified.ToString("yyyy-MM-dd HH:mm")</dd>
+            <dt class="col-5"><i class="fa-solid fa-user-check"></i> Active</dt>
+            <dd class="col-7">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">Active</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">Inactive</span>
+                }
+            </dd>
+            @if (!string.IsNullOrWhiteSpace(Model.Notes))
+            {
+                <dt class="col-5"><i class="fa-solid fa-note-sticky"></i> Notes</dt>
+                <dd class="col-7">@Model.Notes</dd>
+            }
+            @if (Model.Users != null)
+            {
+                <dt class="col-5"><i class="fa-solid fa-user-tie"></i> Linked User</dt>
+                <dd class="col-7">@Model.Users.UserName</dd>
+
+                <!-- Updated here -->
+            }
+            <dt class="col-5"><i class="fa-solid fa-user"></i> Created By</dt>
+            <dd class="col-7">@Model.CreatedBy</dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="MemberId" />
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-danger px-4 me-2 rounded-pill fw-bold">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </button>
+                <a asp-action="Index" class="btn btn-glass ms-2 px-4 rounded-pill">
+                    <i class="fa-solid fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

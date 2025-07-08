@@ -1,0 +1,43 @@
+﻿@model LibrarySystemBBU.Models.Roles
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg rounded-4 border-0">
+                <div class="card-body p-4">
+                    <h2 class="card-title mb-3 fw-semibold text-danger">
+                        <i class="bi bi-trash"></i> Delete Role
+                    </h2>
+                    <hr>
+                    <h5 class="mb-4 text-secondary">Are you sure you want to delete this role?</h5>
+                    <dl class="row mb-4">
+                        <dt class="col-sm-4 text-end">Role Name</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Name)</dd>
+                    </dl>
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex gap-3">
+                            <button type="submit" class="btn btn-danger btn-lg rounded-3 shadow-sm px-4">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg rounded-3 shadow-sm px-4">
+                                <i class="bi bi-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Optional: If using Bootstrap Icons, make sure the CSS is loaded in your _Layout.cshtml -->
+    <!--
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    -->
+}

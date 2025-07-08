@@ -1,0 +1,450 @@
+﻿@model LibrarySystemBBU.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
+
+<style>
+    :root {
+        --bbu-blue: #2680C2;
+        --bbu-blue-dark: #155A8A;
+        --bbu-blue-light: #9ec9ef;
+        --card-bg: #fafdff;
+        --glass: rgba(38, 128, 194, 0.065);
+    }
+
+    body {
+        background: linear-gradient(120deg, #fafdff 60%, #e9f1f8 100%);
+    }
+
+    .dashboard-card {
+        background: var(--card-bg);
+        box-shadow: 0 6px 22px rgba(38, 128, 194, 0.13), 0 2px 8px #e0eaf5;
+        border-radius: 1.5rem;
+        color: var(--bbu-blue-dark);
+        padding: 2.2rem 1.4rem;
+        margin-bottom: 2rem;
+        border: 1.5px solid #e0eaf5;
+        transition: transform .23s cubic-bezier(.4,2,.2,1), box-shadow .3s;
+        position: relative;
+        overflow: hidden;
+        min-height: 210px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-4px) scale(1.025) rotate(-.5deg);
+            box-shadow: 0 10px 36px #bad6ed65;
+            border-color: var(--bbu-blue);
+        }
+
+    .dashboard-icon {
+        font-size: 2.5rem;
+        border-radius: 50%;
+        padding: 0.7rem 1rem;
+        box-shadow: 0 2px 10px #ddeaf8;
+        margin-bottom: 1.1rem;
+        margin-top: 0.2rem;
+        display: inline-block;
+    }
+
+    .icon-books {
+        background: linear-gradient(135deg, #8ecae6 10%, #219ebc 90%);
+        color: #023047 !important;
+    }
+
+    .icon-members {
+        background: linear-gradient(135deg, #ffe5ec 10%, #ffb5a7 90%);
+        color: #d90429 !important;
+    }
+
+    .icon-loans {
+        background: linear-gradient(135deg, #ffd6a5 10%, #fcbf49 90%);
+        color: #7c4700 !important;
+    }
+
+    .icon-overdue {
+        background: linear-gradient(135deg, #ffbaba 10%, #d90429 90%);
+        color: #5c0000 !important;
+    }
+
+    .icon-purchases {
+        background: linear-gradient(135deg, #b9fbc0 10%, #1db954 90%);
+        color: #20572b !important;
+    }
+
+    .icon-returned {
+        background: linear-gradient(135deg, #bdb2ff 10%, #7209b7 90%);
+        color: #240046 !important;
+    }
+
+    .icon-not-return {
+        background: linear-gradient(135deg, #ffd6e0 10%, #f72585 90%);
+        color: #720026 !important;
+    }
+
+    .dashboard-title {
+        font-size: 1.12rem;
+        color: var(--bbu-blue-dark);
+        font-weight: 600;
+        margin-bottom: .4rem;
+        margin-top: .3rem;
+        letter-spacing: .01em;
+    }
+
+    .dashboard-value {
+        font-size: 2.1rem;
+        font-weight: 700;
+        color: var(--bbu-blue);
+        margin-bottom: .6rem;
+        letter-spacing: .03em;
+    }
+
+    .glass-btn {
+        background: linear-gradient(90deg,#fafdff 90%,var(--glass));
+        color: var(--bbu-blue-dark);
+        border: 1.5px solid #e0eaf5;
+        border-radius: 2rem;
+        box-shadow: 0 2px 12px #ddeaf866;
+        font-weight: 600;
+        backdrop-filter: blur(3px);
+        transition: all 0.2s;
+        padding: 0.48rem 1.4rem;
+        margin-top: 0.6rem;
+        font-size: 1rem;
+        outline: none;
+    }
+
+        .glass-btn:hover, .glass-btn:focus {
+            background: var(--bbu-blue);
+            color: #fff !important;
+            border-color: var(--bbu-blue);
+            box-shadow: 0 4px 14px #9ec9ef;
+        }
+
+    .search-wrapper {
+        margin-bottom: 2.5rem;
+        position: relative;
+        max-width: 540px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .search-box {
+        width: 100%;
+        padding: 0.92rem 1.3rem 0.92rem 3rem;
+        border-radius: 2rem;
+        border: none;
+        background: #fafdff;
+        color: var(--bbu-blue-dark);
+        font-size: 1.1rem;
+        box-shadow: 0 2px 10px #ddeaf8;
+        outline: none;
+        font-family: inherit;
+        border: 1.5px solid #e0eaf5;
+    }
+
+    .search-icon {
+        position: absolute;
+        top: 50%;
+        left: 1.1rem;
+        transform: translateY(-50%);
+        font-size: 1.25rem;
+        color: var(--bbu-blue);
+        opacity: .93;
+    }
+
+    #search-results {
+        background: #fff;
+        color: var(--bbu-blue-dark);
+        border-radius: 1.1rem;
+        box-shadow: 0 2px 14px #ddeaf8;
+        position: absolute;
+        width: 100%;
+        z-index: 1000;
+        padding: 0.5rem 0;
+        margin-top: 6px;
+    }
+
+        #search-results .result-item {
+            padding: 0.78rem 1.15rem;
+            cursor: pointer;
+            border-bottom: 1px solid #e0eaf5;
+            font-size: 1rem;
+        }
+
+            #search-results .result-item:last-child {
+                border-bottom: none;
+            }
+
+            #search-results .result-item:hover {
+                background: #f2f8fd;
+                color: var(--bbu-blue-dark);
+            }
+
+    .add-buttons .btn {
+        min-width: 155px;
+        font-size: 1.03rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 2px 10px #ddeaf888;
+    }
+
+    .add-buttons .btn-success {
+        background: var(--bbu-blue);
+        border: none;
+    }
+
+    .add-buttons .btn-primary {
+        background: var(--bbu-blue-dark);
+        border: none;
+    }
+
+    .add-buttons .btn-warning {
+        background: #ffb836;
+        color: #fff;
+        border: none;
+    }
+
+        .add-buttons .btn-success:hover,
+        .add-buttons .btn-primary:hover,
+        .add-buttons .btn-warning:hover {
+            filter: brightness(0.94);
+        }
+
+    .excel-range {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        margin-bottom: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+        .excel-range label {
+            font-size: 1rem;
+            color: var(--bbu-blue-dark);
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .excel-range input[type="date"] {
+            border: 1px solid #e0eaf5;
+            border-radius: 1rem;
+            padding: 0.2rem 0.8rem;
+            font-size: 1rem;
+            background: #fafdff;
+            color: #155A8A;
+        }
+
+            .excel-range input[type="date"]:focus {
+                outline: 1.5px solid #2680C2;
+            }
+
+    .excel-checkboxes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem 1.2rem;
+        margin: 0.3rem 0;
+        align-items: center;
+    }
+
+        .excel-checkboxes label {
+            font-size: 0.97rem;
+            font-weight: 400;
+            color: var(--bbu-blue-dark);
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            margin-bottom: 0;
+        }
+
+        .excel-checkboxes input[type="checkbox"] {
+            accent-color: #2680C2;
+            width: 1rem;
+            height: 1rem;
+        }
+</style>
+
+<div class="container-fluid py-4">
+
+    <div class="search-wrapper">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="dashboard-search" class="search-box" placeholder="Search anything (Book, Member, Loan, ...)" autocomplete="off" />
+        <div id="search-results" style="display:none;"></div>
+    </div>
+
+    <!-- Add Buttons -->
+    <div class="row g-3 mb-4 justify-content-center add-buttons">
+        <div class="col-auto">
+            <a href="@Url.Action("Create", "Books")" class="btn btn-success btn-lg rounded-pill shadow-sm">
+                <i class="fas fa-plus"></i> Add Book
+            </a>
+        </div>
+        <div class="col-auto">
+            <a href="@Url.Action("Create", "Members")" class="btn btn-primary btn-lg rounded-pill shadow-sm">
+                <i class="fas fa-user-plus"></i> Add Member
+            </a>
+        </div>
+        <div class="col-auto">
+            <a href="@Url.Action("Create", "BookLoans")" class="btn btn-warning btn-lg rounded-pill shadow-sm text-white">
+                <i class="fas fa-file-signature"></i> Add Loan
+            </a>
+        </div>
+    </div>
+
+    <!-- Dashboard Cards with colorful icons -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+        <div class="col">
+            <div class="dashboard-card text-center">
+                <span class="dashboard-icon icon-books"><i class="fas fa-book"></i></span>
+                <div class="dashboard-title">Total Books</div>
+                <div class="dashboard-value">@Model.TotalBooks</div>
+                <a href="@Url.Action("Index", "Books")" class="glass-btn">View More <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dashboard-card text-center">
+                <span class="dashboard-icon icon-members"><i class="fas fa-users"></i></span>
+                <div class="dashboard-title">Total Members</div>
+                <div class="dashboard-value">@Model.TotalMembers</div>
+                <a href="@Url.Action("Index", "Members")" class="glass-btn">View More <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dashboard-card text-center">
+                <span class="dashboard-icon icon-loans"><i class="fas fa-file-invoice"></i></span>
+                <div class="dashboard-title">Total Loans</div>
+                <div class="dashboard-value">@Model.TotalLoans</div>
+                <a href="@Url.Action("Index", "BookLoans")" class="glass-btn">View More <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dashboard-card text-center">
+                <span class="dashboard-icon icon-overdue"><i class="fas fa-exclamation-triangle"></i></span>
+                <div class="dashboard-title">Overdue Loans</div>
+                <div class="dashboard-value">@Model.OverdueLoans</div>
+                <a href="@Url.Action("Index", "BookLoans")" class="glass-btn">View More <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dashboard-card text-center">
+                <span class="dashboard-icon icon-purchases"><i class="fas fa-shopping-cart"></i></span>
+                <div class="dashboard-title">Total Purchases</div>
+                <div class="dashboard-value">@Model.Purchases</div>
+                <a href="@Url.Action("Index", "Purchases")" class="glass-btn">View More <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dashboard-card text-center">
+                <span class="dashboard-icon icon-returned"><i class="fas fa-undo"></i></span>
+                <div class="dashboard-title">Total Returned</div>
+                <div class="dashboard-value">@Model.ReturnedBooks</div>
+                <a href="@Url.Action("Index", "BookReturns")" class="glass-btn">View More <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dashboard-card text-center">
+                <span class="dashboard-icon icon-not-return"><i class="fas fa-times-circle"></i></span>
+                <div class="dashboard-title">Total Not Return</div>
+                <div class="dashboard-value">@Model.NotReturn</div>
+                <a href="@Url.Action("Index", "BookLoans")" class="glass-btn">View More <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 g-4">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-2 gap-3">
+                    <div style="font-size:1.15rem;color:#2680C2;">
+                        <i class="fas fa-chart-line me-2"></i>Monthly Loan Statistics
+                    </div>
+                    <div>
+                        <form class="excel-range" id="excelForm" method="get" action="@Url.Action("DownloadExcel", "Dashboard")">
+                            <label for="startDate">Start:</label>
+                            <input type="date" id="startDate" name="start" required />
+                            <label for="endDate">End:</label>
+                            <input type="date" id="endDate" name="end" required />
+                            <div class="excel-checkboxes">
+                                <label><input type="checkbox" name="totals" value="TotalLoans" checked> Total Loans</label>
+                                <label><input type="checkbox" name="totals" value="ReturnedBooks" checked> Total Returned</label>
+                                <label><input type="checkbox" name="totals" value="NotReturn" checked> Total Not Return</label>
+                                <label><input type="checkbox" name="totals" value="OverdueLoans"> Overdue Loans</label>
+                                <label><input type="checkbox" name="totals" value="Purchases"> Purchases</label>
+                                <label><input type="checkbox" name="totals" value="TotalBooks"> Total Books</label>
+                                <label><input type="checkbox" name="totals" value="TotalMembers"> Total Members</label>
+                            </div>
+                            <button type="submit" class="glass-btn" style="font-size:.97rem;padding:0.4rem 1.3rem;">
+                                <i class="fas fa-download me-1"></i>Download Excel
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <canvas id="monthlyChart" height="70"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/jquery/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Chart.js
+    var ctx = document.getElementById('monthlyChart').getContext('2d');
+    var monthlyLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthlyLabels));
+    var monthlyData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthlyLoanStats));
+    var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: monthlyLabels,
+            datasets: [{
+                label: 'Loan Count',
+                data: monthlyData,
+                fill: true,
+                backgroundColor: 'rgba(22, 91, 170, 0.09)',
+                borderColor: '#2680C2',
+                tension: 0.36,
+                pointBackgroundColor: '#2C7BE5',
+                pointBorderColor: '#fff',
+                pointRadius: 5
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, grid: { color: "#e0eaf5" } },
+                x: { grid: { color: "#f3f7fa" } }
+            }
+        }
+    });
+
+    // Universal Search (AJAX)
+    $(function () {
+        $('#dashboard-search').on('input', function () {
+            let q = $(this).val().trim();
+            if (q.length < 2) { $('#search-results').hide(); return; }
+            $.getJSON('@Url.Action("Search", "Dashboard")', { q }, function (data) {
+                let $res = $('#search-results').empty();
+                if (!data.results.length) { $res.hide(); return; }
+                for (let r of data.results) {
+                    let html = '';
+                    if (r.type === "Book") {
+                        html = `<div class="result-item"><i class="fas fa-book me-1"></i> <b>${r.title}</b> by ${r.author} <span class="badge bg-primary">Book</span></div>`;
+                    } else if (r.type === "Member") {
+                        html = `<div class="result-item"><i class="fas fa-user me-1"></i> <b>${r.fullName}</b> <span class="badge bg-info">Member</span></div>`;
+                    } else if (r.type === "Loan") {
+                        html = `<div class="result-item"><i class="fas fa-file-invoice me-1"></i> Loan #${r.loanId} for <b>${r.member}</b> <span class="badge bg-success">Loan</span></div>`;
+                    }
+                    $res.append(html);
+                }
+                $res.show();
+            });
+        });
+        $('#dashboard-search').on('blur', function () { setTimeout(()=>$('#search-results').hide(), 180); });
+    });
+</script>

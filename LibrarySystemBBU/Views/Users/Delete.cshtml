@@ -1,0 +1,94 @@
+﻿@model LibrarySystemBBU.Models.Users
+@{
+    ViewData["Title"] = "Delete User";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.10), 0 2px 4px 0 rgba(0,0,0,0.12);
+        transition: transform .20s cubic-bezier(.39,.575,.565,1), box-shadow .2s;
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+    }
+
+        .card-3d:hover {
+            transform: translateY(-7px) scale(1.02);
+            box-shadow: 0 16px 32px 0 rgba(0, 126, 255, 0.20), 0 6px 12px 0 rgba(0,0,0,0.13);
+        }
+
+    .avatar-3d {
+        box-shadow: 0 4px 12px 0 rgba(52,144,220,0.18);
+        border: 3px solid #38bdf8;
+        transition: box-shadow .2s, border .2s;
+    }
+
+        .avatar-3d:hover {
+            box-shadow: 0 8px 24px 0 rgba(52,144,220,0.28);
+            border: 3px solid #2563eb;
+        }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.15);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        backdrop-filter: blur(2px);
+        transition: all 0.2s;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+</style>
+
+<div class="row justify-content-center my-5">
+    <div class="col-md-7 col-lg-6">
+        <div class="card card-3d shadow-lg">
+            <div class="card-body p-5">
+                <h2 class="text-danger fw-bold text-center mb-3">
+                    <i class="fa-solid fa-trash fa-bounce"></i> Delete User
+                </h2>
+                <h5 class="text-center text-secondary mb-4">
+                    Are you sure you want to delete this user?
+                </h5>
+                <div class="text-center mb-4">
+                    <img src="@(Model.ProfilePicturePath ?? "https://ui-avatars.com/api/?name=" + (Model.FirstName + "+" + Model.LastName) + "&background=60a5fa&color=fff&size=128")"
+                         class="rounded-circle avatar-3d"
+                         style="width:100px; height:100px; object-fit:cover;"
+                         alt="Profile Picture" />
+                    <div class="fw-bold mt-2">@Model.FirstName @Model.LastName</div>
+                    <div class="text-muted">@Model.UserName</div>
+                    <div class="text-muted">@Model.Email</div>
+                </div>
+                <dl class="row small mb-4">
+                    <dt class="col-sm-5"><i class="fa fa-id-card"></i> First Name</dt>
+                    <dd class="col-sm-7">@Model.FirstName</dd>
+                    <dt class="col-sm-5"><i class="fa fa-id-card"></i> Last Name</dt>
+                    <dd class="col-sm-7">@Model.LastName</dd>
+                    <dt class="col-sm-5"><i class="fa fa-user"></i> Username</dt>
+                    <dd class="col-sm-7">@Model.UserName</dd>
+                    <dt class="col-sm-5"><i class="fa fa-envelope"></i> Email</dt>
+                    <dd class="col-sm-7">@Model.Email</dd>
+                    <dt class="col-sm-5"><i class="fa fa-user-tag"></i> Role</dt>
+                    <dd class="col-sm-7">@Model.RoleName</dd>
+                    <dt class="col-sm-5"><i class="fa fa-toggle-on"></i> Active</dt>
+                    <dd class="col-sm-7">@(Model.IsActive ? "Yes" : "No")</dd>
+                </dl>
+                <form asp-action="Delete" class="mt-4 text-center">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-danger px-4 me-2 rounded-pill shadow-sm">
+                        <i class="fa-solid fa-trash"></i> Delete
+                    </button>
+                    <a asp-action="Index" class="btn btn-glass rounded-pill px-3">
+                        <i class="fa-solid fa-arrow-left"></i> Cancel
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

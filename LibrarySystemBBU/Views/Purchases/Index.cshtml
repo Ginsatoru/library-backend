@@ -1,0 +1,295 @@
+﻿@model IEnumerable<LibrarySystemBBU.Models.Purchase>
+
+@{
+    ViewData["Title"] = "Purchase List";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.11), 0 2px 4px 0 rgba(0,0,0,0.13);
+        background: linear-gradient(135deg, #f0fdfa 0%, #f8fafc 100%);
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+        .card-3d:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 16px 32px 0 rgba(16,185,129,0.17), 0 6px 12px 0 rgba(0,0,0,0.14);
+        }
+
+    .btn-glass {
+        background: rgba(16,185,129,0.12);
+        border: 1px solid #6ee7b7;
+        color: #059669;
+        transition: all 0.2s;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+        .btn-glass:hover {
+            background: #34d399;
+            color: #fff;
+            border: 1px solid #059669;
+        }
+
+    .search-input {
+        border-radius: 50px;
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,.08);
+        padding-left: 2.3rem;
+        font-size: 1rem;
+    }
+
+    .search-icon {
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #14b8a6;
+    }
+
+    .toggle-btn-group .btn.active {
+        background: #059669 !important;
+        color: #fff !important;
+    }
+
+    .table thead th {
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .text-teal {
+        color: #14b8a6;
+    }
+
+    .badge-soft {
+        background-color: rgba(20, 184, 166, 0.10) !important;
+        color: #059669 !important;
+        font-weight: 600;
+    }
+
+    .badge-label {
+        background: #f3f4f6 !important;
+        color: #334155 !important;
+        font-size: 1em;
+    }
+</style>
+
+<div class="row my-4">
+    <div class="col-12 text-center">
+        <h2 class="fw-bold text-success mb-1" style="letter-spacing:2px;">
+            <i class="fa-solid fa-cart-shopping fa-2x" style="color:#059669"></i> Purchase List
+        </h2>
+    </div>
+</div>
+
+<div class="row mb-3 align-items-center">
+    <div class="col-md-4 col-sm-7 mx-auto">
+        <div class="position-relative">
+            <span class="position-absolute search-icon">
+                <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+            </span>
+            <input id="purchaseSearch" type="text" class="form-control search-input ps-5" placeholder="Search by quantity, supplier, book, notes..." autocomplete="off" />
+        </div>
+    </div>
+    <div class="col-6 col-md-4 text-end mt-2 mt-md-0">
+        <div class="btn-group toggle-btn-group" role="group">
+            <button id="btnCardView" class="btn btn-glass active" type="button" title="Card View" aria-label="Card View">
+                <i class="fa-solid fa-grip"></i>
+            </button>
+            <button id="btnListView" class="btn btn-glass" type="button" title="List View" aria-label="List View">
+                <i class="fa-solid fa-list"></i>
+            </button>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 text-end mt-2 mt-md-0">
+        <a asp-action="Create" class="btn btn-success btn-glass shadow px-4">
+            <i class="fa-solid fa-plus"></i> Add Purchase
+        </a>
+    </div>
+</div>
+
+<!-- Card View -->
+<div class="row g-4" id="purchaseCardList">
+    @foreach (var item in Model)
+    {
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 purchase-card"
+             data-quantity="@item.Quantity"
+             data-supplier="@item.Supplier"
+             data-notes="@item.Notes"
+             data-book="@item.Book?.Title"
+             data-cost="@item.Cost"
+             data-date="@item.PurchaseDate"
+             data-created="@item.Created"
+             data-modified="@item.Modified">
+            <div class="card card-3d h-100">
+                <div class="card-header bg-success text-white py-3" style="border-top-left-radius:2rem;border-top-right-radius:2rem;">
+                    <i class="fa-solid fa-book"></i>
+                    <span class="fw-bold ms-2">@item.Book?.Title</span>
+                </div>
+                <div class="card-body px-4 py-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge bg-success text-white px-3 py-2 rounded-pill" style="font-size:1.1em;">
+                            <i class="fa-solid fa-box"></i> Qty: @item.Quantity
+                        </span>
+                        <span class="badge bg-warning text-dark rounded-pill px-2 ms-2">
+                            <i class="fa-solid fa-dollar-sign"></i> @item.Cost
+                        </span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="badge bg-info text-dark rounded-pill px-2">
+                            <i class="fa-solid fa-calendar-day"></i> @item.PurchaseDate.ToString("yyyy-MM-dd")
+                        </span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="badge badge-label rounded-pill px-2">
+                            <i class="fa-solid fa-user-tie"></i> @item.Supplier
+                        </span>
+                    </div>
+                    <hr />
+                    <div class="d-flex justify-content-center gap-2 mt-1">
+                        <a asp-action="Edit" asp-route-id="@item.PurchaseId" class="btn btn-glass btn-sm" title="Edit">
+                            <i class="fa-solid fa-pen-to-square fa-lg" style="color:#eab308"></i>
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.PurchaseId" class="btn btn-glass btn-sm" title="Details">
+                            <i class="fa-solid fa-circle-info fa-lg" style="color:#0ea5e9"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.PurchaseId" class="btn btn-glass btn-sm" title="Delete">
+                            <i class="fa-solid fa-trash fa-lg" style="color:#ef4444"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Table/List View -->
+<div id="purchaseTableList" class="d-none">
+    <div class="table-responsive">
+        <table class="table align-middle table-hover shadow-lg"
+               style="border-radius:1.3rem;overflow:hidden;background:linear-gradient(135deg,#f0fdfa 0%,#f8fafc 100%);">
+            <thead class="table-success" style="border-top-left-radius:2rem;border-top-right-radius:2rem;font-size:1.07em;">
+                <tr>
+                    <th><i class="fa-solid fa-book text-teal"></i> Book Title</th>
+                    <th><i class="fa-solid fa-box text-success"></i> Qty</th>
+                    <th><i class="fa-solid fa-calendar-day text-info"></i> Date</th>
+                    <th><i class="fa-solid fa-user-tie text-primary"></i> Supplier</th>
+                    <th><i class="fa-solid fa-dollar-sign text-warning"></i> Cost</th>
+                    <th><i class="fa-solid fa-file-alt text-secondary"></i> Notes</th>
+                    <th><i class="fa-solid fa-clock text-dark"></i> Created</th>
+                    <th><i class="fa-solid fa-pen text-muted"></i> Modified</th>
+                    <th class="text-center" style="border-top-right-radius:1.2rem;">
+                        <i class="fa-solid fa-gears"></i> Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody style="background:rgba(255,255,255,0.98);font-size:1.04em;">
+                @foreach (var item in Model)
+                {
+                    <tr class="purchase-row"
+                        style="transition:box-shadow .18s;"
+                        data-quantity="@item.Quantity"
+                        data-supplier="@item.Supplier"
+                        data-notes="@item.Notes"
+                        data-book="@item.Book?.Title"
+                        data-cost="@item.Cost"
+                        data-date="@item.PurchaseDate"
+                        data-created="@item.Created"
+                        data-modified="@item.Modified"
+                        onmouseover="this.style.boxShadow='0 4px 22px 0 rgba(16,185,129,0.13)'"
+                        onmouseout="this.style.boxShadow='none'">
+                        <td class="fw-semibold text-teal">
+                            <i class="fa-solid fa-book"></i> @item.Book?.Title
+                        </td>
+                        <td>
+                            <span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-2 fw-semibold">
+                                <i class="fa-solid fa-box"></i> @item.Quantity
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge rounded-pill bg-info bg-opacity-10 text-info px-2">
+                                @item.PurchaseDate.ToString("yyyy-MM-dd")
+                            </span>
+                        </td>
+                        <td>
+                            <span class="fw-semibold">
+                                <i class="fa-solid fa-user-tie"></i> @item.Supplier
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge bg-warning text-dark rounded-pill px-2">
+                                <i class="fa-solid fa-dollar-sign"></i> @item.Cost
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-secondary">@item.Notes</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary bg-opacity-10 text-dark rounded-pill px-2">
+                                <i class="fa-solid fa-clock"></i> @(item.Created == default(DateTime) ? "-" : item.Created.ToString("yyyy-MM-dd"))
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary bg-opacity-10 text-dark rounded-pill px-2">
+                                <i class="fa-solid fa-pen"></i> @(item.Modified == default(DateTime) ? "-" : item.Modified.ToString("yyyy-MM-dd"))
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@item.PurchaseId"
+                               class="btn btn-glass btn-sm me-1" title="Edit">
+                                <i class="fa-solid fa-pen-to-square" style="color:#eab308"></i>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.PurchaseId"
+                               class="btn btn-glass btn-sm me-1" title="Details">
+                                <i class="fa-solid fa-circle-info" style="color:#0ea5e9"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.PurchaseId"
+                               class="btn btn-glass btn-sm" title="Delete">
+                                <i class="fa-solid fa-trash" style="color:#ef4444"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Live search for both view types
+        document.getElementById('purchaseSearch').addEventListener('input', function () {
+            let q = this.value.toLowerCase();
+            document.querySelectorAll('.purchase-card').forEach(function (el) {
+                let data = Array.from(el.attributes)
+                    .filter(attr => attr.name.startsWith('data-'))
+                    .map(attr => attr.value.toLowerCase())
+                    .join(' ');
+                el.style.display = data.includes(q) ? "" : "none";
+            });
+            document.querySelectorAll('.purchase-row').forEach(function (el) {
+                let data = Array.from(el.attributes)
+                    .filter(attr => attr.name.startsWith('data-'))
+                    .map(attr => attr.value.toLowerCase())
+                    .join(' ');
+                el.style.display = data.includes(q) ? "" : "none";
+            });
+        });
+
+        // Toggle View: Card vs List
+        document.getElementById('btnCardView').addEventListener('click', function () {
+            this.classList.add('active');
+            document.getElementById('btnListView').classList.remove('active');
+            document.getElementById('purchaseCardList').classList.remove('d-none');
+            document.getElementById('purchaseTableList').classList.add('d-none');
+        });
+        document.getElementById('btnListView').addEventListener('click', function () {
+            this.classList.add('active');
+            document.getElementById('btnCardView').classList.remove('active');
+            document.getElementById('purchaseCardList').classList.add('d-none');
+            document.getElementById('purchaseTableList').classList.remove('d-none');
+        });
+    </script>
+}

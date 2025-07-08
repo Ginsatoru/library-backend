@@ -1,0 +1,193 @@
+﻿@model IEnumerable<LibrarySystemBBU.Models.AdjustmentDetail>
+
+@{
+    ViewData["Title"] = "Stock Adjustments";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 1.6rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.12);
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+        transition: box-shadow .15s;
+        margin-bottom: 1.6rem;
+    }
+
+        .card-3d:hover {
+            box-shadow: 0 18px 36px 0 rgba(52,144,220,0.18);
+        }
+
+    .btn-glass {
+        background: rgba(37,99,235,0.09);
+        border: 1px solid #60a5fa;
+        color: #2563eb;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.2s;
+        box-shadow: 0 1px 6px rgba(52,144,220,0.09);
+    }
+
+        .btn-glass:hover {
+            background: #2563eb;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+
+    .table thead th {
+        vertical-align: middle;
+        background: #2563eb;
+        color: #fff;
+        font-weight: 600;
+        border-top-left-radius: 1.2rem;
+        border-top-right-radius: 1.2rem;
+        font-size: 1.08em;
+        letter-spacing: .5px;
+        border: none;
+    }
+
+    .badge {
+        font-size: 1em;
+        border-radius: 1em;
+        font-weight: 600;
+        padding: 0.36em 1.1em;
+        box-shadow: 0 1px 3px rgba(52,144,220,0.09);
+    }
+
+    .badge-success {
+        background: linear-gradient(90deg,#38bdf8,#22c55e 90%);
+        color: #fff;
+    }
+
+    .badge-danger {
+        background: linear-gradient(90deg,#f87171,#fbbf24 80%);
+        color: #fff;
+    }
+
+    .badge-primary {
+        background: linear-gradient(90deg,#2563eb,#38bdf8 90%);
+        color: #fff;
+    }
+
+    .badge-info {
+        background: linear-gradient(90deg,#f0fdfa,#38bdf8 90%);
+        color: #0c4a6e;
+    }
+
+    .search-bar-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        gap: 1rem;
+        margin-bottom: 1.3rem;
+    }
+
+    .search-input {
+        border-radius: 30px;
+        padding-left: 2.3rem;
+        min-width: 200px;
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,.08);
+        font-size: 1rem;
+        border: 1px solid #60a5fa;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #38bdf8;
+        font-size: 1.1em;
+    }
+</style>
+
+<div class="card card-3d">
+    <div class="card-header bg-gradient text-primary d-flex align-items-center" style="background: linear-gradient(90deg, #2563eb 65%, #38bdf8 100%);">
+        <i class="fa-solid fa-sliders fa-lg me-2"></i>
+        <span class="fw-bold fs-5 text-white">Stock Adjustments</span>
+        <a asp-action="Create" class="btn btn-success btn-glass ms-auto shadow-sm">
+            <i class="fa-solid fa-plus"></i> Create New
+        </a>
+    </div>
+    <div class="card-body pt-4 px-4">
+        <div class="search-bar-wrap position-relative mb-2">
+            <span class="search-icon position-absolute"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <input id="searchInput" type="text" class="form-control search-input ps-5" placeholder="Search adjustments, note, type, barcode..." autocomplete="off" />
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th style="border-top-left-radius:1.2rem;">
+                            <i class="fa-solid fa-sort-numeric-up"></i> Qty Changed
+                        </th>
+                        <th><i class="fa-solid fa-comment-dots"></i> Note</th>
+                        <th><i class="fa-solid fa-gears"></i> Type</th>
+                        <th><i class="fa-solid fa-barcode"></i> Barcode</th>
+                        <th class="text-center" style="border-top-right-radius:1.2rem;">
+                            <i class="fa-solid fa-ellipsis-h"></i> Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span class="badge @(item.QuantityChanged >= 0 ? "badge-success" : "badge-danger")">
+                                    <i class="fa-solid @(item.QuantityChanged >= 0 ? "fa-plus" : "fa-minus")"></i>
+                                    @item.QuantityChanged
+                                </span>
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(item.Note))
+                                {
+                                    <span>@item.Note</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </td>
+                            <td>
+                                <span class="badge badge-primary">
+                                    @item.Adjustment?.AdjustmentType
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge badge-info">
+                                    @item.Catalog?.Barcode
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="Edit" asp-route-id="@item.AdjustmentDetailId" class="btn btn-glass btn-sm me-1" title="Edit">
+                                    <i class="fa-solid fa-pen-to-square" style="color:#eab308"></i>
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.AdjustmentDetailId" class="btn btn-glass btn-sm me-1" title="Details">
+                                    <i class="fa-solid fa-circle-info" style="color:#0ea5e9"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.AdjustmentDetailId" class="btn btn-glass btn-sm" title="Delete">
+                                    <i class="fa-solid fa-trash" style="color:#ef4444"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function () {
+            let q = this.value.toLowerCase();
+            document.querySelectorAll('tbody tr').forEach(function (row) {
+                let rowText = row.innerText.toLowerCase();
+                row.style.display = rowText.includes(q) ? "" : "none";
+            });
+        });
+    </script>
+}

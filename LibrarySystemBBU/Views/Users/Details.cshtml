@@ -1,0 +1,96 @@
+﻿@model LibrarySystemBBU.Models.Users
+@{
+    ViewData["Title"] = "User Details";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.10), 0 2px 4px 0 rgba(0,0,0,0.12);
+        transition: transform .20s cubic-bezier(.39,.575,.565,1), box-shadow .2s;
+        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+        overflow: hidden;
+    }
+
+    .avatar-3d {
+        box-shadow: 0 4px 12px 0 rgba(52,144,220,0.18);
+        border: 3px solid #38bdf8;
+        transition: box-shadow .2s, border .2s;
+    }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.15);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        backdrop-filter: blur(2px);
+        transition: all 0.2s;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+</style>
+
+<div class="row justify-content-center my-5">
+    <div class="col-md-7 col-lg-6">
+        <div class="card card-3d">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold text-primary mb-3">
+                        <i class="fa-duotone fa-user-circle"></i> User Details
+                    </h2>
+                    <img src="@(Model.ProfilePicturePath ?? "https://ui-avatars.com/api/?name=" + (Model.FirstName + "+" + Model.LastName) + "&background=60a5fa&color=fff&size=128")"
+                         class="rounded-circle avatar-3d mb-2"
+                         style="width:100px; height:100px; object-fit:cover;"
+                         alt="Profile Picture" />
+                    <div class="fw-bold mt-2" style="font-size: 1.3rem;">
+                        @Model.FirstName @Model.LastName
+                    </div>
+                    <div class="text-muted">@Model.UserName</div>
+                    <div class="text-muted">@Model.Email</div>
+                </div>
+                <dl class="row mb-4 small">
+                    <dt class="col-sm-5"><i class="fa fa-id-card"></i> First Name</dt>
+                    <dd class="col-sm-7">@Model.FirstName</dd>
+                    <dt class="col-sm-5"><i class="fa fa-id-card"></i> Last Name</dt>
+                    <dd class="col-sm-7">@Model.LastName</dd>
+                    <dt class="col-sm-5"><i class="fa fa-user"></i> Username</dt>
+                    <dd class="col-sm-7">@Model.UserName</dd>
+                    <dt class="col-sm-5"><i class="fa fa-envelope"></i> Email</dt>
+                    <dd class="col-sm-7">@Model.Email</dd>
+                    <dt class="col-sm-5"><i class="fa fa-phone"></i> Phone</dt>
+                    <dd class="col-sm-7">@Model.Phone</dd>
+                    <dt class="col-sm-5"><i class="fa fa-location-dot"></i> Address</dt>
+                    <dd class="col-sm-7">@Model.Address</dd>
+                    <dt class="col-sm-5"><i class="fa fa-venus-mars"></i> Gender</dt>
+                    <dd class="col-sm-7">@Model.Gender</dd>
+                    <dt class="col-sm-5"><i class="fa fa-calendar-days"></i> DOB</dt>
+                    <dd class="col-sm-7">@Model.DateOfBirth?.ToString("yyyy-MM-dd")</dd>
+                    <dt class="col-sm-5"><i class="fa fa-user-tag"></i> Role</dt>
+                    <dd class="col-sm-7">@Model.RoleName</dd>
+                    <dt class="col-sm-5"><i class="fa fa-toggle-on"></i> Active</dt>
+                    <dd class="col-sm-7">@(Model.IsActive ? "Yes" : "No")</dd>
+                    <dt class="col-sm-5"><i class="fa fa-note-sticky"></i> Notes</dt>
+                    <dd class="col-sm-7">@Model.Notes</dd>
+                    <dt class="col-sm-5"><i class="fa fa-clock"></i> Created</dt>
+                    <dd class="col-sm-7">@Model.Created?.ToString("yyyy-MM-dd HH:mm")</dd>
+                    <dt class="col-sm-5"><i class="fa fa-pen-to-square"></i> Modified</dt>
+                    <dd class="col-sm-7">@Model.Modified?.ToString("yyyy-MM-dd HH:mm")</dd>
+                </dl>
+                <div class="text-center">
+                    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-glass me-2">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                    </a>
+                    <a asp-action="Index" class="btn btn-glass">
+                        <i class="fa-solid fa-arrow-left"></i> Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

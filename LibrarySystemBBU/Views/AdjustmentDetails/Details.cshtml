@@ -1,0 +1,80 @@
+﻿@model LibrarySystemBBU.Models.AdjustmentDetail
+
+@{
+    ViewData["Title"] = "Adjustment Detail";
+}
+
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<style>
+    .card-3d {
+        border: none;
+        border-radius: 1.6rem;
+        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.11), 0 2px 4px 0 rgba(0,0,0,0.13);
+        background: linear-gradient(135deg,#e0f2fe 0%,#f8fafc 100%);
+        overflow: hidden;
+        transition: box-shadow .15s;
+        margin-bottom: 1.6rem;
+    }
+
+        .card-3d:hover {
+            box-shadow: 0 18px 36px 0 rgba(52,144,220,0.18);
+        }
+
+    .btn-glass {
+        background: rgba(59,130,246,0.13);
+        border: 1px solid #93c5fd;
+        color: #2563eb;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.2s;
+        box-shadow: 0 1px 6px rgba(52,144,220,0.07);
+    }
+
+        .btn-glass:hover {
+            background: #60a5fa;
+            color: #fff;
+            border: 1px solid #2563eb;
+        }
+
+    dt {
+        color: #2563eb;
+        font-weight: 600;
+    }
+</style>
+
+<div class="row justify-content-center my-4">
+    <div class="col-md-8 col-lg-6">
+        <div class="card card-3d shadow-lg border-0">
+            <div class="card-header bg-gradient text-primary d-flex align-items-center"
+                 style="background: linear-gradient(90deg, #2563eb 70%, #38bdf8 100%);">
+                <i class="fa-solid fa-circle-info fa-lg me-2"></i>
+                <span class="fw-bold fs-5 text-white">Adjustment Detail</span>
+            </div>
+            <div class="card-body px-4 py-4">
+                <dl class="row">
+                    <dt class="col-sm-5 text-end"><i class="fa-solid fa-sort-numeric-up"></i> Qty Changed</dt>
+                    <dd class="col-sm-7">@Model.QuantityChanged</dd>
+
+                    <dt class="col-sm-5 text-end"><i class="fa-solid fa-comment-dots"></i> Note</dt>
+                    <dd class="col-sm-7">
+                        @(string.IsNullOrWhiteSpace(Model.Note) ? "-" : Model.Note)
+                    </dd>
+
+                    <dt class="col-sm-5 text-end"><i class="fa-solid fa-gears"></i> Type</dt>
+                    <dd class="col-sm-7">@Model.Adjustment?.AdjustmentType</dd>
+
+                    <dt class="col-sm-5 text-end"><i class="fa-solid fa-barcode"></i> Barcode</dt>
+                    <dd class="col-sm-7">@Model.Catalog?.Barcode</dd>
+                </dl>
+            </div>
+            <div class="card-footer d-flex flex-wrap justify-content-center gap-2 bg-light">
+                <a asp-action="Edit" asp-route-id="@Model?.AdjustmentDetailId" class="btn btn-warning btn-glass">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                </a>
+                <a asp-action="Index" class="btn btn-glass btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
