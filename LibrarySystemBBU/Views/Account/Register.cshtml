@@ -3,48 +3,68 @@
     Layout = null;
     ViewData["Title"] = "Register";
 }
-
 <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
 <div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow-lg p-4" style="width: 400px; border-radius: 15px;">
+    <div class="card shadow-lg p-4" style="width: 420px; border-radius: 15px;">
         <div class="text-center mb-3">
-            <h3 class="fw-bold text-primary">Create an Account 🚀</h3>
-            <p class="text-muted">Join us today!</p>
+            <h3 class="fw-bold text-primary">Create a Library Member 🚀</h3>
+            <p class="text-muted">Sign up to become a member.</p>
         </div>
-        <form asp-action="Register">
+
+        <form asp-action="Register" asp-controller="Account" method="post" autocomplete="off" novalidate>
+            @Html.AntiForgeryToken()
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="mb-3">
-                <label asp-for="UserName" class="form-label"></label>
-                <input asp-for="UserName" class="form-control rounded-pill" placeholder="Choose a username" />
+                <label asp-for="UserName" class="form-label">Username</label>
+                <input asp-for="UserName" class="form-control rounded-pill" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" type="email" class="form-control rounded-pill" placeholder="Enter your email" />
+                <label asp-for="Email" class="form-label">Email</label>
+                <input asp-for="Email" type="email" class="form-control rounded-pill" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label asp-for="RoleName" class="form-label"></label>
-                <select asp-for="RoleName" asp-items="@Html.GetEnumSelectList(typeof(RoleEnum))"
-                        class="form-select rounded-pill">
-                    <option value="" style="display:none;">Select Role</option>
-                </select>
-                <span asp-validation-for="RoleName" class="text-danger"></span>
+                <label asp-for="Phone" class="form-label">Phone</label>
+                <input asp-for="Phone" type="tel" class="form-control rounded-pill" placeholder="e.g. 012-345-678" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" type="password" class="form-control rounded-pill" placeholder="Create a password" />
+                <label asp-for="FirstName" class="form-label">First Name</label>
+                <input asp-for="FirstName" class="form-control rounded-pill" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="LastName" class="form-label">Last Name</label>
+                <input asp-for="LastName" class="form-control rounded-pill" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            @* Registration for Members only, so we hide Role *@
+            @* <div class="mb-3">
+                <label asp-for="RoleName" class="form-label"></label>
+                <select asp-for="RoleName" class="form-select rounded-pill">
+                    <option value="" selected disabled>Select Role</option>
+                </select>
+                <span asp-validation-for="RoleName" class="text-danger"></span>
+            </div> *@
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control rounded-pill" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label asp-for="ConfirmPassword" class="form-label"></label>
-                <input asp-for="ConfirmPassword" type="password" class="form-control rounded-pill" placeholder="Confirm your password" />
+                <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                <input asp-for="ConfirmPassword" type="password" class="form-control rounded-pill" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
 
@@ -54,9 +74,13 @@
         </form>
 
         <div class="text-center mt-3">
-            <a asp-action="Login" class="text-decoration-none text-primary">
+            <a asp-action="Login" asp-controller="Account" class="text-decoration-none text-primary">
                 Already have an account? Login
             </a>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

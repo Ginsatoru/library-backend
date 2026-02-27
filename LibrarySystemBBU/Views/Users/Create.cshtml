@@ -1,116 +1,162 @@
 ﻿@model LibrarySystemBBU.Models.Users
 @{
     ViewData["Title"] = "Create User";
+
+    // Role detection that works with Identity or Session("RoleName")
+    var roleFromSession = Context?.Session?.GetString("RoleName");
+    bool isAdmin = User.IsInRole("Admin") || string.Equals(roleFromSession, "Admin", StringComparison.OrdinalIgnoreCase);
+    bool isLibrarian = User.IsInRole("Librarian") || string.Equals(roleFromSession, "Librarian", StringComparison.OrdinalIgnoreCase);
+    bool readOnly = !isAdmin; // Librarian => true (view-only)
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-warning">@TempData["Error"]</div>
 }
 
 <div class="row justify-content-center my-5">
     <div class="col-md-7 col-lg-6">
         <div class="card card-3d">
             <div class="card-body p-5">
+
                 <h2 class="fw-bold text-primary text-center mb-4">
                     <i class="fa-solid fa-user-plus"></i> Create User
                 </h2>
-                <form asp-action="Create" enctype="multipart/form-data" autocomplete="off">
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                    <div class="text-center mb-4">
-                        <img id="profilePreview" src="https://ui-avatars.com/api/?name=User&background=acd8fa&color=fff&size=128"
-                             class="img-thumbnail rounded-circle avatar-3d border" style="max-width: 110px;" alt="Profile Preview" />
-                        <label class="btn btn-glass btn-sm mt-2">
-                            <i class="fa fa-upload"></i> Choose Photo
-                            <input type="file" name="ProfilePicture" id="ProfilePicture" accept="image/*" hidden onchange="showPreview(event);" />
-                        </label>
-                        <span asp-validation-for="ProfilePicturePath" class="text-danger"></span>
-                    </div>
-                    <div class="row g-3">
-                        <!-- First Name -->
-                        <div class="col-md-6">
-                            <label asp-for="FirstName" class="form-label">First Name</label>
-                            <input asp-for="FirstName" class="form-control" placeholder="First Name" />
-                            <span asp-validation-for="FirstName" class="text-danger"></span>
+
+                <!-- Guard wrapper: adds an invisible overlay when readOnly=true -->
+                <div class="form-guard position-relative">
+                    @if (readOnly)
+                    {
+                        <!-- Invisible overlay blocks all interactions but keeps the exact UI -->
+                        <div class="read-only-overlay" title="Only Admin can create or edit users"></div>
+                    }
+
+                    <form asp-action="Create" enctype="multipart/form-data" autocomplete="off">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="text-center mb-4">
+                            <img id="profilePreview" src="https://ui-avatars.com/api/?name=User&background=acd8fa&color=fff&size=128"
+                                 class="img-thumbnail rounded-circle avatar-3d border" style="max-width: 110px;" alt="Profile Preview" />
+                            <label class="btn btn-glass btn-sm mt-2">
+                                <i class="fa fa-upload"></i> Choose Photo
+                                <input type="file" name="ProfilePicture" id="ProfilePicture" accept="image/*" hidden onchange="showPreview(event);" />
+                            </label>
+                            <span asp-validation-for="ProfilePicturePath" class="text-danger"></span>
                         </div>
-                        <!-- Last Name -->
-                        <div class="col-md-6">
-                            <label asp-for="LastName" class="form-label">Last Name</label>
-                            <input asp-for="LastName" class="form-control" placeholder="Last Name" />
-                            <span asp-validation-for="LastName" class="text-danger"></span>
-                        </div>
-                        <!-- Username -->
-                        <div class="col-md-6">
-                            <label asp-for="UserName" class="form-label"><i class="fa fa-user"></i> Username</label>
-                            <input asp-for="UserName" class="form-control" placeholder="Username" />
-                            <span asp-validation-for="UserName" class="text-danger"></span>
-                        </div>
-                        <!-- Email -->
-                        <div class="col-md-6">
-                            <label asp-for="Email" class="form-label"><i class="fa fa-envelope"></i> Email</label>
-                            <input asp-for="Email" class="form-control" placeholder="Email address" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
-                        <!-- Password -->
-                        <div class="col-md-6">
-                            <label asp-for="Password" class="form-label"><i class="fa fa-lock"></i> Password</label>
-                            <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
-                        </div>
-                        <!-- Phone -->
-                        <div class="col-md-6">
-                            <label asp-for="Phone" class="form-label"><i class="fa fa-phone"></i> Phone</label>
-                            <input asp-for="Phone" class="form-control" placeholder="Phone number" />
-                            <span asp-validation-for="Phone" class="text-danger"></span>
-                        </div>
-                        <!-- Address -->
-                        <div class="col-md-6">
-                            <label asp-for="Address" class="form-label"><i class="fa fa-location-dot"></i> Address</label>
-                            <input asp-for="Address" class="form-control" placeholder="Address" />
-                            <span asp-validation-for="Address" class="text-danger"></span>
-                        </div>
-                        <!-- Gender Dropdown (from ViewBag.Genders, no icon) -->
-                        <div class="col-md-6">
-                            <label asp-for="Gender" class="form-label">Gender</label>
-                            <select asp-for="Gender" class="form-select" asp-items="ViewBag.Genders">
-                                <option value="">-- Select Gender --</option>
-                            </select>
-                            <span asp-validation-for="Gender" class="text-danger"></span>
-                        </div>
-                        <!-- Date of Birth -->
-                        <div class="col-md-6">
-                            <label asp-for="DateOfBirth" class="form-label"><i class="fa fa-calendar-days"></i> Date of Birth</label>
-                            <input asp-for="DateOfBirth" type="date" class="form-control" />
-                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                        </div>
-                        <!-- Role Dropdown -->
-                        <div class="col-md-6">
-                            <label asp-for="RoleName" class="form-label"><i class="fa fa-user-tag"></i> Role</label>
-                            <select asp-for="RoleName" class="form-select" asp-items="ViewBag.Roles">
-                                <option value="">-- Select Role --</option>
-                            </select>
-                            <span asp-validation-for="RoleName" class="text-danger"></span>
-                        </div>
-                        <!-- Notes -->
-                        <div class="col-md-12">
-                            <label asp-for="Notes" class="form-label"><i class="fa fa-note-sticky"></i> Notes</label>
-                            <input asp-for="Notes" class="form-control" placeholder="Notes" />
-                            <span asp-validation-for="Notes" class="text-danger"></span>
-                        </div>
-                        <!-- Active Checkbox -->
-                        <div class="col-md-12 d-flex align-items-center pt-2">
-                            <div class="form-check ms-2">
-                                <input class="form-check-input" asp-for="IsActive" id="IsActive" />
-                                <label class="form-check-label" for="IsActive">
-                                    <i class="fa fa-toggle-on"></i> Active
-                                </label>
+
+                        <div class="row g-3">
+                            <!-- First Name -->
+                            <div class="col-md-6">
+                                <label asp-for="FirstName" class="form-label">First Name</label>
+                                <input asp-for="FirstName" class="form-control" placeholder="First Name" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="col-md-6">
+                                <label asp-for="LastName" class="form-label">Last Name</label>
+                                <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+
+                            <!-- Username -->
+                            <div class="col-md-6">
+                                <label asp-for="UserName" class="form-label"><i class="fa fa-user"></i> Username</label>
+                                <input asp-for="UserName" class="form-control" placeholder="Username" />
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label"><i class="fa fa-envelope"></i> Email</label>
+                                <input asp-for="Email" class="form-control" placeholder="Email address" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="col-md-6">
+                                <label asp-for="Password" class="form-label"><i class="fa fa-lock"></i> Password</label>
+                                <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="col-md-6">
+                                <label asp-for="Phone" class="form-label"><i class="fa fa-phone"></i> Phone</label>
+                                <input asp-for="Phone" class="form-control" placeholder="Phone number" />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="col-md-6">
+                                <label asp-for="Address" class="form-label"><i class="fa fa-location-dot"></i> Address</label>
+                                <input asp-for="Address" class="form-control" placeholder="Address" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="col-md-6">
+                                <label asp-for="Gender" class="form-label">Gender</label>
+                                <select asp-for="Gender" class="form-select" asp-items="ViewBag.Genders">
+                                    <option value="">-- Select Gender --</option>
+                                </select>
+                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            </div>
+
+                            <!-- Date of Birth -->
+                            <div class="col-md-6">
+                                <label asp-for="DateOfBirth" class="form-label"><i class="fa fa-calendar-days"></i> Date of Birth</label>
+                                <input asp-for="DateOfBirth" type="date" class="form-control" />
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                            </div>
+
+                            <!-- Role -->
+                            <div class="col-md-6">
+                                <label asp-for="RoleName" class="form-label"><i class="fa fa-user-tag"></i> Role</label>
+                                <select asp-for="RoleName" class="form-select" asp-items="ViewBag.Roles">
+                                    <option value="">-- Select Role --</option>
+                                </select>
+                                <span asp-validation-for="RoleName" class="text-danger"></span>
+                            </div>
+
+                            <!-- Notes -->
+                            <div class="col-md-12">
+                                <label asp-for="Notes" class="form-label"><i class="fa fa-note-sticky"></i> Notes</label>
+                                <input asp-for="Notes" class="form-control" placeholder="Notes" />
+                                <span asp-validation-for="Notes" class="text-danger"></span>
+                            </div>
+
+                            <!-- Active -->
+                            <div class="col-md-12 d-flex align-items-center pt-2">
+                                <div class="form-check ms-2">
+                                    <input class="form-check-input" asp-for="IsActive" id="IsActive" />
+                                    <label class="form-check-label" for="IsActive">
+                                        <i class="fa fa-toggle-on"></i> Active
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="mt-4 text-center">
-                        <button type="submit" class="btn btn-success px-5 py-2 rounded-pill fw-bold">
-                            <i class="fa-solid fa-circle-plus"></i> Create User
-                        </button>
-                        <a asp-action="Index" class="btn btn-glass ms-2 rounded-pill px-3">
-                            <i class="fa-solid fa-arrow-left"></i> Back to List
-                        </a>
-                    </div>
-                </form>
+
+                        <div class="mt-4 text-center">
+                            @if (isAdmin)
+                            {
+                                <button type="submit" class="btn btn-success px-5 py-2 rounded-pill fw-bold">
+                                    <i class="fa-solid fa-circle-plus"></i> Create User
+                                </button>
+                            }
+                            else
+                            {
+                                <!-- looks identical; overlay will block click -->
+                                <button type="button" class="btn btn-success px-5 py-2 rounded-pill fw-bold">
+                                    <i class="fa-solid fa-circle-plus"></i> Create User
+                                </button>
+                            }
+                            <a asp-action="Index" class="btn btn-glass ms-2 rounded-pill px-3">
+                                <i class="fa-solid fa-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
             </div>
         </div>
     </div>
@@ -129,6 +175,17 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+        // Optional: show a hint when Librarian clicks anywhere on the overlay
+        document.addEventListener('DOMContentLoaded', function(){
+            var overlay = document.querySelector('.read-only-overlay');
+            if(overlay){
+                overlay.addEventListener('click', function(){
+                    // You can swap to a toast if you have one
+                    alert('Only Admin can create or edit users.');
+                });
+            }
+        });
     </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -177,4 +234,17 @@
             color: #fff;
             border: 1px solid #2563eb;
         }
+
+    /* The overlay that blocks interaction while keeping the exact visuals */
+    .form-guard {
+        position: relative;
+    }
+
+    .read-only-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        background: rgba(0,0,0,0); /* fully transparent */
+        cursor: not-allowed;
+    }
 </style>

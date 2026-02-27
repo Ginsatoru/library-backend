@@ -1,33 +1,75 @@
+﻿using System;
 using LibrarySystemBBU.Data;
 using LibrarySystemBBU.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using OfficeOpenXml; // <-- ADD THIS
+using OfficeOpenXml;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
 builder.Services.AddControllersWithViews();
 
-// Register your custom services
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
 builder.Services.AddScoped<DapperFactory>();
 builder.Services.AddHttpContextAccessor();
 
-// Configure authentication using cookie scheme
+builder.Services.AddScoped<IReportService, ReportService>();
+
+// Email sender + options
+builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("Smtp"));
+builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+// CORS — allow React dev server
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactFrontend", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:5173",  // Vite default
+                "http://localhost:5174",  // Vite alternate
+                "http://localhost:3000"   // fallback
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // required for cookie auth
+    });
+});
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
-        options.LogoutPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
         options.AccessDeniedPath = "/Account/AccessDenied";
         options.ReturnUrlParameter = "ReturnUrl";
+        options.ExpireTimeSpan = TimeSpan.FromDays(1);
+        options.SlidingExpiration = true;
+
+        // Prevent cookie auth from redirecting API/JSON requests — return 401 instead
+        options.Events.OnRedirectToLogin = ctx =>
+        {
+            if (ctx.Request.Path.StartsWithSegments("/MemberAuth") &&
+                ctx.Request.Headers["Accept"].ToString().Contains("application/json"))
+            {
+                ctx.Response.StatusCode = 401;
+                return Task.CompletedTask;
+            }
+            ctx.Response.Redirect(ctx.RedirectUri);
+            return Task.CompletedTask;
+        };
     });
 
-// Authorization services
 builder.Services.AddAuthorization();
 
-// Configure the database context with SQL Server
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                       ?? throw new Exception("Connection string 'DefaultConnection' not found.");
 
@@ -36,34 +78,43 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-// Register any background hosted services
+builder.Services.AddHttpClient();
+builder.Services.Configure<LibrarySystemBBU.Services.TelegramOptions>(
+    builder.Configuration.GetSection("Telegram")
+);
+builder.Services.AddSingleton<ITelegramService, TelegramService>();
 builder.Services.AddHostedService<OverdueLoanReminderService>();
 
-// ----------------------------------------------------------
-// EPPlus 7.x: Set license context for non-commercial use
 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-// ----------------------------------------------------------
 
 var app = builder.Build();
 
-// Middleware pipeline configuration
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// Do NOT redirect to HTTPS in dev — React runs on HTTP
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication(); // Enable authentication middleware
-app.UseAuthorization();  // Enable authorization middleware
+// CORS must come before Auth
+app.UseCors("ReactFrontend");
 
-// Default route mapping to DashboardController by default
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();

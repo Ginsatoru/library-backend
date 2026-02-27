@@ -1,0 +1,636 @@
+﻿@using Microsoft.AspNetCore.Http
+@model LibrarySystemBBU.ViewModels.UserProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+
+<style>
+    .profile-page {
+        min-height: calc(100vh - 120px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 16px;
+    }
+
+    .glass-card .card-body {
+        background: transparent !important;
+    }
+
+    .glass-card {
+        position: relative;
+        max-width: 1100px;
+        margin: 0 auto;
+        border-radius: 28px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.65);
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        box-shadow: 0 22px 60px rgba(15, 23, 42, 0.20);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+    }
+
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 10% 0%, rgba(255, 255, 255, 0.7), transparent 55%), radial-gradient(circle at 100% 100%, rgba(191, 219, 254, 0.25), transparent 55%);
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glass-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+    .glass-header {
+        padding: 14px 24px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.38);
+        background: linear-gradient( 135deg, rgba(255, 255, 255, 0.35), rgba(226, 232, 240, 0.10) );
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+    }
+
+    .glass-body {
+        background: transparent;
+        border-radius: 0 0 28px 28px;
+    }
+
+    .pill-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        background: rgba(219, 234, 254, 0.9);
+        color: #1d4ed8;
+        border: 1px solid rgba(191, 219, 254, 0.9);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .avatar-frame {
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.35);
+        border: 3px solid #bfdbfe;
+    }
+
+    .btn-main {
+        background: linear-gradient(135deg, #3b82f6, #6366f1);
+        border: none;
+        border-radius: 999px;
+        color: #f9fafb;
+        font-weight: 600;
+        padding-inline: 24px;
+        box-shadow: 0 18px 40px rgba(37, 99, 235, 0.45);
+        transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+    }
+
+        .btn-main:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 24px 50px rgba(37, 99, 235, 0.55);
+            filter: brightness(1.04);
+            color: #f9fafb;
+        }
+
+    .btn-ghost {
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.85);
+        background: rgba(255, 255, 255, 0.7);
+        color: #374151;
+        font-weight: 500;
+        padding-inline: 18px;
+        transition: background 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+        .btn-ghost:hover {
+            background: rgba(229, 231, 235, 0.95);
+            box-shadow: 0 6px 18px rgba(148, 163, 184, 0.4);
+            transform: translateY(-1px);
+            color: #111827;
+        }
+
+    .profile-dl dt {
+        color: #6b7280;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    .profile-dl dd {
+        color: #111827;
+        font-size: 0.9rem;
+    }
+
+    .divider-dashed {
+        border-top: 1px dashed rgba(148, 163, 184, 0.5);
+        margin-block: 1rem;
+    }
+
+    .label-soft {
+        font-size: 0.8rem;
+        color: #6b7280;
+    }
+
+    .input-soft,
+    .textarea-soft {
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        color: #111827;
+        border-radius: 12px;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+
+        .input-soft:focus,
+        .textarea-soft:focus {
+            background: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4);
+            color: #111827;
+        }
+
+        .input-soft::placeholder,
+        .textarea-soft::placeholder {
+            color: #9ca3af;
+        }
+
+    .text-danger {
+        font-size: 0.82rem;
+    }
+
+    .modal-content.glass-modal {
+        position: relative;
+        border-radius: 22px;
+        background: rgba(25, 63, 153, 0.58);
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        box-shadow: 0 28px 70px rgba(15, 23, 42, 0.7);
+        overflow: hidden;
+        backdrop-filter: blur(26px);
+        -webkit-backdrop-filter: blur(26px);
+        color: #f9fafb;
+    }
+
+        .modal-content.glass-modal::before {
+            content: "";
+            position: absolute;
+            inset: -30px;
+            background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.22), transparent 55%), radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.35), transparent 60%);
+            opacity: 0.9;
+            z-index: -1;
+        }
+
+    .glass-modal .modal-title,
+    .glass-modal .label-soft,
+    .glass-modal .form-text,
+    .glass-modal .small,
+    .glass-modal h5,
+    .glass-modal p {
+        color: #f9fafb;
+    }
+
+    .glass-modal .close {
+        opacity: 0.85;
+    }
+
+        .glass-modal .close span {
+            color: #f9fafb;
+            font-size: 1.4rem;
+        }
+
+    .glass-modal .input-soft,
+    .glass-modal .textarea-soft {
+        background: rgba(15, 23, 42, 0.55);
+        border: 1px solid rgba(148, 163, 184, 0.85);
+        color: #f9fafb;
+        border-radius: 14px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+        .glass-modal .input-soft::placeholder,
+        .glass-modal .textarea-soft::placeholder {
+            color: rgba(209, 213, 219, 0.85);
+        }
+
+        .glass-modal .input-soft:focus,
+        .glass-modal .textarea-soft:focus {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.6);
+            color: #f9fafb;
+        }
+
+    .modal-avatar-wrapper {
+        text-align: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .modal-avatar {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 14px 32px rgba(15, 23, 42, 0.9);
+        margin-bottom: 0.4rem;
+    }
+
+    .modal-avatar-name {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #f9fafb;
+    }
+
+    .modal-avatar-username {
+        font-size: 0.8rem;
+        color: rgba(226, 232, 240, 0.85);
+    }
+</style>
+
+<div class="profile-page">
+    <div class="col-md-12 col-lg-12 col-xl-10">
+        <div class="glass-card">
+            <div class="glass-header d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="pill-badge">
+                        <i class="fa-solid fa-shield-heart me-1"></i> Profile
+                    </span>
+                    <span class="small text-muted">Manage your account details</span>
+                </div>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-ghost btn-sm">
+                    <i class="fa-solid fa-house me-1"></i> Dashboard
+                </a>
+            </div>
+
+            <div class="card-body p-4 p-md-5 glass-body">
+                <!-- Top section: avatar + basic info -->
+                <div class="text-center mb-4">
+                    @{
+                        var fallbackAvatar = "https://ui-avatars.com/api/?name="
+                        + (Model.FirstName + "+" + Model.LastName)
+                        + "&background=60a5fa&color=fff&size=128";
+
+                        var avatarSrc = string.IsNullOrEmpty(Model.ProfilePicturePath)
+                        ? fallbackAvatar
+                        : Url.Content(Model.ProfilePicturePath);
+                    }
+
+                    <img src="@avatarSrc"
+                         class="rounded-circle avatar-frame mb-3"
+                         style="width:96px; height:96px; object-fit:cover;"
+                         alt="Profile Picture" />
+
+                    <div class="fw-semibold" style="font-size: 1.2rem;">
+                        @Model.FirstName @Model.LastName
+                    </div>
+                    <div class="text-muted small">@Model.UserName</div>
+                    <div class="text-muted small">@Model.Email</div>
+                </div>
+
+                <div class="divider-dashed"></div>
+
+                <!-- READ-ONLY SUMMARY (always DB values) -->
+                <dl class="row mb-4 profile-dl" style="justify-content:center; align-items:center">
+                    <dt class="col-sm-4"><i class="fa fa-phone"></i> Phone</dt>
+                    <dd class="col-sm-8">@Model.Phone</dd>
+
+                    <dt class="col-sm-4"><i class="fa fa-location-dot"></i> Address</dt>
+                    <dd class="col-sm-8">@Model.Address</dd>
+
+                    <dt class="col-sm-4"><i class="fa fa-venus-mars"></i> Gender</dt>
+                    <dd class="col-sm-8">@Model.Gender</dd>
+
+                    <dt class="col-sm-4"><i class="fa fa-calendar-days"></i> DOB</dt>
+                    <dd class="col-sm-8">@Model.DateOfBirth?.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-sm-4"><i class="fa fa-user-tag"></i> Role</dt>
+                    <dd class="col-sm-8">@Model.RoleName</dd>
+
+                    <dt class="col-sm-4"><i class="fa fa-toggle-on"></i> Active</dt>
+                    <dd class="col-sm-8">@(Model.IsActive ? "Yes" : "No")</dd>
+
+                    <dt class="col-sm-4"><i class="fa fa-note-sticky"></i> Notes</dt>
+                    <dd class="col-sm-8">@Model.Notes</dd>
+
+                    <dt class="col-sm-4"><i class="fa fa-clock"></i> Created</dt>
+                    <dd class="col-sm-8">@Model.Created?.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                    <dt class="col-sm-4"><i class="fa fa-pen-to-square"></i> Modified</dt>
+                    <dd class="col-sm-8">@Model.Modified?.ToString("yyyy-MM-dd HH:mm")</dd>
+                </dl>
+
+                <div class="divider-dashed"></div>
+
+                <div class="text-center">
+                    <button type="button"
+                            class="btn btn-main"
+                            id="btnOpenEdit">
+                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===========================
+     EDIT PROFILE MODAL
+=========================== -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true" style="z-index:10000;">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content glass-modal">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title" id="editProfileModalLabel">
+                    <i class="fa-solid fa-pen-to-square me-1"></i> Edit Profile
+                </h5>
+                <button type="button" class="close" id="btnCloseEdit" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body pt-2">
+                @{
+                    var modalFallbackAvatar = "https://ui-avatars.com/api/?name="
+                    + (Model.FirstName + "+" + Model.LastName)
+                    + "&background=60a5fa&color=fff&size=128";
+
+                    var modalAvatarSrc = string.IsNullOrEmpty(Model.ProfilePicturePath)
+                    ? modalFallbackAvatar
+                    : Url.Content(Model.ProfilePicturePath);
+                }
+                <div class="modal-avatar-wrapper">
+                    <img src="@modalAvatarSrc"
+                         alt="Profile picture"
+                         class="modal-avatar" />
+                    <div class="modal-avatar-name">@Model.FirstName @Model.LastName</div>
+                    <div class="modal-avatar-username">@Model.UserName</div>
+                </div>
+
+                <form asp-action="UpdateProfile"
+                      method="post"
+                      enctype="multipart/form-data"
+                      id="editProfileForm">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="All" class="text-danger mb-2"></div>
+
+                    <!-- Hidden fields -->
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="ProfilePicturePath" />
+                    <input type="hidden" asp-for="Created" />
+                    <input type="hidden" asp-for="Modified" />
+                    <input type="hidden" asp-for="IsActive" />
+                    <input type="hidden" asp-for="UserName" />
+                    <!-- Hidden CurrentPassword filled by SweetAlert -->
+                    <input type="hidden" asp-for="CurrentPassword" id="CurrentPasswordHidden" />
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="label-soft">New Profile Picture</label>
+                            <input asp-for="Picture" class="form-control input-soft" type="file" />
+                            <span asp-validation-for="Picture" class="text-danger"></span>
+                            <div class="form-text">
+                                Leave empty to keep current picture.
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="FirstName" class="label-soft"></label>
+                                    <input asp-for="FirstName" class="form-control input-soft" />
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="LastName" class="label-soft"></label>
+                                    <input asp-for="LastName" class="form-control input-soft" />
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Email" class="label-soft"></label>
+                                    <input asp-for="Email" class="form-control input-soft" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Phone" class="label-soft"></label>
+                                    <input asp-for="Phone" class="form-control input-soft" />
+                                    <span asp-validation-for="Phone" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Address" class="label-soft"></label>
+                                    <input asp-for="Address" class="form-control input-soft" />
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+
+                                <!-- Role editable; server will only save if Admin -->
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="RoleName" class="label-soft"></label>
+                                    <input asp-for="RoleName" class="form-control input-soft" />
+                                    <span asp-validation-for="RoleName" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-md-3 mb-3">
+                                    <label asp-for="Gender" class="label-soft"></label>
+                                    <input asp-for="Gender" class="form-control input-soft" />
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-md-3 mb-3">
+                                    <label asp-for="DateOfBirth" class="label-soft"></label>
+                                    <input asp-for="DateOfBirth" class="form-control input-soft" type="date" />
+                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Notes" class="label-soft"></label>
+                                    <textarea asp-for="Notes" class="form-control textarea-soft" rows="2"></textarea>
+                                    <span asp-validation-for="Notes" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="divider-dashed"></div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="NewPassword" class="label-soft">
+                                <i class="fa-solid fa-key"></i> New password (optional)
+                            </label>
+                            <input asp-for="NewPassword" class="form-control input-soft" />
+                            <span asp-validation-for="NewPassword" class="text-danger"></span>
+                            <div class="form-text">
+                                Leave blank if you don't want to change your password.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ConfirmNewPassword" class="label-soft">
+                                Confirm new password
+                            </label>
+                            <input asp-for="ConfirmNewPassword" class="form-control input-soft" />
+                            <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-ghost" id="btnCancelEdit">
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-main" id="btnSaveProfileModal">
+                            <i class="fa-solid fa-save me-1"></i> Save changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById('btnOpenEdit');
+            const form = document.getElementById('editProfileForm');
+            const saveBtn = document.getElementById('btnSaveProfileModal');
+            const hiddenPwd = document.getElementById('CurrentPasswordHidden');
+            const modalElement = document.getElementById('editProfileModal');
+            const cancelBtn = document.getElementById('btnCancelEdit');
+            const closeBtn = document.getElementById('btnCloseEdit');
+
+            function showModal() {
+                if (window.bootstrap && bootstrap.Modal) {
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                } else if (window.$ && typeof $(modalElement).modal === 'function') {
+                    $(modalElement).modal('show');
+                }
+            }
+
+            function hideModal() {
+                if (window.bootstrap && bootstrap.Modal) {
+                    const instance = bootstrap.Modal.getInstance(modalElement);
+                    if (instance) {
+                        instance.hide();
+                    } else {
+                        const modal = new bootstrap.Modal(modalElement);
+                        modal.hide();
+                    }
+                } else if (window.$ && typeof $(modalElement).modal === 'function') {
+                    $(modalElement).modal('hide');
+                }
+            }
+
+            if (editBtn && modalElement) {
+                editBtn.addEventListener('click', function () {
+                    showModal();
+                });
+            }
+
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', function () {
+                    hideModal();
+                });
+            }
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function () {
+                    hideModal();
+                });
+            }
+
+            if (form && saveBtn && hiddenPwd) {
+                saveBtn.addEventListener('click', async function (e) {
+                    e.preventDefault();
+
+                    // client-side validation if available
+                    if (typeof $ !== 'undefined' && typeof $(form).valid === 'function') {
+                        if (!$(form).valid()) {
+                            return;
+                        }
+                    }
+
+                    hideModal();
+
+                    const result = await Swal.fire({
+                        title: 'Confirm changes',
+                        text: 'Enter your current password to save profile changes.',
+                        input: 'password',
+                        inputLabel: 'Current password',
+                        inputPlaceholder: '••••••••',
+                        inputAttributes: {
+                            autocapitalize: 'off',
+                            autocomplete: 'current-password'
+                        },
+                        showCancelButton: true,
+                        confirmButtonText: 'Confirm & Save',
+                        cancelButtonText: 'Cancel',
+                        reverseButtons: true,
+                        allowOutsideClick: false,
+                        allowEscapeKey: true,
+                        preConfirm: (value) => {
+                            if (!value) {
+                                Swal.showValidationMessage('Current password is required.');
+                            }
+                            return value;
+                        }
+                    });
+
+                    if (!result.isConfirmed || !result.value) {
+                        // user cancelled -> reopen modal so they can keep editing
+                        showModal();
+                        return;
+                    }
+
+                    hiddenPwd.value = result.value;
+                    form.submit();
+                });
+            }
+
+            const successMsg = '@(TempData["ProfileSuccess"] ?? "")';
+            const errorMsg = '@(TempData["ProfileError"] ?? "")';
+            const openEdit = '@(TempData["OpenEditModal"] ?? "")';
+
+            if (successMsg) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Profile updated',
+                    text: successMsg
+                });
+            }
+
+            if (errorMsg) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Update failed',
+                    text: errorMsg
+                }).then(() => {
+                    // reopen modal so user sees their form again
+                    showModal();
+                });
+            } else if (openEdit) {
+                // fallback: if flag set but no explicit error message
+                showModal();
+            }
+        });
+    </script>
+}

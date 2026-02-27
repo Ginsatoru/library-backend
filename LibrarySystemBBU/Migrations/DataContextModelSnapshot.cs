@@ -62,6 +62,11 @@ namespace LibrarySystemBBU.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.HasKey("AdjustmentId");
 
                     b.HasIndex("AdjustedByUserId");
@@ -82,6 +87,9 @@ namespace LibrarySystemBBU.Migrations
                     b.Property<Guid>("AdjustmentId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int?>("BookId")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("CatalogId")
                         .HasColumnType("uniqueidentifier");
 
@@ -92,9 +100,16 @@ namespace LibrarySystemBBU.Migrations
                     b.Property<int>("QuantityChanged")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.HasKey("AdjustmentDetailId");
 
                     b.HasIndex("AdjustmentId");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("CatalogId");
 
@@ -109,38 +124,46 @@ namespace LibrarySystemBBU.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookId"));
 
-                    b.Property<string>("Author")
+                    b.Property<DateTime>("AcquisitionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Barcode")
                         .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("CatalogId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Location")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("AvailableCopies")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ISBN")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<int>("TotalCopies")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("BookId");
+
+                    b.HasIndex("Barcode")
+                        .IsUnique();
+
+                    b.HasIndex("CatalogId");
 
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("LibrarySystemBBU.Models.BookLoan", b =>
+            modelBuilder.Entity("LibrarySystemBBU.Models.BookBorrow", b =>
                 {
                     b.Property<int>("LoanId")
                         .ValueGeneratedOnAdd()
@@ -182,106 +205,10 @@ namespace LibrarySystemBBU.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("BookLoans");
+                    b.ToTable("BookBorrows");
                 });
 
-            modelBuilder.Entity("LibrarySystemBBU.Models.BookReturn", b =>
-                {
-                    b.Property<int>("ReturnId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReturnId"));
-
-                    b.Property<decimal>("AmountPaid")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<string>("ConditionOnReturn")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<decimal>("FineAmount")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<int>("LateDays")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LoanId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<decimal?>("RefundAmount")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<DateTime>("ReturnDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.HasKey("ReturnId");
-
-                    b.HasIndex("LoanId");
-
-                    b.ToTable("BookReturns");
-                });
-
-            modelBuilder.Entity("LibrarySystemBBU.Models.Catalog", b =>
-                {
-                    b.Property<Guid>("CatalogId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("AcquisitionDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<string>("Barcode")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("ImagePath")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Location")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime>("Modified")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("PdfFilePath")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("CatalogId");
-
-                    b.HasIndex("BookId");
-
-                    b.ToTable("Catalogs");
-                });
-
-            modelBuilder.Entity("LibrarySystemBBU.Models.LoanBookDetail", b =>
+            modelBuilder.Entity("LibrarySystemBBU.Models.BookBorrowDetail", b =>
                 {
                     b.Property<int>("LoanBookDetailId")
                         .ValueGeneratedOnAdd()
@@ -335,6 +262,276 @@ namespace LibrarySystemBBU.Migrations
                     b.ToTable("LoanBookDetails");
                 });
 
+            modelBuilder.Entity("LibrarySystemBBU.Models.BookReturn", b =>
+                {
+                    b.Property<int>("ReturnId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReturnId"));
+
+                    b.Property<decimal>("AmountPaid")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<string>("ConditionOnReturn")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("ExtraCharge")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal>("FineAmount")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<int>("LateDays")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LoanId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal?>("RefundAmount")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<DateTime>("ReturnDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.HasKey("ReturnId");
+
+                    b.HasIndex("LoanId");
+
+                    b.ToTable("BookReturns");
+                });
+
+            modelBuilder.Entity("LibrarySystemBBU.Models.Catalog", b =>
+                {
+                    b.Property<Guid>("CatalogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("AvailableCopies")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BorrowCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ISBN")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ImagePath")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("InLibraryCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PdfFilePath")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("TotalCopies")
+                        .HasColumnType("int");
+
+                    b.HasKey("CatalogId");
+
+                    b.ToTable("Catalogs", t =>
+                        {
+                            t.HasCheckConstraint("CK_Catalog_AvailableCopies_NonNegative", "[AvailableCopies] >= 0");
+
+                            t.HasCheckConstraint("CK_Catalog_Available_LE_Total", "[AvailableCopies] <= [TotalCopies]");
+
+                            t.HasCheckConstraint("CK_Catalog_TotalCopies_NonNegative", "[TotalCopies] >= 0");
+                        });
+                });
+
+            modelBuilder.Entity("LibrarySystemBBU.Models.History", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ActionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("AmountPaid")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BookTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("BorrowingFee")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("CatalogId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CatalogTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("DepositAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("FineAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("LoanDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("LoanId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LocationType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("LogId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MemberName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OccurredUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ReturnDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Histories");
+                });
+
+            modelBuilder.Entity("LibrarySystemBBU.Models.LibraryLog", b =>
+                {
+                    b.Property<int>("LogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogId"));
+
+                    b.Property<DateTime?>("ApprovedUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedUtc")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Gender")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Purpose")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("ReturnedUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasDefaultValue("Pending");
+
+                    b.Property<string>("StudentName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime>("VisitDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.HasKey("LogId");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("VisitDate");
+
+                    b.ToTable("LibraryLogs");
+                });
+
+            modelBuilder.Entity("LibrarySystemBBU.Models.LibraryLogItem", b =>
+                {
+                    b.Property<int>("LogItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogItemId"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LogId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ReturnedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("LogItemId");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("LogId", "BookId")
+                        .IsUnique();
+
+                    b.ToTable("LibraryLogItems");
+                });
+
             modelBuilder.Entity("LibrarySystemBBU.Models.LoanReminder", b =>
                 {
                     b.Property<int>("ReminderId")
@@ -373,7 +570,14 @@ namespace LibrarySystemBBU.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<bool>("AllowSelfPasswordReset")
+                        .HasColumnType("bit");
+
                     b.Property<string>("CreatedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DICardNumber")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -399,6 +603,12 @@ namespace LibrarySystemBBU.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
+                    b.Property<DateTime?>("LastPasswordResetAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LastPasswordResetByUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("MemberType")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -413,6 +623,23 @@ namespace LibrarySystemBBU.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("PasswordHash")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("PasswordResetExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PasswordResetOtp")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime?>("PasswordResetOtpExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("PasswordResetToken")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Phone")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
@@ -421,19 +648,61 @@ namespace LibrarySystemBBU.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<bool>("StaffOnlyPasswordReset")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid?>("UsersId")
+                    b.Property<string>("TelegramChatId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("TelegramPairToken")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<long?>("TelegramUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TelegramUsername")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("MemberId");
 
+                    b.HasIndex("LastPasswordResetByUserId");
+
                     b.HasIndex("UserId");
 
-                    b.HasIndex("UsersId");
-
                     b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("LibrarySystemBBU.Models.MemberWishlist", b =>
+                {
+                    b.Property<int>("WishlistId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WishlistId"));
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CatalogId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MemberId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("WishlistId");
+
+                    b.HasIndex("CatalogId");
+
+                    b.HasIndex("MemberId", "CatalogId")
+                        .IsUnique();
+
+                    b.ToTable("MemberWishlists");
                 });
 
             modelBuilder.Entity("LibrarySystemBBU.Models.Permission", b =>
@@ -614,8 +883,15 @@ namespace LibrarySystemBBU.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("PasswordResetOtpExpiresUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PasswordResetOtpHash")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(20)
@@ -700,6 +976,10 @@ namespace LibrarySystemBBU.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("LibrarySystemBBU.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId");
+
                     b.HasOne("LibrarySystemBBU.Models.Catalog", "Catalog")
                         .WithMany()
                         .HasForeignKey("CatalogId")
@@ -708,13 +988,26 @@ namespace LibrarySystemBBU.Migrations
 
                     b.Navigation("Adjustment");
 
+                    b.Navigation("Book");
+
                     b.Navigation("Catalog");
                 });
 
-            modelBuilder.Entity("LibrarySystemBBU.Models.BookLoan", b =>
+            modelBuilder.Entity("LibrarySystemBBU.Models.Book", b =>
+                {
+                    b.HasOne("LibrarySystemBBU.Models.Catalog", "Catalog")
+                        .WithMany("Books")
+                        .HasForeignKey("CatalogId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Catalog");
+                });
+
+            modelBuilder.Entity("LibrarySystemBBU.Models.BookBorrow", b =>
                 {
                     b.HasOne("LibrarySystemBBU.Models.Book", "Book")
-                        .WithMany("BookLoans")
+                        .WithMany()
                         .HasForeignKey("BookId");
 
                     b.HasOne("LibrarySystemBBU.Models.Member", "LibraryMember")
@@ -728,34 +1021,12 @@ namespace LibrarySystemBBU.Migrations
                     b.Navigation("LibraryMember");
                 });
 
-            modelBuilder.Entity("LibrarySystemBBU.Models.BookReturn", b =>
+            modelBuilder.Entity("LibrarySystemBBU.Models.BookBorrowDetail", b =>
                 {
-                    b.HasOne("LibrarySystemBBU.Models.BookLoan", "Loan")
-                        .WithMany("BookReturns")
-                        .HasForeignKey("LoanId")
+                    b.HasOne("LibrarySystemBBU.Models.Book", "Book")
+                        .WithMany("BookBorrowDetail")
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Loan");
-                });
-
-            modelBuilder.Entity("LibrarySystemBBU.Models.Catalog", b =>
-                {
-                    b.HasOne("LibrarySystemBBU.Models.Book", "Book")
-                        .WithMany("Catalogs")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-                });
-
-            modelBuilder.Entity("LibrarySystemBBU.Models.LoanBookDetail", b =>
-                {
-                    b.HasOne("LibrarySystemBBU.Models.Book", "Book")
-                        .WithMany("LoanBookDetails")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LibrarySystemBBU.Models.Catalog", "Catalog")
@@ -764,7 +1035,7 @@ namespace LibrarySystemBBU.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibrarySystemBBU.Models.BookLoan", "Loan")
+                    b.HasOne("LibrarySystemBBU.Models.BookBorrow", "Loan")
                         .WithMany("LoanBookDetails")
                         .HasForeignKey("LoanId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -777,9 +1048,39 @@ namespace LibrarySystemBBU.Migrations
                     b.Navigation("Loan");
                 });
 
+            modelBuilder.Entity("LibrarySystemBBU.Models.BookReturn", b =>
+                {
+                    b.HasOne("LibrarySystemBBU.Models.BookBorrow", "Loan")
+                        .WithMany("BookReturns")
+                        .HasForeignKey("LoanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Loan");
+                });
+
+            modelBuilder.Entity("LibrarySystemBBU.Models.LibraryLogItem", b =>
+                {
+                    b.HasOne("LibrarySystemBBU.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("LibrarySystemBBU.Models.LibraryLog", "Log")
+                        .WithMany("Items")
+                        .HasForeignKey("LogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Log");
+                });
+
             modelBuilder.Entity("LibrarySystemBBU.Models.LoanReminder", b =>
                 {
-                    b.HasOne("LibrarySystemBBU.Models.BookLoan", "Loan")
+                    b.HasOne("LibrarySystemBBU.Models.BookBorrow", "Loan")
                         .WithMany("LoanReminders")
                         .HasForeignKey("LoanId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -790,22 +1091,43 @@ namespace LibrarySystemBBU.Migrations
 
             modelBuilder.Entity("LibrarySystemBBU.Models.Member", b =>
                 {
+                    b.HasOne("LibrarySystemBBU.Models.Users", "LastPasswordResetByUser")
+                        .WithMany("LibraryMembers")
+                        .HasForeignKey("LastPasswordResetByUserId");
+
                     b.HasOne("LibrarySystemBBU.Models.Users", "Users")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("LibrarySystemBBU.Models.Users", null)
-                        .WithMany("LibraryMembers")
-                        .HasForeignKey("UsersId");
+                    b.Navigation("LastPasswordResetByUser");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("LibrarySystemBBU.Models.MemberWishlist", b =>
+                {
+                    b.HasOne("LibrarySystemBBU.Models.Catalog", "Catalog")
+                        .WithMany()
+                        .HasForeignKey("CatalogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LibrarySystemBBU.Models.Member", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Catalog");
+
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("LibrarySystemBBU.Models.Purchase", b =>
                 {
                     b.HasOne("LibrarySystemBBU.Models.Book", "Book")
-                        .WithMany("Purchases")
+                        .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -816,9 +1138,9 @@ namespace LibrarySystemBBU.Migrations
             modelBuilder.Entity("LibrarySystemBBU.Models.PurchaseDetail", b =>
                 {
                     b.HasOne("LibrarySystemBBU.Models.Book", "Book")
-                        .WithMany()
+                        .WithMany("PurchaseDetails")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LibrarySystemBBU.Models.Purchase", "Purchase")
@@ -876,22 +1198,28 @@ namespace LibrarySystemBBU.Migrations
 
             modelBuilder.Entity("LibrarySystemBBU.Models.Book", b =>
                 {
-                    b.Navigation("BookLoans");
+                    b.Navigation("BookBorrowDetail");
 
-                    b.Navigation("Catalogs");
-
-                    b.Navigation("LoanBookDetails");
-
-                    b.Navigation("Purchases");
+                    b.Navigation("PurchaseDetails");
                 });
 
-            modelBuilder.Entity("LibrarySystemBBU.Models.BookLoan", b =>
+            modelBuilder.Entity("LibrarySystemBBU.Models.BookBorrow", b =>
                 {
                     b.Navigation("BookReturns");
 
                     b.Navigation("LoanBookDetails");
 
                     b.Navigation("LoanReminders");
+                });
+
+            modelBuilder.Entity("LibrarySystemBBU.Models.Catalog", b =>
+                {
+                    b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("LibrarySystemBBU.Models.LibraryLog", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("LibrarySystemBBU.Models.Member", b =>

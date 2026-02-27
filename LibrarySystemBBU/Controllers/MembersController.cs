@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using LibrarySystemBBU.Data;
 using LibrarySystemBBU.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibrarySystemBBU.Controllers
 {
@@ -23,10 +25,21 @@ namespace LibrarySystemBBU.Controllers
             _env = env;
         }
 
+        // ----------------- CURRENT USER (as Users entity) -----------------
+        private async Task<Users?> GetCurrentUserAsync()
+        {
+            var uname = User?.Identity?.Name;
+            if (string.IsNullOrWhiteSpace(uname)) return null;
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserName == uname);
+        }
+
         // GET: Members
         public async Task<IActionResult> Index()
         {
-            var dataContext = _context.Members.Include(m => m.Users);
+            var dataContext = _context.Members
+                .Include(m => m.Users)
+                .Include(m => m.BookLoans);
+
             return View(await dataContext.ToListAsync());
         }
 
@@ -47,9 +60,8 @@ namespace LibrarySystemBBU.Controllers
         // GET: Members/Create
         public IActionResult Create()
         {
-            // Use Username (not Email) for Linked User dropdown
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName");
-            ViewData["CreatedByList"] = new SelectList(_context.Users, "UserName", "UserName"); // For Created By
+            ViewData["CreatedByList"] = new SelectList(_context.Users, "UserName", "UserName");
             return View();
         }
 
@@ -57,37 +69,55 @@ namespace LibrarySystemBBU.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("MemberId,FullName,Gender,Email,Phone,Address,MemberType,JoinDate,Modified,ProfilePicturePath,IsActive,Notes,UserId,CreatedBy")] Member member,
-            IFormFile ProfilePicture)
+            [Bind("FullName,Gender,Email,Phone,Address,MemberType,IsActive,Notes,UserId,CreatedBy,DICardNumber,TelegramChatId,TelegramUsername")]
+            Member member,
+            IFormFile? ProfilePicture,
+            string? NewPassword,
+            string? ConfirmPassword)
         {
-            if (ModelState.IsValid)
+            // Validate password pair if provided
+            if (!string.IsNullOrWhiteSpace(NewPassword) || !string.IsNullOrWhiteSpace(ConfirmPassword))
             {
-                member.MemberId = Guid.NewGuid();
-                member.JoinDate = DateTime.UtcNow;
-                member.Modified = DateTime.UtcNow;
-
-                try
-                {
-                    if (ProfilePicture != null && ProfilePicture.Length > 0)
-                    {
-                        member.ProfilePicturePath = await SaveProfilePicture(ProfilePicture);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("ProfilePicturePath", "Image upload failed: " + ex.Message);
-                    ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", member.UserId);
-                    ViewData["CreatedByList"] = new SelectList(_context.Users, "UserName", "UserName", member.CreatedBy);
-                    return View(member);
-                }
-
-                _context.Add(member);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (string.IsNullOrWhiteSpace(NewPassword) || string.IsNullOrWhiteSpace(ConfirmPassword) || NewPassword != ConfirmPassword)
+                    ModelState.AddModelError("NewPassword", "Password and Confirm Password must match.");
+                else if (NewPassword.Length < 5 || NewPassword.Length > 20)
+                    ModelState.AddModelError("NewPassword", "Password length must be 5 - 20 characters.");
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", member.UserId);
-            ViewData["CreatedByList"] = new SelectList(_context.Users, "UserName", "UserName", member.CreatedBy);
-            return View(member);
+
+            // ✅ Make photo optional
+            ModelState.Remove(nameof(Member.ProfilePicturePath));
+            ModelState.Remove("ProfilePicturePath");
+
+            if (!ModelState.IsValid)
+            {
+                ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", member.UserId);
+                ViewData["CreatedByList"] = new SelectList(_context.Users, "UserName", "UserName", member.CreatedBy);
+                return View(member);
+            }
+
+            member.MemberId = Guid.NewGuid();
+            member.JoinDate = DateTime.UtcNow;
+            member.Modified = DateTime.UtcNow;
+
+            if (!string.IsNullOrWhiteSpace(NewPassword))
+                member.TrySetPassword(NewPassword);
+
+            try
+            {
+                if (ProfilePicture != null && ProfilePicture.Length > 0)
+                    member.ProfilePicturePath = await SaveProfilePicture(ProfilePicture);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("ProfilePicturePath", "Image upload failed: " + ex.Message);
+                ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", member.UserId);
+                ViewData["CreatedByList"] = new SelectList(_context.Users, "UserName", "UserName", member.CreatedBy);
+                return View(member);
+            }
+
+            _context.Add(member);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Members/Edit/5
@@ -103,63 +133,179 @@ namespace LibrarySystemBBU.Controllers
             return View(member);
         }
 
-        // POST: Members/Edit/5
+        // ✅ POST: Members/Edit/5 (NO current password required)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
             Guid id,
-            [Bind("MemberId,FullName,Gender,Email,Phone,Address,MemberType,JoinDate,Modified,ProfilePicturePath,IsActive,Notes,UserId,CreatedBy")] Member member,
-            IFormFile ProfilePicture)
+            IFormFile? ProfilePicture,
+            string? NewPassword,
+            string? ConfirmPassword)
         {
-            if (id != member.MemberId) return NotFound();
+            var member = await _context.Members.FirstOrDefaultAsync(m => m.MemberId == id);
+            if (member == null) return NotFound();
 
-            if (ModelState.IsValid)
+            // Apply posted values onto existing member (only allowed fields)
+            var updateOk = await TryUpdateModelAsync(
+                member,
+                prefix: "",
+                m => m.FullName,
+                m => m.Gender,
+                m => m.Email,
+                m => m.Phone,
+                m => m.Address,
+                m => m.MemberType,
+                m => m.IsActive,
+                m => m.Notes,
+                m => m.UserId,
+                m => m.CreatedBy,
+                m => m.DICardNumber,
+                m => m.TelegramChatId,
+                m => m.TelegramUsername
+            );
+
+            if (!updateOk)
             {
-                try
-                {
-                    var existing = await _context.Members.AsNoTracking().FirstOrDefaultAsync(m => m.MemberId == id);
-                    if (existing == null) return NotFound();
-
-                    member.Modified = DateTime.UtcNow;
-                    member.JoinDate = existing.JoinDate;
-
-                    try
-                    {
-                        if (ProfilePicture != null && ProfilePicture.Length > 0)
-                        {
-                            if (!string.IsNullOrEmpty(existing.ProfilePicturePath))
-                                DeleteProfilePicture(existing.ProfilePicturePath);
-
-                            member.ProfilePicturePath = await SaveProfilePicture(ProfilePicture);
-                        }
-                        else
-                        {
-                            member.ProfilePicturePath = existing.ProfilePicturePath;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        ModelState.AddModelError("ProfilePicturePath", "Image upload failed: " + ex.Message);
-                        ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", member.UserId);
-                        ViewData["CreatedByList"] = new SelectList(_context.Users, "UserName", "UserName", member.CreatedBy);
-                        return View(member);
-                    }
-
-                    _context.Update(member);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MemberExists(member.MemberId))
-                        return NotFound();
-                    else
-                        throw;
-                }
-                return RedirectToAction(nameof(Index));
+                ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", member.UserId);
+                ViewData["CreatedByList"] = new SelectList(_context.Users, "UserName", "UserName", member.CreatedBy);
+                return View(member);
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", member.UserId);
-            ViewData["CreatedByList"] = new SelectList(_context.Users, "UserName", "UserName", member.CreatedBy);
-            return View(member);
+
+            // password change requested?
+            bool isChangingPassword = !string.IsNullOrWhiteSpace(NewPassword) || !string.IsNullOrWhiteSpace(ConfirmPassword);
+
+            if (isChangingPassword)
+            {
+                // validate new + confirm
+                if (string.IsNullOrWhiteSpace(NewPassword) || string.IsNullOrWhiteSpace(ConfirmPassword) || NewPassword != ConfirmPassword)
+                {
+                    ModelState.AddModelError("NewPassword", "Password and Confirm Password must match.");
+                    TempData["PwdError"] = "Password and Confirm Password must match.";
+                }
+                else if (NewPassword.Length < 5 || NewPassword.Length > 20)
+                {
+                    ModelState.AddModelError("NewPassword", "Password length must be 5 - 20 characters.");
+                    TempData["PwdError"] = "Password length must be 5 - 20 characters.";
+                }
+            }
+
+            // ✅ Make photo optional on edit as well
+            ModelState.Remove(nameof(Member.ProfilePicturePath));
+            ModelState.Remove("ProfilePicturePath");
+
+            if (!ModelState.IsValid)
+            {
+                ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", member.UserId);
+                ViewData["CreatedByList"] = new SelectList(_context.Users, "UserName", "UserName", member.CreatedBy);
+                return View(member);
+            }
+
+            member.Modified = DateTime.UtcNow;
+
+            // ✅ Apply new password WITHOUT current password
+            if (isChangingPassword && !string.IsNullOrWhiteSpace(NewPassword))
+            {
+                if (!member.TrySetPassword(NewPassword))
+                {
+                    ModelState.AddModelError("NewPassword", "Invalid password.");
+                    TempData["PwdError"] = "Invalid new password. Your password was not updated.";
+                    ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", member.UserId);
+                    ViewData["CreatedByList"] = new SelectList(_context.Users, "UserName", "UserName", member.CreatedBy);
+                    return View(member);
+                }
+
+                var actor = await GetCurrentUserAsync();
+                member.LastPasswordResetByUserId = actor?.Id;
+                member.LastPasswordResetAt = DateTime.UtcNow;
+            }
+
+            // Handle profile picture
+            try
+            {
+                if (ProfilePicture != null && ProfilePicture.Length > 0)
+                {
+                    if (!string.IsNullOrEmpty(member.ProfilePicturePath))
+                        DeleteProfilePicture(member.ProfilePicturePath);
+
+                    member.ProfilePicturePath = await SaveProfilePicture(ProfilePicture);
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("ProfilePicturePath", "Image upload failed: " + ex.Message);
+                ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", member.UserId);
+                ViewData["CreatedByList"] = new SelectList(_context.Users, "UserName", "UserName", member.CreatedBy);
+                return View(member);
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MemberExists(member.MemberId))
+                    return NotFound();
+                else
+                    throw;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // =============== RESET PASSWORD (permission-aware) ===============
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> ResetPassword(Guid id)
+        {
+            var member = await _context.Members.FindAsync(id);
+            if (member == null) return NotFound();
+
+            var actor = await GetCurrentUserAsync();
+            if (!Member.CanResetPassword(actor, member)) return Forbid();
+
+            ViewBag.MemberName = member.FullName;
+            return View(model: id);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(Guid id, string NewPassword, string ConfirmPassword)
+        {
+            var member = await _context.Members.FindAsync(id);
+            if (member == null) return NotFound();
+
+            var actor = await GetCurrentUserAsync();
+            if (!Member.CanResetPassword(actor, member)) return Forbid();
+
+            if (string.IsNullOrWhiteSpace(NewPassword) || string.IsNullOrWhiteSpace(ConfirmPassword) || NewPassword != ConfirmPassword)
+            {
+                ViewBag.MemberName = member.FullName;
+                ModelState.AddModelError("NewPassword", "Password and Confirm Password must match.");
+                return View(model: id);
+            }
+            if (NewPassword.Length < 5 || NewPassword.Length > 20)
+            {
+                ViewBag.MemberName = member.FullName;
+                ModelState.AddModelError("NewPassword", "Password length must be 5 - 20 characters.");
+                return View(model: id);
+            }
+
+            if (!member.TrySetPassword(NewPassword))
+            {
+                ViewBag.MemberName = member.FullName;
+                ModelState.AddModelError("NewPassword", "Invalid password.");
+                return View(model: id);
+            }
+
+            member.ClearPasswordResetToken();
+            member.MarkPasswordResetBy(actor);
+
+            await _context.SaveChangesAsync();
+
+            TempData["ok"] = "Member password has been reset.";
+            return RedirectToAction("Details", new { id = member.MemberId });
         }
 
         // GET: Members/Delete/5
@@ -169,6 +315,7 @@ namespace LibrarySystemBBU.Controllers
 
             var member = await _context.Members
                 .Include(m => m.Users)
+                .Include(m => m.BookLoans)
                 .FirstOrDefaultAsync(m => m.MemberId == id);
 
             if (member == null) return NotFound();
@@ -231,6 +378,141 @@ namespace LibrarySystemBBU.Controllers
             {
                 try { System.IO.File.Delete(filePath); } catch { }
             }
+        }
+
+        // ================== EXPORT (CSV / XLS) ==================
+        [HttpGet]
+        public async Task<IActionResult> Export(string format = "csv")
+        {
+            var data = await _context.Members
+                .AsNoTracking()
+                .Include(m => m.Users)
+                .Include(m => m.BookLoans)
+                .OrderBy(m => m.FullName)
+                .ToListAsync();
+
+            if (string.Equals(format, "xls", StringComparison.OrdinalIgnoreCase))
+            {
+                var html = BuildExcelHtml(data);
+                var bytes = AddUtf8Bom(html);
+                return File(bytes, "application/vnd.ms-excel; charset=utf-8", "Members.xls");
+            }
+
+            var csv = BuildCsv(data);
+            var csvBytes = AddUtf8Bom(csv);
+            return File(csvBytes, "text/csv; charset=utf-8", "Members.csv");
+        }
+
+        // ----------------- CSV / HTML helpers -----------------
+        private static string CsvEscape(string? s) =>
+            "\"" + (s ?? string.Empty).Replace("\"", "\"\"") + "\"";
+
+        private static string CsvText(string? s) =>
+            $"=\"{(s ?? string.Empty).Replace("\"", "\"\"")}\"";
+
+        private static string CsvDateText(DateTime? dt, string fmt) =>
+            dt.HasValue ? CsvText(dt.Value.ToString(fmt)) : "\"\"";
+
+        private static string HtmlEncode(string? s) =>
+            System.Net.WebUtility.HtmlEncode(s ?? string.Empty);
+
+        private string BuildCsv(System.Collections.Generic.IEnumerable<Member> rows)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("MemberId,FullName,UserName,Gender,Email,Phone,MemberType,IsActive,JoinDate,Modified,DICardNumber,TelegramChatId,TelegramUsername,TotalLoans,ActiveLoans");
+
+            foreach (var m in rows)
+            {
+                var totalLoans = m.BookLoans?.Count ?? 0;
+                var activeLoans = m.BookLoans?.Count(b => b != null && !b.IsReturned) ?? 0;
+
+                sb.Append(string.Join(",", new[]
+                {
+                    CsvEscape(m.MemberId.ToString()),
+                    CsvEscape(m.FullName),
+                    CsvEscape(m.Users?.UserName),
+                    CsvEscape(m.Gender),
+                    CsvEscape(m.Email),
+                    CsvText(m.Phone),
+                    CsvEscape(m.MemberType),
+                    CsvEscape(m.IsActive ? "Active" : "Inactive"),
+                    CsvDateText(m.JoinDate, "yyyy-MM-dd"),
+                    CsvDateText(m.Modified, "yyyy-MM-dd HH:mm"),
+                    CsvEscape(m.DICardNumber),
+                    CsvEscape(m.TelegramChatId),
+                    CsvEscape(m.TelegramUsername),
+                    CsvEscape(totalLoans.ToString()),
+                    CsvEscape(activeLoans.ToString())
+                }));
+                sb.Append("\r\n");
+            }
+
+            return sb.ToString();
+        }
+
+        private string BuildExcelHtml(System.Collections.Generic.IEnumerable<Member> rows)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("<html><head><meta charset=\"UTF-8\"></head><body>");
+            sb.AppendLine("<table border='1' cellspacing='0' cellpadding='4'>");
+            sb.AppendLine("<tr>" +
+                          "<th>MemberId</th>" +
+                          "<th>FullName</th>" +
+                          "<th>UserName</th>" +
+                          "<th>Gender</th>" +
+                          "<th>Email</th>" +
+                          "<th>Phone</th>" +
+                          "<th>MemberType</th>" +
+                          "<th>Status</th>" +
+                          "<th>JoinDate</th>" +
+                          "<th>Modified</th>" +
+                          "<th>DICardNumber</th>" +
+                          "<th>TelegramChatId</th>" +
+                          "<th>TelegramUsername</th>" +
+                          "<th>TotalLoans</th>" +
+                          "<th>ActiveLoans</th>" +
+                          "</tr>");
+
+            foreach (var m in rows)
+            {
+                var totalLoans = m.BookLoans?.Count ?? 0;
+                var activeLoans = m.BookLoans?.Count(b => b != null && !b.IsReturned) ?? 0;
+
+                string tdText(string? v) =>
+                    $"<td style='mso-number-format:\\@'>{HtmlEncode(v)}</td>";
+
+                string tdDate(DateTime? d, string f) =>
+                    d.HasValue
+                        ? $"<td style='mso-number-format:\\@'>{HtmlEncode(d.Value.ToString(f))}</td>"
+                        : "<td></td>";
+
+                sb.Append("<tr>");
+                sb.Append(tdText(m.MemberId.ToString()));
+                sb.Append(tdText(m.FullName));
+                sb.Append(tdText(m.Users?.UserName));
+                sb.Append(tdText(m.Gender));
+                sb.Append(tdText(m.Email));
+                sb.Append(tdText(m.Phone));
+                sb.Append(tdText(m.MemberType));
+                sb.Append(tdText(m.IsActive ? "Active" : "Inactive"));
+                sb.Append(tdDate(m.JoinDate, "yyyy-MM-dd"));
+                sb.Append(tdDate(m.Modified, "yyyy-MM-dd HH:mm"));
+                sb.Append(tdText(m.DICardNumber));
+                sb.Append(tdText(m.TelegramChatId));
+                sb.Append(tdText(m.TelegramUsername));
+                sb.Append(tdText(totalLoans.ToString()));
+                sb.Append(tdText(activeLoans.ToString()));
+                sb.Append("</tr>");
+            }
+
+            sb.AppendLine("</table></body></html>");
+            return sb.ToString();
+        }
+
+        private static byte[] AddUtf8Bom(string s)
+        {
+            var utf8Bom = new UTF8Encoding(encoderShouldEmitUTF8Identifier: true);
+            return utf8Bom.GetBytes(s);
         }
     }
 }

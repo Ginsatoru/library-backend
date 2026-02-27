@@ -5,34 +5,43 @@
 }
 
 <link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+
 <style>
-    .card-3d {
-        border: none;
-        border-radius: 2rem;
-        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.11), 0 2px 4px 0 rgba(0,0,0,0.13);
-        background: linear-gradient(135deg,#e0f2fe 0%,#f8fafc 100%);
-        overflow: hidden;
-        transition: transform .2s, box-shadow .2s;
+    /* ===== Create member page tweaks (using global glass theme) ===== */
+
+    .create-page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: .75rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
     }
 
-        .card-3d:hover {
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 16px 32px 0 rgba(0,126,255,0.17), 0 6px 12px 0 rgba(0,0,0,0.14);
+    .create-member-card {
+        margin: 0 auto;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--glass-border);
+        background: var(--glass-bg-soft);
+        box-shadow: var(--glass-shadow);
+        backdrop-filter: blur(24px) brightness(1.15);
+        -webkit-backdrop-filter: blur(24px) brightness(1.15);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .create-member-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at 0 0, rgba(219,234,254,0.85), transparent 55%), radial-gradient(circle at 110% 0, rgba(191,219,254,0.75), transparent 60%);
+            opacity: .7;
         }
 
-    .btn-glass {
-        background: rgba(59,130,246,0.12);
-        border: 1px solid #93c5fd;
-        color: #2563eb;
-        border-radius: 50px;
-        font-weight: 600;
-        transition: all 0.2s;
-    }
-
-        .btn-glass:hover {
-            background: #60a5fa;
-            color: #fff;
-            border: 1px solid #2563eb;
+        .create-member-card .card-body {
+            position: relative;
+            z-index: 1;
         }
 
     .avatar-3d {
@@ -40,119 +49,288 @@
         height: 88px;
         object-fit: cover;
         border-radius: 50%;
-        border: 2.5px solid #38bdf8;
+        border: 3px solid var(--brand-secondary);
         background: #e0f2fe;
-        box-shadow: 0 3px 10px 0 rgba(52,144,220,0.13);
+        box-shadow: 0 8px 22px rgba(37,99,235,0.5);
     }
 
     .filename-label {
         font-size: 0.95em;
-        color: #4b5563;
+        color: var(--muted);
         margin-top: 0.35rem;
+    }
+
+    .help-hint {
+        font-size: .86rem;
+        color: var(--muted);
     }
 </style>
 
-<div class="row justify-content-center mt-5">
-    <div class="col-md-7 col-lg-6">
-        <div class="card card-3d">
-            <div class="card-body p-5">
-                <h2 class="fw-bold text-primary text-center mb-4">
-                    <i class="fa-solid fa-user-plus fa-lg"></i> Create New Member
-                </h2>
-                <form asp-action="Create" enctype="multipart/form-data" autocomplete="off">
+    <div class="wrap">
+        <!-- Header -->
+        <div class="create-page-header">
+            <h2 class="page-title mb-0">
+                <span class="logo-dot"></span>
+                Create Member
+            </h2>
+
+            <div class="d-flex gap-2 flex-wrap">
+                <a asp-action="Index" class="btn btn-glass glass-surface-pill">
+                    <i class="fa-solid fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+
+        <!-- Glass create card -->
+        <div class="card create-member-card mt-5">
+            <div class="card-body p-4">
+                <h4 class="fw-bold text-center mb-3" style="color:#020617;">
+                    <i class="fa-solid fa-user-plus"></i> Create New Member
+                </h4>
+
+                <form asp-action="Create" enctype="multipart/form-data" autocomplete="off" method="post">
+                    @Html.AntiForgeryToken()
+
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <!-- Avatar (optional) -->
                     <div class="text-center mb-3">
                         <img id="profilePreview"
                              src="https://ui-avatars.com/api/?name=Member&background=60a5fa&color=fff&size=128"
                              class="avatar-3d mb-2"
                              alt="Preview" />
-                        <label class="btn btn-glass btn-sm ms-2 mb-1" style="position:relative;">
-                            <i class="fa fa-upload"></i> Upload/Take Photo
-                            <input type="file"
-                                   name="ProfilePicture"
-                                   accept="image/*"
-                                   capture="environment"
-                                   hidden
-                                   onchange="showPreview(event);" />
-                        </label>
-                        <button type="button"
-                                onclick="resetPreview()"
-                                class="btn btn-glass btn-sm ms-2"
-                                tabindex="-1"
-                                aria-label="Clear Photo">
-                            <i class="fa fa-times"></i> Clear
-                        </button>
+                        <div class="d-flex justify-content-center flex-wrap gap-2">
+                            <label class="btn btn-glass btn-sm" style="font-size:0.92em;">
+                                <i class="fa fa-upload"></i> Upload/Take Photo
+                                <span class="text-muted">(optional)</span>
+                                <input type="file"
+                                       name="ProfilePicture"
+                                       accept="image/*"
+                                       capture="environment"
+                                       hidden
+                                       onchange="showPreview(event);" />
+                            </label>
+                            <button type="button"
+                                    onclick="resetPreview()"
+                                    class="btn btn-glass btn-sm"
+                                    tabindex="-1"
+                                    aria-label="Clear Photo">
+                                <i class="fa fa-times"></i> Clear
+                            </button>
+                        </div>
                         <div id="filenameLabel" class="filename-label"></div>
-                        <span asp-validation-for="ProfilePicturePath" class="text-danger small"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label asp-for="FullName" class="form-label"><i class="fa fa-user"></i> Full Name</label>
-                        <input asp-for="FullName" class="form-control" />
-                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                    <!-- ===== Row 1: FullName + Gender ===== -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="mb-3 mb-md-0">
+                                <label asp-for="FullName" class="form-label">
+                                    <i class="fa fa-user"></i> Full Name
+                                </label>
+                                <input asp-for="FullName" class="form-control" />
+                                <span asp-validation-for="FullName" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3 mb-md-0">
+                                <label asp-for="Gender" class="form-label">
+                                    <i class="fa fa-venus-mars"></i> Gender
+                                </label>
+                                <select asp-for="Gender" class="form-select">
+                                    <option value="">-- Select Gender --</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+                                </select>
+                                <span asp-validation-for="Gender" class="text-danger small"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="Gender" class="form-label"><i class="fa fa-venus-mars"></i> Gender</label>
-                        <select asp-for="Gender" class="form-select">
-                            <option value="">-- Select Gender --</option>
-                            <option>Male</option>
-                            <option>Female</option>
-                            <option>Other</option>
-                        </select>
-                        <span asp-validation-for="Gender" class="text-danger small"></span>
+
+                    <!-- ===== Row 2: Email + Phone ===== -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="mb-3 mb-md-0">
+                                <label asp-for="Email" class="form-label">
+                                    <i class="fa fa-envelope"></i> Email
+                                </label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3 mb-md-0">
+                                <label asp-for="Phone" class="form-label">
+                                    <i class="fa fa-phone"></i> Phone
+                                </label>
+                                <input asp-for="Phone" class="form-control" />
+                                <span asp-validation-for="Phone" class="text-danger small"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="Email" class="form-label"><i class="fa fa-envelope"></i> Email</label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger small"></span>
+
+                    <!-- ===== Row 3: Address + MemberType ===== -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="mb-3 mb-md-0">
+                                <label asp-for="Address" class="form-label">
+                                    <i class="fa fa-location-dot"></i> Address
+                                </label>
+                                <input asp-for="Address" class="form-control" />
+                                <span asp-validation-for="Address" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3 mb-md-0">
+                                <label asp-for="MemberType" class="form-label">
+                                    <i class="fa fa-id-card-clip"></i> Type
+                                </label>
+                                <select asp-for="MemberType" class="form-select">
+                                    <option value="">-- Select Type --</option>
+                                    <option>Student</option>
+                                    <option>Teacher</option>
+                                    <option>Guest</option>
+                                    <option>Other</option>
+                                </select>
+                                <span asp-validation-for="MemberType" class="text-danger small"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="Phone" class="form-label"><i class="fa fa-phone"></i> Phone</label>
-                        <input asp-for="Phone" class="form-control" />
-                        <span asp-validation-for="Phone" class="text-danger small"></span>
+
+                    <!-- ===== Row 4: Library ID + Telegram Chat ID ===== -->
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-6">
+                            <div class="mb-3 mb-md-0">
+                                <label asp-for="DICardNumber" class="form-label">
+                                    <i class="fa-solid fa-id-card"></i> Library Card / Member ID
+                                </label>
+                                <input asp-for="DICardNumber" class="form-control" />
+                                <span asp-validation-for="DICardNumber" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3 mb-md-0">
+                                <label asp-for="TelegramChatId" class="form-label">
+                                    <i class="fa-brands fa-telegram"></i> Telegram Chat ID
+                                </label>
+                                <input asp-for="TelegramChatId" class="form-control" />
+                                <div class="help-hint">
+                                    Chat ID used for sending Telegram reminders (numeric ID from your bot).
+                                </div>
+                                <span asp-validation-for="TelegramChatId" class="text-danger small"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="Address" class="form-label"><i class="fa fa-location-dot"></i> Address</label>
-                        <input asp-for="Address" class="form-control" />
-                        <span asp-validation-for="Address" class="text-danger small"></span>
+
+                    <!-- ===== Row 5: Telegram Username + Active switch ===== -->
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-6">
+                            <div class="mb-3 mb-md-0">
+                                <label asp-for="TelegramUsername" class="form-label">
+                                    <i class="fa-brands fa-telegram"></i> Telegram Username
+                                </label>
+                                <input asp-for="TelegramUsername" class="form-control" placeholder="username" />
+                                <span asp-validation-for="TelegramUsername" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-center">
+                            <div class="form-check mt-3 mt-md-0">
+                                <input class="form-check-input" asp-for="IsActive" id="IsActive" />
+                                <label class="form-check-label" for="IsActive">
+                                    <i class="fa fa-toggle-on"></i> Active
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="MemberType" class="form-label"><i class="fa fa-id-card-clip"></i> Type</label>
-                        <select asp-for="MemberType" class="form-select">
-                            <option value="">-- Select Type --</option>
-                            <option>Student</option>
-                            <option>Teacher</option>
-                            <option>Guest</option>
-                            <option>Other</option>
-                        </select>
-                        <span asp-validation-for="MemberType" class="text-danger small"></span>
+
+                    <!-- ===== Row 6: Notes (full width) ===== -->
+                    <div class="row g-3 mt-1">
+                        <div class="col-12">
+                            <div class="mb-3 mb-md-0">
+                                <label asp-for="Notes" class="form-label">
+                                    <i class="fa fa-note-sticky"></i> Notes
+                                </label>
+                                <input asp-for="Notes" class="form-control" />
+                                <span asp-validation-for="Notes" class="text-danger small"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3 form-check">
-                        <input class="form-check-input" asp-for="IsActive" id="IsActive" />
-                        <label class="form-check-label" for="IsActive">
-                            <i class="fa fa-toggle-on"></i> Active
-                        </label>
+
+                    <!-- ===== Row 7: Linked User + Created By ===== -->
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-6">
+                            <div class="mb-3 mb-md-0">
+                                <label asp-for="UserId" class="form-label">
+                                    <i class="fa fa-user-tie"></i> Linked User
+                                </label>
+                                <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3 mb-md-0">
+                                <label asp-for="CreatedBy" class="form-label">
+                                    <i class="fa fa-user"></i> Created By
+                                </label>
+                                <select asp-for="CreatedBy" class="form-select" asp-items="ViewBag.CreatedByList"></select>
+                                <span asp-validation-for="CreatedBy" class="text-danger small"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="Notes" class="form-label"><i class="fa fa-note-sticky"></i> Notes</label>
-                        <input asp-for="Notes" class="form-control" />
-                        <span asp-validation-for="Notes" class="text-danger small"></span>
+
+                    <!-- Password (optional) -->
+                    <div class="card-glass glas-all-style mt-3 mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fa-solid fa-lock me-2"></i>
+                            <strong>Set Password (optional)</strong>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="mb-3 mb-md-0">
+                                    <label class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <input name="NewPassword"
+                                               id="NewPassword"
+                                               type="password"
+                                               class="form-control"
+                                               placeholder="5 - 20 characters" />
+                                        <button class="btn btn-outline-secondary"
+                                                type="button"
+                                                onclick="togglePw('NewPassword', this)">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <span class="text-muted small">
+                                        Leave blank if you don't want to set a password now.
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-0">
+                                    <label class="form-label">Confirm Password</label>
+                                    <div class="input-group">
+                                        <input name="ConfirmPassword"
+                                               id="ConfirmPassword"
+                                               type="password"
+                                               class="form-control" />
+                                        <button class="btn btn-outline-secondary"
+                                                type="button"
+                                                onclick="togglePw('ConfirmPassword', this)">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    @* server-side validation messages from ModelState["NewPassword"] will show in summary *@
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="UserId" class="form-label"><i class="fa fa-user-tie"></i> Linked User</label>
-                        <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
-                    </div>
-                    <div class="mb-3">
-                        <label asp-for="CreatedBy" class="form-label"><i class="fa fa-user"></i> Created By</label>
-                        <!-- CHANGED: Use a select, not input, for Created By -->
-                        <select asp-for="CreatedBy" class="form-select" asp-items="ViewBag.CreatedByList"></select>
-                        <span asp-validation-for="CreatedBy" class="text-danger small"></span>
-                    </div>
+
                     <div class="mt-4 text-center">
-                        <button type="submit" class="btn btn-success btn-glass px-5 py-2 rounded-pill fw-bold">
+                        <button type="submit" class="btn btn-success px-5 py-2 rounded-pill fw-bold">
                             <i class="fa-solid fa-circle-plus"></i> Create Member
                         </button>
-                        <a asp-action="Index" class="btn btn-glass ms-2 rounded-pill px-3">
+                        <a asp-action="Index" class="btn btn-glass glass-surface-pill ms-2 rounded-pill px-3">
                             <i class="fa-solid fa-arrow-left"></i> Back to List
                         </a>
                     </div>
@@ -160,7 +338,6 @@
             </div>
         </div>
     </div>
-</div>
 
 @section Scripts {
     <script>
@@ -178,16 +355,26 @@
             }
             document.getElementById('filenameLabel').innerText = fileName ? "Selected: " + fileName : "";
         }
+
         function resetPreview() {
             var preview = document.getElementById('profilePreview');
             preview.src = "https://ui-avatars.com/api/?name=Member&background=60a5fa&color=fff&size=128";
             var fileInput = document.querySelector('input[name="ProfilePicture"]');
-            if (fileInput) {
-                fileInput.value = "";
-            }
+            if (fileInput) fileInput.value = "";
             document.getElementById('filenameLabel').innerText = "";
         }
+
+        function togglePw(id, btn) {
+            const input = document.getElementById(id);
+            if (!input) return;
+            const isPw = input.type === "password";
+            input.type = isPw ? "text" : "password";
+            btn.innerHTML = isPw
+                ? '<i class="fa-regular fa-eye-slash"></i>'
+                : '<i class="fa-regular fa-eye"></i>';
+        }
     </script>
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

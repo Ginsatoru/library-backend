@@ -17,309 +17,293 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = LibrarySystemBBU
 build_property.RootNamespace = LibrarySystemBBU
-build_property.ProjectDir = D:\BBU Study\Year 4 S1\Library System BBU\LibrarySystem\LibrarySystemBBU\
+build_property.ProjectDir = C:\Users\NETTECH-STORE\OneDrive - AAAPOS\Web Projects\School\Backend\LibrarySystem\LibrarySystem\LibrarySystemBBU\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\BBU Study\Year 4 S1\Library System BBU\LibrarySystem\LibrarySystemBBU
+build_property.MSBuildProjectDirectory = C:\Users\NETTECH-STORE\OneDrive - AAAPOS\Web Projects\School\Backend\LibrarySystem\LibrarySystem\LibrarySystemBBU
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Account/AccessDenied.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Account/AccessDenied.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxBY2Nlc3NEZW5pZWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Account/Login.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Account/ForgotPassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxGb3Jnb3RQYXNzd29yZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Account/Register.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Account/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxQcm9maWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/AdjustmentDetails/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRqdXN0bWVudERldGFpbHNcQ3JlYXRlLmNzaHRtbA==
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Account/ResetPassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZXNldFBhc3N3b3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/AdjustmentDetails/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRqdXN0bWVudERldGFpbHNcRGVsZXRlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/AdjustmentDetails/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRqdXN0bWVudERldGFpbHNcRGV0YWlscy5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/AdjustmentDetails/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRqdXN0bWVudERldGFpbHNcRWRpdC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/AdjustmentDetails/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRqdXN0bWVudERldGFpbHNcSW5kZXguY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Adjustments/Create.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Adjustments/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRqdXN0bWVudHNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Adjustments/Delete.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Adjustments/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRqdXN0bWVudHNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Adjustments/Details.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Adjustments/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRqdXN0bWVudHNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Adjustments/Edit.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Adjustments/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRqdXN0bWVudHNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Adjustments/Index.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Adjustments/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRqdXN0bWVudHNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookLoans/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0xvYW5zXENyZWF0ZS5jc2h0bWw=
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Adjustments/_DetailRow.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRqdXN0bWVudHNcX0RldGFpbFJvdy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookLoans/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0xvYW5zXERlbGV0ZS5jc2h0bWw=
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/BookBorrows/BorrowReceipt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0JvcnJvd3NcQm9ycm93UmVjZWlwdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookLoans/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0xvYW5zXERldGFpbHMuY3NodG1s
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/BookBorrows/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0JvcnJvd3NcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookLoans/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0xvYW5zXEVkaXQuY3NodG1s
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/BookBorrows/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0JvcnJvd3NcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookLoans/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0xvYW5zXEluZGV4LmNzaHRtbA==
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/BookBorrows/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0JvcnJvd3NcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookReturns/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va1JldHVybnNcQ3JlYXRlLmNzaHRtbA==
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/BookBorrows/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0JvcnJvd3NcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookReturns/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va1JldHVybnNcRGVsZXRlLmNzaHRtbA==
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/BookBorrows/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0JvcnJvd3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookReturns/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va1JldHVybnNcRGV0YWlscy5jc2h0bWw=
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/BookBorrows/ReturnReceipt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va0JvcnJvd3NcUmV0dXJuUmVjZWlwdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookReturns/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va1JldHVybnNcRWRpdC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/BookReturns/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va1JldHVybnNcSW5kZXguY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Books/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va3NcQ3JlYXRlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Books/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va3NcRGVsZXRlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Books/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va3NcRGV0YWlscy5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Books/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va3NcRWRpdC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Books/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va3NcSW5kZXguY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Catalogs/Create.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Catalogs/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0YWxvZ3NcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Catalogs/Delete.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Catalogs/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0YWxvZ3NcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Catalogs/Details.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Catalogs/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0YWxvZ3NcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Catalogs/Edit.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Catalogs/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0YWxvZ3NcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Catalogs/Index.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Catalogs/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0YWxvZ3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Dashboard/Index.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Dashboard/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Home/Index.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Histories/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGlzdG9yaWVzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LoanBookDetails/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9hbkJvb2tEZXRhaWxzXENyZWF0ZS5jc2h0bWw=
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/LibraryLogs/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeUxvZ3NcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LoanBookDetails/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9hbkJvb2tEZXRhaWxzXERlbGV0ZS5jc2h0bWw=
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/LibraryLogs/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeUxvZ3NcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LoanBookDetails/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9hbkJvb2tEZXRhaWxzXERldGFpbHMuY3NodG1s
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/LibraryLogs/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeUxvZ3NcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LoanBookDetails/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9hbkJvb2tEZXRhaWxzXEVkaXQuY3NodG1s
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/LibraryLogs/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeUxvZ3NcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LoanBookDetails/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9hbkJvb2tEZXRhaWxzXEluZGV4LmNzaHRtbA==
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/LibraryLogs/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGlicmFyeUxvZ3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LoanReminders/Index.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/LoanReminders/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9hblJlbWluZGVyc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/LoanReminders/Send.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/LoanReminders/Send.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9hblJlbWluZGVyc1xTZW5kLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Members/Create.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/MemberAuth/ForgotPassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyQXV0aFxGb3Jnb3RQYXNzd29yZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/MemberAuth/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyQXV0aFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/MemberAuth/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyQXV0aFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/MemberAuth/ResetPassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyQXV0aFxSZXNldFBhc3N3b3JkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/MemberPortal/ConnectTelegram.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyUG9ydGFsXENvbm5lY3RUZWxlZ3JhbS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Members/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyc1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Members/Delete.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Members/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyc1xEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Members/Details.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Members/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyc1xEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Members/Edit.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Members/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyc1xFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Members/Index.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Members/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/PurchaseDetails/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VEZXRhaWxzXENyZWF0ZS5jc2h0bWw=
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Members/ResetPassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyc1xSZXNldFBhc3N3b3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/PurchaseDetails/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VEZXRhaWxzXERlbGV0ZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/PurchaseDetails/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VEZXRhaWxzXERldGFpbHMuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/PurchaseDetails/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VEZXRhaWxzXEVkaXQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/PurchaseDetails/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VEZXRhaWxzXEluZGV4LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Purchases/Create.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Purchases/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Purchases/Delete.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Purchases/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Purchases/Details.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Purchases/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VzXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Purchases/Edit.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Purchases/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Purchases/Index.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Purchases/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Roles/Create.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Purchases/_DetailRow.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VzXF9EZXRhaWxSb3cuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Reports/Monthly.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0c1xNb250aGx5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Roles/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZXNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Roles/Delete.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Roles/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZXNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Roles/Details.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Roles/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZXNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Roles/Edit.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Roles/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZXNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Roles/Index.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Roles/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Shared/_Footer.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Shared/_Footer.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Gb290ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Shared/_Layout.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Shared/_Navbar.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Shared/_Navbar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9OYXZiYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Shared/_Sidebar.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Shared/_Sidebar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9TaWRlYmFyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Users/Create.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/TelegramDebug/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVsZWdyYW1EZWJ1Z1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Users/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Users/Delete.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Users/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Users/Details.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Users/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Users/Edit.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Users/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/Users/Index.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Users/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/_ViewImports.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/BBU Study/Year 4 S1/Library System BBU/LibrarySystem/LibrarySystemBBU/Views/_ViewStart.cshtml]
+[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

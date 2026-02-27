@@ -1,157 +1,466 @@
-﻿<aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="/uploads/photo_2025-04-08_17-35-43.jpg" class="brand-link elevation-3">
-        <img src="/uploads/photo_2025-04-08_17-35-43.jpg" alt="BBU Logo" class="brand-image img-circle elevation-3 animated pulse" style="opacity:.86">
-        <span class="brand-text font-weight-light fw-bold ms-2">BBU Library</span>
-    </a>
+﻿<!-- SIDEBAR -->
+<aside class="main-sidebar shadow-lg">
 
-    <!-- Sidebar Navigation -->
-    <div class="sidebar mt-0">
-        <nav class="mt-1">
-            <ul class="nav nav-pills nav-sidebar flex-column"
-                data-widget="treeview" role="menu" data-accordion="false"
-                style="font-size:1.13rem;">
+    <!-- glass handle for click toggle -->
+    <div class="sidebar-handle" title="Toggle compact sidebar"></div>
 
-                <!-- Main Navigation -->
+    <!-- Brand -->
+    <div class="brand d-flex align-items-center gap-2 px-3 pt-4 pb-3">
+        <img src="/uploads/photo_2025-04-08_17-35-43.jpg" alt="BBU Logo" class="rounded-circle brand-logo">
+        <span class="brand-text fw-semibold">BBU Library</span>
+    </div>
+
+    <!-- Scroll area -->
+    <div class="sidebar nav-scroll">
+        <nav class="mt-1" role="navigation" aria-label="Main sidebar">
+            <ul class="nav flex-column gap-1 text-white px-2">
+
+                <!-- SECTION: Main -->
+                <li class="nav-section">MAIN</li>
+
                 <li class="nav-item">
-                    <a class="nav-link elevation-2" asp-controller="Dashboard" asp-action="Index">
-                        <i class="nav-icon fas fa-tachometer-alt text-info"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link elevation-2" asp-controller="Home" asp-action="Index">
-                        <i class="nav-icon fas fa-home text-primary"></i>
-                        <p>Home</p>
+                    <a class="nav-link d-flex align-items-center gap-2" asp-controller="Dashboard" asp-action="Index">
+                        <i class="fas fa-tachometer-alt"></i><span>Dashboard</span>
                     </a>
                 </li>
 
-                <!-- Books Management -->
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link elevation-2">
-                        <i class="nav-icon fas fa-book text-primary"></i>
-                        <p>
-                            Books Management
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview ms-3">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Books" asp-action="Index">
-                                <i class="fas fa-book-open nav-icon text-success"></i>
-                                <p>Books</p>
+             
+
+                <!-- SECTION: Books -->
+                <li class="nav-section">BOOKS</li>
+
+                <li class="nav-item">
+                    <button class="nav-link d-flex justify-content-between align-items-center w-100 text-start"
+                            data-bs-toggle="collapse" data-bs-target="#booksMenu" aria-expanded="false" aria-controls="booksMenu">
+                        <span class="d-flex align-items-center gap-2">
+                            <i class="fas fa-book"></i> <span>Books Management</span>
+                        </span>
+                        <i class="fas fa-angle-down chevron"></i>
+                    </button>
+
+                    <ul class="collapse list-unstyled ms-3 mt-1" id="booksMenu" data-persist="true">
+                        <li>
+                            <a class="nav-sublink" asp-controller="Catalogs" asp-action="Index">
+                                <i class="fas fa-barcode me-2"></i>Catalogs
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Catalogs" asp-action="Index">
-                                <i class="fas fa-barcode nav-icon text-info"></i>
-                                <p>Catalogs</p>
+                        <li>
+                            <a class="nav-sublink" asp-controller="Purchases" asp-action="Index">
+                                <i class="fas fa-shopping-cart me-2"></i>Purchases
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Purchases" asp-action="Index">
-                                <i class="fas fa-shopping-cart nav-icon text-danger"></i>
-                                <p>Purchases</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Adjustments" asp-action="Index">
-                                <i class="fas fa-tools nav-icon text-secondary"></i>
-                                <p>Adjustments</p>
+                        <li>
+                            <a class="nav-sublink" asp-controller="Adjustments" asp-action="Index">
+                                <i class="fas fa-tools me-2"></i>Adjustments
                             </a>
                         </li>
                     </ul>
                 </li>
 
-                <!-- Standalone Sections -->
-                <li class="nav-item">
-                    <a class="nav-link elevation-2" asp-controller="BookLoans" asp-action="Index">
-                        <i class="nav-icon fas fa-book-reader text-success"></i>
-                        <p>Book Loans</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link elevation-2" asp-controller="BookReturns" asp-action="Index">
-                        <i class="nav-icon fas fa-undo-alt text-info"></i>
-                        <p>Book Returns</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link elevation-2" asp-controller="LoanReminders" asp-action="Index">
-                        <i class="nav-icon fas fa-bell text-warning"></i>
-                        <p>Loan Reminders</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link elevation-2" asp-controller="Members" asp-action="Index">
-                        <i class="nav-icon fas fa-users text-danger"></i>
-                        <p>Members</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link elevation-2" asp-controller="Users" asp-action="Index">
-                        <i class="nav-icon fas fa-user-shield text-primary"></i>
-                        <p>Libraren</p>
-                    </a>
-                </li>
-                @* <li class="nav-item">
-                    <a class="nav-link elevation-2" asp-controller="Roles" asp-action="Index">
-                        <i class="nav-icon fas fa-user-tag text-info"></i>
-                        <p>Roles</p>
-                    </a>
-                </li> *@
+                <!-- SECTION: Operations -->
+                <li class="nav-section">OPERATIONS</li>
 
-                <!-- More Submenu -->
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link elevation-2">
-                        <i class="nav-icon fas fa-ellipsis-h text-secondary"></i>
-                        <p>More <i class="fas fa-angle-left right"></i></p>
+                <li>
+                    <a class="nav-link d-flex align-items-center gap-2" asp-controller="BookBorrows" asp-action="Index">
+                        <i class="fas fa-book-reader"></i><span>Book Borrow</span>
                     </a>
-                    <ul class="nav nav-treeview ms-3">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="AdjustmentDetails" asp-action="Index">
-                                <i class="fas fa-tasks nav-icon text-info"></i>
-                                <p>Adjustment Details</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="LoanBookDetails" asp-action="Index">
-                                <i class="fas fa-book-medical nav-icon text-primary"></i>
-                                <p>Loan Book Details</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="PurchaseDetails" asp-action="Index">
-                                <i class="fas fa-list nav-icon text-success"></i>
-                                <p>Purchase Details</p>
-                            </a>
-                        </li>
-                        @* <li class="nav-item">
-                            <a class="nav-link" asp-controller="Shared" asp-action="Index">
-                                <i class="fas fa-share-alt nav-icon text-warning"></i>
-                                <p>Shared</p>
-                            </a>
-                        </li> *@
-                    </ul>
                 </li>
 
-                <!-- Logout (always last) -->
-                <li class="nav-item mt-2">
-                    <a class="nav-link elevation-2 text-danger" asp-controller="Account" asp-action="Logout">
-                        <i class="nav-icon fas fa-sign-out-alt"></i>
-                        <p>Logout</p>
+                <li>
+                    <a class="nav-link d-flex align-items-center gap-2" asp-controller="LibraryLogs" asp-action="Index">
+                        <i class="fas fa-undo-alt"></i><span>Library Logs</span>
                     </a>
                 </li>
+
+                <li>
+                    <a class="nav-link d-flex align-items-center justify-content-between gap-2" asp-controller="LoanReminders" asp-action="Index">
+                        <span class="d-flex align-items-center gap-2">
+                            <i class="fas fa-bell"></i><span>Reminders</span>
+                        </span>
+                        <span class="badge rounded-pill bg-light text-dark" title="Pending reminders"></span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="nav-link d-flex align-items-center gap-2" asp-controller="Members" asp-action="Index">
+                        <i class="fas fa-users"></i><span>Members</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="nav-link d-flex align-items-center gap-2"
+                       asp-controller="Histories" asp-action="Index">
+                        <i class="fas fa-clock-rotate-left"></i><span>Histories</span>
+                    </a>
+                </li>
+                <!-- 🔹 REPORTS -->
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" asp-controller="Reports" asp-action="Monthly">
+                        <i class="fas fa-chart-bar"></i><span style="color:red !important;">Report</span>
+                    </a>
+                </li>
+
             </ul>
         </nav>
     </div>
+
+    <!-- Logout button -->
+    <form asp-controller="Account" asp-action="Logout" method="post" class="px-3">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-outline-danger w-100">
+            <i class="fas fa-sign-out-alt me-2"></i> Logout
+        </button>
+    </form>
+
+    <!-- Footer / Profile -->
+    <div class="sidebar-footer px-3 py-3 d-flex align-items-center justify-content-between mt-3">
+        <div class="d-flex align-items-center gap-2">
+            <div class="avatar">B</div>
+            <div class="small text-white-50 lh-sm">
+                <div class="fw-semibold text-white">Librarian</div>
+                <div>librarian@bbu.edu</div>
+            </div>
+        </div>
+    </div>
 </aside>
 
+<!-- STYLES -->
 <style>
-    /* Sidebar Nav Active and Hover Effect */
-    .nav-sidebar .nav-link.active,
-    .nav-sidebar .nav-link:hover {
-        background: #0ea5e9 !important;
+    :root {
+        /* main blue theme */
+        --brand: #00007a;
+        --sidebar-bg: #020617;
+        --sidebar-bg-2: #00007a;
+        --sidebar-hover: rgba(255,255,255,.08);
+        --sidebar-active: rgba(255,255,255,.16);
+        --sidebar-border: rgba(255,255,255,.12);
+        --ring: #93c5fd;
+    }
+
+    /* prevent horizontal overflow caused by transitions */
+    html, body, .wrapper {
+        overflow-x: hidden;
+    }
+
+    /* base widths (AdminLTE will also set these, we override with !important) */
+    .main-sidebar {
+        width: 250px !important;
+        min-height: 100vh;
+        background: radial-gradient(120% 120% at 0% 0%, rgba(255,255,255,.08) 0%, transparent 40%), linear-gradient(160deg, #000099 0%, #00007a 100%) !important;
+        color: #fff !important;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        transition: width .24s cubic-bezier(0.22, 0.61, 0.36, 1);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+        border-right: 1px solid rgba(255,255,255,.15);
+        overflow: hidden;
+    }
+
+    /* small glass handle on the right edge for click toggle */
+    .sidebar-handle {
+        position: absolute;
+        top: 50%;
+        right: -4px;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 90px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.75); /* thicker white look */
+        opacity: .6;
+        transition: opacity .2s, transform .2s;
+        cursor: pointer;
+        z-index: 5;
+    }
+
+    .main-sidebar:hover .sidebar-handle {
+        opacity: 1;
+        transform: translateY(-50%) scaleX(1.05);
+    }
+
+    .brand-logo {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+    }
+
+    .brand-text {
+        font-size: 1.15rem;
+        letter-spacing: .2px;
+        color: #ffffff;
+        white-space: nowrap;
+    }
+
+    .nav-scroll {
+        flex: 1 1 auto;
+        padding-bottom: .5rem;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+        .nav-scroll::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .nav-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .nav-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,.18);
+            border-radius: 8px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+    .nav-section {
+        font-size: .72rem;
+        letter-spacing: .12rem;
+        color: rgba(255,255,255,.7);
+        padding: .75rem .75rem .25rem;
+        margin-top: .35rem;
+        white-space: nowrap;
+    }
+
+    .nav-link {
+        color: #fff;
+        border-radius: .75rem;
+        padding: .65rem .8rem;
+        transition: transform .15s ease, background-color .15s ease, color .15s ease, box-shadow .2s ease;
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        white-space: nowrap;
+    }
+
+        .nav-link i {
+            min-width: 20px;
+        }
+
+        .nav-link:hover {
+            background: var(--sidebar-hover);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active,
+        .nav-link[aria-current="page"] {
+            background: var(--sidebar-active);
+            box-shadow: inset 0 0 0 1px var(--sidebar-border);
+        }
+
+            /* thicker white active indicator bar */
+            .nav-link.active::before,
+            .nav-link[aria-current="page"]::before {
+                content: "";
+                position: absolute;
+                left: -10px;
+                top: 10%;
+                height: 80%;
+                width: 5px;
+                border-radius: 999px;
+                background: #ffffff;
+                opacity: .9;
+            }
+
+    .nav-sublink {
+        display: block;
+        color: rgba(255,255,255,.9);
+        padding: .5rem .75rem;
+        border-radius: .5rem;
+        margin: .125rem 0;
+        transition: background-color .15s ease, color .15s ease;
+        font-size: .94rem;
+        white-space: nowrap;
+    }
+
+        .nav-sublink:hover {
+            background: var(--sidebar-hover);
+            color: #fff;
+        }
+
+    .chevron {
+        transition: transform .2s ease;
+    }
+
+    button[aria-expanded="true"] .chevron {
+        transform: rotate(180deg);
+    }
+
+    .sidebar-footer {
+        border-top: 1px solid var(--sidebar-border);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+    }
+
+    .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.2);
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .nav-link:focus,
+    .nav-sublink:focus,
+    #collapseAllBtn:focus,
+    #sidebarMiniToggle:focus {
+        outline: none;
+        box-shadow: 0 0 0 .2rem rgba(147,197,253,.35);
+    }
+
+    .main-sidebar .text-white-50:hover {
         color: #fff !important;
     }
+
+    /* =====================================================
+           COMPACT / SLIDE-OUT BEHAVIOUR
+           =================================================== */
+
+    /* base content width; smooth */
+    .content-wrapper {
+        margin-left: 250px;
+        transition: margin-left .24s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    /* collapsed state (icons only) */
+    body.bbu-sidebar-mini .main-sidebar {
+        width: 80px !important;
+    }
+
+    body.bbu-sidebar-mini .content-wrapper {
+        margin-left: 80px;
+    }
+
+    /* hide text when collapsed */
+    body.bbu-sidebar-mini .main-sidebar .brand-text,
+    body.bbu-sidebar-mini .main-sidebar .nav-section,
+    body.bbu-sidebar-mini .main-sidebar .nav-link span,
+    body.bbu-sidebar-mini .main-sidebar .sidebar-footer .small {
+        opacity: 0;
+        transform: translateX(-8px);
+        pointer-events: none;
+        transition: opacity .15s ease, transform .15s ease;
+    }
+
+    /* center icons when collapsed */
+    body.bbu-sidebar-mini .main-sidebar .nav-link,
+    body.bbu-sidebar-mini .main-sidebar .nav-sublink {
+        justify-content: center;
+    }
+
+        body.bbu-sidebar-mini .main-sidebar .nav-link i {
+            margin-right: 0;
+        }
+
+    /* when hovering the collapsed bar, slide text & width out */
+    body.bbu-sidebar-mini .main-sidebar:hover {
+        width: 250px !important;
+    }
+
+        body.bbu-sidebar-mini .main-sidebar:hover + .content-wrapper {
+            margin-left: 250px;
+        }
+
+        body.bbu-sidebar-mini .main-sidebar:hover .brand-text,
+        body.bbu-sidebar-mini .main-sidebar:hover .nav-section,
+        body.bbu-sidebar-mini .main-sidebar:hover .nav-link span,
+        body.bbu-sidebar-mini .main-sidebar:hover .sidebar-footer .small {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+            transition: opacity .18s ease .08s, transform .18s ease .08s;
+        }
+
+    /* tiny tweak so badge doesn't get hidden weirdly */
+    body.bbu-sidebar-mini .main-sidebar .badge {
+        font-size: .65rem;
+    }
+
+    /* kill AdminLTE default offset */
+    .layout-navbar-fixed.layout-fixed .wrapper .sidebar {
+        margin-top: 0 !important;
+    }
+
+    .sidebar-mini .main-sidebar .nav-link, .sidebar-mini-md .main-sidebar .nav-link, .sidebar-mini-xs .main-sidebar .nav-link{
+        color:white;
+    }
 </style>
+
+<!-- JS -->
+<script>
+    (function () {
+        // 1) ACTIVE LINK + OPEN PARENT COLLAPSE
+        try {
+            var path = location.pathname.toLowerCase();
+            document.querySelectorAll('.main-sidebar a.nav-link, .main-sidebar a.nav-sublink')
+                .forEach(function (a) {
+                    var href = (a.getAttribute('href') || '').toLowerCase();
+                    if (!href) return;
+                    if (href === path || (href !== '/' && path.startsWith(href))) {
+                        a.classList.add('active');
+                        var parentCollapse = a.closest('.collapse');
+                        if (parentCollapse) {
+                            new bootstrap.Collapse(parentCollapse, { toggle: false }).show();
+                        }
+                    }
+                });
+        } catch (e) { }
+
+        // 2) PERSIST COLLAPSED MENUS
+        var keyPrefix = 'bbu.sidebar.collapse.';
+        document.querySelectorAll('.main-sidebar .collapse[data-persist="true"]').forEach(function (el) {
+            var id = el.id; if (!id) return;
+            var saved = localStorage.getItem(keyPrefix + id);
+            if (saved === '1') {
+                new bootstrap.Collapse(el, { toggle: false }).show();
+            }
+            el.addEventListener('shown.bs.collapse', function () {
+                localStorage.setItem(keyPrefix + id, '1');
+            });
+            el.addEventListener('hidden.bs.collapse', function () {
+                localStorage.setItem(keyPrefix + id, '0');
+            });
+        });
+
+        // 3) "Collapse all sections" button
+        var collapseBtn = document.getElementById('collapseAllBtn');
+        if (collapseBtn) {
+            collapseBtn.addEventListener('click', function () {
+                document.querySelectorAll('.main-sidebar .collapse.show').forEach(function (c) {
+                    new bootstrap.Collapse(c, { toggle: false }).hide();
+                });
+            });
+        }
+
+        // 4) MINI / SLIDE-OUT SIDEBAR TOGGLE
+        var MINI_KEY = 'bbu.sidebar.mini';
+        var body = document.body;
+        var miniToggle = document.getElementById('sidebarMiniToggle');
+        var handle = document.querySelector('.sidebar-handle');
+
+        function setMini(on) {
+            if (on) body.classList.add('bbu-sidebar-mini');
+            else body.classList.remove('bbu-sidebar-mini');
+            localStorage.setItem(MINI_KEY, on ? '1' : '0');
+        }
+
+        // restore previous state
+        var savedMini = localStorage.getItem(MINI_KEY);
+        if (savedMini === '1') {
+            setMini(true);
+        }
+
+        function toggleMini() {
+            setMini(!body.classList.contains('bbu-sidebar-mini'));
+        }
+
+        if (miniToggle) miniToggle.addEventListener('click', toggleMini);
+        if (handle) handle.addEventListener('click', toggleMini);
+    })();
+</script>

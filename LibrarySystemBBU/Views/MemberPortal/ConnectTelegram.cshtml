@@ -1,0 +1,58 @@
+﻿@model LibrarySystemBBU.Models.Member
+
+@{
+    ViewData["Title"] = "Connect Telegram";
+    Layout = null;
+
+    string? deepLink = ViewBag.TelegramDeepLink as string;
+    bool hasDeepLink = !string.IsNullOrWhiteSpace(deepLink);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
+
+        <h1 class="text-xl font-bold mb-4 text-gray-900">Connect your Telegram</h1>
+
+        <p class="text-sm text-gray-600 mb-4">
+            Hello <strong>@Model.FullName</strong>, click the button below to connect your Telegram
+            account with the library bot. Telegram will open in a new tab, and this page will go
+            straight to your member dashboard.
+        </p>
+
+        <ol class="list-decimal list-inside text-xs text-gray-500 mb-4 space-y-1">
+            <li>Click the button below.</li>
+            <li>Telegram will open the Library Bot (in a new tab).</li>
+            <li>Tap <strong>Start</strong> inside Telegram.</li>
+            <li>This page will immediately go to your member page.</li>
+        </ol>
+
+        @if (hasDeepLink)
+        {
+            <a href="@deepLink"
+               target="_blank"
+               class="w-full inline-flex justify-center items-center px-4 py-2 rounded-md bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700"
+               onclick="window.open(this.href, '_blank'); window.location.href='@Url.Action("Index", "Members")'; return false;">
+                📲 Connect with Library Bot
+            </a>
+        }
+        else
+        {
+            <div class="w-full text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-md p-2 mb-2">
+                ⚠ Telegram link is not available. Please contact the library staff.
+            </div>
+        }
+
+        <div class="mt-4 text-xs text-slate-600">
+            After you tap <strong>Start</strong> in Telegram, the bot will be able to send you reminders.
+        </div>
+    </div>
+</body>
+</html>

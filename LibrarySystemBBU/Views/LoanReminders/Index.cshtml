@@ -2,100 +2,365 @@
 
 @{
     ViewData["Title"] = "Loan Reminders";
+
+    var currentPage = ViewBag.CurrentPage as int? ?? 1;
+    var totalPages = ViewBag.TotalPages as int? ?? 1;
+    var totalReminders = ViewBag.TotalReminders as int? ?? (Model?.Count() ?? 0);
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
-</head>
-<body class="bg-gray-100 antialiased p-8">
-    <div class="max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-        <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Sent Loan Reminders</h2>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
-        <div class="mb-6">
-            <a asp-action="Send" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                <i class="fas fa-paper-plane mr-2"></i> Send New Reminder
-            </a>
+<style>
+    /* =======================
+           Loan Reminders (scoped)
+           ======================= */
+
+    #loanRemindersPage .muted {
+        color: var(--muted, #6b7280);
+        font-size: .9rem;
+    }
+
+    #loanRemindersPage .toolbar {
+        margin-bottom: 10px;
+    }
+
+    #loanRemindersPage .stats-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        padding: 5px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(148,163,184,.45);
+        background: linear-gradient(180deg,#ffffff,rgba(248,250,252,.9));
+        font-size: .8rem;
+        color: var(--text, #0f172a);
+    }
+
+        #loanRemindersPage .stats-pill strong {
+            font-weight: 700;
+        }
+
+    #loanRemindersPage .card-glass.glas-all-style {
+        margin-top: 6px;
+    }
+
+    #loanRemindersPage .table-wrap {
+        overflow: auto;
+        border-radius: 16px;
+        border: 1px solid rgba(1,0,140,.10);
+        background: linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.88));
+    }
+
+    #loanRemindersPage table thead th {
+        position: sticky;
+        top: 0;
+        background: linear-gradient(180deg,var(--brand-50,#eef0ff),rgba(255,255,255,.96));
+        border-bottom: 2px solid var(--brand-200, #b6b6ff);
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    #loanRemindersPage tbody tr {
+        transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
+    }
+
+        #loanRemindersPage tbody tr:hover {
+            background: rgba(15,23,42,.02);
+            transform: translateY(-1px);
+            box-shadow: inset 0 0 0 999px rgba(15,23,42,.02);
+        }
+
+    #loanRemindersPage .member-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 999px;
+        background: linear-gradient(180deg,#e5e7eb,#ffffff);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: .8rem;
+        font-weight: 600;
+        color: #4b5563;
+        box-shadow: 0 1px 3px rgba(15,23,42,.2);
+    }
+
+    #loanRemindersPage .text-truncate {
+        max-width: 260px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Type badge */
+    #loanRemindersPage .badge-soft {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: .78rem;
+        border: 1px solid transparent;
+        font-weight: 600;
+    }
+
+    #loanRemindersPage .badge-default {
+        background: #f3f4f6;
+        color: #374151;
+        border-color: #e5e7eb;
+    }
+
+    #loanRemindersPage .badge-telegram {
+        background: #e0e7ff;
+        color: #1d4ed8;
+        border-color: #c7d2fe;
+    }
+
+    #loanRemindersPage .badge-call {
+        background: #fef3c7;
+        color: #92400e;
+        border-color: #fde68a;
+    }
+
+    #loanRemindersPage .badge-email {
+        background: #d1fae5;
+        color: #047857;
+        border-color: #a7f3d0;
+    }
+
+    /* Empty state */
+    #loanRemindersPage .empty-state {
+        border-radius: 16px;
+        border: 1px dashed rgba(148,163,184,.6);
+        background: linear-gradient(180deg,rgba(255,255,255,.96),rgba(248,250,252,.95));
+        box-shadow: 0 10px 28px rgba(15,23,42,.12);
+    }
+
+    /* Pagination */
+    #loanRemindersPage .pager {
+        border-top: 1px solid rgba(15,23,42,.08);
+        padding: 10px 14px;
+        background: linear-gradient(180deg,rgba(248,250,252,.96),rgba(255,255,255,.98));
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+    }
+
+    #loanRemindersPage .pager-btn {
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-size: .82rem;
+    }
+
+        #loanRemindersPage .pager-btn.disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+</style>
+
+<div id="loanRemindersPage">
+    <h2 class="page-title">
+        <span class="logo-dot"></span>
+        Reminders
+    </h2>
+
+    <!-- Toolbar -->
+    <div class="toolbar d-flex flex-wrap gap-2 align-items-center justify-content-between">
+        <div class="muted d-flex align-items-center gap-2">
+            <i class="bi bi-info-circle"></i>
+            Overview of reminders sent to members.
         </div>
 
-        @if (Model == null || !Model.Any())
-        {
-            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-md" role="alert">
-                <p class="font-bold">No Reminders Sent</p>
-                <p>There are no loan reminders logged in the system yet.</p>
-            </div>
-        }
-        else
-        {
-            <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="py-3 px-6">
-                                Reminder ID
-                            </th>
-                            <th scope="col" class="py-3 px-6">
-                                Loan ID
-                            </th>
-                            <th scope="col" class="py-3 px-6">
-                                Member
-                            </th>
-                            <th scope="col" class="py-3 px-6">
-                                Book Title
-                            </th>
-                            <th scope="col" class="py-3 px-6">
-                                Sent Date
-                            </th>
-                            <th scope="col" class="py-3 px-6">
-                                Reminder Type
-                            </th>
-                            <th scope="col" class="py-3 px-6">
-                                <span class="sr-only">Actions</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    @Html.DisplayFor(modelItem => item.ReminderId)
-                                </th>
-                                <td class="py-4 px-6">
-                                    @Html.DisplayFor(modelItem => item.LoanId)
-                                </td>
-                                <td class="py-4 px-6">
-                                    @Html.DisplayFor(modelItem => item.Loan.LibraryMember.FullName)
-                                </td>
-                                <td class="py-4 px-6">
-                                    @Html.DisplayFor(modelItem => item.Loan.Book.Title)
-                                </td>
-                                <td class="py-4 px-6">
-                                    @Html.DisplayFor(modelItem => item.SentDate)
-                                </td>
-                                <td class="py-4 px-6">
-                                    @Html.DisplayFor(modelItem => item.ReminderType)
-                                </td>
-                                <td class="py-4 px-6 text-right">
-                                    @* Add action links if needed, e.g., details *@
-                                    <a href="#" class="font-medium text-indigo-600 dark:text-indigo-500 hover:underline">Details</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <span class="stats-pill">
+                <i class="bi bi-bell"></i>
+                Total reminders:
+                <strong>@totalReminders</strong>
+            </span>
+
+            <a asp-action="Send"
+               class="btn-glass btn-brand">
+                <i class="bi bi-plus-circle"></i> Send Reminder
+            </a>
+
+            <a asp-controller="Dashboard"
+               asp-action="Index"
+               class="btn-glass btn-outline">
+                <i class="bi bi-arrow-left-circle"></i> Dashboard
+            </a>
+        </div>
     </div>
-</body>
-</html>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="empty-state text-center py-5 px-3 mt-2">
+            <div class="display-6 mb-2">📭</div>
+            <h5 class="mb-1">No reminders yet</h5>
+            <div class="muted mb-3">
+                Send your first reminder to see it listed here.
+            </div>
+
+            <a asp-action="Send" class="btn-glass btn-brand">
+                <i class="bi bi-plus-circle"></i> Send First Reminder
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="card-glass glas-all-style mt-2">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="bi bi-send-check"></i> Sent Loan Reminders
+                </div>
+                <div class="muted">
+                    Page <strong>@currentPage</strong> of <strong>@totalPages</strong>
+                </div>
+            </div>
+
+            <div class="card-body pb-0">
+                <div class="table-wrap">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Reminder ID</th>
+                                <th>Loan</th>
+                                <th>Member</th>
+                                <th>Telegram</th>
+                                <th>Books</th>
+                                <th>Sent Date</th>
+                                <th class="text-end">Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                var member = item.Loan?.LibraryMember;
+
+                                var tg = string.IsNullOrWhiteSpace(member?.TelegramUsername)
+                                ? (member?.TelegramChatId ?? "—")
+                                : "@" + member.TelegramUsername;
+
+                                // Titles
+                                var titles = item.Loan?.LoanBookDetails?
+                                .Where(x => x.Book != null)
+                                .Select(x =>
+                                !string.IsNullOrWhiteSpace(x.Book!.Title)
+                                ? x.Book.Title
+                                : (x.Book.Catalog != null ? x.Book.Catalog.Title : null))
+                                .Where(t => !string.IsNullOrWhiteSpace(t))
+                                .Distinct()
+                                .ToList()
+                                ?? new List<string>();
+
+                                var titlesText = titles.Any()
+                                ? string.Join(", ", titles)
+                                : "(No book titles)";
+
+                                string typeClass = "badge-soft badge-default";
+                                if (!string.IsNullOrWhiteSpace(item.ReminderType))
+                                {
+                                    var t = item.ReminderType.ToLowerInvariant();
+                                    if (t.Contains("telegram"))
+                                    {
+                                        typeClass = "badge-soft badge-telegram";
+                                    }
+                                    else if (t.Contains("call"))
+                                    {
+                                        typeClass = "badge-soft badge-call";
+                                    }
+                                    else if (t.Contains("email"))
+                                    {
+                                        typeClass = "badge-soft badge-email";
+                                    }
+                                }
+
+                                <tr>
+                                    <!-- Reminder ID -->
+                                    <td>@item.ReminderId</td>
+
+                                    <!-- Loan ID -->
+                                    <td>
+                                        <span class="badge-soft badge-default">
+                                            <i class="bi bi-journal-bookmark"></i> #@item.LoanId
+                                        </span>
+                                    </td>
+
+                                    <!-- Member -->
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="member-avatar">
+                                                @(string.IsNullOrWhiteSpace(member?.FullName)
+                                                    ? "S"
+                                                    : member!.FullName![0])
+                                            </div>
+                                            <div>
+                                                <div>@member?.FullName</div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <!-- Telegram -->
+                                    <td>
+                                        <span class="badge-soft badge-default">
+                                            <i class="bi bi-telegram"></i> @tg
+                                        </span>
+                                    </td>
+
+                                    <!-- Books -->
+                                    <td>
+                                        <span class="text-truncate d-inline-block" title="@titlesText">
+                                            @titlesText
+                                        </span>
+                                    </td>
+
+                                    <!-- Sent Date -->
+                                    <td>@item.SentDate.ToString("yyyy-MM-dd HH:mm")</td>
+
+                                    <!-- Type -->
+                                    <td class="text-end">
+                                        <span class="@typeClass">
+                                            @item.ReminderType
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            @if (totalPages > 1)
+            {
+                <div class="pager d-flex justify-content-end gap-2">
+                    @if (currentPage > 1)
+                    {
+                        <a asp-action="Index"
+                           asp-route-page="@(currentPage - 1)"
+                           class="btn-glass btn-outline pager-btn">
+                            <i class="bi bi-arrow-left"></i> Previous
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="btn-glass btn-outline pager-btn disabled">
+                            <i class="bi bi-arrow-left"></i> Previous
+                        </span>
+                    }
+
+                    @if (currentPage < totalPages)
+                    {
+                        <a asp-action="Index"
+                           asp-route-page="@(currentPage + 1)"
+                           class="btn-glass btn-outline pager-btn">
+                            Next <i class="bi bi-arrow-right"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="btn-glass btn-outline pager-btn disabled">
+                            Next <i class="bi bi-arrow-right"></i>
+                        </span>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>

@@ -3,45 +3,179 @@
     Layout = null;
     ViewData["Title"] = "Login";
 }
-<link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow-lg p-4" style="width: 350px; border-radius: 15px;">
-        <div class="text-center mb-3">
-            <h3 class="fw-bold text-primary">Welcome</h3>
-            <p class="text-muted">Login to continue</p>
-        </div>
-        <form asp-action="Login" asp-route-ReturnUrl="@ViewBag.ReturnUrl">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="mb-3">
-                <label asp-for="UserName" class="form-label"></label>
-                <input asp-for="UserName" class="form-control rounded-pill" placeholder="Enter your username" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: radial-gradient(circle at top left, #184281 0, #160e9ee3 55%, #001f95 100%);
+            color: #fff;
+        }
+
+        .login-bg {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+            .login-bg::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(circle at top left, rgb(255 255 255 / 30%), transparent 60%), radial-gradient(circle at bottom right, rgb(136 103 195 / 35%), transparent 60%), url(/admin-lte/img/bbulogo.png) no-repeat center;
+                background-size: 300px 300px;
+                opacity: 0.25;
+                filter: blur(1px);
+            }
+
+        .glass-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 380px;
+            padding: 2.5rem 2.25rem;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(5px) brightness(1.2);
+            -webkit-backdrop-filter: blur(18px) brightness(1.2);
+        }
+
+            .glass-card h3 {
+                font-weight: 700;
+            }
+
+            .glass-card .subtitle {
+                font-size: 0.9rem;
+                opacity: 0.8;
+            }
+
+            .glass-card .form-label {
+                color: #f1f1f1;
+                font-weight: 500;
+            }
+
+            .glass-card .form-control {
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.18);
+                border: 1px solid rgba(255, 255, 255, 0.45);
+                color: #fff;
+            }
+
+                .glass-card .form-control:focus {
+                    outline: none;
+                    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.35);
+                    background: rgba(255, 255, 255, 0.25);
+                }
+
+                .glass-card .form-control::placeholder {
+                    color: rgba(240, 240, 240, 0.75);
+                }
+
+            .glass-card .form-check-label {
+                color: #f5f5f5;
+                font-size: 0.9rem;
+            }
+
+            .glass-card .btn-primary {
+                border-radius: 999px;
+                font-weight: 600;
+                border: none;
+                box-shadow: 0 12px 24px rgba(13, 110, 253, 0.55);
+            }
+
+                .glass-card .btn-primary:focus,
+                .glass-card .btn-primary:hover {
+                    box-shadow: 0 16px 32px rgba(13, 110, 253, 0.75);
+                }
+
+            .glass-card a {
+                color: #aad4ff;
+            }
+
+                .glass-card a:hover {
+                    color: #ffffff;
+                    text-decoration: underline;
+                }
+
+        .text-danger {
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-bg">
+        <div class="glass-card">
+            <div class="text-center mb-4">
+                <h3 class="text-white">Welcome</h3>
+                <p class="subtitle">Login to continue</p>
+            </div>
+
+            @if (TempData["ResetPwdSuccess"] != null)
+            {
+                <div class="alert alert-success py-2">@TempData["ResetPwdSuccess"]</div>
+            }
+
+            <form asp-action="Login" asp-route-ReturnUrl="@ViewBag.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+                <div class="mb-3">
+                    <label asp-for="UserName" class="form-label"></label>
+                    <input asp-for="UserName" class="form-control" placeholder="Enter your username or email" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
 
-            <div class="mb-3">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" type="password" class="form-control rounded-pill" placeholder="Enter your password" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" asp-for="RememberMe" id="RememberMe" />
+                        <label class="form-check-label" for="RememberMe">
+                            @Html.DisplayNameFor(model => model.RememberMe)
+                        </label>
+                    </div>
+
+                    <a asp-controller="Account" asp-action="ForgotPassword" class="text-decoration-none">
+                        Forgot password?
+                    </a>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    🚀 Login Now
+                </button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a asp-action="Register" class="text-decoration-none">
+                    No Account yet? Register here
+                </a>
             </div>
-
-            <div class="form-check mb-3">
-                <input class="form-check-input" asp-for="RememberMe" />
-                <label class="form-check-label">
-                    @Html.DisplayNameFor(model => model.RememberMe)
-                </label>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm">
-                🚀 Login Now
-            </button>
-        </form>
-
-        <div class="text-center mt-3">
-            <a asp-action="Register" class="text-decoration-none text-primary">
-                No Account yet? Register here
-            </a>
         </div>
     </div>
-</div>
 
+    <partial name="_ValidationScriptsPartial" />
+</body>
+</html>

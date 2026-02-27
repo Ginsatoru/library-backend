@@ -1,0 +1,629 @@
+﻿@using LibrarySystemBBU.Models
+@model IEnumerable<History>
+
+@{
+    ViewData["Title"] = "History";
+
+    string entityType = (string?)ViewData["entityType"] ?? "All";
+    string actionType = (string?)ViewData["actionType"] ?? "All";
+    string location = (string?)ViewData["location"] ?? "All";
+    string q = (string?)ViewData["q"] ?? "";
+    string from = (string?)ViewData["from"] ?? "";
+    string to = (string?)ViewData["to"] ?? "";
+
+    int total = (int)(ViewData["totalCount"] ?? 0);
+    int homeCount = (int)(ViewData["homeCount"] ?? 0);
+    int libraryCount = (int)(ViewData["libraryCount"] ?? 0);
+    int loanCount = (int)(ViewData["loanCount"] ?? 0);
+    int logCount = (int)(ViewData["logCount"] ?? 0);
+    int returnCount = (int)(ViewData["returnCount"] ?? 0);
+
+    string Active(string current, string value)
+        => string.Equals(current, value, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+
+    // ---- Cambodia/Bangkok time helper ----
+    TimeZoneInfo khTz;
+    try
+    {
+        khTz = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"); // Windows
+    }
+    catch
+    {
+        khTz = TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok"); // Linux
+    }
+
+    Func<DateTime, DateTime> ToKhTime = dt =>
+    {
+        var utc = DateTime.SpecifyKind(dt, DateTimeKind.Utc);
+        return TimeZoneInfo.ConvertTimeFromUtc(utc, khTz);
+    };
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+<style>
+    /* ==========================
+               History Page – scoped UI
+               ========================== */
+    #historyPage .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 14px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,.22);
+        background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.80));
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 16px 45px rgba(1,0,140,.18);
+        margin-bottom: 10px;
+    }
+
+    #historyPage .btn-pill-sm {
+        border-radius: 999px;
+        padding: .32rem .7rem;
+        font-weight: 600;
+        font-size: .85rem;
+        border: 1px solid #dfe3ff;
+        background: #f6f7ff;
+        color: #2b2f7f;
+        display: inline-flex;
+        align-items: center;
+        gap: .3rem;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+        #historyPage .btn-pill-sm.active {
+            background: #2b2f7f;
+            color: #fff;
+            border-color: #2b2f7f;
+        }
+
+    #historyPage .btn-glass.btn-outline {
+        background: linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,.35));
+        color: var(--brand-800, #05057a);
+    }
+
+    #historyPage .pill {
+        border: 1px solid rgba(1,0,140,.18);
+        border-radius: 999px;
+        padding: .35rem .6rem;
+        font-size: .82rem;
+        background: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        box-shadow: 0 4px 10px rgba(1,0,140,.08);
+        white-space: nowrap;
+    }
+
+    #historyPage .card-glass {
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,.22);
+        background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.80));
+        box-shadow: 0 16px 45px rgba(1,0,140,.20);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        overflow: hidden;
+    }
+
+        #historyPage .card-glass .card-header {
+            padding: 12px 16px;
+            font-weight: 700;
+            background: linear-gradient(180deg, var(--brand-50,#eef0ff), rgba(255,255,255,.94));
+            border-bottom: 1px solid rgba(1,0,140,.15);
+            color: var(--brand-800,#05057a);
+        }
+
+    #historyPage .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: end;
+        margin-bottom: 0.25rem;
+    }
+
+        #historyPage .filters .form-control,
+        #historyPage .filters .form-select {
+            min-width: 150px;
+        }
+
+    #historyPage .search-wrap {
+        position: relative;
+        flex: 1 1 260px;
+        min-width: 220px;
+        max-width: 420px;
+    }
+
+    #historyPage .search-input {
+        width: 100%;
+        padding: 8px 72px 8px 32px;
+        border-radius: 999px;
+        border: 1px solid rgba(1,0,140,.24);
+        font-size: .9rem;
+    }
+
+    #historyPage .search-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: .8;
+        font-size: .9rem;
+    }
+
+    #historyPage .search-clear {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        opacity: .75;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #historyPage .note-muted {
+        font-size: .78rem;
+        color: var(--muted,#6b7280);
+    }
+
+    #historyPage thead th {
+        background: linear-gradient(180deg, var(--brand-50,#eef0ff), #ffffff);
+        color: var(--brand-800,#05057a);
+        vertical-align: middle;
+        z-index: 1;
+        font-size: .85rem;
+        position: static !important;
+    }
+
+    #historyPage tbody tr {
+        transition: background .15s, transform .15s, box-shadow .15s;
+    }
+
+        #historyPage tbody tr:hover {
+            background: rgba(15,23,42,.02);
+            transform: translateY(-1px);
+            box-shadow: 0 1px 4px rgba(15,23,42,.12);
+        }
+
+    #historyPage .badge-soft {
+        display: inline-block;
+        padding: .2rem .5rem;
+        border-radius: 999px;
+        font-size: .78rem;
+        border: 1px solid transparent;
+        white-space: nowrap;
+    }
+
+    #historyPage .b-home {
+        background: #e0f2fe;
+        color: #075985;
+        border-color: #bae6fd;
+    }
+
+    #historyPage .b-library {
+        background: #f3e8ff;
+        color: #6b21a8;
+        border-color: #e9d5ff;
+    }
+
+    #historyPage .b-loan {
+        background: #e9f2ff;
+        color: #084c9c;
+        border-color: #c4ddff;
+    }
+
+    #historyPage .b-log {
+        background: #fff5f0;
+        color: #9a3412;
+        border-color: #fed7aa;
+    }
+
+    #historyPage .b-return {
+        background: #ecfdf3;
+        color: #166534;
+        border-color: #bbf7d0;
+    }
+
+    #historyPage .table-wrapper {
+        max-height: 70vh;
+        overflow: auto;
+    }
+
+    @@media (max-width: 768px) {
+        #historyPage .toolbar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+            #historyPage .toolbar > .d-flex.flex-wrap.gap-2 {
+                width: 100%;
+            }
+
+        #historyPage .pill {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        #historyPage .filters {
+            align-items: stretch;
+        }
+
+            #historyPage .filters > div {
+                flex: 1 1 45%;
+            }
+    }
+</style>
+
+<div id="historyPage">
+    <h2 class="page-title">
+        <span class="logo-dot"></span>
+        History
+    </h2>
+
+    <!-- form is just a container; we prevent submit in JS -->
+    <form id="historyFilterForm" class="mb-3" onsubmit="return false;">
+        <input type="hidden" id="entityTypeField" value="@entityType" />
+
+        <div class="toolbar">
+            <!-- Entity filter chips -->
+            <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="btn-pill-sm js-entity @Active(entityType,"All")" data-value="All">
+                    <i class="bi bi-collection"></i> All
+                </button>
+                <button type="button" class="btn-pill-sm js-entity @Active(entityType,"Loan")" data-value="Loan">
+                    <i class="bi bi-journal-arrow-down"></i> Home
+                </button>
+                <button type="button" class="btn-pill-sm js-entity @Active(entityType,"LibraryLog")" data-value="LibraryLog">
+                    <i class="bi bi-journal-bookmark"></i> Library Logs
+                </button>
+                <button type="button" class="btn-pill-sm js-entity @Active(entityType,"Return")" data-value="Return">
+                    <i class="bi bi-arrow-return-left"></i> Returns
+                </button>
+            </div>
+
+            <!-- LIVE SEARCH -->
+            <div class="search-wrap ms-sm-3">
+                <i class="bi bi-search search-icon"></i>
+                <input id="qInput"
+                       class="search-input"
+                       placeholder="Search member, title, notes..."
+                       value="@q" />
+                <button class="search-clear" type="button" id="clearSearch" title="Clear">
+                    <i class="bi bi-x-circle"></i>
+                </button>
+            </div>
+
+            <!-- Summary pills + export -->
+            <div class="ms-auto d-flex align-items-center flex-wrap gap-2">
+                <span class="pill">
+                    <i class="bi bi-layers"></i> Total: <strong id="totalSpan">@total</strong>
+                </span>
+                <span class="pill">
+                    <i class="bi bi-house"></i> Home: <strong id="homeSpan">@homeCount</strong>
+                </span>
+                <span class="pill">
+                    <i class="bi bi-building"></i> Library: <strong id="librarySpan">@libraryCount</strong>
+                </span>
+
+                <!-- Server-side Excel export with same server filters -->
+                <a asp-action="Export"
+                   asp-route-entityType="@entityType"
+                   asp-route-actionType="@actionType"
+                   asp-route-location="@location"
+                   asp-route-q="@q"
+                   asp-route-from="@from"
+                   asp-route-to="@to"
+                   asp-route-format="xls"
+                   class="btn-glass btn-outline">
+                    <i class="bi bi-file-earmark-excel"></i> Export
+                </a>
+            </div>
+        </div>
+
+        <!-- Simple filters -->
+        <div class="filters">
+            <div>
+                <label class="form-label">From</label>
+                <input id="fromInput" value="@from" type="date" class="form-control" />
+            </div>
+            <div>
+                <label class="form-label">To</label>
+                <input id="toInput" value="@to" type="date" class="form-control" />
+            </div>
+
+            <div>
+                <label class="form-label">Action</label>
+                <select id="actionTypeSelect" class="form-select">
+                    <option value="All" selected="@("All".Equals(actionType, StringComparison.OrdinalIgnoreCase))">All</option>
+                    <option value="BorrowHome" selected="@("BorrowHome".Equals(actionType, StringComparison.OrdinalIgnoreCase))">Borrow Home</option>
+                    <option value="BorrowInLibrary" selected="@("BorrowInLibrary".Equals(actionType, StringComparison.OrdinalIgnoreCase))">Borrow In Library</option>
+                    <option value="ReturnHome" selected="@("ReturnHome".Equals(actionType, StringComparison.OrdinalIgnoreCase))">Return (Home)</option>
+                    <option value="ReturnLibrary" selected="@("ReturnLibrary".Equals(actionType, StringComparison.OrdinalIgnoreCase))">Return (Library)</option>
+                    <option value="Approve" selected="@("Approve".Equals(actionType, StringComparison.OrdinalIgnoreCase))">Approve</option>
+                    <option value="Unreturn" selected="@("Unreturn".Equals(actionType, StringComparison.OrdinalIgnoreCase))">Unreturn</option>
+                    <option value="ToPending" selected="@("ToPending".Equals(actionType, StringComparison.OrdinalIgnoreCase))">To Pending</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="form-label">Location</label>
+                <select id="locationSelect" class="form-select">
+                    <option value="All" selected="@("All".Equals(location, StringComparison.OrdinalIgnoreCase))">All</option>
+                    <option value="Home" selected="@("Home".Equals(location, StringComparison.OrdinalIgnoreCase))">Home</option>
+                    <option value="Library" selected="@("Library".Equals(location, StringComparison.OrdinalIgnoreCase))">Library</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="form-label d-block">&nbsp;</label>
+                <button type="button" id="btnApplyFilters" class="btn-glass btn-outline">
+                    <i class="bi bi-funnel"></i> Apply
+                </button>
+            </div>
+        </div>
+
+        <div class="note-muted mt-1">
+            Filters &amp; search are applied instantly on this page (no reload).
+        </div>
+    </form>
+
+    <div class="card-glass">
+        <div class="card-header">
+            <i class="bi bi-activity"></i> Timeline
+        </div>
+        <div class="p-2 table-wrapper table-responsive">
+            @if (Model == null || !Model.Any())
+            {
+                <div class="p-3 text-muted">
+                    <i class="bi bi-inboxes"></i> No history records found.
+                </div>
+            }
+            else
+            {
+                <table class="table table-hover align-middle mb-0" id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Time (KH)</th>
+                            <th>Action</th>
+                            <th>Location</th>
+                            <th>Member</th>
+                            <th>Book / Catalog</th>
+                            <th>Qty</th>
+                            <th class="text-end">Fees / Fines</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var h in Model)
+                        {
+                            var locBadgeClass = h.LocationType switch
+                            {
+                                "Home" => "b-home",
+                                "Library" => "b-library",
+                                _ => ""
+                            };
+
+                            string mainTitle = !string.IsNullOrWhiteSpace(h.BookTitle)
+                            ? h.BookTitle!
+                            : (!string.IsNullOrWhiteSpace(h.CatalogTitle) ? h.CatalogTitle! : "—");
+
+                            string feeText = "";
+                            if (h.BorrowingFee.HasValue && h.BorrowingFee.Value != 0)
+                                feeText += $"B: {h.BorrowingFee.Value:0.00} ";
+                            if (h.FineAmount.HasValue && h.FineAmount.Value != 0)
+                                feeText += $"F: {h.FineAmount.Value:0.00} ";
+                            if (h.AmountPaid.HasValue && h.AmountPaid.Value != 0)
+                                feeText += $"P: {h.AmountPaid.Value:0.00} ";
+                            if (h.DepositAmount.HasValue && h.DepositAmount.Value != 0)
+                                feeText += $"D: {h.DepositAmount.Value:0.00} ";
+                            if (string.IsNullOrWhiteSpace(feeText)) feeText = "—";
+
+                            string actionLabel = h.ActionType switch
+                            {
+                                "BorrowHome" => "Borrow (Home)",
+                                "BorrowInLibrary" => "Borrow (Library)",
+                                "ReturnHome" => "Return (Home)",
+                                "ReturnLibrary" => "Return (Library)",
+                                "Approve" => "Approve",
+                                "Unreturn" => "Unreturn",
+                                "ToPending" => "To Pending",
+                                _ => h.ActionType ?? "—"
+                            };
+
+                            // ---- convert UTC → KH/Bangkok time for display & filtering ----
+                            var localTime = ToKhTime(h.OccurredUtc);
+                            var localDateString = localTime.ToString("yyyy-MM-dd");
+
+                            <tr data-entity="@h.EntityType"
+                                data-action="@h.ActionType"
+                                data-location="@h.LocationType"
+                                data-member="@h.MemberName"
+                                data-book="@h.BookTitle"
+                                data-catalog="@h.CatalogTitle"
+                                data-notes="@h.Notes"
+                                data-date="@localDateString">
+                                <td>@localTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>@actionLabel</td>
+                                <td>
+                                    @if (!string.IsNullOrWhiteSpace(h.LocationType))
+                                    {
+                                        <span class="badge-soft @locBadgeClass">@h.LocationType</span>
+                                    }
+                                    else
+                                    {
+                                        @:—
+                                    }
+                                </td>
+                                <td>@(string.IsNullOrWhiteSpace(h.MemberName) ? "—" : h.MemberName)</td>
+                                <td>@mainTitle</td>
+                                <td>@(h.Quantity?.ToString() ?? "—")</td>
+                                <td class="text-end">@feeText</td>
+                                <td>@(string.IsNullOrWhiteSpace(h.Notes) ? "—" : h.Notes)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const entityField = document.getElementById('entityTypeField');
+            const qInput = document.getElementById('qInput');
+            const clearSearch = document.getElementById('clearSearch');
+            const fromInput = document.getElementById('fromInput');
+            const toInput = document.getElementById('toInput');
+            const actionSelect = document.getElementById('actionTypeSelect');
+            const locationSelect = document.getElementById('locationSelect');
+            const btnApply = document.getElementById('btnApplyFilters');
+
+            const totalSpan = document.getElementById('totalSpan');
+            const homeSpan = document.getElementById('homeSpan');
+            const librarySpan = document.getElementById('librarySpan');
+
+            function applyFilters() {
+                const q = (qInput.value || '').trim().toLowerCase();
+                const fromVal = fromInput.value;
+                const toVal = toInput.value;
+                const actionVal = actionSelect.value || 'All';
+                const locVal = locationSelect.value || 'All';
+                const entityVal = entityField.value || 'All';
+
+                const fromDate = fromVal ? new Date(fromVal) : null;
+                const toDate = toVal ? new Date(toVal) : null;
+
+                const rows = document.querySelectorAll('#historyTable tbody tr');
+
+                let total = 0;
+                let home = 0;
+                let library = 0;
+
+                rows.forEach(row => {
+                    const rowEntity = (row.dataset.entity || '').trim();
+                    const rowAction = (row.dataset.action || '').trim();
+                    const rowLoc = (row.dataset.location || '').trim();
+                    const rowMember = (row.dataset.member || '').toLowerCase();
+                    const rowBook = (row.dataset.book || '').toLowerCase();
+                    const rowCatalog = (row.dataset.catalog || '').toLowerCase();
+                    const rowNotes = (row.dataset.notes || '').toLowerCase();
+                    const rowDateStr = row.dataset.date || '';
+                    const rowDate = rowDateStr ? new Date(rowDateStr) : null;
+
+                    let visible = true;
+
+                    if (entityVal && entityVal !== 'All' && rowEntity !== entityVal) {
+                        visible = false;
+                    }
+
+                    if (visible && actionVal && actionVal !== 'All' && rowAction !== actionVal) {
+                        visible = false;
+                    }
+
+                    if (visible && locVal && locVal !== 'All' && rowLoc !== locVal) {
+                        visible = false;
+                    }
+
+                    if (visible && fromDate && rowDate && rowDate < fromDate) {
+                        visible = false;
+                    }
+                    if (visible && toDate && rowDate && rowDate > toDate) {
+                        visible = false;
+                    }
+
+                    if (visible && q) {
+                        const text = (rowMember + ' ' + rowBook + ' ' + rowCatalog + ' ' + rowNotes).toLowerCase();
+                        if (!text.includes(q)) {
+                            visible = false;
+                        }
+                    }
+
+                    row.style.display = visible ? '' : 'none';
+
+                    if (visible) {
+                        total++;
+                        if (rowLoc === 'Home') home++;
+                        if (rowLoc === 'Library') library++;
+                    }
+                });
+
+                totalSpan.textContent = total.toString();
+                homeSpan.textContent = home.toString();
+                librarySpan.textContent = library.toString();
+            }
+
+            // entity chips
+            document.querySelectorAll('.js-entity').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const val = btn.getAttribute('data-value') || 'All';
+                    entityField.value = val;
+
+                    document.querySelectorAll('.js-entity').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    applyFilters();
+                });
+            });
+
+            // search as you type
+            if (qInput) {
+                qInput.addEventListener('input', applyFilters);
+            }
+
+            // clear search
+            if (clearSearch && qInput) {
+                clearSearch.addEventListener('click', () => {
+                    qInput.value = '';
+                    qInput.focus();
+                    applyFilters();
+                });
+            }
+
+            // filters change
+            fromInput.addEventListener('change', applyFilters);
+            toInput.addEventListener('change', applyFilters);
+            actionSelect.addEventListener('change', applyFilters);
+            locationSelect.addEventListener('change', applyFilters);
+
+            // Apply button
+            btnApply.addEventListener('click', applyFilters);
+
+            // Export visible table rows to CSV (client side)
+            document.getElementById('exportCsv')?.addEventListener('click', () => {
+                const table = document.getElementById('historyTable');
+                if (!table) return;
+
+                const rows = table.querySelectorAll('tr');
+                const lines = [];
+                rows.forEach(tr => {
+                    if (tr.style.display === 'none') return;
+                    const cells = Array.from(tr.children).map(td => td.innerText.trim());
+                    if (!cells.length) return;
+                    const line = cells.map(v => `"${v.replace(/"/g, '""')}"`).join(',');
+                    lines.push(line);
+                });
+
+                const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'history_' + new Date().toISOString().slice(0, 10) + '.csv';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            });
+
+            // initial
+            applyFilters();
+        })();
+    </script>
+}

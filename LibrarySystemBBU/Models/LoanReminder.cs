@@ -1,29 +1,30 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibrarySystemBBU.Models
 {
-    // Represents a reminder sent for a book loan (based on the 'LoanReminders' table in your ERD).
+
     public class LoanReminder
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ReminderId { get; set; } // Primary Key (INT as per ERD)
+        public int ReminderId { get; set; }
 
-        // Foreign Key to BookLoans
         [Required(ErrorMessage = "Loan ID is required.")]
         public int LoanId { get; set; }
 
-        [Required(ErrorMessage = "Sent Date is required.")]
-        [DataType(DataType.Date)]
+        /// <summary>
+        /// When this reminder was sent.
+        /// </summary>
+        [DataType(DataType.DateTime)]
         public DateTime SentDate { get; set; }
 
         [Required(ErrorMessage = "Reminder Type is required.")]
         [StringLength(50)]
-        public required string ReminderType { get; set; }
+        public string ReminderType { get; set; } = string.Empty;
 
-        // Navigation property
-        [ForeignKey("LoanId")]
-        public BookLoan? Loan { get; set; }
+        [ForeignKey(nameof(LoanId))]
+        public BookBorrow? Loan { get; set; }
     }
 }

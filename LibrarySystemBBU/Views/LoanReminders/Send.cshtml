@@ -4,61 +4,148 @@
     ViewData["Title"] = "Send Loan Reminder";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+<style>
+    /* ============================
+           Send Loan Reminder (scoped)
+           ============================ */
+    #loanReminderSendPage {
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+        #loanReminderSendPage .muted {
+            color: var(--muted, #6b7280);
+            font-size: .9rem;
         }
-    </style>
-</head>
-<body class="bg-gray-100 antialiased flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Send Loan Reminder
-        </h2>
 
-        <form asp-action="Send" method="post" class="mt-8 space-y-6">
-            <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm mb-4"></div>
+        #loanReminderSendPage .card-glass.glas-all-style {
+            margin-top: 8px;
+        }
 
-            <div class="rounded-md shadow-sm -space-y-px">
-                <!-- Overdue Loan Selection -->
-                <div>
-                    <label asp-for="LoanId" class="block text-sm font-medium text-gray-700 mb-1">Select Overdue Loan</label>
-                    <select asp-for="LoanId" asp-items="ViewBag.OverdueLoans" class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
-                        <option value="">-- Select an Overdue Loan --</option>
-                    </select>
-                    <span asp-validation-for="LoanId" class="text-red-500 text-xs mt-1 block"></span>
-                </div>
+        #loanReminderSendPage .card-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(1,0,140,.12);
+            font-weight: 700;
+            color: var(--brand-800, #05057a);
+            background: linear-gradient(180deg,var(--brand-50,#eef0ff),rgba(255,255,255,.9));
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
 
-                <!-- Reminder Type Selection -->
-                <div class="mt-4">
-                    <label asp-for="ReminderType" class="block text-sm font-medium text-gray-700 mb-1">Reminder Type</label>
-                    <select asp-for="ReminderType" asp-items="ViewBag.ReminderTypes" class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
-                        <option value="">-- Select Reminder Type --</option>
-                    </select>
-                    <span asp-validation-for="ReminderType" class="text-red-500 text-xs mt-1 block"></span>
-                </div>
+        #loanReminderSendPage .card-body {
+            padding: 16px;
+        }
+
+        #loanReminderSendPage .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(148,163,184,.55);
+            background: linear-gradient(180deg,#ffffff,#f1f5f9);
+            font-size: .78rem;
+            color: var(--text,#0f172a);
+        }
+
+            #loanReminderSendPage .status-pill i {
+                font-size: .9rem;
+            }
+
+        #loanReminderSendPage .hint {
+            font-size: .82rem;
+            color: var(--muted,#6b7280);
+        }
+</style>
+
+<div id="loanReminderSendPage">
+    <h2 class="page-title">
+        <span class="logo-dot"></span>
+        Send Loan Reminder
+    </h2>
+
+    <div class="card-glass glas-all-style">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="muted">
+                <i class="bi bi-info-circle"></i>
+                Send a reminder for overdue loans via Telegram
             </div>
-
-            <!-- Submit Button -->
-            <div class="mt-6">
-                <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Send Reminder
-                </button>
-            </div>
-        </form>
+            <a asp-action="Index" class="btn-glass btn-outline">
+                <i class="bi bi-arrow-left-circle"></i> Back to List
+            </a>
+        </div>
     </div>
 
-    <!-- Client-side Validation Scripts -->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
-</body>
-</html>
+    <form asp-action="Send" method="post" class="card-glass glas-all-style">
+        @Html.AntiForgeryToken()
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <i class="bi bi-send-check"></i> Reminder Information
+            </div>
+            <div class="status-pill">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                Overdue loans only
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="mb-3">
+                <label asp-for="LoanId" class="form-label">
+                    <i class="bi bi-journal-bookmark"></i> Select Overdue Loan
+                </label>
+                <select asp-for="LoanId"
+                        asp-items="ViewBag.OverdueLoans"
+                        class="form-select">
+                    <option value="">-- Select an Overdue Loan --</option>
+                </select>
+                <span asp-validation-for="LoanId" class="text-danger"></span>
+                <div class="hint mt-1">
+                    ជ្រើសរើស​ការ​ខ្ចីសៀវភៅ​ដែលហួសកំណត់ (Overdue) ដើម្បីផ្ញើ Reminder តាម Telegram។
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ReminderType" class="form-label">
+                    <i class="bi bi-megaphone"></i> Reminder Type
+                </label>
+                <select asp-for="ReminderType"
+                        asp-items="ViewBag.ReminderTypes"
+                        class="form-select">
+                    <option value="">-- Select Reminder Type --</option>
+                </select>
+                <span asp-validation-for="ReminderType" class="text-danger"></span>
+                <div class="hint mt-1">
+                    ឧ. <strong>ManualTelegram</strong>, <strong>ManualCall</strong>, <strong>ManualEmail</strong> ។
+                </div>
+            </div>
+
+            <div class="alert alert-light border mt-3 mb-0">
+                <div class="d-flex gap-2">
+                    <i class="bi bi-telegram text-primary"></i>
+                    <div class="hint mb-0">
+                        Reminder នឹងផ្ញើទៅ <strong>Telegram Chat ID</strong> របស់សមាជិក
+                        ដែលបានភ្ជាប់ក្នុង Member.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body d-flex gap-2 justify-content-end pt-0">
+            <a asp-action="Index" class="btn-glass btn-outline">
+                <i class="bi bi-x-circle"></i> Cancel
+            </a>
+            <button type="submit" class="btn-glass btn-brand">
+                <i class="bi bi-send-fill"></i> Send Reminder
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

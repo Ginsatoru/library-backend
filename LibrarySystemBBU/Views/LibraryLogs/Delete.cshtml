@@ -1,0 +1,263 @@
+﻿@model LibrarySystemBBU.Models.LibraryLog
+@{
+    ViewData["Title"] = "Delete Library Log";
+
+    string status = Model?.Status ?? "Pending";
+    string statusClass = status switch
+    {
+        "Approved" => "b-approved",
+        "Returned" => "b-returned",
+        _ => "b-pending"
+    };
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+    :root {
+        --brand: #01008C;
+        --brand-50: #e6e6ff;
+        --brand-800: #05057a;
+        --glass-border: rgba(255,255,255,.25);
+        --muted: #667085;
+        --text: #0f0f2e;
+        --shadow: 0 14px 36px rgba(1,0,140,.18)
+    }
+
+    body {
+        color: var(--text)
+    }
+
+    .page-title {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        margin: 0 0 12px;
+        font-weight: 800;
+        letter-spacing: .3px
+    }
+
+    .logo-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: conic-gradient(from 45deg,var(--brand),#7f87ff,var(--brand));
+        box-shadow: 0 0 0 3px var(--brand-50),0 4px 10px rgba(1,0,140,.3)
+    }
+
+    .card-glass {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        background: linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.7));
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        box-shadow: var(--shadow)
+    }
+
+    .card-header {
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(1,0,140,.12);
+        font-weight: 700;
+        color: var(--brand-800);
+        background: linear-gradient(180deg,var(--brand-50),rgba(255,255,255,.8));
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px
+    }
+
+    .card-body {
+        padding: 16px
+    }
+
+    .dl-grid dt {
+        font-weight: 600;
+        color: var(--brand-800)
+    }
+
+    .dl-grid dd {
+        margin-bottom: 10px
+    }
+
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(1,0,140,.12);
+        border-radius: 999px;
+        padding: 6px 10px;
+        margin: 6px 6px 0 0;
+        background: linear-gradient(180deg,#fff,#f7f8ff)
+    }
+
+    .muted {
+        color: var(--muted)
+    }
+
+    .btn-glass {
+        border: 1px solid rgba(255,255,255,.5);
+        background: linear-gradient(180deg,rgba(255,255,255,.8),rgba(255,255,255,.55));
+        color: var(--brand-800);
+        padding: 9px 14px;
+        border-radius: 999px;
+        font-weight: 600;
+        box-shadow: 0 8px 18px rgba(1,0,140,.12);
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        transition: .2s;
+        text-decoration: none
+    }
+
+        .btn-glass:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(1,0,140,.2)
+        }
+
+    .btn-dangerish {
+        background: linear-gradient(180deg,#ff9aa0,#ff6b75);
+        color: #fff;
+        border-color: rgba(255,255,255,.5)
+    }
+
+    .btn-outline {
+        background: linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.35));
+        color: var(--brand-800)
+    }
+
+    .status-pill {
+        display: inline-block;
+        padding: .25rem .6rem;
+        border-radius: 999px;
+        border: 1px solid #dfe3ff;
+        font-weight: 700;
+        font-size: .82rem
+    }
+
+    .b-pending {
+        background: #fff7e6;
+        color: #8a5a00;
+        border-color: #ffe3ad
+    }
+
+    .b-approved {
+        background: #e7fff0;
+        color: #066e3c;
+        border-color: #b8f5d2
+    }
+
+    .b-returned {
+        background: #eef1ff;
+        color: #2b2f7f;
+        border-color: #dfe3ff
+    }
+</style>
+
+<h2 class="page-title"><span class="logo-dot"></span> Delete Library Log</h2>
+
+<div class="card-glass">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <div><i class="bi bi-exclamation-triangle"></i> Confirm Deletion</div>
+        <div><span class="status-pill @statusClass">@status</span></div>
+    </div>
+    <div class="card-body">
+        @if (!string.Equals(status, "Pending", StringComparison.OrdinalIgnoreCase))
+        {
+            <div class="alert alert-warning">
+                <i class="bi bi-shield-exclamation"></i>
+                Only <strong>Pending</strong> logs can be deleted.
+            </div>
+            <div class="mt-3 d-flex justify-content-end">
+                <a asp-action="Details" asp-route-id="@Model.LogId" class="btn-glass btn-outline">
+                    <i class="bi bi-arrow-left"></i> Back to Details
+                </a>
+            </div>
+        }
+        else
+        {
+            <p class="text-danger fw-bold mb-3">
+                Are you sure you want to permanently delete this log?
+            </p>
+
+            <dl class="row dl-grid">
+                <dt class="col-sm-3">Student Name</dt>
+                <dd class="col-sm-9">@Model.StudentName</dd>
+
+                <dt class="col-sm-3">Phone Number</dt>
+                <dd class="col-sm-9">@Model.PhoneNumber</dd>
+
+                <dt class="col-sm-3">Gender</dt>
+                <dd class="col-sm-9">@Model.Gender</dd>
+
+                <dt class="col-sm-3">Books</dt>
+                <dd class="col-sm-9">
+                    @if (Model.Items != null && Model.Items.Any())
+                    {
+                        foreach (var it in Model.Items)
+                        {
+                            var title = it.Book?.Catalog?.Title ?? it.Book?.Title ?? "(Unknown title)";
+                            var code = it.Book?.Barcode ?? "—";
+                            <span class="chip"><i class="bi bi-journal-bookmark"></i> @($"{title} ({code})")</span>
+                        }
+                    }
+                    else
+                    {
+                        <span class="muted">—</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Visit Date</dt>
+                <dd class="col-sm-9">@Model.VisitDate.ToString("yyyy-MM-dd")</dd>
+
+                <dt class="col-sm-3">Purpose</dt>
+                <dd class="col-sm-9">@Model.Purpose</dd>
+
+                <dt class="col-sm-3">Notes</dt>
+                <dd class="col-sm-9">@Model.Notes</dd>
+
+                <dt class="col-sm-3">Created (UTC)</dt>
+                <dd class="col-sm-9">@Model.CreatedUtc.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                <dt class="col-sm-3">Approved On (UTC)</dt>
+                <dd class="col-sm-9">@((Model.ApprovedUtc.HasValue) ? Model.ApprovedUtc.Value.ToString("yyyy-MM-dd HH:mm") : "—")</dd>
+
+                <dt class="col-sm-3">Returned On (UTC)</dt>
+                <dd class="col-sm-9">@((Model.ReturnedUtc.HasValue) ? Model.ReturnedUtc.Value.ToString("yyyy-MM-dd HH:mm") : "—")</dd>
+            </dl>
+
+            <form asp-action="Delete" method="post" class="mt-3 d-flex justify-content-end gap-2" id="deleteForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="LogId" />
+                <a asp-action="Index" class="btn-glass btn-outline"><i class="bi bi-arrow-left"></i> Cancel</a>
+                <button type="submit" class="btn-glass btn-dangerish">
+                    <i class="bi bi-trash3"></i> Delete
+                </button>
+            </form>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // SweetAlert confirm on Delete
+        (function(){
+            const form = document.getElementById('deleteForm');
+            if(!form) return;
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const ans = await Swal.fire({
+                    title: 'Delete this log?',
+                    text: 'This action cannot be undone.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete',
+                    cancelButtonText: 'Cancel',
+                    reverseButtons: true
+                });
+                if(!ans.isConfirmed) return;
+
+                // Submit normally (server still guards Pending-only)
+                form.submit();
+            });
+        })();
+    </script>
+}

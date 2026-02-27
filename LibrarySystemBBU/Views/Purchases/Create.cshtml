@@ -1,127 +1,427 @@
 ﻿@model LibrarySystemBBU.Models.Purchase
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
     ViewData["Title"] = "Create Purchase";
+    var bookSelect = (SelectList)ViewData["BookId"];
 }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-<div class="row justify-content-center my-4">
-    <div class="col-md-8 col-lg-6 col-xl-5">
-        <div class="card shadow-lg border-0 card-3d">
-            <div class="card-header bg-success bg-gradient text-white d-flex align-items-center" style="border-radius: 2rem 2rem 0 0;">
-                <i class="fa-solid fa-cart-plus fa-lg me-2"></i>
-                <h5 class="mb-0 fw-bold">Create Purchase</h5>
-            </div>
-            <div class="card-body px-4 py-5">
-                <form asp-action="Create" autocomplete="off">
-                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 mb-3"></div>
+<style>
+    /* ===== Page-specific styles (global glass theme already defines page-title, toolbar, btn-glass, card-glass, pill, etc.) ===== */
 
-                    <div class="mb-3">
-                        <label asp-for="BookId" class="form-label fw-semibold">
-                            <i class="fa-solid fa-book"></i> Book Title
-                        </label>
-                        <select asp-for="BookId" class="form-select shadow-sm" asp-items="ViewBag.BookId" required autofocus>
-                            <option value="">-- Select a Book --</option>
-                        </select>
-                        <span asp-validation-for="BookId" class="text-danger small"></span>
-                    </div>
+    .page-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .75rem;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-                    <div class="row g-3">
-                        <div class="col-md-6 mb-3 mb-md-0">
-                            <label asp-for="Quantity" class="form-label fw-semibold">
-                                <i class="fa-solid fa-box"></i> Quantity
-                            </label>
-                            <input asp-for="Quantity" class="form-control shadow-sm" type="number" min="1" placeholder="1" required />
-                            <span asp-validation-for="Quantity" class="text-danger small"></span>
-                        </div>
-                        <div class="col-md-6">
-                            <label asp-for="Cost" class="form-label fw-semibold">
-                                <i class="fa-solid fa-dollar-sign"></i> Cost
-                            </label>
-                            <input asp-for="Cost" class="form-control shadow-sm" type="number" min="0" step="0.01" placeholder="0.00" required />
-                            <span asp-validation-for="Cost" class="text-danger small"></span>
-                        </div>
-                    </div>
+    .w-5 {
+        width: 5%;
+    }
 
-                    <div class="mb-3 mt-3">
-                        <label asp-for="Supplier" class="form-label fw-semibold">
-                            <i class="fa-solid fa-user-tie"></i> Supplier
-                        </label>
-                        <input asp-for="Supplier" class="form-control shadow-sm" placeholder="Enter supplier name" required />
-                        <span asp-validation-for="Supplier" class="text-danger small"></span>
-                    </div>
+    .w-15 {
+        width: 15%;
+    }
 
-                    <div class="mb-3">
-                        <label asp-for="Notes" class="form-label fw-semibold">
-                            <i class="fa-solid fa-file-alt"></i> Notes
-                        </label>
-                        <textarea asp-for="Notes" class="form-control shadow-sm" rows="2" placeholder="Optional notes"></textarea>
-                        <span asp-validation-for="Notes" class="text-danger small"></span>
-                    </div>
+    .w-20 {
+        width: 20%;
+    }
 
-                    <div class="d-flex justify-content-between align-items-center mt-4">
-                        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
-                            <i class="fa-solid fa-arrow-left"></i> Back
-                        </a>
-                        <button type="submit" class="btn btn-success rounded-pill px-5 shadow btn-glass fw-bold">
-                            <i class="fa-solid fa-plus"></i> Create
-                        </button>
-                    </div>
-                </form>
-            </div>
+    .w-45 {
+        width: 45%;
+    }
+
+    .input-qty,
+    .input-price,
+    .input-total {
+        text-align: right;
+    }
+
+        .input-total[readonly] {
+            background: #f8fafc;
+        }
+
+    .hr-soft {
+        border: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba(0,0,0,.08), transparent);
+    }
+
+    .totals-sticky {
+        position: sticky;
+        bottom: -1px;
+        z-index: 3;
+        background: linear-gradient(180deg, var(--glass), var(--glass-2));
+        border-top: 1px solid var(--bdr);
+        box-shadow: var(--shadow-1);
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+        padding: .75rem 1rem;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* Table hover: use soft highlight, no custom theme overrides */
+    #detailsTable.table-hover tbody tr {
+        transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+    }
+
+        #detailsTable.table-hover tbody tr:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(15,23,42,.12);
+            background-color: rgba(148,163,184,.08);
+        }
+
+    /* Make Select2 look like Bootstrap .form-control height */
+    .select2-container .select2-selection--single {
+        height: 38px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 38px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 38px;
+    }
+
+    .input-group{
+        flex-wrap: nowrap;
+        gap:2px;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="page-bar mb-3">
+        <h2 class="page-title mb-0">
+            <span class="logo-dot"></span>
+            Create Purchase
+        </h2>
+
+        <div class="toolbar">
+            <span class="pill">
+                <i class="bi bi-list-ol"></i>
+                Rows: <strong id="statRows">0</strong>
+            </span>
+            <span class="pill">
+                <i class="bi bi-arrow-up-right"></i>
+                Qty: <strong id="statQty">0</strong>
+            </span>
+            <span class="pill">
+                <i class="bi bi-cash-coin"></i>
+                Cost: <strong id="statCost">0.00</strong>
+            </span>
+
+            <a asp-action="Index" class="btn-glass btn-outline ms-auto">
+                <i class="bi bi-arrow-left-circle"></i> Back to List
+            </a>
+
+            <!-- Optional: top Save button, submits the form -->
+            <button type="submit"
+                    form="purchaseForm"
+                    class="btn-glass btn-brand">
+                <i class="bi bi-check2-circle"></i> Save
+            </button>
         </div>
     </div>
+
+    <form id="purchaseForm"
+          asp-action="Create"
+          method="post"
+          novalidate
+          class="card-glass glas-all-style">
+        @Html.AntiForgeryToken()
+
+        <div class="p-3 p-md-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label asp-for="PurchaseDate" class="form-label">
+                        <i class="bi bi-calendar-date me-1"></i>
+                        @Html.DisplayNameFor(m => m.PurchaseDate)
+                    </label>
+                    <input asp-for="PurchaseDate" class="form-control" />
+                    <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="Supplier" class="form-label">
+                        <i class="bi bi-truck me-1"></i>
+                        @Html.DisplayNameFor(m => m.Supplier)
+                    </label>
+                    <input asp-for="Supplier"
+                           class="form-control"
+                           placeholder="Supplier name" />
+                    <span asp-validation-for="Supplier" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-5">
+                    <label asp-for="Notes" class="form-label">
+                        <i class="bi bi-stickies me-1"></i>
+                        @Html.DisplayNameFor(m => m.Notes)
+                    </label>
+                    <input asp-for="Notes"
+                           class="form-control"
+                           placeholder="Optional notes..." />
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>
+            </div>
+
+            <hr class="hr-soft my-4" />
+
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div class="section-title m-0 d-flex align-items-center gap-2">
+                    <i class="bi bi-table"></i> Line Items
+                </div>
+
+                <div class="d-flex gap-2 flex-wrap">
+                    <button type="button"
+                            class="btn-glass btn-outline"
+                            id="clearAllBtn">
+                        <i class="bi bi-trash3"></i> Clear All
+                    </button>
+                    <button type="button"
+                            class="btn-glass btn-outline"
+                            id="add3Btn">
+                        <i class="bi bi-plus-circle"></i> Add 3 Rows
+                    </button>
+                    <button type="button"
+                            class="btn-glass btn-brand"
+                            id="addRowBtn">
+                        <i class="bi bi-plus-circle-fill"></i> Add Row
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-wrap mt-2">
+                <table class="table table-sm table-hover table-striped table-bordered align-middle mb-0"
+                       id="detailsTable">
+                    <thead>
+                        <tr>
+                            <th class="w-45">
+                                <i class="bi bi-book me-1"></i>
+                                Book's name
+                            </th>
+                            <th class="text-end w-15">
+                                <i class="bi bi-arrow-up-right me-1"></i>
+                                Quantity
+                            </th>
+                            <th class="text-end w-20">
+                                <i class="bi bi-cash-coin me-1"></i>
+                                Unit Price
+                            </th>
+                            <th class="text-end w-20">
+                                <i class="bi bi-calculator me-1"></i>
+                                Line Total
+                            </th>
+                            <th class="w-5"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailBody">
+                        @* rows added by JS *@
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th class="text-end">Totals:</th>
+                            <th class="text-end">
+                                <span id="footerQty">0</span>
+                            </th>
+                            <th class="text-end">—</th>
+                            <th class="text-end">
+                                <span id="footerCost">0.00</span>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="totals-sticky d-flex justify-content-between align-items-center gap-2">
+            <div class="small text-muted d-flex align-items-center gap-2">
+                <i class="bi bi-question-circle"></i>
+                Line totals = Quantity × Unit Price
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <button type="submit"
+                        class="btn-glass btn-brand"
+                        id="saveBtn">
+                    <i class="bi bi-check2-circle me-1"></i> Save
+                </button>
+                <a asp-action="Index" class="btn-glass btn-outline">
+                    <i class="bi bi-x-circle me-1"></i> Cancel
+                </a>
+            </div>
+        </div>
+
+        <!-- Hidden template row -->
+        <table class="d-none">
+            <tbody id="detailRowTemplate">
+                @await Html.PartialAsync(
+                         "_DetailRow",
+                         new LibrarySystemBBU.Models.PurchaseDetail(),
+                         new ViewDataDictionary(ViewData)
+                {
+                { "index", "__index__" },
+                { "bookSelect", bookSelect }
+                }
+                         )
+            </tbody>
+        </table>
+    </form>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <partial name="_ValidationScriptsPartial" />
+
+    <!-- jQuery (usually already present), Select2 JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        (function () {
+            const body = document.getElementById('detailBody');
+            const template = document.getElementById('detailRowTemplate').innerHTML;
+            const addBtn = document.getElementById('addRowBtn');
+            const add3Btn = document.getElementById('add3Btn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            const footerQty = document.getElementById('footerQty');
+            const footerCost = document.getElementById('footerCost');
+            const form = document.getElementById('purchaseForm');
+
+            const statRows = document.getElementById('statRows');
+            const statQty = document.getElementById('statQty');
+            const statCost = document.getElementById('statCost');
+
+            function initSelect2(scope) {
+                $(scope).find('select.book-select').select2({
+                    placeholder: 'Search book by title…',
+                    width: '100%'
+                });
+            }
+
+            function addRow(focus = true) {
+                const index = body.querySelectorAll('tr').length;
+                const html = template.replaceAll('__index__', index);
+                const wrap = document.createElement('tbody');
+                wrap.innerHTML = html.trim();
+                const tr = wrap.firstElementChild;
+
+                tr.querySelector('input[id$="__Quantity"]')?.classList.add('input-qty');
+                tr.querySelector('input[id$="__UnitPrice"]')?.classList.add('input-price');
+                tr.querySelector('input[id$="__LineTotal"]')?.classList.add('input-total');
+
+                body.appendChild(tr);
+                initSelect2(tr);
+                wireRow(tr);
+                if (focus) tr.querySelector('select, input')?.focus();
+                recalcFooter();
+            }
+
+            function parseNum(v, decimals) {
+                const n = parseFloat(v);
+                if (Number.isFinite(n))
+                    return decimals != null ? Number(n.toFixed(decimals)) : n;
+                return 0;
+            }
+
+            function formatMoney(n) {
+                return (n ?? 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+
+            function recalcFooter() {
+                let rows = 0, qty = 0, cost = 0;
+                body.querySelectorAll('tr').forEach(tr => {
+                    rows++;
+                    const q = tr.querySelector('input[id$="__Quantity"]');
+                    const lt = tr.querySelector('input[id$="__LineTotal"]');
+                    qty += parseNum(q?.value || '0', 0);
+                    cost += parseNum(lt?.value || '0', 2);
+                });
+
+                footerQty.textContent = qty.toString();
+                footerCost.textContent = formatMoney(cost);
+
+                statRows.textContent = rows.toString();
+                statQty.textContent = qty.toString();
+                statCost.textContent = formatMoney(cost);
+            }
+
+            function clampNonNegative(input, decimals) {
+                const n = parseNum(input.value || '0', decimals);
+                if (n < 0) input.value = Math.abs(n).toFixed(decimals ?? 0);
+            }
+
+            function wireRow(tr) {
+                const q = tr.querySelector('input[id$="__Quantity"]');
+                const up = tr.querySelector('input[id$="__UnitPrice"]');
+                const lt = tr.querySelector('input[id$="__LineTotal"]');
+                if (lt) lt.readOnly = true;
+
+                function recalc() {
+                    if (q) clampNonNegative(q, 0);
+                    if (up) clampNonNegative(up, 2);
+                    const qty = parseNum(q?.value || '0', 0);
+                    const price = parseNum(up?.value || '0', 2);
+                    if (lt) lt.value = (qty * price).toFixed(2);
+                    recalcFooter();
+                }
+
+                q?.addEventListener('input', recalc);
+                up?.addEventListener('input', recalc);
+                recalc();
+            }
+
+            document.addEventListener('click', (e) => {
+                const btn = e.target.closest('.btn-remove-row');
+                if (!btn) return;
+                e.preventDefault();
+                const tr = btn.closest('tr');
+                if (tr && tr.parentNode) {
+                    $(tr).find('select.book-select').each(function () {
+                        $(this).select2('destroy');
+                    });
+                    tr.parentNode.removeChild(tr);
+                    recalcFooter();
+                }
+            });
+
+            addBtn.addEventListener('click', () => addRow(true));
+            add3Btn.addEventListener('click', () => {
+                addRow(false);
+                addRow(false);
+                addRow(true);
+            });
+
+            clearAllBtn.addEventListener('click', () => {
+                if (!confirm('Clear all line items?')) return;
+                $(body).find('select.book-select').each(function () {
+                    $(this).select2('destroy');
+                });
+                body.innerHTML = '';
+                recalcFooter();
+            });
+
+            form.addEventListener('submit', function (e) {
+                if (body.querySelectorAll('tr').length === 0) {
+                    e.preventDefault();
+                    alert('Please add at least one line item.');
+                    return false;
+                }
+            });
+
+            // First row
+            addRow(true);
+        })();
+    </script>
 }
-
-<style>
-    .card-3d {
-        border-radius: 2rem;
-        box-shadow: 0 8px 32px 0 rgba(16,185,129,0.09), 0 1.5px 8px 0 rgba(0,0,0,0.07);
-        background: linear-gradient(135deg, #f0fdfa 0%, #f8fafc 100%);
-        transition: transform .20s cubic-bezier(.39,.575,.565,1), box-shadow .2s;
-    }
-
-        .card-3d:hover {
-            transform: translateY(-6px) scale(1.015);
-            box-shadow: 0 16px 38px 0 rgba(16,185,129,0.13), 0 8px 16px 0 rgba(0,0,0,0.12);
-        }
-
-    .btn-glass {
-        background: rgba(16,185,129,0.13);
-        border: 1px solid #6ee7b7;
-        color: #059669;
-        transition: all 0.2s;
-        border-radius: 50px;
-        font-weight: 600;
-        box-shadow: 0 2px 8px rgba(16,185,129,0.05);
-    }
-
-        .btn-glass:hover {
-            background: #34d399;
-            color: #fff;
-            border: 1px solid #059669;
-        }
-
-    .form-control, .form-select {
-        border-radius: 1.2rem;
-        border: 1px solid #d1fae5;
-        font-size: 1.03rem;
-        box-shadow: none !important;
-    }
-
-        .form-control:focus, .form-select:focus {
-            border-color: #34d399;
-            box-shadow: 0 0 0 .2rem rgba(16,185,129,.12);
-        }
-
-    .card-header {
-        border-bottom: none;
-    }
-</style>

@@ -1,105 +1,348 @@
-﻿@model LibrarySystemBBU.Models.Catalog
-
+﻿@model LibrarySystemBBU.Controllers.CatalogsController.CatalogFormVM
 @{
     ViewData["Title"] = "Delete Catalog";
+    var booksCount = Model.Books?.Count ?? 0;
 }
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
-<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
 <style>
-    .card-3d {
-        border: none;
-        border-radius: 2rem;
-        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.11), 0 2px 4px 0 rgba(0,0,0,0.13);
-        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
-        overflow: hidden;
-        transition: transform .2s, box-shadow .2s;
+    :root {
+        --brand: #01008C;
+        --brand-50: #eef0ff;
+        --brand-200: #c9cdff;
+        --brand-400: #7f87ff;
+        --danger: #ef4444;
+        --text: #0f102a;
+        --muted: #64748b;
+        --bdr: rgba(1,0,140,.18);
+        --glass: rgba(255,255,255,.80);
+        --glass-2: rgba(255,255,255,.64);
+        --shadow-1: 0 6px 16px rgba(1,0,140,.12);
+        --shadow-2: 0 12px 30px rgba(1,0,140,.18);
     }
 
-        .card-3d:hover {
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 16px 32px 0 rgba(0,126,255,0.17), 0 6px 12px 0 rgba(0,0,0,0.14);
-        }
+    body {
+        background: radial-gradient(60rem 30rem at -10% 0%, rgba(1,0,140,.10), transparent 60%), radial-gradient(60rem 40rem at 120% 10%, rgba(1,0,140,.08), transparent 60%), linear-gradient(180deg,#f7f8ff,#fff);
+        color: var(--text);
+    }
+
+    .page-title {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        margin: .25rem 0 1rem;
+        font-weight: 800;
+        letter-spacing: .2px
+    }
+
+    .logo-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: conic-gradient(from 45deg,var(--brand),var(--brand-400),var(--brand));
+        box-shadow: 0 0 0 3px var(--brand-50),0 4px 10px rgba(1,0,140,.30);
+    }
+
+    .alert-glass {
+        border: 1px solid rgba(239,68,68,.25);
+        background: linear-gradient(180deg,rgba(255,245,245,.95),rgba(255,240,240,.75));
+        color: #7a1414;
+        font-weight: 600;
+        border-radius: 14px;
+        padding: 14px 18px;
+        margin-bottom: 14px;
+    }
+
+    .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 12px;
+        padding: 10px 12px;
+        border-radius: 16px;
+        border: 1px solid var(--bdr);
+        background: linear-gradient(180deg,var(--glass),var(--glass-2));
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: var(--shadow-2);
+    }
+
+    .pill {
+        border: 1px solid var(--bdr);
+        border-radius: 999px;
+        padding: .35rem .6rem;
+        font-size: .9rem;
+        background: #fff;
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        box-shadow: 0 4px 10px rgba(1,0,140,.08);
+    }
 
     .btn-glass {
-        background: rgba(59,130,246,0.12);
-        border: 1px solid #93c5fd;
-        color: #2563eb;
-        transition: all 0.2s;
-        border-radius: 50px;
+        border: 1px solid rgba(255,255,255,.55);
+        background: linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.65));
+        color: var(--brand);
+        padding: 8px 14px;
+        border-radius: 999px;
         font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        box-shadow: var(--shadow-1);
+        transition: transform .2s,box-shadow .2s;
+        text-decoration: none;
     }
 
         .btn-glass:hover {
-            background: #60a5fa;
-            color: #fff;
-            border: 1px solid #2563eb;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-2);
         }
+
+    .btn-danger-glass {
+        background: linear-gradient(180deg,rgba(239,68,68,.95),rgba(239,68,68,.7));
+        color: #fff;
+        border-color: rgba(255,255,255,.4);
+    }
+
+    .btn-outline {
+        background: linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,.55));
+        color: #0d0dd6;
+    }
+
+    .card-glass {
+        border: 1px solid var(--bdr);
+        border-radius: 16px;
+        padding: 14px;
+        background: linear-gradient(180deg,var(--glass),var(--glass-2));
+        box-shadow: var(--shadow-2);
+    }
+
+    .section-title {
+        font-weight: 800;
+        letter-spacing: .2px;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        margin: .25rem 0 10px;
+    }
+
+    .table-wrap {
+        margin-top: 10px;
+        overflow: auto;
+        border-radius: 16px;
+        border: 1px solid rgba(1,0,140,.12);
+        background: linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.85));
+        box-shadow: var(--shadow-2);
+    }
+
+    thead th {
+        position: sticky;
+        top: 0;
+        background: linear-gradient(180deg,var(--brand-50),rgba(255,255,255,.92));
+        color: var(--brand);
+        font-weight: 700;
+        border-bottom: 2px solid var(--brand-200);
+    }
+
+    .preview-img {
+        max-height: 150px;
+        border-radius: 12px;
+        border: 1px solid rgba(0,0,0,.08);
+        box-shadow: 0 6px 16px rgba(0,0,0,.08);
+    }
+
+    .embed-pdf {
+        width: 100%;
+        height: 360px;
+        border: 1px solid rgba(0,0,0,.08);
+        border-radius: 12px;
+    }
+
+    .muted {
+        color: var(--muted)
+    }
+
+    .confirm-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 14px
+    }
 </style>
 
-<div class="row justify-content-center mt-5">
-    <div class="col-md-7 col-lg-6">
-        <div class="card card-3d">
-            <div class="card-body p-5">
-                <h2 class="fw-bold text-danger text-center mb-4">
-                    <i class="fa-solid fa-trash"></i> Delete Catalog
-                </h2>
-                <h5 class="text-center text-secondary mb-4">Are you sure you want to delete this catalog entry?</h5>
-                <dl class="row small mb-4">
-                    <dt class="col-sm-4"><i class="fa-solid fa-barcode"></i> Barcode</dt>
-                    <dd class="col-sm-8">@Model.Barcode</dd>
+<h2 class="page-title"><span class="logo-dot"></span> Delete Catalog</h2>
 
-                    <dt class="col-sm-4"><i class="fa-solid fa-signal"></i> Status</dt>
-                    <dd class="col-sm-8">
-                        <span class="badge @(Model.Status == "Available" ? "bg-success" : "bg-danger")">
-                            <i class="fa-solid @(Model.Status == "Available" ? "fa-circle-check" : "fa-circle-xmark")"></i> @Model.Status
-                        </span>
-                    </dd>
+<div class="alert-glass">
+    <i class="bi bi-exclamation-triangle-fill" style="color:var(--danger);"></i>
+    ប្រាកដថាចង់លុប Catalog នេះមែនទេ?
+    <strong>Books ទាំងអស់ក្រោម Catalog នេះនឹងត្រូវលុបផងដែរ។</strong>
+</div>
 
-                    <dt class="col-sm-4"><i class="fa-solid fa-location-dot"></i> Location</dt>
-                    <dd class="col-sm-8">@Model.Location</dd>
+<div class="toolbar">
+    <span class="pill"><i class="bi bi-journal-text"></i> Title: <strong>@Model.Title</strong></span>
+    <span class="pill"><i class="bi bi-collection"></i> Total: <strong>@Model.TotalCopies</strong></span>
+    <span class="pill"><i class="bi bi-box-seam"></i> Available: <strong>@Model.AvailableCopies</strong></span>
+    <span class="pill"><i class="bi bi-book"></i> Books: <strong>@booksCount</strong></span>
+    <span class="muted ms-2">កំណត់ចំណាំ៖ សកម្មភាពនេះមិនអាចប្ដូរវិញបានទេ។</span>
+</div>
 
-                    <dt class="col-sm-4"><i class="fa-solid fa-calendar-plus"></i> Acquisition Date</dt>
-                    <dd class="col-sm-8">@Model.AcquisitionDate.ToString("yyyy-MM-dd")</dd>
+<form asp-action="Delete" method="post" id="deleteForm">
+    @Html.AntiForgeryToken()
+    <input asp-for="CatalogId" type="hidden" />
 
-                    <dt class="col-sm-4"><i class="fa-solid fa-clock"></i> Created</dt>
-                    <dd class="col-sm-8">@Model.Created.ToString("yyyy-MM-dd HH:mm")</dd>
+    <div class="card-glass">
+        <div class="section-title"><i class="bi bi-info-circle"></i> Catalog Info</div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Title</label>
+                <input class="form-control" value="@Model.Title" disabled />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Author</label>
+                <input class="form-control" value="@Model.Author" disabled />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold">ISBN</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-upc-scan"></i></span>
+                    <input class="form-control" value="@Model.ISBN" disabled />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Category</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-tags"></i></span>
+                    <input class="form-control" value="@Model.Category" disabled />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-bold">Total Copies</label>
+                <input class="form-control" value="@Model.TotalCopies" disabled />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-bold">Available</label>
+                <input class="form-control" value="@Model.AvailableCopies" disabled />
+            </div>
 
-                    <dt class="col-sm-4"><i class="fa-solid fa-pen-to-square"></i> Modified</dt>
-                    <dd class="col-sm-8">@Model.Modified.ToString("yyyy-MM-dd HH:mm")</dd>
+            <!-- Cover & PDF -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Cover Image</label><br />
+                @if (!string.IsNullOrWhiteSpace(Model.ImagePath))
+                {
+                    <div class="d-flex align-items-center gap-2">
+                        <img src="@Model.ImagePath" class="preview-img" alt="cover" />
+                        <a href="@Model.ImagePath" target="_blank" class="btn-glass btn-outline btn-sm">
+                            <i class="bi bi-box-arrow-up-right"></i> Open Image
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="muted">No image uploaded.</div>
+                }
+            </div>
 
-                    <dt class="col-sm-4"><i class="fa-solid fa-image"></i> Image</dt>
-                    <dd class="col-sm-8">
-                        @if (!string.IsNullOrEmpty(Model.ImagePath))
-                        {
-                            <img src="@Model.ImagePath" alt="Image" style="width:64px; border-radius:7px; box-shadow:0 2px 8px 0 rgba(0,0,0,0.08);" />
-                        }
-                    </dd>
-
-                    <dt class="col-sm-4"><i class="fa-solid fa-file-pdf"></i> PDF</dt>
-                    <dd class="col-sm-8">
-                        @if (!string.IsNullOrEmpty(Model.PdfFilePath))
-                        {
-                            <a href="@Model.PdfFilePath" target="_blank" class="btn btn-glass btn-sm">
-                                <i class="fa-solid fa-file-pdf" style="color:#ef4444"></i> View PDF
-                            </a>
-                        }
-                    </dd>
-
-                    <dt class="col-sm-4"><i class="fa-solid fa-user-pen"></i> Author</dt>
-                    <dd class="col-sm-8">
-                        @(Model.Book != null ? Model.Book.Author : "")
-                    </dd>
-                </dl>
-                <form asp-action="Delete" class="mt-4 text-center">
-                    <input type="hidden" asp-for="CatalogId" />
-                    <button type="submit" class="btn btn-danger px-4 me-2 rounded-pill shadow-sm">
-                        <i class="fa-solid fa-trash"></i> Delete
-                    </button>
-                    <a asp-action="Index" class="btn btn-glass rounded-pill px-3">
-                        <i class="fa-solid fa-arrow-left"></i> Cancel
-                    </a>
-                </form>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">PDF</label><br />
+                @if (!string.IsNullOrWhiteSpace(Model.PdfFilePath))
+                {
+                    <div class="d-flex align-items-center gap-2 flex-wrap mb-2">
+                        <a href="@Model.PdfFilePath" target="_blank" class="btn-glass btn-outline btn-sm">
+                            <i class="bi bi-box-arrow-up-right"></i> Open PDF
+                        </a>
+                    </div>
+                    <iframe class="embed-pdf" src="@Model.PdfFilePath"></iframe>
+                }
+                else
+                {
+                    <div class="muted">No PDF attached.</div>
+                }
             </div>
         </div>
     </div>
-</div>
+
+    <div class="section-title mt-3"><i class="bi bi-book"></i> Books</div>
+    <div class="table-wrap">
+        <table class="table table-sm table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>BookId</th>
+                    <th>Barcode</th>
+                    <th>Status</th>
+                    <th>Location</th>
+                    <th>Acquired</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model.Books)
+                {
+                    <tr>
+                        <td>@b.BookId</td>
+                        <td>@b.Barcode</td>
+                        <td>@b.Status</td>
+                        <td>@b.Location</td>
+                        <td>@b.AcquisitionDate.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="confirm-wrap">
+        <input type="checkbox" id="chkConfirm" />
+        <label for="chkConfirm" class="m-0">
+            ខ្ញុំយល់ព្រមលុប Catalog នេះ និងសៀវភៅទាំងអស់ដែលពាក់ព័ន្ធ។
+        </label>
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+        <button type="submit" id="btnDelete" class="btn-glass btn-danger-glass" disabled>
+            <i class="bi bi-trash3"></i> Confirm Delete
+        </button>
+        <a asp-action="Index" class="btn-glass btn-outline"><i class="bi bi-x-circle"></i> Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        (function(){
+          const chk = document.getElementById('chkConfirm');
+          const btn = document.getElementById('btnDelete');
+          const form = document.getElementById('deleteForm');
+
+          chk?.addEventListener('change', ()=>{ btn.disabled = !chk.checked; });
+
+          form?.addEventListener('submit', function(e){
+            if(!chk.checked){
+              e.preventDefault();
+              Swal.fire({
+                icon:'warning',
+                title:'Please confirm',
+                text:'សូមធីក checkbox ដើម្បីយល់ព្រមលុប។',
+                confirmButtonColor:'#01008C'
+              });
+              return;
+            }
+            e.preventDefault(); // intercept for final confirm
+            Swal.fire({
+              icon:'warning',
+              title:'Delete this catalog?',
+              html:`This action will remove <b>@booksCount</b> book(s) with the catalog.<br/>This cannot be undone.`,
+              showCancelButton:true,
+              confirmButtonText:'Yes, delete',
+              cancelButtonText:'Cancel',
+              confirmButtonColor:'#ef4444',
+              cancelButtonColor:'#94a3b8',
+              reverseButtons:true
+            }).then(res=>{
+              if(res.isConfirmed){
+                form.submit();
+              }
+            });
+          });
+        })();
+    </script>
+}

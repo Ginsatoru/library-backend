@@ -1,7 +1,13 @@
 ﻿@model LibrarySystemBBU.Models.Users
 @{
     ViewData["Title"] = "User Details";
+
+    // Role detection (supports Identity & Session)
+    var roleFromSession = Context?.Session?.GetString("RoleName");
+    bool isAdmin = User.IsInRole("Admin") || string.Equals(roleFromSession, "Admin", StringComparison.OrdinalIgnoreCase);
+    bool isLibrarian = User.IsInRole("Librarian") || string.Equals(roleFromSession, "Librarian", StringComparison.OrdinalIgnoreCase);
 }
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 <style>
     .card-3d {
@@ -13,11 +19,21 @@
         overflow: hidden;
     }
 
+        .card-3d:hover {
+            transform: translateY(-7px) scale(1.02);
+            box-shadow: 0 16px 32px 0 rgba(0,126,255,0.20), 0 6px 12px 0 rgba(0,0,0,0.13);
+        }
+
     .avatar-3d {
         box-shadow: 0 4px 12px 0 rgba(52,144,220,0.18);
         border: 3px solid #38bdf8;
         transition: box-shadow .2s, border .2s;
     }
+
+        .avatar-3d:hover {
+            box-shadow: 0 8px 24px 0 rgba(52,144,220,0.28);
+            border: 3px solid #2563eb;
+        }
 
     .btn-glass {
         background: rgba(59,130,246,0.15);
@@ -34,15 +50,29 @@
             color: #fff;
             border: 1px solid #2563eb;
         }
+
+    /* Guard overlay for read-only Librarian */
+    .guard-wrap {
+        position: relative;
+    }
+
+    .read-only-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        background: rgba(0,0,0,0);
+        cursor: not-allowed;
+    }
 </style>
 
 <div class="row justify-content-center my-5">
     <div class="col-md-7 col-lg-6">
         <div class="card card-3d">
             <div class="card-body p-5">
+
                 <div class="text-center mb-4">
                     <h2 class="fw-bold text-primary mb-3">
-                        <i class="fa-duotone fa-user-circle"></i> User Details
+                        <i class="fa-solid fa-user-circle"></i> User Details
                     </h2>
                     <img src="@(Model.ProfilePicturePath ?? "https://ui-avatars.com/api/?name=" + (Model.FirstName + "+" + Model.LastName) + "&background=60a5fa&color=fff&size=128")"
                          class="rounded-circle avatar-3d mb-2"
@@ -54,6 +84,7 @@
                     <div class="text-muted">@Model.UserName</div>
                     <div class="text-muted">@Model.Email</div>
                 </div>
+
                 <dl class="row mb-4 small">
                     <dt class="col-sm-5"><i class="fa fa-id-card"></i> First Name</dt>
                     <dd class="col-sm-7">@Model.FirstName</dd>
@@ -82,7 +113,14 @@
                     <dt class="col-sm-5"><i class="fa fa-pen-to-square"></i> Modified</dt>
                     <dd class="col-sm-7">@Model.Modified?.ToString("yyyy-MM-dd HH:mm")</dd>
                 </dl>
-                <div class="text-center">
+
+                <!-- Guard: Librarian sees everything but cannot click Edit -->
+                <div class="guard-wrap text-center mt-3">
+                    @if (isLibrarian && !isAdmin)
+                    {
+                        <div class="read-only-overlay" title="Only Admin can edit users"></div>
+                    }
+
                     <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-glass me-2">
                         <i class="fa-solid fa-pen-to-square"></i> Edit
                     </a>
@@ -90,7 +128,21 @@
                         <i class="fa-solid fa-arrow-left"></i> Back
                     </a>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var overlay = document.querySelector('.read-only-overlay');
+            if (overlay) {
+                overlay.addEventListener('click', function () {
+                    alert('Only Admin can edit users.');
+                });
+            }
+        });
+    </script>
+}

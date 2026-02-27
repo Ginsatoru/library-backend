@@ -1,0 +1,159 @@
+﻿@model IEnumerable<LibrarySystemBBU.Models.TelegramDebugRow>
+
+@{
+    ViewData["Title"] = "Telegram Debug – getUpdates";
+}
+
+<link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background: radial-gradient(circle at top, #e0f2fe, #f8fafc, #ffffff);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .page-title {
+        margin: 0;
+        font-weight: 700;
+        letter-spacing: .3px;
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+
+    .title-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 999px;
+        background: conic-gradient(from 45deg, #0f172a, #38bdf8, #0f172a);
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, .25);
+    }
+
+    .btn-back {
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        font-weight: 500;
+        border: 1px solid rgba(37, 99, 235, .4);
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+        color: #1d4ed8;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, .15);
+        padding-inline: 1rem;
+    }
+
+        .btn-back:hover {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #1d4ed8;
+        }
+
+    .card-glass {
+        border-radius: 16px;
+        border: 1px solid rgba(148, 163, 184, .3);
+        background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(248, 250, 252, .95));
+        box-shadow: 0 18px 40px rgba(15, 23, 42, .15);
+        padding: 1.25rem 1.4rem;
+    }
+
+    .table-wrap {
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid rgba(148, 163, 184, .35);
+        box-shadow: 0 10px 28px rgba(15, 23, 42, .10);
+        background: #ffffff;
+    }
+
+    thead.table-light th {
+        background: linear-gradient(180deg, #e5edff, #f9fafb);
+        border-bottom: 2px solid rgba(148, 163, 184, .4);
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    tbody tr:hover {
+        background-color: #eff6ff;
+    }
+
+    code {
+        background: #e5e7eb;
+        border-radius: 6px;
+        padding: .1rem .35rem;
+        font-size: .85rem;
+    }
+</style>
+
+<div class="container mt-4 mb-5">
+
+    <!-- Header with Back button -->
+    <div class="page-header">
+        <h2 class="page-title">
+            <span class="title-dot"></span>
+            Telegram Debug – <span class="text-primary">getUpdates</span>
+        </h2>
+
+        <a asp-controller="Members"
+           asp-action="Index"
+           class="btn btn-back">
+            <i class="fa-solid fa-arrow-left-long"></i>
+            <span>Back to Members</span>
+        </a>
+    </div>
+
+    <div class="card-glass mb-3">
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger mb-3">
+                @ViewBag.Error
+            </div>
+        }
+
+        <p class="text-muted mb-0">
+            Ask members to send <code>/start</code> or <code>/start TOKEN</code> to your Telegram bot.
+            Then refresh this page to see their <strong>ChatId</strong> and <strong>username</strong>.
+            You can copy the ChatId and paste it into the member record if you want to save it manually.
+        </p>
+    </div>
+
+    <div class="table-wrap">
+        <table class="table table-bordered table-striped table-sm align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 180px;">Chat ID</th>
+                    <th style="width: 220px;">Username</th>
+                    @* <th>Text</th> *@
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model == null || !Model.Any())
+                {
+                    <tr>
+                        <td colspan="3" class="text-center text-muted py-4">
+                            No updates yet. Try sending <code>/start</code> to your bot and reload this page.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var row in Model)
+                    {
+                        <tr>
+                            <td>@row.ChatId</td>
+                            <td>@(string.IsNullOrWhiteSpace(row.Username) ? "—" : "@" + row.Username)</td>
+                            @* <td>@row.Text</td> *@
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,28 +1,28 @@
-﻿using LibrarySystemBBU.Data;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using LibrarySystemBBU.Data;
 using LibrarySystemBBU.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace LibrarySystemBBU.Services
 {
-    // OverdueLoanReminderService: A background service that periodically checks for overdue books
-    // and automatically creates LoanReminder records for them.
+    /// <summary>
+    /// Sends Telegram reminders:
+    /// - 3 days before due date  (ReminderType = "DueIn3Days")
+    /// - On the due date         (ReminderType = "DueToday")
+    /// - 1 day after due date    (ReminderType = "Overdue1Day")
+    /// </summary>
     public class OverdueLoanReminderService : IHostedService, IDisposable
     {
         private readonly ILogger<OverdueLoanReminderService> _logger;
-        private readonly IServiceScopeFactory _scopeFactory; // Used to create scoped services (DataContext)
-        private Timer? _timer = null; // Timer for periodic execution
+        private readonly IServiceScopeFactory _scopeFactory;
+        private Timer? _timer;
 
-        // Constructor: Injects logger and service scope factory.
-        // IServiceScopeFactory is crucial because DataContext is typically scoped,
-        // and background services are singletons. You need to create a new scope
-        // for each operation to ensure correct DbContext lifecycle.
         public OverdueLoanReminderService(
             ILogger<OverdueLoanReminderService> logger,
             IServiceScopeFactory scopeFactory)
@@ -31,83 +31,146 @@ namespace LibrarySystemBBU.Services
             _scopeFactory = scopeFactory;
         }
 
-        // StartAsync: Called when the application starts.
-        // Initializes and starts the timer.
         public Task StartAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Overdue Loan Reminder Service is starting.");
+            _logger.LogInformation("📌 OverdueLoanReminderService is starting.");
 
-            // Configure the timer to call DoWork every 1 minute (adjust as needed for production)
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(1)); // Initial delay 0, then repeat every 1 minute
+            // Run immediately, then every 24 hours
+            // (You can change TimeSpan.FromHours(24) to TimeSpan.FromMinutes(60) while testing)
+            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromHours(24));
 
             return Task.CompletedTask;
         }
 
-        // DoWork: The method executed by the timer.
-        // It's responsible for finding overdue loans and creating reminders.
         private async void DoWork(object? state)
         {
-            _logger.LogInformation("Overdue Loan Reminder Service is working. Checking for overdue loans...");
+            _logger.LogInformation("🔎 OverdueLoanReminderService: Checking loans for reminders...");
 
-            // Create a new scope for the DataContext.
-            // This ensures that DbContext is correctly disposed after each operation.
-            using (var scope = _scopeFactory.CreateScope())
+            using var scope = _scopeFactory.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+            var telegram = scope.ServiceProvider.GetRequiredService<ITelegramService>();
+
+            try
             {
-                var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+                var today = DateTime.Today;
 
-                try
+                // All active loans with Telegram chat
+                var activeLoans = await context.BookBorrows
+                    .Include(bl => bl.LibraryMember)
+                    .Where(bl =>
+                        !bl.IsReturned &&
+                        bl.LibraryMember != null &&
+                        !string.IsNullOrWhiteSpace(bl.LibraryMember.TelegramChatId))
+                    .ToListAsync();
+
+                _logger.LogInformation("Found {Count} active loans with Telegram chat.", activeLoans.Count);
+
+                foreach (var loan in activeLoans)
                 {
-                    // Get all loans that are not yet returned and are past their due date.
-                    var overdueLoans = await context.BookLoans
-                        .Where(bl => !bl.IsReturned && bl.DueDate < DateTime.Today)
-                        .ToListAsync();
+                    var member = loan.LibraryMember!;
+                    var chatId = member.TelegramChatId!;
 
-                    foreach (var loan in overdueLoans)
+                    // daysDiff = positive if still before due date
+                    // 0 = due today
+                    // negative = already overdue
+                    int daysDiff = (loan.DueDate.Date - today).Days;
+
+                    string? reminderType = null;
+                    string? msg = null;
+
+                    if (daysDiff == 3)
                     {
-                        // Check if a "Overdue" reminder already exists for this loan.
-                        // This prevents sending multiple identical reminders for the same loan.
-                        bool reminderExists = await context.LoanReminders
-                            .AnyAsync(lr => lr.LoanId == loan.LoanId && lr.ReminderType == "Overdue");
-
-                        if (!reminderExists)
-                        {
-                            // Create a new LoanReminder record.
-                            var reminder = new LoanReminder
-                            {
-                                LoanId = loan.LoanId,
-                                SentDate = DateTime.Now, // Set the current date/time when reminder is generated
-                                ReminderType = "Overdue" // Define a type for automated reminders
-                            };
-
-                            context.LoanReminders.Add(reminder);
-                            _logger.LogInformation($"Created overdue reminder for LoanId: {loan.LoanId}");
-                        }
+                        // 3 days before due date
+                        reminderType = "DueIn3Days";
+                        msg =
+                            $"សួស្តី <b>{member.FullName}</b> 👋\n\n" +
+                            $"សៀវភៅដែលអ្នកបានខ្ចី នឹងដល់ថ្ងៃសងនៅក្នុង <b>3 ថ្ងៃទៀត</b> (កាលបរិច្ឆេទសង: {loan.DueDate:yyyy-MM-dd}).\n" +
+                            $"សូមរៀបចំយកមកសងទាន់ពេល ដើម្បីជៀសវាងការបង់ពិន័យ 🙏";
                     }
-                    await context.SaveChangesAsync(); // Save all new reminders
-                    _logger.LogInformation("Overdue Loan Reminder Service finished checking.");
+                    else if (daysDiff == 0)
+                    {
+                        // Due date is TODAY
+                        reminderType = "DueToday";
+                        msg =
+                            $"សួស្តី <b>{member.FullName}</b> 👋\n\n" +
+                            $"សៀវភៅដែលអ្នកបានខ្ចី មានកាលបរិច្ឆេទសង <b>ថ្ងៃនេះ</b> ({loan.DueDate:yyyy-MM-dd}).\n" +
+                            $"សូមយកមកសងនៅបណ្ណាល័យ BBU ក្នុងថ្ងៃនេះ ដើម្បីជៀសវាងការបង់ពិន័យ 🙏";
+                    }
+                    else if (daysDiff == -1)
+                    {
+                        // 1 day overdue
+                        reminderType = "Overdue1Day";
+                        msg =
+                            $"សួស្តី <b>{member.FullName}</b> 👋\n\n" +
+                            $"សៀវភៅដែលអ្នកបានខ្ចី បានហួសថ្ងៃសងចាប់តាំងពី <b>{loan.DueDate:yyyy-MM-dd}</b> (ឥឡូវនេះហួស <b>1 ថ្ងៃ</b>)។\n" +
+                            $"សូមយកមកសងឲ្យបានឆាប់ តាមបណ្ណាល័យ BBU ដើម្បីកុំឲ្យមានពិន័យបន្ថែម 🙏";
+                    }
+
+                    // If this loan does not match any of these 3 cases, skip
+                    if (reminderType == null || msg == null)
+                        continue;
+
+                    // Check if this reminder type already sent for this loan
+                    bool alreadySent = await context.LoanReminders.AnyAsync(lr =>
+                        lr.LoanId == loan.LoanId &&
+                        lr.ReminderType == reminderType);
+
+                    if (alreadySent)
+                    {
+                        _logger.LogInformation(
+                            "Reminder '{ReminderType}' for LoanId {LoanId} already sent. Skipping.",
+                            reminderType, loan.LoanId);
+                        continue;
+                    }
+
+                    try
+                    {
+                        await telegram.SendMessageAsync(chatId, msg);
+                    }
+                    catch (Exception exTg)
+                    {
+                        _logger.LogError(exTg,
+                            "Error sending Telegram message for LoanId {LoanId}.",
+                            loan.LoanId);
+                        // Continue with next loan
+                        continue;
+                    }
+
+                    // Log to LoanReminders to avoid sending again
+                    context.LoanReminders.Add(new LoanReminder
+                    {
+                        LoanId = loan.LoanId,
+                        SentDate = DateTime.Now,
+                        ReminderType = reminderType
+                    });
+
+                    await context.SaveChangesAsync();
+
+                    _logger.LogInformation(
+                        "Reminder '{ReminderType}' sent for LoanId {LoanId} to Member {MemberName}.",
+                        reminderType, loan.LoanId, member.FullName);
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error occurred while checking for overdue loans.");
-                }
+
+                _logger.LogInformation("OverdueLoanReminderService: Reminder check complete.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "OverdueLoanReminderService: Error occurred while checking loans.");
             }
         }
 
-        // StopAsync: Called when the application is shutting down.
-        // Stops the timer.
         public Task StopAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Overdue Loan Reminder Service is stopping.");
-
-            _timer?.Change(Timeout.Infinite, 0); // Stop the timer from firing
-
+            _logger.LogInformation("📌 OverdueLoanReminderService is stopping.");
+            _timer?.Change(Timeout.Infinite, 0);
             return Task.CompletedTask;
         }
 
-        // Dispose: Cleans up resources (the timer).
         public void Dispose()
         {
             _timer?.Dispose();
         }
     }
 }
+
+

@@ -1,0 +1,220 @@
+﻿@model LibrarySystemBBU.Models.BookBorrow
+@{
+    ViewData["Title"] = "Delete Loan";
+}
+
+<!-- Anti-Forgery for AJAX -->
+<form id="__af" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>
+
+<style>
+    :root {
+        --brand: #01008C;
+        --brand-50: #e6e6ff;
+        --brand-200: #b6b6ff;
+        --brand-400: #6666ff;
+        --brand-800: #05057a;
+        --glass-bg: rgba(255,255,255,.16);
+        --glass-border: rgba(255,255,255,.26);
+        --glass-shadow: 0 12px 34px rgba(1,0,140,.22);
+        --text: #0f0f2e;
+        --muted: #6b7280;
+        --danger: #ef4444;
+    }
+
+    body {
+        background: radial-gradient(60rem 30rem at -10% -10%, rgba(1,0,140,.18), transparent 60%), radial-gradient(60rem 40rem at 120% 0%, rgba(1,0,140,.12), transparent 60%), linear-gradient(180deg, #f7f8ff 0%, #ffffff 100%);
+        color: var(--text);
+    }
+
+    .page-title {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        margin: 0 0 .75rem;
+        font-weight: 800;
+        letter-spacing: .3px;
+        text-shadow: 0 2px 0 rgba(255,255,255,.85);
+    }
+
+    .logo-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: conic-gradient(from 45deg, var(--brand), var(--brand-400), var(--brand));
+        box-shadow: 0 0 0 3px var(--brand-50), 0 4px 10px rgba(1,0,140,.35);
+    }
+
+    .card-glass {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.86));
+        border: 1px solid rgba(1,0,140,.12);
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: var(--glass-shadow);
+        margin-bottom: 14px;
+    }
+
+    .pill-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(160px,1fr));
+        gap: 10px;
+    }
+
+    .pill {
+        border: 1px solid rgba(1,0,140,.16);
+        background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.8));
+        border-radius: 12px;
+        padding: 12px;
+        box-shadow: 0 8px 18px rgba(1,0,140,.08);
+    }
+
+        .pill .k {
+            font-size: .82rem;
+            color: var(--muted);
+        }
+
+        .pill .v {
+            font-weight: 800;
+            letter-spacing: .3px;
+        }
+
+    .warning-banner {
+        border: 1px solid rgba(239,68,68,.25);
+        background: linear-gradient(180deg, rgba(239,68,68,.08), rgba(239,68,68,.04));
+        color: #7f1d1d;
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 14px;
+        display: flex;
+        gap: .6rem;
+        align-items: flex-start;
+    }
+
+    .btn-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .btn-glass {
+        border: 1px solid rgba(255,255,255,.5);
+        background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.5));
+        color: var(--brand-800);
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-weight: 700;
+        box-shadow: 0 6px 16px rgba(1,0,140,.15);
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        transition: transform .18s ease, box-shadow .18s ease;
+        text-decoration: none;
+    }
+
+        .btn-glass:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(1,0,140,.22);
+        }
+
+    .btn-danger {
+        background: linear-gradient(180deg, #ff8a8f, #ff4d59);
+        color: #fff;
+        border-color: rgba(255,255,255,.35);
+        text-shadow: 0 1px 0 rgba(0,0,0,.25);
+    }
+</style>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+<h2 class="page-title"><span class="logo-dot"></span> Delete Borrowed #@Model.LoanId</h2>
+
+<div class="warning-banner">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <div>
+        <strong>Are you sure?</strong><br />
+        Deleting this borrowed will also delete its item details and return records. This action cannot be undone.
+    </div>
+</div>
+
+<div class="card-glass">
+    <div class="pill-grid">
+        <div class="pill">
+            <div class="k"><i class="bi bi-person-badge"></i> Member</div>
+            <div class="v">@Model.MemberId</div>
+        </div>
+        <div class="pill">
+            <div class="k"><i class="bi bi-calendar-date"></i> Borrow Date</div>
+            <div class="v">@Model.LoanDate.ToString("yyyy-MM-dd")</div>
+        </div>
+        <div class="pill">
+            <div class="k"><i class="bi bi-calendar2-event"></i> Due Date</div>
+            <div class="v">@Model.DueDate.ToString("yyyy-MM-dd")</div>
+        </div>
+        <div class="pill">
+            <div class="k"><i class="bi bi-cash-coin"></i> Borrowing Fee</div>
+            <div class="v">@Model.BorrowingFee.ToString("0.00")</div>
+        </div>
+    </div>
+</div>
+
+<div class="btn-row">
+    <button type="button" id="btnDelete" class="btn-glass btn-danger">
+        <i class="bi bi-trash3"></i> Delete
+    </button>
+    <a asp-action="Index" class="btn-glass">
+        <i class="bi bi-arrow-left-circle"></i> Cancel
+    </a>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function getToken() {
+            const el = document.querySelector('#__af input[name="__RequestVerificationToken"]');
+            return el ? el.value : '';
+        }
+        const theme = {
+            confirmButtonColor: getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#01008C',
+            cancelButtonColor: '#94a3b8',
+            background: '#ffffff',
+            color: '#0f0f2e'
+        };
+
+        document.getElementById('btnDelete').addEventListener('click', function () {
+            Swal.fire({
+                title: 'Delete Borrowed #@Model.LoanId?',
+                html: 'This will permanently remove the Borrow and its related items/returns.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Delete',
+                ...theme
+            }).then(res => {
+                if (!res.isConfirmed) return;
+
+                // Use your DeleteAjax route: [HttpPost("BookBorrows/Delete/{id}")]
+                fetch('/BookBorrows/Delete/@Model.LoanId', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': getToken()
+                    },
+                    body: '{}'
+                }).then(async rsp => {
+                    if (rsp.ok) {
+                        const data = await rsp.json().catch(() => ({}));
+                        Swal.fire({ title: 'Deleted!', text: (data && data.message) || 'Loan deleted.', icon: 'success', ...theme })
+                            .then(() => window.location.href = '@Url.Action("Index", "BookBorrows")');
+                    } else {
+                        const msg = await rsp.text();
+                        Swal.fire({ title: 'Error', text: msg || 'Delete failed.', icon: 'error', ...theme });
+                    }
+                }).catch(() => {
+                    Swal.fire({ title: 'Error', text: 'Network error.', icon: 'error', ...theme });
+                });
+            });
+        });
+    </script>
+}

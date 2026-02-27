@@ -1,172 +1,399 @@
 ﻿@model IEnumerable<LibrarySystemBBU.Models.Adjustment>
+@using LibrarySystemBBU.Models
 
 @{
     ViewData["Title"] = "Adjustments";
+
+    string CatalogLabel(Catalog? c)
+        => c == null
+            ? "—"
+            : (string.IsNullOrWhiteSpace(c.ISBN) ? c.Title : $"{c.Title} ({c.ISBN})");
+
+    var today = DateTime.Today;
+
+    var total = Model?.Count() ?? 0;
+    var inc = Model?.Count(x => x.QuantityChange >= 0) ?? 0;
+    var dec = total - inc;
 }
 
-<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
 <style>
-    .card-3d {
-        border: none;
-        border-radius: 2rem;
-        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.10), 0 2px 4px 0 rgba(0,0,0,0.12);
-        background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
-        overflow: hidden;
-        transition: transform .2s, box-shadow .2s;
+    :root {
+        --brand: #01008C;
+        --brand-50: #e6e6ff;
+        --brand-100: #dfe0ff;
+        --brand-200: #bfc2ff;
+        --brand-300: #9aa1ff;
+        --brand-400: #6666ff;
+        --brand-500: #3d3dff;
+        --brand-600: #1a1aff;
+        --brand-700: #0d0dd6;
+        --brand-800: #05057a;
+        --brand-900: #03034f;
+        --text: #0f0f2e;
+        --muted: #6b7280;
+        --success: #22c55e;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --glass-bg: rgba(255,255,255,.16);
+        --glass-border: rgba(255,255,255,.28);
+        --depth-1: 0 6px 16px rgba(1,0,140,.15);
+        --depth-2: 0 12px 28px rgba(1,0,140,.18);
+        --depth-3: 0 16px 40px rgba(1,0,140,.22);
     }
 
-        .card-3d:hover {
-            transform: translateY(-4px) scale(1.01);
-            box-shadow: 0 16px 32px 0 rgba(0,126,255,0.17), 0 6px 12px 0 rgba(0,0,0,0.12);
+    body {
+        background: radial-gradient(60rem 30rem at -10% 0%, rgba(1,0,140,.12), transparent 60%), radial-gradient(60rem 40rem at 120% 10%, rgba(1,0,140,.10), transparent 60%), linear-gradient(180deg,#f7f8ff 0%,#ffffff 100%);
+        color: var(--text);
+    }
+
+    .page-title {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        margin: 0 0 .75rem;
+        font-weight: 800;
+        letter-spacing: .3px;
+        text-shadow: 0 2px 0 rgba(255,255,255,.85);
+    }
+
+    .logo-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: conic-gradient(from 45deg,var(--brand),var(--brand-400),var(--brand));
+        box-shadow: 0 0 0 3px var(--brand-50),0 4px 10px rgba(1,0,140,.30);
+    }
+
+    .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 14px;
+        border-radius: 16px;
+        border: 1px solid var(--glass-border);
+        background: linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.65));
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: var(--depth-2);
+    }
+
+        .toolbar:hover {
+            transform: translateY(-2px);
+            transition: .25s ease;
         }
 
     .btn-glass {
-        background: rgba(59,130,246,0.12);
-        border: 1px solid #93c5fd;
-        color: #2563eb;
-        transition: all 0.2s;
-        border-radius: 50px;
+        border: 1px solid rgba(255,255,255,.55);
+        background: linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,.55));
+        color: var(--brand-800);
+        padding: 8px 14px;
+        border-radius: 999px;
         font-weight: 600;
+        box-shadow: var(--depth-1);
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        transition: transform .18s ease, box-shadow .18s ease;
     }
 
         .btn-glass:hover {
-            background: #60a5fa;
-            color: #fff;
-            border: 1px solid #2563eb;
+            transform: translateY(-2px);
+            box-shadow: var(--depth-2);
         }
 
-    .table thead tr th {
-        border-top-left-radius: 1.2rem !important;
-        border-top-right-radius: 1.2rem !important;
+    .btn-brand {
+        background: linear-gradient(180deg,var(--brand-400),var(--brand));
+        color: #fff;
+        border-color: rgba(255,255,255,.35);
+        text-shadow: 0 1px 0 rgba(0,0,0,.25);
     }
 
-    .table tbody tr {
-        transition: background .2s;
+    .btn-outline {
+        background: linear-gradient(180deg,rgba(255,255,255,.65),rgba(255,255,255,.4));
+        color: var(--brand-800);
     }
 
-        .table tbody tr:hover {
-            background: #e0f2fe !important;
-            box-shadow: 0 2px 14px 0 rgba(0,126,255,0.11);
+    .segmented {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+        .segmented .btn-toggle {
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid rgba(1,0,140,.25);
+            background: linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,.55));
+            box-shadow: var(--depth-1);
         }
 
-    /* Make table fill the card and allow horizontal drag/scroll */
-    .table-responsive {
-        overflow-x: auto;
-        min-height: .01%;
-        padding-bottom: 1px;
+            .segmented .btn-toggle.active {
+                color: #fff;
+                background: linear-gradient(180deg,var(--brand-400),var(--brand));
+                border-color: var(--brand-300);
+                text-shadow: 0 1px 0 rgba(0,0,0,.25);
+            }
+
+    .search-wrap {
+        position: relative;
+        flex: 1 1 320px;
+        min-width: 220px;
     }
 
-    /* Remove padding left/right if AdminLTE main-content has */
-    .container-fluid {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+    .search-input {
+        width: 100%;
+        padding: 10px 44px 10px 40px;
+        border-radius: 999px;
+        outline: none;
+        border: 1px solid rgba(1,0,140,.20);
+        background: linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.75));
+        box-shadow: inset 0 1px 2px rgba(0,0,0,.05), var(--depth-1);
+        transition: box-shadow .2s, transform .2s;
+    }
+
+        .search-input:focus {
+            box-shadow: 0 0 0 4px rgba(1,0,140,.15), var(--depth-2);
+            transform: translateY(-1px);
+        }
+
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: .8;
+    }
+
+    .search-clear {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        opacity: .75;
+    }
+
+    .table-wrap {
+        margin-top: 12px;
+        overflow: auto;
+        border-radius: 16px;
+        border: 1px solid rgba(1,0,140,.12);
+        background: linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.85));
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        box-shadow: var(--depth-3);
+    }
+
+    thead th {
+        position: sticky;
+        top: 0;
+        background: linear-gradient(180deg,var(--brand-50),rgba(255,255,255,.92));
+        color: var(--brand-800);
+        font-weight: 700;
+        border-bottom: 2px solid var(--brand-200);
+    }
+
+    tbody tr {
+        transition: transform .15s, box-shadow .15s, background .15s;
+    }
+
+        tbody tr:hover {
+            transform: translateY(-1px);
+            box-shadow: inset 0 0 0 9999px rgba(1,0,140,.03);
+        }
+
+    .btn-chip {
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: .85rem;
+        border: 1px solid rgba(1,0,140,.25);
+        background: linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.7));
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 4px 10px rgba(1,0,140,.10);
+    }
+
+    .badge-plus {
+        background: rgba(34,197,94,.10);
+        color: #15803d;
+    }
+
+    .badge-minus {
+        background: rgba(239,68,68,.12);
+        color: #b91c1c;
+    }
+
+    .bi {
+        vertical-align: -.125em;
     }
 </style>
 
-<div class="container-fluid px-0">
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card card-3d mb-4">
-                <div class="card-body px-4 py-4">
-                    <div class="row align-items-center mb-3">
-                        <div class="col-md-6">
-                            <h2 class="fw-bold text-primary mb-1" style="letter-spacing:2px;">
-                                <i class="fa-solid fa-arrows-rotate fa-2x me-2" style="color:#2563eb"></i>
-                                Adjustments List
-                            </h2>
-                        </div>
-                        <div class="col-md-4 my-1">
-                            <input type="text" id="searchInput" class="form-control"
-                                   placeholder="🔍 Search adjustments...">
-                        </div>
-                        <div class="col-md-2 text-end">
-                            <a asp-action="Create" class="btn btn-success btn-glass shadow px-4">
-                                <i class="fa-solid fa-plus"></i> Create New
-                            </a>
-                        </div>
-                    </div>
+<h2 class="page-title"><span class="logo-dot"></span> Adjustments</h2>
 
-                    <div class="table-responsive">
-                        <table class="table align-middle table-hover mb-0 shadow-sm"
-                               style="border-radius:1.3rem;overflow:hidden;background:linear-gradient(135deg,#e0f2fe 0%,#f8fafc 100%);min-width:1100px;">
-                            <thead class="table-primary" style="font-size:1.07em;">
-                                <tr>
-                                    <th><i class="fa-solid fa-tag" style="color:#3b82f6"></i> Type</th>
-                                    <th><i class="fa-solid fa-arrow-right-arrow-left" style="color:#22c55e"></i> Qty Change</th>
-                                    <th><i class="fa-solid fa-calendar-day" style="color:#0891b2"></i> Date</th>
-                                    <th><i class="fa-solid fa-comment-dots" style="color:#eab308"></i> Reason</th>
-                                    <th><i class="fa-solid fa-user-plus" style="color:#64748b"></i> Created</th>
-                                    <th><i class="fa-solid fa-user-clock" style="color:#0ea5e9"></i> Modified</th>
-                                    <th><i class="fa-solid fa-barcode" style="color:#6366f1"></i> Barcode</th>
-                                    <th><i class="fa-solid fa-user" style="color:#f59e42"></i> Adjusted By</th>
-                                    <th class="text-center" style="border-top-right-radius:1.2rem;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody style="background:rgba(255,255,255,0.97);font-size:1.04em;">
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            <span class="badge bg-primary px-2 py-1">@item.AdjustmentType</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-success px-2 py-1">@item.QuantityChange</span>
-                                        </td>
-                                        <td>
-                                            @item.AdjustmentDate.ToString("yyyy-MM-dd HH:mm")
-                                        </td>
-                                        <td class="text-truncate" style="max-width:140px;">
-                                            @item.Reason
-                                        </td>
-                                        <td>
-                                            <span class="text-dark">
-                                                @(item.Created.HasValue? item.Created.Value.ToString("yyyy-MM-dd") : "-")
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="text-dark">
-                                                @(item.Modified.HasValue? item.Modified.Value.ToString("yyyy-MM-dd") : "-")
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-info text-dark px-2">@item.Catalog?.Barcode</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-warning text-dark px-2">@item.AdjustedByUser?.UserName</span>
-                                        </td>
-                                        <td class="text-center">
-                                            <a asp-action="Edit" asp-route-id="@item.AdjustmentId" class="btn btn-glass btn-sm me-1" title="Edit">
-                                                <i class="fa-solid fa-pen-to-square" style="color:#eab308"></i>
-                                            </a>
-                                            <a asp-action="Details" asp-route-id="@item.AdjustmentId" class="btn btn-glass btn-sm me-1" title="Details">
-                                                <i class="fa-solid fa-circle-info" style="color:#0ea5e9"></i>
-                                            </a>
-                                            <a asp-action="Delete" asp-route-id="@item.AdjustmentId" class="btn btn-glass btn-sm" title="Delete">
-                                                <i class="fa-solid fa-trash" style="color:#ef4444"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div> <!-- card-body -->
-            </div> <!-- card-3d -->
-        </div>
+<div class="toolbar">
+    <a asp-action="Create" class="btn-glass btn-brand"><i class="bi bi-plus-circle"></i> Create Adjustment</a>
+
+    <div class="segmented" role="group" aria-label="Filters">
+        <button type="button" class="btn-toggle active" data-filter="all"><i class="bi bi-grid"></i> All</button>
+       @*  <button type="button" class="btn-toggle" data-filter="increase"><i class="bi bi-graph-up-arrow"></i> Increase</button> *@
+       @*  <button type="button" class="btn-toggle" data-filter="decrease"><i class="bi bi-graph-down-arrow"></i> Decrease</button> *@
+        <button type="button" class="btn-toggle" data-filter="damage"><i class="bi bi-tools"></i> Damage</button>
+        <button type="button" class="btn-toggle" data-filter="lost"><i class="bi bi-x-octagon"></i> Lost</button>
+      @*   <button type="button" class="btn-toggle" data-filter="correction"><i class="bi bi-pencil-square"></i> Correction</button> *@
+    </div>
+
+    <div class="search-wrap">
+        <i class="bi bi-search search-icon"></i>
+        <input id="globalSearch" class="search-input" placeholder="Search anything… (date, type, catalog, qty, reason, user)" />
+        <button class="search-clear" type="button" id="clearSearch" title="Clear"><i class="bi bi-x-circle"></i></button>
+    </div>
+
+    <div class="d-flex align-items-center gap-2 ms-auto">
+        <span class="btn-chip"><i class="bi bi-layers"></i> Total: <strong id="statTotal">@total</strong></span>
+        <span class="btn-chip"><i class="bi bi-arrow-up-circle-fill" style="color:var(--success)"></i> + <strong id="statInc">@inc</strong></span>
+        <span class="btn-chip"><i class="bi bi-arrow-down-circle-fill" style="color:var(--danger)"></i> − <strong id="statDec">@dec</strong></span>
+
+        <!-- Updated: use server-side Excel export -->
+        <a asp-action="Export" class="btn-glass btn-outline">
+            <i class="bi bi-file-earmark-excel"></i> Export
+        </a>
     </div>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.getElementById("searchInput");
-        const table = document.querySelector(".table tbody");
-        searchInput.addEventListener("keyup", function () {
-            const filter = searchInput.value.toLowerCase();
-            const rows = table.getElementsByTagName("tr");
-            for (let i = 0; i < rows.length; i++) {
-                let rowText = rows[i].innerText.toLowerCase();
-                rows[i].style.display = rowText.includes(filter) ? "" : "none";
+<div class="table-wrap">
+    <table class="table table-striped align-middle" id="adjTable">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Catalog</th>
+                <th>Quantity</th>
+                <th>Reason</th>
+                <th>Adjusted By</th>
+                <th style="min-width:230px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    var qty = item.QuantityChange;
+                    var badgeClass = qty >= 0 ? "badge-plus" : "badge-minus";
+                    <tr data-type="@item.AdjustmentType.ToLower()"
+                        data-date="@item.AdjustmentDate.ToString("yyyy-MM-dd")"
+                        data-user="@((item.AdjustedByUser?.UserName ?? "—").ToLower())">
+                        <td>@item.AdjustmentDate.ToString("yyyy-MM-dd")</td>
+                        <td>@item.AdjustmentType</td>
+                        <td>@CatalogLabel(item.Catalog)</td>
+                        <td>
+                            <span class="btn-chip @badgeClass">
+                                @(qty >= 0 ? "+" : "−") @Math.Abs(qty)
+                            </span>
+                        </td>
+                        <td>@item.Reason</td>
+                        <td>@(item.AdjustedByUser?.UserName ?? "—")</td>
+                        <td class="text-nowrap">
+                            <a class="btn-glass btn-outline btn-sm" asp-action="Details" asp-route-id="@item.AdjustmentId"><i class="bi bi-eye"></i> Details</a>
+                            <a class="btn-glass btn-outline btn-sm" asp-action="Edit" asp-route-id="@item.AdjustmentId"><i class="bi bi-pencil-square"></i> Edit</a>
+                            <a class="btn-glass btn-outline btn-sm" asp-action="Delete" asp-route-id="@item.AdjustmentId"><i class="bi bi-trash3"></i> Delete</a>
+                        </td>
+                    </tr>
+                }
             }
-        });
-    });
-</script>
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        <i class="bi bi-inboxes"></i> No adjustments found.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div id="noMatches" class="alert alert-warning mt-3 d-none" role="alert">
+    <i class="bi bi-question-circle"></i> No matching results for your filters.
+</div>
+
+@section Scripts {
+    <script>
+        (() => {
+            const $ = sel => document.querySelector(sel);
+            const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+            const segBtns = $$('.segmented .btn-toggle');
+            const search = $('#globalSearch');
+            const clear = $('#clearSearch');
+            const rows = () => $$('#adjTable tbody tr');
+            const noMsg = $('#noMatches');
+
+            const statTotal = $('#statTotal');
+            const statInc = $('#statInc');
+            const statDec = $('#statDec');
+
+            function applyUI(filter) {
+                segBtns.forEach(b => b.classList.remove('active'));
+                const active = segBtns.find(b => b.dataset.filter === filter);
+                if (active) active.classList.add('active');
+
+                const q = (search.value || '').trim().toLowerCase();
+
+                let vis = 0, inc = 0, dec = 0;
+
+                rows().forEach(r => {
+                    const type = (r.dataset.type || '').toLowerCase();
+                    const text = (r.innerText || '').toLowerCase();
+
+                    let show = true;
+
+                    if (filter && filter !== 'all') {
+                        show = type === filter;
+                    }
+
+                    if (show && q) {
+                        show = text.includes(q);
+                    }
+
+                    r.style.display = show ? '' : 'none';
+
+                    if (show) {
+                        vis++;
+                        // Determine plus/minus from badge class
+                        const isPlus = r.querySelector('.badge-plus') !== null;
+                        if (isPlus) inc++; else dec++;
+                    }
+                });
+
+                noMsg.classList.toggle('d-none', vis !== 0);
+                statTotal.textContent = vis;
+                statInc.textContent = inc;
+                statDec.textContent = dec;
+            }
+
+            // events
+            segBtns.forEach(b => b.addEventListener('click', () => applyUI(b.dataset.filter)));
+            search.addEventListener('input', () => {
+                const active = document.querySelector('.segmented .btn-toggle.active')?.dataset.filter || 'all';
+                applyUI(active);
+            });
+            clear.addEventListener('click', () => {
+                search.value = ''; search.focus();
+                const active = document.querySelector('.segmented .btn-toggle.active')?.dataset.filter || 'all';
+                applyUI(active);
+            });
+
+            // init
+            applyUI('all');
+        })();
+    </script>
+}

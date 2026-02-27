@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "ContainingType": "LibrarySystemBBU.Controllers.TelegramBotController",
+    "Method": "Webhook",
+    "RelativePath": "api/telegram/webhook",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateJson",
+        "Type": "System.Text.Json.JsonElement",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

@@ -1,0 +1,118 @@
+﻿@model LibrarySystemBBU.Models.PurchaseDetail
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    var idx = ViewData["index"]?.ToString() ?? "0";
+    var bookSelect = (SelectList)ViewData["bookSelect"];
+}
+
+<tr class="align-middle">
+    <td style="display:none;">
+        <input type="hidden" name="PurchaseDetails[@(idx)].PurchaseDetailId" value="@Model.PurchaseDetailId" />
+        <input type="hidden" name="PurchaseDetails[@(idx)].PurchaseId" value="@Model.PurchaseId" />
+    </td>
+
+    <!-- Book -->
+    <td>
+        <div class="input-group">
+            <span class="input-group-text bg-navy text-white">
+                <i class="fa-solid fa-book"></i>
+            </span>
+            <select class="form-select book-select"
+                    name="PurchaseDetails[@(idx)].BookId"
+                    id="PurchaseDetails_@(idx)__BookId"
+                    asp-items="bookSelect">
+                <option value="">-- select a book --</option>
+            </select>
+        </div>
+        <span class="text-danger"
+              data-valmsg-for="PurchaseDetails[@(idx)].BookId"
+              data-valmsg-replace="true"></span>
+
+        <script>
+            (function(){
+                // Keep server-selected value (for Edit)
+                var sel = document.getElementById('PurchaseDetails_@(idx)__BookId');
+                if (sel && '@Model.BookId' && '@Model.BookId' !== '0') sel.value = '@Model.BookId';
+            })();
+        </script>
+    </td>
+
+    <!-- Quantity -->
+    <td>
+        <div class="input-group">
+            <span class="input-group-text bg-navy text-white">
+                <i class="fa-solid fa-arrow-up-1-9"></i>
+            </span>
+            <input class="form-control text-end" type="number" min="1" step="1"
+                   name="PurchaseDetails[@(idx)].Quantity"
+                   id="PurchaseDetails_@(idx)__Quantity"
+                   value="@(Model.Quantity == 0 ? "" : Model.Quantity.ToString())" />
+        </div>
+        <span class="text-danger" data-valmsg-for="PurchaseDetails[@(idx)].Quantity" data-valmsg-replace="true"></span>
+    </td>
+
+    <!-- Unit Price -->
+    <td>
+        <div class="input-group">
+            <span class="input-group-text bg-navy text-white">
+                <i class="fa-solid fa-dollar-sign"></i>
+            </span>
+            <input class="form-control text-end" type="number" min="0" step="0.01"
+                   name="PurchaseDetails[@(idx)].UnitPrice"
+                   id="PurchaseDetails_@(idx)__UnitPrice"
+                   value="@(Model.UnitPrice == 0 ? "" : Model.UnitPrice.ToString("0.##"))" />
+        </div>
+        <span class="text-danger" data-valmsg-for="PurchaseDetails[@(idx)].UnitPrice" data-valmsg-replace="true"></span>
+    </td>
+
+    <!-- Line Total (readonly, auto) -->
+    <td>
+        <div class="input-group">
+            <span class="input-group-text bg-navy text-white">
+                <i class="fa-solid fa-calculator"></i>
+            </span>
+            <input class="form-control text-end" type="number" min="0" step="0.01" readonly
+                   name="PurchaseDetails[@(idx)].LineTotal"
+                   id="PurchaseDetails_@(idx)__LineTotal"
+                   value="@(Model.LineTotal == 0 ? "" : Model.LineTotal.ToString("0.##"))" />
+        </div>
+        <small class="text-muted">auto</small>
+    </td>
+
+    <!-- Actions -->
+    <td class="text-center">
+        <button class="btn btn-sm btn-outline-danger btn-remove-row" title="Remove">
+            <i class="fa-regular fa-trash-can"></i>
+        </button>
+    </td>
+</tr>
+
+@section Scripts {
+    <script>
+        /* client-side convenience calc; server recomputes on submit */
+        (function(){
+            const q  = document.getElementById('PurchaseDetails_@(idx)__Quantity');
+            const up = document.getElementById('PurchaseDetails_@(idx)__UnitPrice');
+            const lt = document.getElementById('PurchaseDetails_@(idx)__LineTotal');
+
+            function toNum(v, dp){
+                const n = parseFloat(v);
+                if (!Number.isFinite(n)) return 0;
+                return dp != null ? Number(n.toFixed(dp)) : n;
+            }
+
+            function recalc() {
+                if (q && toNum(q.value,0) < 0) q.value = Math.abs(toNum(q.value,0)).toString();
+                if (up && toNum(up.value,2) < 0) up.value = Math.abs(toNum(up.value,2)).toFixed(2);
+
+                const qty = toNum(q?.value || '0', 0);
+                const price = toNum(up?.value || '0', 2);
+                if (lt) lt.value = (qty * price).toFixed(2);
+            }
+
+            q?.addEventListener('input', recalc);
+            up?.addEventListener('input', recalc);
+            recalc();
+        })();
+    </script>
+}

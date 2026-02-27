@@ -24,27 +24,23 @@ namespace LibrarySystemBBU.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        // --- ROLE DROPDOWN HELPER (HARDCODED) ---
         private void PopulateRolesDropDownList(object selectedRole = null)
         {
             var roles = new List<string> { "Admin", "Librarian", "User", "Guest" };
             ViewBag.Roles = new SelectList(roles, selectedRole);
         }
 
-        // --- GENDER DROPDOWN HELPER (HARDCODED) ---
         private void PopulateGenderDropDownList(object selectedGender = null)
         {
             var genders = new List<string> { "Male", "Female", "Other" };
             ViewBag.Genders = new SelectList(genders, selectedGender);
         }
 
-        // GET: Users
         public async Task<IActionResult> Index()
         {
             return View(await _context.Users.ToListAsync());
         }
 
-        // GET: Users/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null) return NotFound();
@@ -53,7 +49,6 @@ namespace LibrarySystemBBU.Controllers
             return View(user);
         }
 
-        // GET: Users/Create
         public IActionResult Create()
         {
             PopulateRolesDropDownList();
@@ -61,7 +56,6 @@ namespace LibrarySystemBBU.Controllers
             return View();
         }
 
-        // POST: Users/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Users user, IFormFile ProfilePicture)
@@ -72,6 +66,12 @@ namespace LibrarySystemBBU.Controllers
                 user.Created = DateTime.UtcNow;
                 user.Modified = DateTime.UtcNow;
 
+                // ✅ Hash the password before saving
+                if (!string.IsNullOrWhiteSpace(user.Password))
+                {
+                    user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                }
+
                 if (ProfilePicture != null && ProfilePicture.Length > 0)
                 {
                     user.ProfilePicturePath = await SaveProfilePicture(ProfilePicture);
@@ -81,12 +81,12 @@ namespace LibrarySystemBBU.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             PopulateRolesDropDownList(user.RoleName);
             PopulateGenderDropDownList(user.Gender);
             return View(user);
         }
 
-        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null) return NotFound();
@@ -111,7 +111,6 @@ namespace LibrarySystemBBU.Controllers
                 var existingUser = await _context.Users.FindAsync(id);
                 if (existingUser == null) return NotFound();
 
-                // Update all allowed fields
                 existingUser.FirstName = user.FirstName;
                 existingUser.LastName = user.LastName;
                 existingUser.UserName = user.UserName;
@@ -125,8 +124,11 @@ namespace LibrarySystemBBU.Controllers
                 existingUser.IsActive = user.IsActive;
                 existingUser.Modified = DateTime.UtcNow;
 
+               
                 if (!string.IsNullOrWhiteSpace(user.Password))
-                    existingUser.Password = user.Password;
+                {
+                    existingUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                }
 
                 if (ProfilePicture != null && ProfilePicture.Length > 0)
                 {
@@ -144,12 +146,12 @@ namespace LibrarySystemBBU.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             PopulateRolesDropDownList(user.RoleName);
             PopulateGenderDropDownList(user.Gender);
             return View(user);
         }
 
-        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null) return NotFound();
@@ -160,7 +162,6 @@ namespace LibrarySystemBBU.Controllers
             return View(user);
         }
 
-        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
@@ -182,7 +183,6 @@ namespace LibrarySystemBBU.Controllers
             return _context.Users.Any(e => e.Id == id);
         }
 
-        // Save profile picture helper
         private async Task<string> SaveProfilePicture(IFormFile profilePicture)
         {
             var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "profiles");
@@ -207,15 +207,15 @@ namespace LibrarySystemBBU.Controllers
             return $"/uploads/profiles/{uniqueFileName}";
         }
 
-        // Delete profile picture helper
         private void DeleteProfilePicture(string profilePicturePath)
         {
             if (string.IsNullOrEmpty(profilePicturePath)) return;
+
             var filePath = Path.Combine(_webHostEnvironment.WebRootPath, profilePicturePath.TrimStart('/'));
             if (System.IO.File.Exists(filePath))
             {
                 try { System.IO.File.Delete(filePath); }
-                catch { /* log if needed */ }
+                catch {  }
             }
         }
     }

@@ -2,22 +2,65 @@
 
 @{
     ViewData["Title"] = "Member List";
+    var total = Model?.Count() ?? 0;
+    var active = Model?.Count(m => m.IsActive) ?? 0;
+    var inactive = total - active;
 }
 
 <link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+
 <style>
-    .card-3d {
-        border: none;
-        border-radius: 1.6rem;
-        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.11),0 2px 4px 0 rgba(0,0,0,0.13);
-        background: linear-gradient(135deg,#e0f2fe 0%,#f8fafc 100%);
-        overflow: hidden;
-        transition: transform .15s, box-shadow .15s;
+    /* ===== Member index specific tweaks (reusing global theme vars) ===== */
+
+    .member-page-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
     }
 
+    @@media (min-width: 768px) {
+        .member-page-header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    .member-card-list {
+        margin-top: 0.75rem;
+    }
+
+    .card-3d {
+        position: relative;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--glass-border);
+        background: var(--glass-bg);
+        box-shadow: var(--glass-shadow);
+        backdrop-filter: blur(22px) brightness(1.15);
+        -webkit-backdrop-filter: blur(22px) brightness(1.15);
+        transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+        overflow: hidden;
+    }
+
+        .card-3d::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at 0 0, rgba(219,234,254,0.8), transparent 55%), radial-gradient(circle at 110% 0, rgba(191,219,254,0.7), transparent 60%);
+            opacity: .6;
+        }
+
         .card-3d:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 16px 32px 0 rgba(0,126,255,0.17), 0 6px 12px 0 rgba(0,0,0,0.12);
+            transform: translateY(-4px);
+            border-color: rgba(0,0,122,0.45);
+            box-shadow: 0 22px 50px rgba(15,23,42,0.45);
+        }
+
+        .card-3d > .card-body {
+            position: relative;
+            z-index: 1;
         }
 
     .avatar-3d {
@@ -25,36 +68,23 @@
         height: 64px;
         object-fit: cover;
         border-radius: 50%;
-        border: 2px solid #38bdf8;
-        box-shadow: 0 3px 10px 0 rgba(52,144,220,0.14);
+        border: 2px solid var(--brand-secondary);
         background: #e0f2fe;
+        box-shadow: 0 6px 18px rgba(37,99,235,0.35);
     }
 
     .badge-active {
-        background: #22c55e;
+        background: var(--ok);
+        color: #0f172a;
+        border-radius: 999px;
+        padding-inline: .6rem;
     }
 
     .badge-inactive {
-        background: #64748b;
-    }
-
-    .btn-glass {
-        background: rgba(59,130,246,0.12);
-        border: 1px solid #93c5fd;
-        color: #2563eb;
-        border-radius: 50px;
-        font-weight: 600;
-        transition: all 0.2s;
-    }
-
-        .btn-glass:hover {
-            background: #60a5fa;
-            color: #fff;
-            border: 1px solid #2563eb;
-        }
-
-    .member-card-list {
-        margin-top: 1.8rem;
+        background: var(--muted);
+        color: #f9fafb;
+        border-radius: 999px;
+        padding-inline: .6rem;
     }
 
     .text-truncate-2 {
@@ -64,303 +94,316 @@
         overflow: hidden;
     }
 
-    .search-input {
-        border-radius: 50px;
-        box-shadow: 0 1px 3px 0 rgba(0,0,0,.08);
-        padding-left: 2.3rem;
-        font-size: 1rem;
-        margin-bottom: 16px;
+    /* Make pills slightly tighter here */
+    .member-stats-pill {
+        font-size: .85rem;
     }
 
-    .search-icon {
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #38bdf8;
+    .no-results {
+        display: none;
     }
 
-    .toggle-btn-group .btn.active {
-        background: #2563eb !important;
-        color: #fff !important;
-    }
-
-    .table thead th {
-        vertical-align: middle;
+    #noResults.glass-surface {
+        border-radius: var(--radius-md);
     }
 </style>
 
-<div class="row my-4">
-    <div class="col-12 text-center">
-        <h2 class="fw-bold text-primary mb-1" style="letter-spacing:2px;">
-            <i class="fa-solid fa-users fa-2x" style="color:#38bdf8"></i> Member List
+<div class="dashboard-shell">
+    <div class="wrap">
+        <h2 class="page-title">
+            <span class="logo-dot"></span>
+            Member List
         </h2>
-    </div>
-</div>
 
-<div class="row mb-3 align-items-center">
-    <div class="col-md-4 col-sm-7 mx-auto">
-        <div class="position-relative">
-            <span class="position-absolute search-icon">
-                <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-            </span>
-            <input id="memberSearch" type="text" class="form-control search-input ps-5" placeholder="Search name, username, email, phone, address..." autocomplete="off" />
-        </div>
-    </div>
-    <div class="col-6 col-md-4 text-end mt-2 mt-md-0">
-        <div class="btn-group toggle-btn-group" role="group">
-            <button id="btnCardView" class="btn btn-glass active" type="button" title="Card View">
-                <i class="fa-solid fa-grip"></i>
-            </button>
-            <button id="btnListView" class="btn btn-glass" type="button" title="List View">
-                <i class="fa-solid fa-list"></i>
-            </button>
-        </div>
-    </div>
-    <div class="col-6 col-md-4 text-end mt-2 mt-md-0">
-        <a asp-action="Create" class="btn btn-success btn-glass shadow px-4">
-            <i class="fa-solid fa-user-plus"></i> Create New
-        </a>
-    </div>
-</div>
+        <!-- Header + toolbar -->
+        <div class="member-page-header">
+            <div class="toolbar glass-surface w-100">
+                <!-- Search -->
+                <div class="search-wrap">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input id="memberSearch"
+                           type="search"
+                           class="search-input"
+                           placeholder="Search name, username, email, phone, address, ID, Telegram, …"
+                           autocomplete="off" />
+                </div>
 
-<!-- CARD VIEW -->
-<div class="row member-card-list g-4" id="memberCardList">
-    @foreach (var item in Model)
-    {
-        var hasPhoto = !string.IsNullOrWhiteSpace(item.ProfilePicturePath);
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3 member-card"
-             data-name="@item.FullName"
-             data-username="@item.Users?.UserName"
-             data-email="@item.Email"
-             data-phone="@item.Phone"
-             data-type="@item.MemberType"
-             data-address="@item.Address"
-             data-notes="@item.Notes"
-             data-gender="@item.Gender"
-             data-createdby="@item.CreatedBy"
-             data-joindate="@(item.JoinDate.ToString("yyyy-MM-dd"))"
-             data-modified="@(item.Modified.ToString("yyyy-MM-dd HH:mm"))">
-            <div class="card card-3d h-100">
-                <div class="card-body p-4 text-center">
-                    <img src="@(hasPhoto? item.ProfilePicturePath: "https://ui-avatars.com/api/?name=" + (item.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128")"
-                         class="avatar-3d mb-2"
-                         alt="Member Photo" />
-                    <h5 class="fw-bold mb-1 text-primary text-truncate">
-                        <i class="fa-solid fa-user"></i> @item.FullName
-                    </h5>
-                    <div class="small mb-1 text-muted">
-                        <i class="fa-solid fa-user-tie"></i> @item.Users?.UserName
-                    </div>
-                    <div class="small mb-1 text-muted">
-                        <i class="fa-solid fa-envelope"></i> @item.Email
-                    </div>
-                    <div class="small mb-1 text-muted">
-                        <i class="fa-solid fa-phone"></i> @item.Phone
-                    </div>
-                    <div class="mb-1">
-                        <span class="badge bg-info text-dark">
-                            <i class="fa-solid fa-id-card-clip"></i> @item.MemberType
-                        </span>
-                        <span class="badge @(item.IsActive ? "badge-active" : "badge-inactive") ms-1">
-                            <i class="fa-solid @(item.IsActive ? "fa-circle-check" : "fa-circle-xmark")"></i> @(item.IsActive ? "Active" : "Inactive")
-                        </span>
-                    </div>
-                    @* <div class="text-muted small mb-2">
-                        <i class="fa-solid fa-calendar-plus"></i> @item.JoinDate.ToString("yyyy-MM-dd")
-                    </div>
-                    <div class="text-truncate-2 mb-1 small">
-                        <i class="fa-solid fa-location-dot"></i> @item.Address
-                    </div> *@
-                    @* <div class="text-muted small mb-1">
-                        <i class="fa-solid fa-venus-mars"></i> @item.Gender
-                    </div>
-                    <div class="text-muted small mb-1">
-                        <i class="fa-solid fa-clock"></i> @item.Modified.ToString("yyyy-MM-dd HH:mm")
-                    </div>
-                    <div class="text-muted small mb-1">
-                        <i class="fa-solid fa-user"></i> By: @(item.CreatedBy ?? "-")
-                    </div>
-                    <div class="small text-muted mb-2">
-                        <i class="fa-solid fa-note-sticky"></i> @item.Notes
-                    </div> *@
-                    <div class="d-flex justify-content-center gap-2 mt-2">
-                        <a asp-action="Edit" asp-route-id="@item.MemberId" class="btn btn-glass btn-sm" title="Edit">
-                            <i class="fa-solid fa-pen-to-square fa-lg" style="color:#eab308"></i>
-                        </a>
-                        <a asp-action="Details" asp-route-id="@item.MemberId" class="btn btn-glass btn-sm" title="Details">
-                            <i class="fa-solid fa-circle-info fa-lg" style="color:#0ea5e9"></i>
-                        </a>
-                        <a asp-action="Delete" asp-route-id="@item.MemberId" class="btn btn-glass btn-sm" title="Delete">
-                            <i class="fa-solid fa-trash fa-lg" style="color:#ef4444"></i>
-                        </a>
-                    </div>
+                <!-- Stats + actions -->
+                <div class="ms-auto d-flex align-items-center gap-2 flex-wrap">
+                    <span class="pill member-stats-pill">
+                        <i class="fa-regular fa-layer-group"></i>
+                        Total: <strong id="statTotal">@total</strong>
+                    </span>
+                    <span class="pill member-stats-pill">
+                        <i class="fa-solid fa-circle-check" style="color:var(--ok)"></i>
+                        Active: <strong id="statActive">@active</strong>
+                    </span>
+                    <span class="pill member-stats-pill">
+                        <i class="fa-solid fa-circle-xmark" style="color:var(--muted)"></i>
+                        Inactive: <strong id="statInactive">@inactive</strong>
+                    </span>
+
+                    <a asp-action="Create"
+                       class="btn btn-glass btn-brand">
+                        <i class="fa-solid fa-user-plus"></i> Create New
+                    </a>
+
+                    <a asp-controller="TelegramDebug"
+                       asp-action="Index"
+                       class="btn btn-glass glass-surface-pill">
+                        <i class="fa-brands fa-telegram"></i> Telegram member ID
+                    </a>
+
+                    <!-- Existing client-side CSV export (visible cards) -->
+                 @*    <button id="exportCsv"
+                            type="button"
+                            class="btn btn-glass">
+                        <i class="fa-solid fa-file-csv"></i> Export CSV (current view)
+                    </button> *@
+
+                    <!-- NEW: server-side Excel export (.xls, all members) -->
+                    <a asp-action="Export"
+                       asp-route-format="xls"
+                       class="btn btn-glass">
+                        <i class="fa-solid fa-file-excel"></i> Export
+                    </a>
                 </div>
             </div>
         </div>
-    }
-</div>
-<div id="memberTableList" class="d-none">
-    <div class="card shadow-lg border-0 rounded-4 mt-3">
-        <div class="card-header bg-gradient-primary text-white rounded-top-4 d-flex align-items-center" style="background: linear-gradient(90deg, #2563eb 60%, #38bdf8 100%);">
-            <i class="fa-solid fa-users fa-lg me-2"></i>
-            <span class="fw-bold fs-5">Member List</span>
+
+        <!-- CARD VIEW (glass profile cards only) -->
+        <div class="row member-card-list g-3" id="memberCardList">
+            @foreach (var item in Model)
+            {
+                var hasPhoto = !string.IsNullOrWhiteSpace(item.ProfilePicturePath);
+                var totalLoans = item.BookLoans?.Count ?? 0;
+                var activeLoans = item.BookLoans?.Count(b => b != null && !b.IsReturned) ?? 0;
+
+                <div class="col-12 col-md-6 col-lg-4 col-xl-3 member-card"
+                     data-name="@item.FullName"
+                     data-username="@item.Users?.UserName"
+                     data-email="@item.Email"
+                     data-phone="@item.Phone"
+                     data-type="@item.MemberType"
+                     data-address="@item.Address"
+                     data-notes="@item.Notes"
+                     data-gender="@item.Gender"
+                     data-createdby="@item.CreatedBy"
+                     data-joindate="@(item.JoinDate.ToString("yyyy-MM-dd"))"
+                     data-modified="@(item.Modified.ToString("yyyy-MM-dd HH:mm"))"
+                     data-loans-total="@totalLoans"
+                     data-loans-active="@activeLoans"
+                     data-status="@(item.IsActive ? "Active" : "Inactive")"
+                     data-dicard="@item.DICardNumber"
+                     data-tgchat="@item.TelegramChatId"
+                     data-tguser="@item.TelegramUsername">
+                    <div class="card card-3d h-100">
+                        <div class="card-body p-4 text-center">
+                            <img src="@(hasPhoto
+                                         ? item.ProfilePicturePath
+                                         : "https://ui-avatars.com/api/?name=" + (item.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128")"
+                                 class="avatar-3d mb-2"
+                                 alt="Member Photo" />
+
+                            <h5 class="fw-bold mb-1 text-primary text-truncate">
+                                <i class="fa-solid fa-user"></i> @item.FullName
+                            </h5>
+
+                            <div class="small mb-1 text-muted">
+                                <i class="fa-solid fa-user-tie"></i> @item.Users?.UserName
+                            </div>
+                            <div class="small mb-1 text-muted">
+                                <i class="fa-solid fa-envelope"></i> @item.Email
+                            </div>
+                            <div class="small mb-1 text-muted">
+                                <i class="fa-solid fa-phone"></i> @item.Phone
+                            </div>
+
+                            <div class="small mb-1 text-muted">
+                                <i class="fa-solid fa-id-card"></i>
+                                @(!string.IsNullOrWhiteSpace(item.DICardNumber) ? item.DICardNumber : "No ID")
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(item.TelegramUsername) || !string.IsNullOrWhiteSpace(item.TelegramChatId))
+                            {
+                                <div class="small mb-2 text-muted text-truncate-2">
+                                    <i class="fa-brands fa-telegram"></i>
+                                    @item.TelegramUsername
+                                    @if (!string.IsNullOrWhiteSpace(item.TelegramChatId))
+                                    {
+                                        <span>(@item.TelegramChatId)</span>
+                                    }
+                                </div>
+                            }
+
+                            <div class="mb-2">
+                                <span class="badge bg-info text-dark">
+                                    <i class="fa-solid fa-id-card-clip"></i> @item.MemberType
+                                </span>
+                                <span class="badge @(item.IsActive ? "badge-active" : "badge-inactive") ms-1">
+                                    <i class="fa-solid @(item.IsActive ? "fa-circle-check" : "fa-circle-xmark")"></i>
+                                    @(item.IsActive ? "Active" : "Inactive")
+                                </span>
+                            </div>
+
+                            <div class="d-flex justify-content-center gap-2 my-2">
+                                <span class="badge bg-secondary">
+                                    <i class="fa-solid fa-book-open"></i> Total: @totalLoans
+                                </span>
+                                <span class="badge @(activeLoans > 0 ? "bg-warning text-dark" : "bg-success")">
+                                    <i class="fa-solid fa-hourglass-half"></i> Active: @activeLoans
+                                </span>
+                            </div>
+
+                            <div class="d-flex justify-content-center gap-2 mt-2">
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.MemberId"
+                                   class="btn btn-glass btn-sm"
+                                   title="Edit">
+                                    <i class="fa-solid fa-pen-to-square fa-lg" style="color:#eab308"></i>
+                                </a>
+                                <a asp-action="Details"
+                                   asp-route-id="@item.MemberId"
+                                   class="btn btn-glass btn-sm"
+                                   title="Details">
+                                    <i class="fa-solid fa-circle-info fa-lg" style="color:#0ea5e9"></i>
+                                </a>
+                                <a asp-controller="Histories"
+                                   asp-action="Index"
+                                   asp-route-q="@item.FullName"
+                                   class="btn btn-glass btn-sm"
+                                   title="View Borrow / Library History">
+                                    <i class="fa-solid fa-clock-rotate-left fa-lg" style="color:#6366f1"></i>
+                                </a>
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.MemberId"
+                                   class="btn btn-glass btn-sm"
+                                   title="Delete">
+                                    <i class="fa-solid fa-trash fa-lg" style="color:#ef4444"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table align-middle table-hover mb-0" style="background:linear-gradient(135deg,#e0f2fe 0%,#f8fafc 100%);">
-                    <thead class="table-primary" style="font-size:1.07em;">
-                        <tr>
-                            <th class="ps-4"><i class="fa-solid fa-user text-primary"></i> Name</th>
-                            <th><i class="fa-solid fa-user-tie text-info"></i> Username</th>
-                            <th><i class="fa-solid fa-envelope text-secondary"></i> Email</th>
-                            <th><i class="fa-solid fa-phone text-success"></i> Phone</th>
-                            <th><i class="fa-solid fa-venus-mars text-pink"></i> Gender</th>
-                            <th><i class="fa-solid fa-id-card-clip text-indigo"></i> Type</th>
-                            <th><i class="fa-solid fa-user text-dark"></i> CreatedBy</th>
-                            <th><i class="fa-solid fa-circle-info text-warning"></i> Status</th>
-                            <th class="text-center pe-4">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr class="member-row"
-                                data-name="@item.FullName"
-                                data-username="@item.Users?.UserName"
-                                data-email="@item.Email"
-                                data-phone="@item.Phone"
-                                data-type="@item.MemberType"
-                                data-address="@item.Address"
-                                data-notes="@item.Notes"
-                                data-gender="@item.Gender"
-                                data-createdby="@item.CreatedBy"
-                                data-joindate="@(item.JoinDate.ToString("yyyy-MM-dd"))"
-                                data-modified="@(item.Modified.ToString("yyyy-MM-dd HH:mm"))">
-                                <td class="fw-bold text-primary ps-4">@item.FullName</td>
-                                <td>@item.Users?.UserName</td>
-                                <td>@item.Email</td>
-                                <td>@item.Phone</td>
-                                <td>@item.Gender</td>
-                                <td>@item.MemberType</td>
-                                <td>@(item.CreatedBy ?? "-")</td>
-                                <td>
-                                    <span class="badge rounded-pill @(item.IsActive ? "bg-success" : "bg-secondary") px-3 py-2 shadow">
-                                        <i class="fa-solid @(item.IsActive ? "fa-circle-check" : "fa-circle-xmark")"></i>
-                                        @(item.IsActive ? "Active" : "Inactive")
-                                    </span>
-                                </td>
-                                <td class="text-center pe-4">
-                                    <a asp-action="Edit" asp-route-id="@item.MemberId" class="btn btn-glass btn-sm me-1" title="Edit">
-                                        <i class="fa-solid fa-pen-to-square" style="color:#eab308"></i>
-                                    </a>
-                                    <a asp-action="Details" asp-route-id="@item.MemberId" class="btn btn-glass btn-sm me-1" title="Details">
-                                        <i class="fa-solid fa-circle-info" style="color:#0ea5e9"></i>
-                                    </a>
-                                    <a asp-action="Delete" asp-route-id="@item.MemberId" class="btn btn-glass btn-sm" title="Delete">
-                                        <i class="fa-solid fa-trash" style="color:#ef4444"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+
+        <div id="noResults" class="alert alert-warning mt-3 no-results glass-surface" role="alert">
+            <i class="fa-regular fa-circle-question"></i> No matching members.
         </div>
     </div>
 </div>
 
-<style>
-    .btn-glass {
-        background: rgba(59,130,246,0.11);
-        border: 1px solid #93c5fd;
-        color: #2563eb;
-        border-radius: 50px;
-        font-weight: 600;
-        transition: all 0.2s;
-        backdrop-filter: blur(2px);
-        box-shadow: 0 2px 10px 0 rgba(52,144,220,0.06);
-    }
-
-        .btn-glass:hover {
-            background: #60a5fa;
-            color: #fff;
-            border: 1px solid #2563eb;
-        }
-    /* Modern badge */
-    .bg-success, .bg-secondary {
-        color: #fff !important;
-        font-weight: 600;
-        font-size: 1em;
-        border-radius: 1em;
-        box-shadow: 0 1px 6px rgba(52,144,220,0.07);
-    }
-
-
-    {
-        border-radius: 1rem !important;
-    }
-
-    .table thead th, .table tbody td {
-        font-size: 0.98em;
-    }
-
-    .table th, .table td {
-        padding: 0.55rem;
-    }
-
-    }
-</style>
-
 @section Scripts {
     <script>
-        // Search for both card and table
-        document.getElementById('memberSearch').addEventListener('input', function () {
-            let q = this.value.toLowerCase();
-            document.querySelectorAll('.member-card').forEach(function (el) {
-                let fields = [
-                    el.getAttribute('data-name'),
-                    el.getAttribute('data-username'),
-                    el.getAttribute('data-email'),
-                    el.getAttribute('data-phone'),
-                    el.getAttribute('data-type'),
-                    el.getAttribute('data-address'),
-                    el.getAttribute('data-notes'),
-                    el.getAttribute('data-gender'),
-                    el.getAttribute('data-createdby'),
-                    el.getAttribute('data-joindate'),
-                    el.getAttribute('data-modified')
-                ].join(' ').toLowerCase();
-                el.style.display = fields.includes(q) ? "" : "none";
-            });
-            document.querySelectorAll('.member-row').forEach(function (el) {
-                let fields = [
-                    el.getAttribute('data-name'),
-                    el.getAttribute('data-username'),
-                    el.getAttribute('data-email'),
-                    el.getAttribute('data-phone'),
-                    el.getAttribute('data-type'),
-                    el.getAttribute('data-address'),
-                    el.getAttribute('data-notes'),
-                    el.getAttribute('data-gender'),
-                    el.getAttribute('data-createdby'),
-                    el.getAttribute('data-joindate'),
-                    el.getAttribute('data-modified')
-                ].join(' ').toLowerCase();
-                el.style.display = fields.includes(q) ? "" : "none";
-            });
-        });
-        // Toggle View
-        document.getElementById('btnCardView').addEventListener('click', function () {
-            this.classList.add('active');
-            document.getElementById('btnListView').classList.remove('active');
-            document.getElementById('memberCardList').classList.remove('d-none');
-            document.getElementById('memberTableList').classList.add('d-none');
-        });
-        document.getElementById('btnListView').addEventListener('click', function () {
-            this.classList.add('active');
-            document.getElementById('btnCardView').classList.remove('active');
-            document.getElementById('memberCardList').classList.add('d-none');
-            document.getElementById('memberTableList').classList.remove('d-none');
-        });
+        (function () {
+            const $ = s => document.querySelector(s);
+            const $$ = s => Array.from(document.querySelectorAll(s));
+
+            const search = $('#memberSearch');
+            const noResults = $('#noResults');
+
+            const statTotal = $('#statTotal');
+            const statActive = $('#statActive');
+            const statInactive = $('#statInactive');
+
+            const norm = s => (s || '').toString().toLowerCase().trim();
+            const debounce = (fn, d = 140) => {
+                let t;
+                return (...a) => {
+                    clearTimeout(t);
+                    t = setTimeout(() => fn(...a), d);
+                };
+            };
+
+            function filter() {
+                const q = norm(search.value);
+                const cards = $$('.member-card');
+
+                let visibleTotal = 0;
+                let visibleActive = 0;
+                let visibleInactive = 0;
+
+                cards.forEach(el => {
+                    const text = [
+                        el.dataset.name, el.dataset.username, el.dataset.email, el.dataset.phone,
+                        el.dataset.type, el.dataset.address, el.dataset.notes, el.dataset.gender,
+                        el.dataset.createdby, el.dataset.joindate, el.dataset.modified,
+                        el.dataset.dicard, el.dataset.tgchat, el.dataset.tguser
+                    ].join(' ').toLowerCase();
+
+                    const show = !q || text.includes(q);
+                    el.style.display = show ? '' : 'none';
+
+                    if (show) {
+                        visibleTotal++;
+                        const status = (el.dataset.status || '').toLowerCase();
+                        if (status === 'active') visibleActive++;
+                        else visibleInactive++;
+                    }
+                });
+
+                // update pills
+                statTotal.textContent = visibleTotal.toString();
+                statActive.textContent = visibleActive.toString();
+                statInactive.textContent = visibleInactive.toString();
+
+                // toggle "no results"
+                if (noResults) {
+                    noResults.style.display = visibleTotal > 0 ? 'none' : 'block';
+                }
+            }
+
+            // search
+            search.addEventListener('input', debounce(filter, 140));
+
+            // ---------- CSV Export (from visible cards) ----------
+            function download(filename, text) {
+                const blob = new Blob([text], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+            }
+
+            function csvEscape(v) {
+                const s = (v ?? '').toString();
+                if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+                return `"${s}"`;
+            }
+
+            function exportFromCards() {
+                const cards = $$('#memberCardList .member-card').filter(c => c.style.display !== 'none');
+                const headers = [
+                    "Name", "Username", "Email", "Phone",
+                    "Gender", "Type", "LibraryId",
+                    "TotalLoans", "ActiveLoans",
+                    "Status", "JoinDate", "Modified",
+                    "TelegramChatId", "TelegramUsername"
+                ];
+                const lines = [headers.join(',')];
+
+                cards.forEach(c => {
+                    const d = c.dataset;
+                    const row = [
+                        d.name, d.username, d.email, d.phone, d.gender, d.type, d.dicard,
+                        d.loansTotal, d.loansActive, d.status, d.joindate, d.modified,
+                        d.tgchat, d.tguser
+                    ].map(csvEscape).join(',');
+                    lines.push(row);
+                });
+
+                download(`members_${new Date().toISOString().slice(0, 10)}.csv`, lines.join('\n'));
+            }
+
+            $('#exportCsv').addEventListener('click', exportFromCards);
+
+            // initial
+            filter();
+        })();
     </script>
 }

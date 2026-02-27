@@ -1,0 +1,176 @@
+﻿@model LibrarySystemBBU.Models.ReturnReceiptVm
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Return Receipt - @Model.ReturnId</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f3f4f6;
+        }
+        .receipt {
+            max-width: 600px;
+            margin: 16px auto;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px 20px;
+        }
+        h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+        table.meta {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+        }
+        table.meta td {
+            padding: 4px 0;
+            font-size: 14px;
+        }
+        table.meta td:first-child {
+            width: 40%;
+            font-weight: 600;
+        }
+        ul {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 14px;
+        }
+        .note {
+            margin-top: 16px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        @@media print {
+            body {
+                background: #fff;
+            }
+            .receipt {
+                margin: 0;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body onload="window.print()">
+    <div class="receipt">
+        <h2>Return Receipt</h2>
+
+        <table class="meta">
+            <tr>
+                <td>Return:</td>
+                <td>@Model.ReturnId</td>
+            </tr>
+            <tr>
+                <td>Borrow:</td>
+                <td>@Model.LoanId</td>
+            </tr>
+            <tr>
+                <td>Member:</td>
+                <td>@Model.MemberName</td>
+            </tr>
+            <tr>
+                <td>Borrow Date:</td>
+                <td>@Model.LoanDate.ToString("yyyy-MM-dd")</td>
+            </tr>
+            <tr>
+                <td>Due Date:</td>
+                <td>@Model.DueDate.ToString("yyyy-MM-dd")</td>
+            </tr>
+            <tr>
+                <td>Return Date:</td>
+                <td>@Model.ReturnDate.ToString("yyyy-MM-dd")</td>
+            </tr>
+        </table>
+
+        <h4>Books Returned:</h4>
+        <ul>
+            @foreach (var title in Model.BookTitles)
+            {
+                <li>@title</li>
+            }
+        </ul>
+
+        <h4>Financial Summary</h4>
+        <h4>Financial Summary</h4>
+        <table class="meta">
+            <tr>
+                <td>Borrowing Fee:</td>
+                <td>@Model.BorrowingFee.ToString("0.00") ៛</td>
+            </tr>
+            <tr>
+                <td>Deposit:</td>
+                <td>@(Model.DepositAmount?.ToString("0.00") ?? "0.00") ៛</td>
+            </tr>
+            <tr>
+                <td>Late Days:</td>
+                <td>@Model.LateDays</td>
+            </tr>
+            <tr>
+                <td>Fine Amount:</td>
+                <td>@Model.FineAmount.ToString("0.00") ៛</td>
+            </tr>
+            <tr>
+                <td>Extra Charge:</td>
+                <td>@Model.ExtraCharge.ToString("0.00") ៛</td>
+            </tr>
+            <tr style="color:#1d4ed8;">
+                <td>Refund Amount:</td>
+                <td>@(Model.RefundAmount?.ToString("0.00") ?? "0.00") ៛</td>
+            </tr>
+            <tr style="color:#1d4ed8;">
+                <td>Total Paid (Fine + Extra):</td>
+                <td>@Model.AmountPaid.ToString("0.00") ៛</td>
+            </tr>
+        </table>
+
+
+        @if (!string.IsNullOrWhiteSpace(Model.ConditionOnReturn) || !string.IsNullOrWhiteSpace(Model.Notes))
+        {
+            <h4>Condition & Notes</h4>
+            <table class="meta">
+                @if (!string.IsNullOrWhiteSpace(Model.ConditionOnReturn))
+                {
+                    <tr>
+                        <td>Condition on Return:</td>
+                        <td>@Model.ConditionOnReturn</td>
+                    </tr>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Notes))
+                {
+                    <tr>
+                        <td>Notes:</td>
+                        <td>@Model.Notes</td>
+                    </tr>
+                }
+            </table>
+        }
+
+        <p class="note">
+            This receipt is for the member as proof of return. You do not need to bring this receipt back to the library.
+        </p>
+
+        <div class="footer">
+            Printed on @DateTime.Now.ToString("yyyy-MM-dd HH:mm")
+        </div>
+    </div>
+</body>
+</html>

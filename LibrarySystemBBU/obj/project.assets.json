@@ -8915,23 +8915,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\SoKun Vlogger\\.nuget\\packages\\": {},
+    "C:\\Users\\NETTECH-STORE\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\LibrarySystemBBU.csproj",
+      "projectUniqueName": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\LibrarySystemBBU.csproj",
       "projectName": "LibrarySystemBBU",
-      "projectPath": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\LibrarySystemBBU.csproj",
-      "packagesPath": "C:\\Users\\SoKun Vlogger\\.nuget\\packages\\",
-      "outputPath": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\obj\\",
+      "projectPath": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\LibrarySystemBBU.csproj",
+      "packagesPath": "C:\\Users\\NETTECH-STORE\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\SoKun Vlogger\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\NETTECH-STORE\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -9022,7 +9022,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

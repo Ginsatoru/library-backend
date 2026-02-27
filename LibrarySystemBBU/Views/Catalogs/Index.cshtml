@@ -1,190 +1,323 @@
 ﻿@model IEnumerable<LibrarySystemBBU.Models.Catalog>
+@using System.Linq
 
 @{
-    ViewData["Title"] = "Catalog List";
+    ViewData["Title"] = "Catalogs";
+    var totalCatalogs = Model?.Count() ?? 0;
+    var sumTotalCopies = Model?.Sum(x => x.TotalCopies) ?? 0;
+    var sumAvailable = Model?.Sum(x => x.AvailableCopies) ?? 0;
+
+    // For Card view: show exactly 4 items (1 row x 4 columns)
+    var four = (Model ?? Enumerable.Empty<LibrarySystemBBU.Models.Catalog>()).Take(4).ToList();
 }
 
-<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
-<style>
-    .card-3d-table {
-        border: none;
-        border-radius: 1.6rem;
-        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.12),0 2px 4px 0 rgba(0,0,0,0.09);
-        background: linear-gradient(135deg,#e0f2fe 0%,#f8fafc 100%);
-        overflow: hidden;
-        margin-top: 2.2rem;
-    }
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
-    .btn-glass {
-        background: rgba(59,130,246,0.15);
-        border: 1px solid #93c5fd;
-        color: #2563eb;
-        border-radius: 50px;
-        font-weight: 600;
-        transition: all 0.2s;
-    }
+<h2 class="page-title"><span class="logo-dot"></span> Catalogs</h2>
 
-        .btn-glass:hover {
-            background: #60a5fa;
-            color: #fff;
-            border: 1px solid #2563eb;
-        }
+<div class="toolbar glass-surface">
+    <a class="btn-glass btn-brand" asp-action="Create"><i class="bi bi-plus-circle"></i> Create New</a>
 
-    .search-input {
-        border-radius: 50px;
-        box-shadow: 0 1px 3px 0 rgba(0,0,0,.07);
-        padding-left: 2.3rem;
-        font-size: 1rem;
-        margin-bottom: 0.7rem;
-    }
-
-    .search-icon {
-        left: 17px;
-        top: 53%;
-        transform: translateY(-50%);
-        color: #38bdf8;
-    }
-
-    .catalog-thumb {
-        width: 52px;
-        height: 52px;
-        object-fit: cover;
-        border-radius: 9px;
-        box-shadow: 0 3px 8px 0 rgba(51,146,210,0.09);
-        border: 2px solid #e0f2fe;
-        background: #fff;
-    }
-
-    .table-responsive {
-        border-radius: 1.1rem;
-        overflow: hidden;
-    }
-
-    .table th, .table td {
-        vertical-align: middle;
-    }
-</style>
-
-<div class="row">
-    <div class="col-12 text-center">
-        <h2 class="fw-bold text-primary mb-2" style="letter-spacing:2px;">
-            <i class="fa-solid fa-list fa-lg" style="color:#2563eb"></i> Catalog List
-        </h2>
+    <div class="segmented" role="group" aria-label="View">
+        <button type="button" class="btn-toggle active" data-view="list"><i class="bi bi-list-ul"></i> List</button>
+        <button type="button" class="btn-toggle" data-view="cards"><i class="bi bi-grid-3x3-gap"></i> Cards</button>
     </div>
-</div>
 
-<div class="row mb-2">
-    <div class="col-md-5 col-sm-7 mx-auto">
-        <div class="position-relative">
-            <span class="position-absolute search-icon">
-                <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-            </span>
-            <input id="catalogSearch" type="text" class="form-control search-input ps-5"
-                   placeholder="Search barcode, location, author, status..." autocomplete="off" />
-        </div>
+    <div class="search-wrap">
+        <i class="bi bi-search search-icon"></i>
+        <input id="globalSearch" class="search-input" placeholder="Search title, author, ISBN, category…" />
+        <button class="search-clear" type="button" id="clearSearch" title="Clear"><i class="bi bi-x-circle"></i></button>
     </div>
-    <div class="col-md-4 offset-md-3 text-end mt-2 mt-md-0">
-        <a asp-action="Create" class="btn btn-success btn-glass shadow px-4">
-            <i class="fa-solid fa-plus"></i> Add Catalog
+
+    <!-- SINGLE EXPORT BUTTON (Catalog + Book, EN+KH in one file) -->
+    <div class="d-flex align-items-center gap-2 ms-2">
+        <a class="btn-glass btn-outline glass-surface-pill"
+           asp-action="Export">
+            <i class="bi bi-download"></i> Export
         </a>
     </div>
+
+    <div class="ms-auto d-flex align-items-center gap-2">
+        <span class="pill glass-surface-pill"><i class="bi bi-journal-text"></i> Catalogs: <strong id="statCount">@totalCatalogs</strong></span>
+        <span class="pill glass-surface-pill"><i class="bi bi-collection"></i> Total Copies: <strong id="statTotal">@sumTotalCopies</strong></span>
+        <span class="pill glass-surface-pill"><i class="bi bi-box-seam"></i> Available: <strong id="statAvail">@sumAvailable</strong></span>
+    </div>
 </div>
 
-<div class="card card-3d-table">
-    <div class="table-responsive">
-        <table class="table align-middle table-hover mb-0">
-            <thead class="table-primary" style="font-size:1.08em;">
+<!-- LIST VIEW -->
+<div id="view-list">
+    <div class="table-wrap glass-surface">
+        <!-- added glass-table class here -->
+        <table class="table table-striped align-middle glass-table" id="catalogsTable">
+            <thead>
                 <tr>
-                    <th><i class="fa-solid fa-barcode" style="color:#2563eb"></i> Barcode</th>
-                    <th><i class="fa-solid fa-signal" style="color:#4ade80"></i> Status</th>
-                    <th><i class="fa-solid fa-location-dot" style="color:#0ea5e9"></i> Location</th>
-                    <th><i class="fa-solid fa-calendar-plus" style="color:#06b6d4"></i> Acquisition</th>
-                    <th><i class="fa-solid fa-clock" style="color:#64748b"></i> Created</th>
-                    <th><i class="fa-solid fa-pen-to-square" style="color:#eab308"></i> Modified</th>
-                    <th><i class="fa-solid fa-image" style="color:#14b8a6"></i> Image</th>
-                    <th><i class="fa-solid fa-file-pdf" style="color:#ef4444"></i> PDF</th>
-                    <th><i class="fa-solid fa-user-pen" style="color:#1d4ed8"></i> Author</th>
-                    <th class="text-center">Action</th>
+                    <th style="min-width:220px;">Title</th>
+                    <th>Author</th>
+                    <th>ISBN</th>
+                    <th>Category</th>
+                    <th class="text-end">Total</th>
+                    <th class="text-end">Available</th>
+                    <!-- NEW: usage columns -->
+                    <th class="text-end">Borrowed</th>
+                    <th class="text-end">Read in Library</th>
+                    <th style="min-width:220px;"></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @foreach (var c in Model)
                 {
-                    <tr class="catalog-row"
-                        data-barcode="@item.Barcode"
-                        data-location="@item.Location"
-                        data-status="@item.Status"
-                        data-author="@item.Book?.Author">
-                        <td class="fw-bold text-primary">@item.Barcode</td>
-                        <td>
-                            <span class="badge @(item.Status == "Available" ? "bg-success" : "bg-danger")">
-                                <i class="fa-solid @(item.Status == "Available" ? "fa-circle-check" : "fa-circle-xmark")"></i> @item.Status
-                            </span>
-                        </td>
-                        <td>@item.Location</td>
-                        <td>
-                            @item.AcquisitionDate.ToString("yyyy-MM-dd")
-                        </td>
-                        <td class="small text-secondary">
-                            @item.Created.ToString("yyyy-MM-dd HH:mm")
-                        </td>
-                        <td class="small text-secondary">
-                            @item.Modified.ToString("yyyy-MM-dd HH:mm")
-                        </td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.ImagePath))
-                            {
-                                <img src="@item.ImagePath" class="catalog-thumb" alt="thumb" />
-                            }
-                        </td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.PdfFilePath))
-                            {
-                                <a href="@item.PdfFilePath" class="btn btn-glass btn-sm" target="_blank">
-                                    <i class="fa-solid fa-file-pdf" style="color:#ef4444"></i>
-                                </a>
-                            }
-                        </td>
-                        <td>@(item.Book != null ? item.Book.Author : "")</td>
-                        <td class="text-center">
-                            <a asp-action="Edit" asp-route-id="@item.CatalogId" class="btn btn-glass btn-sm me-1" title="Edit">
-                                <i class="fa-solid fa-pen-to-square" style="color:#eab308"></i>
-                            </a>
-                            <a asp-action="Details" asp-route-id="@item.CatalogId" class="btn btn-glass btn-sm me-1" title="Details">
-                                <i class="fa-solid fa-circle-info" style="color:#0ea5e9"></i>
-                            </a>
-                            <a asp-action="Delete" asp-route-id="@item.CatalogId" class="btn btn-glass btn-sm" title="Delete">
-                                <i class="fa-solid fa-trash" style="color:#ef4444"></i>
-                            </a>
+                    var barcodes = c.Books == null
+                    ? ""
+                    : string.Join(" ", c.Books.Select(b => b.Barcode));
+
+                    <tr data-title="@c.Title"
+                        data-author="@c.Author"
+                        data-isbn="@c.ISBN"
+                        data-category="@c.Category"
+                        data-total="@c.TotalCopies"
+                        data-avail="@c.AvailableCopies"
+                        data-barcodes="@barcodes">
+                        <td>@c.Title</td>
+                        <td>@c.Author</td>
+                        <td>@c.ISBN</td>
+                        <td>@c.Category</td>
+                        <td class="text-end">@c.TotalCopies</td>
+                        <td class="text-end">@c.AvailableCopies</td>
+                        <td class="text-end">@c.BorrowCount</td>
+                        <td class="text-end">@c.InLibraryCount</td>
+                        <td class="text-nowrap actions">
+                            <a class="btn-glass btn-outline btn-sm glass-surface-pill" asp-action="Details" asp-route-id="@c.CatalogId"><i class="bi bi-eye"></i> Details</a>
+                            <a class="btn-glass btn-outline btn-sm glass-surface-pill" asp-action="Edit" asp-route-id="@c.CatalogId"><i class="bi bi-pencil-square"></i> Edit</a>
+                            <a class="btn-glass btn-outline btn-sm glass-surface-pill" asp-action="Delete" asp-route-id="@c.CatalogId"><i class="bi bi-trash3"></i> Delete</a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+
+    <!-- Pagination controls (List view only) -->
+    <div class="pager" id="listPager">
+        <button type="button" class="btn-glass btn-outline glass-surface-pill" id="prevPage"><i class="bi bi-chevron-left"></i> Prev</button>
+        <span class="page-info" id="pageInfo">Page 1 / 1</span>
+        <button type="button" class="btn-glass btn-outline glass-surface-pill" id="nextPage">Next <i class="bi bi-chevron-right"></i></button>
+    </div>
+</div>
+
+<!-- CARD VIEW (exactly 1 row x 4 columns; only 4 items rendered) -->
+<div class="cards-wrap" id="view-cards" style="display:none">
+    @foreach (var c in four)
+    {
+        var title = c.Title ?? "";
+        var author = c.Author ?? "";
+        var isbn = c.ISBN ?? "";
+        var category = c.Category ?? "";
+        var image = string.IsNullOrWhiteSpace(c.ImagePath) ? null : c.ImagePath;
+        var barcodesCard = c.Books == null
+        ? ""
+        : string.Join(" ", c.Books.Select(b => b.Barcode));
+
+        <div class="catalog-card"
+             data-title="@title"
+             data-author="@author"
+             data-isbn="@isbn"
+             data-category="@category"
+             data-total="@c.TotalCopies"
+             data-avail="@c.AvailableCopies"
+             data-barcodes="@barcodesCard">
+            <div class="catalog-card-cover">
+                @if (!string.IsNullOrWhiteSpace(image))
+                {
+                    <img src="@image" alt="@title cover" />
+                }
+                else
+                {
+                    <div class="placeholder"><i class="bi bi-image"></i></div>
+                }
+            </div>
+
+            <div class="catalog-card-body">
+                <div class="title"><i class="bi bi-journal-bookmark"></i> @title</div>
+                <div class="meta"><i class="bi bi-person"></i> @author</div>
+                <div class="meta"><i class="bi bi-upc-scan"></i> @isbn</div>
+                <div class="meta"><i class="bi bi-tags"></i> @category</div>
+                <div class="stats">
+                    <span class="chip"><i class="bi bi-collection"></i> Total @c.TotalCopies</span>
+                    <span class="chip"><i class="bi bi-box-seam"></i> Avail @c.AvailableCopies</span>
+                    <!-- NEW usage chips -->
+                    <span class="chip"><i class="bi bi-box-arrow-in-down"></i> Borrowed @c.BorrowCount</span>
+                    <span class="chip"><i class="bi bi-building"></i> In Lib @c.InLibraryCount</span>
+                </div>
+            </div>
+
+            <div class="catalog-card-actions">
+                <a class="btn-glass btn-outline btn-sm" asp-action="Details" asp-route-id="@c.CatalogId"><i class="bi bi-eye"></i> Details</a>
+                <a class="btn-glass btn-outline btn-sm" asp-action="Edit" asp-route-id="@c.CatalogId"><i class="bi bi-pencil-square"></i> Edit</a>
+                <a class="btn-glass btn-outline btn-sm" asp-action="Delete" asp-route-id="@c.CatalogId"><i class="bi bi-trash3"></i> Delete</a>
+            </div>
+        </div>
+    }
 </div>
 
 @section Scripts {
     <script>
-        // Live Search Filter (use event parameter, never the global 'event')
-        document.getElementById('catalogSearch').addEventListener('input', function (e) {
-            let q = this.value.toLowerCase();
-            document.querySelectorAll('.catalog-row').forEach(function (el) {
-                let barcode = el.getAttribute('data-barcode')?.toLowerCase() || "";
-                let location = el.getAttribute('data-location')?.toLowerCase() || "";
-                let status = el.getAttribute('data-status')?.toLowerCase() || "";
-                let author = el.getAttribute('data-author')?.toLowerCase() || "";
-                if (
-                    barcode.includes(q) ||
-                    location.includes(q) ||
-                    status.includes(q) ||
-                    author.includes(q)
-                ) {
-                    el.style.display = "";
+        (function () {
+            const search = document.getElementById('globalSearch');
+            const clearBtn = document.getElementById('clearSearch');
+            const statCount = document.getElementById('statCount');
+            const statTotal = document.getElementById('statTotal');
+            const statAvail = document.getElementById('statAvail');
+
+            const btns = document.querySelectorAll('.segmented .btn-toggle');
+            const viewList = document.getElementById('view-list');
+            const viewCards = document.getElementById('view-cards');
+            const pager = document.getElementById('listPager');
+            const prevBtn = document.getElementById('prevPage');
+            const nextBtn = document.getElementById('nextPage');
+            const pageInfo = document.getElementById('pageInfo');
+
+            let pageSize = 10;
+            let pageIndex = 1;
+
+            btns.forEach(b => {
+                b.addEventListener('click', () => {
+                    btns.forEach(x => x.classList.remove('active'));
+                    b.classList.add('active');
+                    const v = b.getAttribute('data-view');
+                    if (v === 'cards') {
+                        viewCards.style.display = 'grid';
+                        document.querySelector('#view-list .table-wrap').style.display = 'none';
+                        pager.style.display = 'none';
+                    } else {
+                        viewCards.style.display = 'none';
+                        document.querySelector('#view-list .table-wrap').style.display = 'block';
+                        pager.style.display = 'flex';
+                        pageIndex = 1;
+                        apply();
+                    }
+                    apply();
+                });
+            });
+
+            function getAllRows() {
+                return Array.from(document.querySelectorAll('#catalogsTable tbody tr'));
+            }
+
+            function apply() {
+                const q = (search.value || '').trim().toLowerCase();
+
+                // LIST
+                const rows = getAllRows();
+                rows.forEach(tr => {
+                    const text = [
+                        tr.dataset.title || '',
+                        tr.dataset.author || '',
+                        tr.dataset.isbn || '',
+                        tr.dataset.category || '',
+                        tr.dataset.barcodes || '',
+                        tr.dataset.total || '',
+                        tr.dataset.avail || ''
+                    ].join(' ').toLowerCase();
+
+                    const show = !q || text.includes(q);
+                    tr.dataset._filtered = show ? '1' : '0';
+                });
+
+                paginate();
+
+                // CARDS
+                document.querySelectorAll('#view-cards .catalog-card').forEach(card => {
+                    const text = [
+                        card.dataset.title || '',
+                        card.dataset.author || '',
+                        card.dataset.isbn || '',
+                        card.dataset.category || '',
+                        card.dataset.barcodes || '',
+                        card.dataset.total || '',
+                        card.dataset.avail || ''
+                    ].join(' ').toLowerCase();
+
+                    const show = !q || text.includes(q);
+                    card.style.display = show ? '' : 'none';
+                });
+
+                const usingCards =
+                    (viewCards.style.display !== 'none' &&
+                        document.querySelector('#view-list .table-wrap').style.display === 'none');
+
+                let count = 0, sumT = 0, sumA = 0;
+
+                if (usingCards) {
+                    document.querySelectorAll('#view-cards .catalog-card').forEach(card => {
+                        if (card.style.display === 'none') return;
+                        count++;
+                        sumT += parseInt(card.dataset.total || '0');
+                        sumA += parseInt(card.dataset.avail || '0');
+                    });
                 } else {
-                    el.style.display = "none";
+                    document.querySelectorAll('#catalogsTable tbody tr').forEach(tr => {
+                        if (tr.style.display === 'none') return;
+                        count++;
+                        sumT += parseInt(tr.dataset.total || '0');
+                        sumA += parseInt(tr.dataset.avail || '0');
+                    });
+                }
+
+                statCount.textContent = count.toString();
+                statTotal.textContent = sumT.toString();
+                statAvail.textContent = sumA.toString();
+            }
+
+            function paginate() {
+                const rows = getAllRows().filter(r => r.dataset._filtered === '1');
+
+                const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
+                if (pageIndex > totalPages) pageIndex = totalPages;
+                if (pageIndex < 1) pageIndex = 1;
+
+                let start = (pageIndex - 1) * pageSize;
+                let end = start + pageSize;
+
+                getAllRows().forEach(r => {
+                    if (r.dataset._filtered === '0') { r.style.display = 'none'; return; }
+                    r.style.display = 'none';
+                });
+
+                rows.slice(start, end).forEach(r => r.style.display = '');
+
+                pageInfo.textContent = `Page ${rows.length ? pageIndex : 0} / ${rows.length ? Math.ceil(rows.length / pageSize) : 0}`;
+                prevBtn.disabled = (pageIndex <= 1 || rows.length === 0);
+                nextBtn.disabled = (pageIndex >= Math.ceil(rows.length / pageSize) || rows.length === 0);
+            }
+
+            // live search while typing
+            search.addEventListener('input', () => {
+                pageIndex = 1;
+                apply();
+            });
+
+            // press Enter in search box
+            search.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    pageIndex = 1;
+                    apply();
                 }
             });
-        });
+
+            clearBtn.addEventListener('click', () => {
+                search.value = '';
+                search.focus();
+                pageIndex = 1;
+                apply();
+            });
+
+            prevBtn.addEventListener('click', () => { pageIndex--; apply(); });
+            nextBtn.addEventListener('click', () => { pageIndex++; apply(); });
+
+            document.querySelector('#view-list .table-wrap').style.display = 'block';
+            pager.style.display = 'flex';
+            apply();
+        })();
     </script>
 }

@@ -1,152 +1,234 @@
 ﻿@model LibrarySystemBBU.Models.Purchase
-
+@using System.Linq
 @{
     ViewData["Title"] = "Purchase Details";
+    var details = (Model.PurchaseDetails ?? Enumerable.Empty<LibrarySystemBBU.Models.PurchaseDetail>())
+        .OrderBy(x => x.PurchaseDetailId).ToList();
 }
 
-<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+@functions {
+    // Build a friendly book label consistent with BuildBookSelectList in the controller:
+    // 1) Prefer Book.Title (with " — ISBN" when available)
+    // 2) else Catalog.Title (with " — ISBN" when available)
+    // 3) else "Book #<id>" (optionally " — <Barcode>" if present)
+    string BookLabel(LibrarySystemBBU.Models.Book? b)
+    {
+        if (b == null) return string.Empty;
+
+        var baseTitle = !string.IsNullOrWhiteSpace(b.Title)
+            ? b.Title
+            : (!string.IsNullOrWhiteSpace(b.Catalog?.Title)
+                ? b.Catalog!.Title
+                : $"Book #{b.BookId}");
+
+        var text = !string.IsNullOrWhiteSpace(b.Catalog?.ISBN)
+            ? $"{baseTitle} — {b.Catalog!.ISBN}"
+            : baseTitle;
+
+        if (text.StartsWith("Book #") && !string.IsNullOrWhiteSpace(b.Barcode))
+            text = $"{text} — {b.Barcode}";
+
+        return text;
+    }
+}
+
 <style>
-    .card-3d {
-        border: none;
-        border-radius: 2rem;
-        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.13), 0 2px 4px 0 rgba(0,0,0,0.13);
-        background: linear-gradient(135deg, #f0fdfa 0%, #f8fafc 100%);
-        overflow: hidden;
-        transition: transform .2s, box-shadow .2s;
+    :root {
+        --navy: #000080;
     }
 
-        .card-3d:hover {
-            transform: translateY(-4px) scale(1.01);
-            box-shadow: 0 16px 32px 0 rgba(16,185,129,0.14), 0 6px 12px 0 rgba(0,0,0,0.13);
+    .text-navy {
+        color: var(--navy) !important;
+    }
+
+    .bg-navy {
+        background-color: var(--navy) !important;
+    }
+
+    .btn-navy {
+        --bs-btn-color: #fff;
+        --bs-btn-bg: var(--navy);
+        --bs-btn-border-color: var(--navy);
+        --bs-btn-hover-bg: #000066;
+        --bs-btn-hover-border-color: #000066;
+        --bs-btn-active-bg: #000055;
+        --bs-btn-active-border-color: #000055;
+    }
+
+    /* 3D card look */
+    .elev-card {
+        border: 1px solid rgba(0,0,0,.06);
+        border-radius: 1rem;
+        background: #fff;
+        box-shadow: 0 10px 24px rgba(0,0,128,.10);
+        transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+        .elev-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 36px rgba(0,0,128,.16);
         }
 
-    .badge-soft {
-        background-color: #e0f2fe;
-        color: #0ea5e9;
-        font-size: 1em;
-        border-radius: 1.3rem;
-        padding: 0.34em 1em;
-        margin-left: 4px;
-        font-weight: 500;
-        letter-spacing: 0.03em;
-    }
-
-    .main-book-title {
-        font-size: 1.45rem;
-        font-weight: 700;
-        color: #14b8a6;
-        margin-bottom: 1.2rem;
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-        letter-spacing: 0.5px;
-    }
-
-    .detail-label {
-        color: #2563eb;
+    .kv .key {
+        min-width: 11rem;
         font-weight: 600;
-        font-size: 1.08em;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+        color: var(--navy);
     }
 
-    .detail-value {
-        font-weight: 500;
-        color: #334155;
-        font-size: 1.07em;
-        display: flex;
-        align-items: center;
-        gap: 6px;
+    .kv .val {
+        word-break: break-word;
     }
 
-    .text-dash {
-        color: #a3a3a3;
-        font-style: italic;
-        letter-spacing: 0.03em;
+    .search-wrap {
+        border: 1px solid rgba(0,0,128,.25);
+        border-radius: .75rem;
+        padding: .5rem .75rem;
+        background: #fff;
+        box-shadow: 0 4px 14px rgba(0,0,128,.08);
     }
-   
+
+    .table thead th {
+        vertical-align: middle;
+    }
 </style>
 
-<div class="row justify-content-center my-4">
-    <div class="col-lg-8 col-md-10">
-        <div class="card card-3d shadow-lg border-0 p-4">
-            <div class="mb-4 pb-2 border-bottom border-info d-flex align-items-center gap-2">
-                <i class="fa-solid fa-circle-info fa-xl text-info"></i>
-                <h2 class="fw-bold mb-0 text-info" style="letter-spacing:1px;">Purchase Details</h2>
+<div class="container mt-4 card-glass glas-all-style">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+        <h2 class="mb-0 text-navy d-flex align-items-center gap-2">
+            <i class="fa-solid fa-receipt"></i> Purchase Details
+        </h2>
+        <div class="d-flex gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.PurchaseId" class="btn btn-navy">
+                <i class="fa-regular fa-pen-to-square me-1"></i> Edit
+            </a>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fa-solid fa-arrow-left me-1"></i> Back
+            </a>
+        </div>
+    </div>
+
+    <!-- Header info -->
+    <div class="elev-card p-3 p-md-4 mt-3">
+        <div class="row gy-3 kv">
+            <div class="col-12 col-md-6 d-flex">
+                <div class="key me-2"><i class="fa-regular fa-calendar-days me-1"></i>Purchase Date</div>
+                <div class="val">@Model.PurchaseDate.ToString("yyyy-MM-dd")</div>
             </div>
-            <div class="main-book-title mb-3">
-                <i class="fa-solid fa-book"></i>
-                <span>Book Title: <span class="fw-bold">@Model.Book?.Title ?? "N/A"</span></span>
+            <div class="col-12 col-md-6 d-flex">
+                <div class="key me-2"><i class="fa-solid fa-book me-1"></i>Book</div>
+                <div class="val">@BookLabel(Model.Book)</div>
             </div>
-            <dl class="row mb-0">
-                <dt class="col-md-4 col-sm-6 detail-label">
-                    <i class="fa-solid fa-box text-success"></i> Quantity
-                </dt>
-                <dd class="col-md-8 col-sm-6 detail-value">
-                    @Model.Quantity
-                </dd>
-                <dt class="col-md-4 col-sm-6 detail-label">
-                    <i class="fa-solid fa-calendar-day text-info"></i> Purchase Date
-                </dt>
-                <dd class="col-md-8 col-sm-6 detail-value">
-                    <span class="badge-soft">
-                        @(Model.PurchaseDate == default(DateTime)
-                                                ? Html.Raw("<span class='text-dash'>-</span>")
-                                                : Model.PurchaseDate.ToString("yyyy-MM-dd"))
-                    </span>
-                </dd>
-                <dt class="col-md-4 col-sm-6 detail-label">
-                    <i class="fa-solid fa-user-tie text-primary"></i> Supplier
-                </dt>
-                <dd class="col-md-8 col-sm-6 detail-value">
-                    @(!string.IsNullOrWhiteSpace(Model.Supplier)
-                                        ? Model.Supplier
-                                        : Html.Raw("<span class='text-dash'>-</span>"))
-                </dd>
-                <dt class="col-md-4 col-sm-6 detail-label">
-                    <i class="fa-solid fa-dollar-sign text-warning"></i> Cost
-                </dt>
-                <dd class="col-md-8 col-sm-6 detail-value">
-                    <span class="badge-soft">
-                        @(Model.Cost > 0
-                                                ? Model.Cost.ToString("C")
-                                                : Html.Raw("<span class='text-dash'>-</span>"))
-                    </span>
-                </dd>
-                <dt class="col-md-4 col-sm-6 detail-label">
-                    <i class="fa-solid fa-file-alt text-secondary"></i> Notes
-                </dt>
-                <dd class="col-md-8 col-sm-6 detail-value">
-                    @(!string.IsNullOrWhiteSpace(Model.Notes)
-                                        ? Model.Notes
-                                        : Html.Raw("<span class='text-dash'>-</span>"))
-                </dd>
-                <dt class="col-md-4 col-sm-6 detail-label">
-                    <i class="fa-solid fa-clock text-dark"></i> Created
-                </dt>
-                <dd class="col-md-8 col-sm-6 detail-value">
-                    @(Model.Created == default(DateTime)
-                                        ? Html.Raw("<span class='text-dash'>-</span>")
-                                        : Model.Created.ToString("yyyy-MM-dd HH:mm"))
-                </dd>
-                <dt class="col-md-4 col-sm-6 detail-label">
-                    <i class="fa-solid fa-pen text-muted"></i> Modified
-                </dt>
-                <dd class="col-md-8 col-sm-6 detail-value">
-                    @(Model.Modified == default(DateTime) || Model.Modified == Model.Created
-                                        ? Html.Raw("<span class='text-dash'>-</span>")
-                                        : Model.Modified.ToString("yyyy-MM-dd HH:mm"))
-                </dd>
-            </dl>
-            <div class="mt-4 d-flex justify-content-end gap-2">
-                <a asp-action="Edit" asp-route-id="@Model.PurchaseId" class="btn btn-warning btn-glass">
-                    <i class="fa-solid fa-pen-to-square"></i> Edit
-                </a>
-                <a asp-action="Index" class="btn btn-outline-secondary btn-glass">
-                    <i class="fa-solid fa-arrow-left"></i> Back to List
-                </a>
+            <div class="col-12 col-md-6 d-flex">
+                <div class="key me-2"><i class="fa-solid fa-truck me-1"></i>Supplier</div>
+                <div class="val"><span class="badge rounded-pill bg-navy">@Model.Supplier</span></div>
+            </div>
+            <div class="col-12 col-md-6 d-flex">
+                <div class="key me-2"><i class="fa-solid fa-sack-dollar me-1"></i>Cost</div>
+                <div class="val">@Model.Cost.ToString("N2")</div>
+            </div>
+            <div class="col-12 d-flex">
+                <div class="key me-2"><i class="fa-regular fa-note-sticky me-1"></i>Notes</div>
+                <div class="val">@Model.Notes</div>
             </div>
         </div>
     </div>
+
+    <!-- Line items header + search -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mt-4">
+        <h5 class="mb-0 text-navy d-flex align-items-center gap-2">
+            <i class="fa-solid fa-table-list"></i> Line Items
+            <span class="badge rounded-pill bg-navy ms-1" id="rowsCountBadge">@details.Count item@(details.Count == 1 ? "" : "s")</span>
+        </h5>
+        <div class="search-wrap d-flex align-items-center gap-2 w-100 w-md-auto">
+            <i class="fa-solid fa-magnifying-glass text-navy"></i>
+            <input id="lineSearch" type="search" class="form-control border-0 p-0"
+                   placeholder="ស្វែងរកគ្រប់ជួរឈរ (Book / Qty / Unit Price / Line Total)" />
+        </div>
+    </div>
+
+    <!-- Line items table -->
+    <div class="table-responsive mt-2">
+        <table class="table table-sm table-hover table-striped table-bordered align-middle mb-0" id="detailsTbl">
+            <thead class="table-light">
+                <tr class="text-navy">
+                    <th><i class="fa-solid fa-book me-1"></i>Book</th>
+                    <th class="text-end"><i class="fa-solid fa-arrow-up-1-9 me-1"></i>Quantity</th>
+                    <th class="text-end"><i class="fa-solid fa-dollar-sign me-1"></i>Unit Price</th>
+                    <th class="text-end"><i class="fa-solid fa-calculator me-1"></i>Line Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var d in details)
+                {
+                    <tr>
+                        <td>@BookLabel(d.Book)</td>
+                        <td class="text-end">@d.Quantity</td>
+                        <td class="text-end">@d.UnitPrice.ToString("N2")</td>
+                        <td class="text-end">@d.LineTotal.ToString("N2")</td>
+                    </tr>
+                }
+                @if (!details.Any())
+                {
+                    <tr><td colspan="4" class="text-center text-muted">No line items.</td></tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th class="text-end">Totals (visible):</th>
+                    <th class="text-end"><span id="tQty">0</span></th>
+                    <th class="text-end">—</th>
+                    <th class="text-end"><span id="tCost">0.00</span></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        (() => {
+            const input = document.getElementById('lineSearch');
+            const tbl = document.getElementById('detailsTbl');
+            const rows = Array.from(tbl.querySelectorAll('tbody tr'));
+            const rowsCountBadge = document.getElementById('rowsCountBadge');
+            const tQty = document.getElementById('tQty');
+            const tCost = document.getElementById('tCost');
+
+            const norm = s => (s||'').toString().toLowerCase();
+            const matchAll = (txt, q) => {
+                const terms = norm(q).split(/\s+/).filter(Boolean);
+                const h = norm(txt);
+                return terms.every(t => h.includes(t));
+            };
+            const parseNum = v => {
+                const n = parseFloat((v||'').toString().replace(/,/g,''));
+                return Number.isFinite(n) ? n : 0;
+            };
+            const recalcTotals = () => {
+                let qty = 0, cost = 0, visible = 0;
+                rows.forEach(tr => {
+                    if (tr.style.display !== 'none') {
+                        visible++;
+                        qty  += parseNum(tr.children[1]?.innerText);
+                        cost += parseNum(tr.children[3]?.innerText);
+                    }
+                });
+                rowsCountBadge.textContent = `${visible} item${visible===1?'':'s'}`;
+                tQty.textContent = qty.toString();
+                tCost.textContent = (cost||0).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+            };
+            const applyFilter = (q) => {
+                rows.forEach(tr => {
+                    const txt = tr.innerText || tr.textContent || '';
+                    tr.style.display = matchAll(txt, q) ? '' : 'none';
+                });
+                recalcTotals();
+            };
+
+            input?.addEventListener('input', e => applyFilter(e.target.value));
+
+            // initial totals
+            recalcTotals();
+        })();
+    </script>
+}

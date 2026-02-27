@@ -1,159 +1,130 @@
-﻿@* _Navbar.cshtml *@
-<nav class="main-header navbar navbar-expand navbar-white navbar-light shadow-sm elevation-2">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button" aria-label="Toggle Sidebar">
-                <i class="fas fa-bars"></i>
-            </a>
-        </li>
-        @* <li class="nav-item d-none d-sm-inline-block">
-            <a asp-controller="Home" asp-action="Index" class="nav-link">
-                <i class="fas fa-home"></i> Home
-            </a>
-        </li> *@
-        <li class="nav-item d-none d-sm-inline-block">
-            <a asp-controller="Home" asp-action="Contact" class="nav-link">
-                <i class="fas fa-envelope"></i> Contact
-            </a>
-        </li>
-    </ul>
+﻿@using System.Security.Claims
+@{
+    var isAuth = User?.Identity?.IsAuthenticated ?? false;
 
-    <!-- SEARCH FORM -->
-    <form class="form-inline ms-3 d-none d-md-flex">
-        <div class="input-group input-group-sm">
-            <input class="form-control form-control-navbar" type="search" placeholder="Search..." aria-label="Search">
-            <div class="input-group-append">
-                <button class="btn btn-navbar" type="submit" title="Search">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
+    string fullName = isAuth
+        ? (User.FindFirst("FullName")?.Value
+           ?? User.FindFirst(ClaimTypes.Name)?.Value
+           ?? "User")
+        : "Guest";
+
+    string? email = isAuth ? User.FindFirst(ClaimTypes.Email)?.Value : null;
+    string? role = isAuth ? User.FindFirst(ClaimTypes.Role)?.Value : null;
+
+    var avatarPath = isAuth
+        ? (User.FindFirst("ProfilePicturePath")?.Value ?? "/admin-lte/img/avatar2.png")
+        : "/admin-lte/img/avatar2.png";
+
+    var avatar = Url.Content(avatarPath);
+    var avatarFallback = Url.Content("/admin-lte/img/avatar2.png");
+}
+<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+
+<nav class="main-header navbar navbar-expand navbar-white navbar-surface shadow-sm px-3">
+    @if (isAuth)
+    {
+        <!-- Right: Icons + Profile -->
+        <ul class="navbar-nav ms-auto align-items-center gap-2">
+            <li class="nav-item"><a class="nav-link text-dark" href="#"><i class="far fa-bell fs-5"></i></a></li>
+            <li class="nav-item"><a class="nav-link text-dark" href="#"><i class="far fa-question-circle fs-5"></i></a></li>
+            <li class="nav-item"><a class="nav-link text-dark" href="#"><i class="fas fa-cog fs-5"></i></a></li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link d-flex align-items-center gap-2" href="#" data-bs-toggle="dropdown">
+                    <span class="fw-semibold text-dark d-none d-md-inline">@fullName</span>
+                    <img src="@avatar" onerror="this.onerror=null;this.src='@avatarFallback';"
+                         class="avatar-xs shadow-sm" alt="Profile">
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-end mt-2 shadow-sm" style="min-width:260px;">
+                    <div class="px-3 pt-3 pb-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="@avatar" onerror="this.onerror=null;this.src='@avatarFallback';"
+                                 class="avatar-lg shadow-sm" alt="Avatar">
+                            <div>
+                                <div class="fw-semibold">@fullName</div>
+                                @if (!string.IsNullOrWhiteSpace(email))
+                                {
+                                    <small class="text-muted">@email</small>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(role))
+                                {
+                                    <div><span class="pill bg-white">@role</span></div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a href="/Account/Profile" class="dropdown-item">
+                        <i class="fas fa-user me-2 text-info"></i> Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="px-3">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-danger w-100">
+                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                        </button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    }
+    else
+    {
+        <div class="ms-auto d-flex gap-2">
+            <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Login</a>
+            <a class="btn btn-outline-primary" asp-controller="Account" asp-action="Register">Register</a>
         </div>
-    </form>
-
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ms-auto align-items-center">
-        <!-- Messages Dropdown Menu -->
-        <li class="nav-item dropdown">
-            <a class="nav-link" data-bs-toggle="dropdown" href="#" aria-label="Messages">
-                <i class="far fa-comments"></i>
-                <span class="badge badge-danger navbar-badge">3</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                <a href="#" class="dropdown-item">
-                    <div class="media">
-                        <img src="/admin-lte/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                        <div class="media-body">
-                            <h3 class="dropdown-item-title">
-                                Brad Diesel
-                                <span class="float-end text-sm text-danger"><i class="fas fa-star"></i></span>
-                            </h3>
-                            <p class="text-sm">Call me whenever you can...</p>
-                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                        </div>
-                    </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <div class="media">
-                        <img src="/admin-lte/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                        <div class="media-body">
-                            <h3 class="dropdown-item-title">
-                                John Pierce
-                                <span class="float-end text-sm text-muted"><i class="fas fa-star"></i></span>
-                            </h3>
-                            <p class="text-sm">I got your message bro</p>
-                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                        </div>
-                    </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <div class="media">
-                        <img src="/admin-lte/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                        <div class="media-body">
-                            <h3 class="dropdown-item-title">
-                                Nora Silvester
-                                <span class="float-end text-sm text-warning"><i class="fas fa-star"></i></span>
-                            </h3>
-                            <p class="text-sm">The subject goes here</p>
-                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                        </div>
-                    </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer text-center">See All Messages</a>
-            </div>
-        </li>
-        <!-- Notifications Dropdown Menu -->
-        <li class="nav-item dropdown">
-            <a class="nav-link" data-bs-toggle="dropdown" href="#" aria-label="Notifications">
-                <i class="far fa-bell"></i>
-                <span class="badge badge-warning navbar-badge">15</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                <span class="dropdown-item dropdown-header">15 Notifications</span>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-envelope mr-2"></i> 4 new messages
-                    <span class="float-end text-muted text-sm">3 mins</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-users mr-2"></i> 8 friend requests
-                    <span class="float-end text-muted text-sm">12 hours</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-file mr-2"></i> 3 new reports
-                    <span class="float-end text-muted text-sm">2 days</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer text-center">See All Notifications</a>
-            </div>
-        </li>
-        <!-- Fullscreen and Control Sidebar -->
-        <li class="nav-item d-none d-md-inline-block">
-            <a class="nav-link" data-widget="fullscreen" href="#" role="button" aria-label="Fullscreen">
-                <i class="fas fa-expand-arrows-alt"></i>
-            </a>
-        </li>
-        <li class="nav-item d-none d-md-inline-block">
-            <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button" aria-label="Control Sidebar">
-                <i class="fas fa-th-large"></i>
-            </a>
-        </li>
-
-        <!-- Profile Dropdown -->
-        <li class="nav-item dropdown ms-2">
-            <a class="nav-link d-flex align-items-center" data-bs-toggle="dropdown" href="#" aria-label="User Profile">
-                <img src="~/admin-lte/img/avatar2.png" class="rounded-circle shadow" style="width:32px;height:32px;object-fit:cover;" alt="Profile">
-                <span class="ms-2 d-none d-md-inline text-dark fw-semibold">
-                    @User.Identity?.Name
-                </span>
-                <i class="fas fa-chevron-down ms-1 text-muted small"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end mt-2 shadow-sm animated fadeIn">
-                <a href="/Account/Profile" class="dropdown-item">
-                    <i class="fas fa-user me-2 text-info"></i> Profile
-                </a>
-                <div class="dropdown-divider"></div>
-                <a asp-controller="Account" asp-action="Logout" class="dropdown-item text-danger">
-                    <i class="fas fa-sign-out-alt me-2"></i> Logout
-                </a>
-            </div>
-        </li>
-    </ul>
+    }
 </nav>
 
-<style>
-    .navbar .dropdown-menu {
-        min-width: 230px;
-        border-radius: 1rem;
-    }
+@section Scripts {
+    <script>
+        (function () {
+            const box = document.getElementById('globalSearch');
+            const dd = document.getElementById('searchDropdown');
+            if (!box || !dd) return;
 
-        .navbar .dropdown-menu .dropdown-item:active {
-            background: #e0f2fe !important;
-            color: #0369a1 !important;
-        }
-</style>
+            function hide() { dd.style.display = 'none'; dd.innerHTML = ''; }
+            function show() { dd.style.display = 'block'; }
+
+            let t = null;
+
+            box.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const q = box.value.trim();
+                    if (q.length) window.location = '/Search/All?q=' + encodeURIComponent(q);
+                }
+            });
+
+            box.addEventListener('input', () => {
+                const q = box.value.trim();
+                if (!q) { hide(); return; }
+                clearTimeout(t);
+                t = setTimeout(async () => {
+                    try {
+                        const r = await fetch('/Search/Typeahead?term=' + encodeURIComponent(q));
+                        if (!r.ok) { hide(); return; }
+                        const data = await r.json();
+                        if (!Array.isArray(data) || data.length === 0) { hide(); return; }
+                        dd.innerHTML = data.map(x => `
+                                    <div class="search-item" onclick="window.location='${x.url}'">
+                                        <i class="${x.icon}"></i>
+                                        <div class="flex-grow-1">
+                                            <div class="fw-semibold">${x.title}</div>
+                                            <div class="text-muted small">${x.meta ?? ''}</div>
+                                        </div>
+                                        <span class="pill">${x.group}</span>
+                                    </div>`).join('');
+                        show();
+                    } catch { hide(); }
+                }, 200);
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!dd.contains(e.target) && e.target !== box) hide();
+            });
+        })();
+    </script>
+}

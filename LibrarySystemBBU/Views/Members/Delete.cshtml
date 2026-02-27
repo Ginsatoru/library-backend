@@ -2,112 +2,305 @@
 
 @{
     ViewData["Title"] = "Delete Member";
+    var totalLoans = Model.BookLoans?.Count ?? 0;
+    var activeLoans = Model.BookLoans?.Count(b => b != null && !b.IsReturned) ?? 0;
+    var hasActive = activeLoans > 0;
 }
 
 <link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+
 <style>
-    .card-3d {
-        border: none;
-        border-radius: 2rem;
-        box-shadow: 0 10px 24px 0 rgba(0,0,0,0.11), 0 2px 4px 0 rgba(0,0,0,0.13);
-        background: linear-gradient(135deg,#e0f2fe 0%,#f8fafc 100%);
-        overflow: hidden;
-        max-width: 540px;
-        margin: 32px auto 0 auto;
+    /* ===== Delete member page – glass + blur using global theme ===== */
+
+    .delete-page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: .75rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
     }
+
+    .delete-member-card {
+        margin: 0 auto;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--glass-border);
+        background: var(--glass-bg-soft);
+        box-shadow: var(--glass-shadow);
+        backdrop-filter: blur(24px) brightness(1.15);
+        -webkit-backdrop-filter: blur(24px) brightness(1.15);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .delete-member-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at 0 0, rgba(254, 242, 242, 0.85), transparent 55%), radial-gradient(circle at 110% 0, rgba(254, 226, 226, 0.75), transparent 60%);
+            opacity: .9;
+        }
+
+        .delete-member-card .card-body {
+            position: relative;
+            z-index: 1;
+        }
 
     .avatar-3d {
         width: 96px;
         height: 96px;
         object-fit: cover;
         border-radius: 50%;
-        border: 3px solid #38bdf8;
-        box-shadow: 0 4px 12px 0 rgba(52,144,220,0.18);
+        border: 3px solid var(--brand-secondary);
+        box-shadow: 0 10px 26px rgba(37, 99, 235, 0.55);
         margin-bottom: 1.2rem;
         background: #e0f2fe;
     }
 
-    .btn-glass {
-        background: rgba(59,130,246,0.15);
-        border: 1px solid #93c5fd;
-        color: #2563eb;
-        border-radius: 50px;
+    .stat-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        padding: .35rem .7rem;
+        border-radius: 999px;
         font-weight: 600;
-        transition: all 0.18s;
+        font-size: .9rem;
+        background: rgba(219, 234, 254, 0.95);
+        color: #1e3a8a;
+        border: 1px solid rgba(191, 219, 254, 0.9);
+        box-shadow: 0 6px 14px rgba(148, 163, 184, 0.35);
     }
 
-        .btn-glass:hover {
-            background: #60a5fa;
-            color: #fff;
-            border: 1px solid #2563eb;
+        .stat-pill.danger {
+            background: rgba(254, 242, 242, 0.95);
+            color: #b91c1c;
+            border-color: #fecaca;
         }
+
+    .delete-warning-icon {
+        font-size: 1.1rem;
+        margin-right: .4rem;
+    }
 </style>
 
-<div class="card card-3d">
-    <div class="card-body p-4">
-        <h2 class="fw-bold text-center text-danger mb-3">
-            <i class="fa-solid fa-triangle-exclamation"></i> Delete Member
-        </h2>
-        <p class="text-center text-muted mb-3">Are you sure you want to delete this member?</p>
-        <div class="text-center">
-            <img src="@(string.IsNullOrWhiteSpace(Model.ProfilePicturePath)
-                                                  ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
-                                                  : Model.ProfilePicturePath)"
-                 class="avatar-3d" alt="Profile" />
-            <h5 class="mt-2 fw-bold text-primary">@Model.FullName</h5>
-            <span class="badge bg-info text-dark">@Model.MemberType</span>
-        </div>
-        <hr class="my-3" />
-        <dl class="row small mb-2">
-            <dt class="col-5"><i class="fa-solid fa-envelope"></i> Email</dt>
-            <dd class="col-7">@Model.Email</dd>
-            <dt class="col-5"><i class="fa-solid fa-phone"></i> Phone</dt>
-            <dd class="col-7">@Model.Phone</dd>
-            <dt class="col-5"><i class="fa-solid fa-venus-mars"></i> Gender</dt>
-            <dd class="col-7">@Model.Gender</dd>
-            <dt class="col-5"><i class="fa-solid fa-location-dot"></i> Address</dt>
-            <dd class="col-7">@Model.Address</dd>
-            <dt class="col-5"><i class="fa-solid fa-calendar-plus"></i> Join Date</dt>
-            <dd class="col-7">@Model.JoinDate.ToString("yyyy-MM-dd")</dd>
-            <dt class="col-5"><i class="fa-solid fa-clock"></i> Modified</dt>
-            <dd class="col-7">@Model.Modified.ToString("yyyy-MM-dd HH:mm")</dd>
-            <dt class="col-5"><i class="fa-solid fa-user-check"></i> Active</dt>
-            <dd class="col-7">
-                @if (Model.IsActive)
-                {
-                    <span class="badge bg-success">Active</span>
-                }
-                else
-                {
-                    <span class="badge bg-secondary">Inactive</span>
-                }
-            </dd>
-            @if (!string.IsNullOrWhiteSpace(Model.Notes))
-            {
-                <dt class="col-5"><i class="fa-solid fa-note-sticky"></i> Notes</dt>
-                <dd class="col-7">@Model.Notes</dd>
-            }
-            @if (Model.Users != null)
-            {
-                <dt class="col-5"><i class="fa-solid fa-user-tie"></i> Linked User</dt>
-                <dd class="col-7">@Model.Users.UserName</dd>
+<div class="dashboard-shell">
+    <div class="wrap">
+        <!-- Header -->
+        <div class="delete-page-header">
+            <h2 class="page-title mb-0">
+                <span class="logo-dot"></span>
+                Delete Member
+            </h2>
 
-                <!-- Updated here -->
-            }
-            <dt class="col-5"><i class="fa-solid fa-user"></i> Created By</dt>
-            <dd class="col-7">@Model.CreatedBy</dd>
-        </dl>
-
-        <form asp-action="Delete">
-            <input type="hidden" asp-for="MemberId" />
-            <div class="text-center mt-3">
-                <button type="submit" class="btn btn-danger px-4 me-2 rounded-pill fw-bold">
-                    <i class="fa-solid fa-trash"></i> Delete
-                </button>
-                <a asp-action="Index" class="btn btn-glass ms-2 px-4 rounded-pill">
+            <div class="d-flex gap-2 flex-wrap">
+                <a asp-action="Index" class="btn btn-glass glass-surface-pill">
                     <i class="fa-solid fa-arrow-left"></i> Back to List
                 </a>
             </div>
-        </form>
+        </div>
+
+        <!-- Glass delete card -->
+        <div class="card delete-member-card">
+            <div class="card-body p-4">
+                <h3 class="fw-bold text-center mb-2" style="color:#b91c1c;">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Delete Member
+                </h3>
+
+                @if (hasActive)
+                {
+                    <div class="alert alert-danger d-flex align-items-start glass-surface mt-3" role="alert" style="color:black;">
+                        <i class="fa-solid fa-circle-exclamation delete-warning-icon mt-1"></i>
+                        <div>
+                            <strong>Cannot delete while there are active (unreturned) loans.</strong><br />
+                            Please mark all borrowed books as returned before deleting this member.
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-center text-muted mb-3">
+                        Are you sure you want to delete this member? This action cannot be undone.
+                    </p>
+                }
+
+                <!-- Member summary -->
+                <div class="text-center mb-3">
+                    <img src="@(string.IsNullOrWhiteSpace(Model.ProfilePicturePath)
+                                             ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
+                                             : Model.ProfilePicturePath)"
+                         class="avatar-3d"
+                         alt="Profile" />
+
+                    <h5 class="mt-2 fw-bold" style="color:#0f172a;">
+                        @Model.FullName
+                    </h5>
+
+                    <span class="badge bg-info text-dark">
+                        <i class="fa-solid fa-id-card-clip"></i> @Model.MemberType
+                    </span>
+
+                    <div class="mt-3 d-flex flex-wrap justify-content-center gap-2">
+                        <span class="stat-pill">
+                            <i class="fa-solid fa-book-open"></i> Total Loans: @totalLoans
+                        </span>
+                        <span class="stat-pill @(hasActive ? "danger" : "")">
+                            <i class="fa-solid fa-hourglass-half"></i> Active: @activeLoans
+                        </span>
+                    </div>
+                </div>
+
+                <hr class="my-3" />
+
+                <!-- Details -->
+                <dl class="row small mb-2">
+                    <dt class="col-5">
+                        <i class="fa-solid fa-envelope"></i> Email
+                    </dt>
+                    <dd class="col-7">@Model.Email</dd>
+
+                    <dt class="col-5">
+                        <i class="fa-solid fa-phone"></i> Phone
+                    </dt>
+                    <dd class="col-7">@Model.Phone</dd>
+
+                    <dt class="col-5">
+                        <i class="fa-solid fa-venus-mars"></i> Gender
+                    </dt>
+                    <dd class="col-7">@Model.Gender</dd>
+
+                    <dt class="col-5">
+                        <i class="fa-solid fa-location-dot"></i> Address
+                    </dt>
+                    <dd class="col-7">@Model.Address</dd>
+
+                    <dt class="col-5">
+                        <i class="fa-solid fa-id-card"></i> Library ID
+                    </dt>
+                    <dd class="col-7">@Model.DICardNumber</dd>
+
+                    <dt class="col-5">
+                        <i class="fa-brands fa-telegram"></i> Telegram Chat ID
+                    </dt>
+                    <dd class="col-7">@Model.TelegramChatId</dd>
+
+                    <dt class="col-5">
+                        <i class="fa-brands fa-telegram"></i> Telegram Username
+                    </dt>
+                    <dd class="col-7">@Model.TelegramUsername</dd>
+
+                    <dt class="col-5">
+                        <i class="fa-solid fa-calendar-plus"></i> Join Date
+                    </dt>
+                    <dd class="col-7">@Model.JoinDate.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-5">
+                        <i class="fa-solid fa-clock"></i> Modified
+                    </dt>
+                    <dd class="col-7">@Model.Modified.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                    <dt class="col-5">
+                        <i class="fa-solid fa-user-check"></i> Active
+                    </dt>
+                    <dd class="col-7">
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success">
+                                <i class="fa-solid fa-circle-check"></i> Active
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                <i class="fa-solid fa-circle-xmark"></i> Inactive
+                            </span>
+                        }
+                    </dd>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Notes))
+                    {
+                        <dt class="col-5">
+                            <i class="fa-solid fa-note-sticky"></i> Notes
+                        </dt>
+                        <dd class="col-7">@Model.Notes</dd>
+                    }
+
+                    @if (Model.Users != null)
+                    {
+                        <dt class="col-5">
+                            <i class="fa-solid fa-user-tie"></i> Linked User
+                        </dt>
+                        <dd class="col-7">@Model.Users.UserName</dd>
+                    }
+
+                    <dt class="col-5">
+                        <i class="fa-solid fa-user"></i> Created By
+                    </dt>
+                    <dd class="col-7">@Model.CreatedBy</dd>
+                </dl>
+
+                <!-- Delete form -->
+                <form asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="MemberId" />
+
+                    <div class="text-center mt-3">
+                        <button type="submit"
+                                class="btn btn-danger px-4 me-2 rounded-pill fw-bold"
+                        @(hasActive ? "disabled" : "")
+                                title="@(hasActive ? "Cannot delete: active loans exist" : "Delete member")">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+
+                        <a asp-action="Index" class="btn btn-glass glass-surface-pill ms-2 px-4 rounded-pill">
+                            <i class="fa-solid fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </form>
+
+                @* Optional: show a tiny table of up to 3 recent loans *@
+                @if ((Model.BookLoans?.Any() ?? false))
+                {
+                    <hr />
+                    <h6 class="fw-bold mb-2">
+                        <i class="fa-regular fa-clock me-1"></i> Recent Loans
+                    </h6>
+                    <div class="table-responsive glass-surface">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Loan Date</th>
+                                    <th>Due</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var l in Model.BookLoans
+                               .OrderByDescending(x => x.LoanDate)
+                               .Take(3))
+                                {
+                                    <tr>
+                                        <td>@l.LoanId</td>
+                                        <td>@l.LoanDate.ToString("yyyy-MM-dd")</td>
+                                        <td>@l.DueDate.ToString("yyyy-MM-dd")</td>
+                                        <td>
+                                            @if (l.IsReturned)
+                                            {
+                                                <span class="badge bg-success">Returned</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning text-dark">Active</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
 </div>

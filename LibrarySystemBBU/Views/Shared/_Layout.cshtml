@@ -2,24 +2,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - BBU Library Management</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- Core CSS -->
     <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/admin-lte/css/adminlte.min.css" />
-    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
     <!-- Plugins CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
-
-    @* Custom site styles can go here *@
+    <link rel="stylesheet" href="~/css/style.css" />
+    <!-- Custom Styles -->
     <style>
-        /* Beautiful scrollbar and overall smoothing */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8fafc;
+        }
+
+        .content-wrapper {
+            min-height: 93vh;
+        }
+
+        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 9px;
             background: #f3f4f6;
@@ -30,33 +41,62 @@
             border-radius: 8px;
         }
 
-        body {
-            background: #f8fafc;
+        /* Navbar Styling */
+        .navbar .input-group .form-control {
+            border-radius: 2rem;
+            font-size: 0.95rem;
         }
 
-        .content-wrapper {
-            min-height: 93vh;
-            background: #f8fafc;
+        .navbar .nav-link {
+            transition: background-color 0.2s ease;
+            padding: 0.5rem 0.75rem;
         }
+
+            .navbar .nav-link:hover {
+                background-color: #f1f5f9;
+                border-radius: 0.5rem;
+            }
+
+        .navbar .dropdown-menu {
+            border-radius: 1rem;
+            min-width: 200px;
+        }
+
+            .navbar .dropdown-menu .dropdown-item:active {
+                background: #e0f2fe !important;
+                color: #0369a1 !important;
+            }
+
+        .navbar .fs-5 {
+            font-size: 1.25rem;
+        }
+
+        .gap-3 {
+            gap: 1rem !important;
+        }
+
+        
+        
     </style>
+
     @RenderSection("Head", required: false)
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
 
+    <div class="wrapper">
         <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="~/admin-lte/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+            <img class="animation__shake" src="~/admin-lte/img/bbulogo.png" alt="bbulogo" height="135" width="135"/>
         </div>
 
         <!-- Navbar -->
         <partial name="_Navbar" />
 
-        <!-- Main Sidebar Container -->
+        <!-- Sidebar -->
         <partial name="_Sidebar" />
 
-        <!-- Content Wrapper -->
-        <div class="content-wrapper">
+        <!-- Main Content -->
+        <div class="dashboard-shell content-wrapper">
             <div class="container-fluid pt-2 pb-3">
                 @RenderBody()
             </div>
@@ -68,21 +108,20 @@
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark"></aside>
     </div>
-    <!-- ./wrapper -->
-    <!-- jQuery and Core Scripts -->
+
+    <!-- Scripts -->
     <script src="~/jquery/jquery.min.js"></script>
     <script src="~/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/admin-lte/js/adminlte.min.js"></script>
 
-    <!-- Plugins Scripts -->
+    <!-- Plugins -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <script src="plugins/raphael/raphael.min.js"></script>
     <script src="plugins/chart.js/Chart.min.js"></script>
-    @* Add other plugin scripts as needed *@
 
-    <!-- AdminLTE Demo Scripts (Optional) -->
+    <!-- Optional AdminLTE Demo Scripts -->
     <script src="dist/js/demo.js"></script>
     <script src="dist/js/pages/dashboard2.js"></script>
 

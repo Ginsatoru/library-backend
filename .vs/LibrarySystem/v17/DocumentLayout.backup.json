@@ -1,418 +1,78 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\",
+  "WorkspaceRootPath": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\adjustment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\adjustment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\migrations\\20260226151735_addmemberwishlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\migrations\\20260226151735_addmemberwishlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\adjustmentdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\adjustmentdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\bookloan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\bookloan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\loanbookdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\loanbookdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\controllers\\rolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\rolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\users\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\users\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\shared\\_sidebar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\shared\\_sidebar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\shared\\_navbar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\shared\\_navbar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\userpermission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\userpermission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\libman.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\libman.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\data\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\data\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\data\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\controllers\\bookloanscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\bookloanscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\controllers\\memberportalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\memberportalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\controllers\\bookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\bookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\controllers\\catalogscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\catalogscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\models\\memberwishlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\memberwishlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\librarysystembbu.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\librarysystembbu.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\controllers\\loanreminderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\loanreminderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\librarylogs\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\librarylogs\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\controllers\\memberscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\memberscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\librarylogs\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\librarylogs\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\controllers\\purchasescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\purchasescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\librarylogs\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\librarylogs\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\bookloans\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\bookloans\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\bookloans\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\bookloans\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\controllers\\loanbookdetailscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\loanbookdetailscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\bookloans\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\bookloans\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\loanbookdetails\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\loanbookdetails\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\loanbookdetails\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\loanbookdetails\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\loanbookdetails\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\loanbookdetails\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\loanbookdetails\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\loanbookdetails\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\loanbookdetails\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\loanbookdetails\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\bookreturns\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\bookreturns\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\bookreturns\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\bookreturns\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\bookreturns\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\bookreturns\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\bookreturns\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\bookreturns\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\bookreturns\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\bookreturns\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\bookloans\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\bookloans\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\bookloans\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\bookloans\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\controllers\\adjustmentdetailscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\adjustmentdetailscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\purchasedetails\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\purchasedetails\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\purchasedetails\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\purchasedetails\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\purchasedetails\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\purchasedetails\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\purchasedetails\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\purchasedetails\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\purchasedetails\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\purchasedetails\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\purchases\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\purchases\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\purchases\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\purchases\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\purchases\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\purchases\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\purchases\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\purchases\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\purchases\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\purchases\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\users\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\users\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\users\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\users\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\users\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\librarylogs\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\librarylogs\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\users\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\users\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\users\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\users\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\users\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\users\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\models\\librarylog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\librarylog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\roles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\roles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\permission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\permission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\purchase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\purchase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\roleenum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\roleenum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\roles\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\roles\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\roles\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\roles\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\roles\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\roles\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\roles\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\roles\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\roles\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\roles\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\shared\\_footer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\shared\\_footer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\books\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\books\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\controllers\\purchasedetailscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\purchasedetailscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\migrations\\20250704025643_addbookidtopurchase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\migrations\\20250704025643_addbookidtopurchase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\books\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\books\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\adjustmentdetails\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\adjustmentdetails\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\adjustmentdetails\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\adjustmentdetails\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\adjustmentdetails\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\adjustmentdetails\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\adjustmentdetails\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\adjustmentdetails\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\adjustmentdetails\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\adjustmentdetails\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\adjustments\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\adjustments\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\adjustments\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\adjustments\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\books\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\books\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\adjustments\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\adjustments\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\adjustments\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\adjustments\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\books\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\books\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\catalogs\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\catalogs\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\members\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\members\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\members\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\members\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\members\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\members\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\members\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\members\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\members\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\members\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\catalogs\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\catalogs\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\catalogs\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\catalogs\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\catalogs\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\catalogs\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\catalogs\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\catalogs\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\catalog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\catalog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\migrations\\20251024035519_add_librarylogitems.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\migrations\\20251024035519_add_librarylogitems.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\catalogs\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\catalogs\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\migrations\\20251024014812_addlibrarylogs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\migrations\\20251024014812_addlibrarylogs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\books\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\books\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\purchasedetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\purchasedetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\data\\userdatacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\data\\userdatacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\member.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\member.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\loanreminder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\loanreminder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\models\\bookreturn.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\models\\bookreturn.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\views\\shared\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\shared\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\migrations\\20250624151450_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\migrations\\20250624151450_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\migrations\\20250701100142_initialcreate_v2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\migrations\\20250701100142_initialcreate_v2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|d:\\bbu study\\year 4 s1\\library system bbu\\librarysystem\\librarysystembbu\\migrations\\20250705023225_addfirstandlastnametousers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\migrations\\20250705023225_addfirstandlastnametousers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\migrations\\20251023122924_addinlibraryreads.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\migrations\\20251023122924_addinlibraryreads.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -422,1263 +82,224 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 0,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Create.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Users\\Create.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Create.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Users\\Create.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAALQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-02T07:05:30.808Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "RolesController.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\RolesController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\RolesController.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\RolesController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\RolesController.cs",
-              "ViewState": "AgIAADUAAAAAAAAAAAAIwAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "20260226151735_AddMemberWishlist.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20260226151735_AddMemberWishlist.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Migrations\\20260226151735_AddMemberWishlist.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20260226151735_AddMemberWishlist.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Migrations\\20260226151735_AddMemberWishlist.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T13:17:51.912Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\UsersController.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\UsersController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAAMAAAAAAAAAAAAAcwMcAAABHAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-02T09:39:31.33Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "LoanBookDetail.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\LoanBookDetail.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\LoanBookDetail.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\LoanBookDetail.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\LoanBookDetail.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAIwDAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-01T03:39:20.238Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "BookLoan.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\BookLoan.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\BookLoan.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\BookLoan.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\BookLoan.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-25T12:58:15.561Z",
+              "WhenOpened": "2026-02-26T15:17:35.229Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AdjustmentDetail.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\AdjustmentDetail.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\AdjustmentDetail.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\AdjustmentDetail.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\AdjustmentDetail.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAQwB8AAAAAAAAAAAAAAA==",
+              "Title": "DataContext.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Data\\DataContext.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Data\\DataContext.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Data\\DataContext.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Data\\DataContext.cs",
+              "ViewState": "AgIAAJEBAAAAAAAAAAAswJ8BAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-01T07:27:08.014Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-26T15:14:38.72Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Adjustment.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Adjustment.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\Adjustment.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Adjustment.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\Adjustment.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAqwCQAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "MemberPortalController.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\MemberPortalController.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\MemberPortalController.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\MemberPortalController.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\MemberPortalController.cs",
+              "ViewState": "AgIAAHMBAAAAAAAAAAA1wHcBAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-26T12:26:09.485Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-26T15:08:44.462Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MemberWishlist.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Models\\MemberWishlist.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\MemberWishlist.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Models\\MemberWishlist.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Models\\MemberWishlist.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAIwA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-26T15:06:55.628Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAAN4AAAAAAAAAAAAAAN4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T12:13:12.85Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\LibraryLogs\\Create.cshtml",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\LibraryLogs\\Create.cshtml",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\LibraryLogs\\Create.cshtml",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\LibraryLogs\\Create.cshtml",
+              "ViewState": "AgIAAE4BAAAAAAAAAAAqwGkBAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-24T01:52:17.486Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "_Sidebar.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Shared\\_Sidebar.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Shared\\_Sidebar.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Shared\\_Sidebar.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Shared\\_Sidebar.cshtml",
-              "ViewState": "AgIAAHcAAAAAAAAAAAAAAIUAAAAgAAAAAAAAAA==",
+              "Title": "Delete.cshtml",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\LibraryLogs\\Delete.cshtml",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\LibraryLogs\\Delete.cshtml",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\LibraryLogs\\Delete.cshtml",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\LibraryLogs\\Delete.cshtml",
+              "ViewState": "AgIAAOUAAAAAAAAAAAAqwPcAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-24T15:27:39.632Z"
+              "WhenOpened": "2025-10-24T01:53:47.444Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "_Navbar.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Shared\\_Navbar.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Shared\\_Navbar.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Shared\\_Navbar.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Shared\\_Navbar.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAALAAAAAAAAAA==",
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\LibraryLogs\\Edit.cshtml",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\LibraryLogs\\Edit.cshtml",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\LibraryLogs\\Edit.cshtml",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\LibraryLogs\\Edit.cshtml",
+              "ViewState": "AgIAAH4BAAAAAAAAAAAqwJIBAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-02T11:39:26.379Z"
+              "WhenOpened": "2025-10-24T01:54:36.977Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAC4AAAAAAAAAAAAAADYAAAAHAAAAAAAAAA==",
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Edit.cshtml",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Users\\Edit.cshtml",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Edit.cshtml",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\Users\\Edit.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T01:54:51.352Z"
+              "WhenOpened": "2025-10-27T09:41:43.978Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
-              "Title": "UserPermission.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\UserPermission.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\UserPermission.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\UserPermission.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\UserPermission.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T11:58:37.743Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\HomeController.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\HomeController.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAowCoAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-24T16:27:06.672Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "CatalogsController.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\CatalogsController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\CatalogsController.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\CatalogsController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\CatalogsController.cs",
-              "ViewState": "AgIAANoAAAAAAAAAAAAIwPEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-24T15:25:00.597Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "BooksController.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\BooksController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\BooksController.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\BooksController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\BooksController.cs",
-              "ViewState": "AgIAAIYAAAAAAAAAAAAIwJ0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-24T15:20:23.06Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "BookLoansController.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\BookLoansController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\BookLoansController.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\BookLoansController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\BookLoansController.cs",
-              "ViewState": "AgIAALAAAAAAAAAAAAAIwMcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-02T07:04:58.382Z"
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\LibraryLogs\\Details.cshtml",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\LibraryLogs\\Details.cshtml",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\LibraryLogs\\Details.cshtml",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\LibraryLogs\\Details.cshtml",
+              "ViewState": "AgIAAIgAAAAAAAAAAAAIwKYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-24T01:54:44.879Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 11,
-              "Title": "libman.json",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\libman.json",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\libman.json",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\libman.json",
-              "RelativeToolTip": "LibrarySystemBBU\\libman.json",
-              "ViewState": "AgIAAEUAAAAAAAAAAAAgwF4AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-07-05T03:53:28.435Z"
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Create.cshtml",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Users\\Create.cshtml",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Create.cshtml",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\Users\\Create.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-27T09:22:29.844Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 12,
-              "Title": "DataContext.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Data\\DataContext.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Data\\DataContext.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Data\\DataContext.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Data\\DataContext.cs",
-              "ViewState": "AgIAADIBAAAAAAAAAAAkwEEBAAAAAAAAAAAAAA==",
+              "Title": "LibraryLog.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Models\\LibraryLog.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\LibraryLog.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Models\\LibraryLog.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Models\\LibraryLog.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAIwEoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-01T03:51:17.648Z"
+              "WhenOpened": "2025-10-24T01:42:26.234Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Create.cshtml",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Catalogs\\Create.cshtml",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Create.cshtml",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\Catalogs\\Create.cshtml",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABEAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-24T12:12:22.675Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Details.cshtml",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Catalogs\\Details.cshtml",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Details.cshtml",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\Catalogs\\Details.cshtml",
+              "ViewState": "AgIAAPkAAAAAAAAAAAAAAAQBAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-24T12:10:17.365Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "LibrarySystemBBU.csproj",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\LibrarySystemBBU.csproj",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\LibrarySystemBBU.csproj",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\LibrarySystemBBU.csproj",
+              "RelativeToolTip": "LibrarySystemBBU\\LibrarySystemBBU.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-10-24T01:50:16.226Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "20251024035519_Add_LibraryLogItems.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20251024035519_Add_LibraryLogItems.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Migrations\\20251024035519_Add_LibraryLogItems.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20251024035519_Add_LibraryLogItems.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Migrations\\20251024035519_Add_LibraryLogItems.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T03:55:19.37Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "20251024014812_AddLibraryLogs.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20251024014812_AddLibraryLogs.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Migrations\\20251024014812_AddLibraryLogs.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20251024014812_AddLibraryLogs.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Migrations\\20251024014812_AddLibraryLogs.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T01:48:12.985Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 17,
-              "Title": "LoanRemindersController.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\LoanRemindersController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\LoanRemindersController.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\LoanRemindersController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\LoanRemindersController.cs",
-              "ViewState": "AgIAAEgAAAAAAAAAAAAmwGEAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-05T03:19:19.436Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "MembersController.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\MembersController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\MembersController.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\MembersController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\MembersController.cs",
-              "ViewState": "AgIAANQAAAAAAAAAAAAcwOwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-24T15:25:49.21Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "PurchasesController.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\PurchasesController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\PurchasesController.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\PurchasesController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\PurchasesController.cs",
-              "ViewState": "AgIAAJEAAAAAAAAAAAAIwKgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T02:57:49.501Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookLoans\\Details.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\BookLoans\\Details.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookLoans\\Details.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\BookLoans\\Details.cshtml",
-              "ViewState": "AgIAAJsAAAAAAAAAAAAowE0AAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-05T03:52:53.162Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookLoans\\Create.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\BookLoans\\Create.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookLoans\\Create.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\BookLoans\\Create.cshtml",
-              "ViewState": "AgIAAJQAAAAAAAAAAAAmwKIAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T01:59:06.711Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "LoanBookDetailsController.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\LoanBookDetailsController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\LoanBookDetailsController.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\LoanBookDetailsController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\LoanBookDetailsController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAK0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-02T07:04:10.051Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookLoans\\Index.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\BookLoans\\Index.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookLoans\\Index.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\BookLoans\\Index.cshtml",
-              "ViewState": "AgIAAP4AAAAAAAAAAAAiwBcBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T02:26:20.508Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\LoanBookDetails\\Index.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\LoanBookDetails\\Index.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\LoanBookDetails\\Index.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\LoanBookDetails\\Index.cshtml",
-              "ViewState": "AgIAAFYAAAAAAAAAAAAiwG8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-05T03:19:24.876Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\LoanBookDetails\\Edit.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\LoanBookDetails\\Edit.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\LoanBookDetails\\Edit.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\LoanBookDetails\\Edit.cshtml",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAGEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-07T04:29:04.511Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\LoanBookDetails\\Delete.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\LoanBookDetails\\Delete.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\LoanBookDetails\\Delete.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\LoanBookDetails\\Delete.cshtml",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAowDgAAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-07T04:29:44.663Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 30,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookReturns\\Create.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\BookReturns\\Create.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookReturns\\Create.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\BookReturns\\Create.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACoAAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-07T02:27:51.634Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 29,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookReturns\\Details.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\BookReturns\\Details.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookReturns\\Details.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\BookReturns\\Details.cshtml",
-              "ViewState": "AgIAACwAAAAAAAAAAAAowEEAAAA0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-07T03:17:54.238Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\LoanBookDetails\\Create.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\LoanBookDetails\\Create.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\LoanBookDetails\\Create.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\LoanBookDetails\\Create.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-07T04:21:29.47Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 28,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\LoanBookDetails\\Details.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\LoanBookDetails\\Details.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\LoanBookDetails\\Details.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\LoanBookDetails\\Details.cshtml",
-              "ViewState": "AgIAADUAAAAAAAAAAAAowDsAAABBAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-07T04:29:35.934Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 31,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookReturns\\Delete.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\BookReturns\\Delete.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookReturns\\Delete.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\BookReturns\\Delete.cshtml",
-              "ViewState": "AgIAACkAAAAAAAAAAAAowD0AAABAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-07T03:14:02.721Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 32,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookReturns\\Edit.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\BookReturns\\Edit.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookReturns\\Edit.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\BookReturns\\Edit.cshtml",
-              "ViewState": "AgIAAD8AAAAAAAAAAIBJwA8AAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-07T02:54:01.908Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 33,
-              "Title": "Users.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Users.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\Users.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Users.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\Users.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-25T10:01:12.507Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 34,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookReturns\\Index.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\BookReturns\\Index.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookReturns\\Index.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\BookReturns\\Index.cshtml",
-              "ViewState": "AgIAAJsAAAAAAAAAAAAIwI8AAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-07T02:27:54.01Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 35,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookLoans\\Edit.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\BookLoans\\Edit.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookLoans\\Edit.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\BookLoans\\Edit.cshtml",
-              "ViewState": "AgIAAEMAAAAAAAAAAAAiwFAAAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-05T03:52:52.506Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 36,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookLoans\\Delete.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\BookLoans\\Delete.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\BookLoans\\Delete.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\BookLoans\\Delete.cshtml",
-              "ViewState": "AgIAAFMAAAAAAAAAAAAowGAAAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-05T03:52:53.928Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 37,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\appsettings.json",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\appsettings.json",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\appsettings.json",
-              "RelativeToolTip": "LibrarySystemBBU\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-07-05T03:53:30.107Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 38,
-              "Title": "AdjustmentDetailsController.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\AdjustmentDetailsController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\AdjustmentDetailsController.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\AdjustmentDetailsController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\AdjustmentDetailsController.cs",
+              "Title": "20251023122924_AddInLibraryReads.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20251023122924_AddInLibraryReads.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Migrations\\20251023122924_AddInLibraryReads.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20251023122924_AddInLibraryReads.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Migrations\\20251023122924_AddInLibraryReads.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-03T09:11:46.913Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 39,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\PurchaseDetails\\Delete.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\PurchaseDetails\\Delete.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\PurchaseDetails\\Delete.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\PurchaseDetails\\Delete.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-05T03:33:21.926Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 40,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\PurchaseDetails\\Details.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\PurchaseDetails\\Details.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\PurchaseDetails\\Details.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\PurchaseDetails\\Details.cshtml",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAowFYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-05T03:33:46.329Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 41,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\PurchaseDetails\\Edit.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\PurchaseDetails\\Edit.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\PurchaseDetails\\Edit.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\PurchaseDetails\\Edit.cshtml",
-              "ViewState": "AgIAAGQAAAAAAAAAAAAiwH8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-05T03:33:24.196Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 42,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\PurchaseDetails\\Create.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\PurchaseDetails\\Create.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\PurchaseDetails\\Create.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\PurchaseDetails\\Create.cshtml",
-              "ViewState": "AgIAAFoAAAAAAAAAAAAiwHUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-05T03:32:31.496Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 43,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\PurchaseDetails\\Index.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\PurchaseDetails\\Index.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\PurchaseDetails\\Index.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\PurchaseDetails\\Index.cshtml",
-              "ViewState": "AgIAAJMAAAAAAAAAAAAowKwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-05T03:32:32.869Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 49,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Edit.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Users\\Edit.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Edit.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Users\\Edit.cshtml",
-              "ViewState": "AgIAAGgAAAAAAAAAAAAowHIAAABPAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-02T08:11:00.387Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 45,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Purchases\\Create.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Purchases\\Create.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Purchases\\Create.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Purchases\\Create.cshtml",
-              "ViewState": "AgIAAGUAAAAAAAAAAAAiwH8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T03:17:55.181Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 48,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Purchases\\Index.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Purchases\\Index.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Purchases\\Index.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Purchases\\Index.cshtml",
-              "ViewState": "AgIAAA4BAAAAAAAAAAAiwCcBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T02:57:57.61Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 46,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Purchases\\Edit.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Purchases\\Edit.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Purchases\\Edit.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Purchases\\Edit.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T03:27:31.28Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 47,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Purchases\\Details.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Purchases\\Details.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Purchases\\Details.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Purchases\\Details.cshtml",
-              "ViewState": "AgIAAH8AAAAAAAAAAAAiwJgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T03:27:13.741Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 44,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Purchases\\Delete.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Purchases\\Delete.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Purchases\\Delete.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Purchases\\Delete.cshtml",
-              "ViewState": "AgIAAI0AAAAAAAAAAIBJwBMAAABGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T03:19:54.157Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 51,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Details.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Users\\Details.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Details.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Users\\Details.cshtml",
-              "ViewState": "AgIAAEcAAAAAAAAAAAAiwGAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-02T08:11:01.004Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 52,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Delete.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Users\\Delete.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Delete.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Users\\Delete.cshtml",
-              "ViewState": "AgIAADMAAAAAAAAAAAAiwFQAAABAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-02T08:11:01.621Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 50,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Index.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Users\\Index.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Index.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Users\\Index.cshtml",
-              "ViewState": "AgIAACYAAAAAAAAAAAAYwDMAAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-02T07:30:30.16Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 102,
-              "Title": "20250705023225_AddFirstAndLastNameToUsers.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20250705023225_AddFirstAndLastNameToUsers.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Migrations\\20250705023225_AddFirstAndLastNameToUsers.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20250705023225_AddFirstAndLastNameToUsers.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Migrations\\20250705023225_AddFirstAndLastNameToUsers.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-05T02:32:25.955Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 53,
-              "Title": "Roles.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Roles.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\Roles.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Roles.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\Roles.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T11:19:43.416Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 55,
-              "Title": "Purchase.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Purchase.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\Purchase.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Purchase.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\Purchase.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAADwvy8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-01T07:17:52.143Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 56,
-              "Title": "RoleEnum.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\RoleEnum.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\RoleEnum.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\RoleEnum.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\RoleEnum.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T11:15:33Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 57,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Roles\\Index.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Roles\\Index.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Roles\\Index.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Roles\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T01:38:27.472Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 54,
-              "Title": "Permission.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Permission.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\Permission.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Permission.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\Permission.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T11:15:34.78Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 58,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Roles\\Edit.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Roles\\Edit.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Roles\\Edit.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Roles\\Edit.cshtml",
-              "ViewState": "AgIAAA8AAAAAAAAAAIBJwC8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T01:38:26.582Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 59,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Roles\\Details.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Roles\\Details.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Roles\\Details.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Roles\\Details.cshtml",
-              "ViewState": "AgIAAAgAAAAAAAAAAIBJwCYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T01:38:25.878Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 60,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Roles\\Delete.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Roles\\Delete.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Roles\\Delete.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Roles\\Delete.cshtml",
-              "ViewState": "AgIAAA0AAAAAAAAAAIBJwCsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T01:38:25.128Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 61,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Roles\\Create.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Roles\\Create.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Roles\\Create.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Roles\\Create.cshtml",
-              "ViewState": "AgIAAAgAAAAAAAAAAIBJwCgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T01:38:15.611Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 62,
-              "Title": "_Footer.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Shared\\_Footer.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Shared\\_Footer.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Shared\\_Footer.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Shared\\_Footer.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-25T11:16:13.88Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 63,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Books\\Delete.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Books\\Delete.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Books\\Delete.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Books\\Delete.cshtml",
-              "ViewState": "AgIAACQAAAAAAAAAAIBJwEIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T02:13:38.419Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 65,
-              "Title": "Book.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Book.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\Book.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Book.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\Book.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAywCUAAAA1AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-03T02:19:12.179Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 64,
-              "Title": "PurchaseDetailsController.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\PurchaseDetailsController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\PurchaseDetailsController.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\PurchaseDetailsController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\PurchaseDetailsController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T02:45:11.758Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 66,
-              "Title": "20250704025643_AddBookIdToPurchase.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20250704025643_AddBookIdToPurchase.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Migrations\\20250704025643_AddBookIdToPurchase.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20250704025643_AddBookIdToPurchase.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Migrations\\20250704025643_AddBookIdToPurchase.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T02:56:44.302Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 67,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Books\\Index.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Books\\Index.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Books\\Index.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Books\\Index.cshtml",
-              "ViewState": "AgIAAOQAAAAAAAAAAIBJwAIBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T01:59:55.988Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 68,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\AdjustmentDetails\\Index.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\AdjustmentDetails\\Index.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\AdjustmentDetails\\Index.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\AdjustmentDetails\\Index.cshtml",
-              "ViewState": "AgIAAKMAAAAAAAAAAIBJwLUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T09:07:37.514Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 69,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\AdjustmentDetails\\Edit.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\AdjustmentDetails\\Edit.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\AdjustmentDetails\\Edit.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\AdjustmentDetails\\Edit.cshtml",
-              "ViewState": "AgIAAE4AAAAAAAAAAIBJwGIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T02:18:53.702Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 70,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\AdjustmentDetails\\Details.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\AdjustmentDetails\\Details.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\AdjustmentDetails\\Details.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\AdjustmentDetails\\Details.cshtml",
-              "ViewState": "AgIAADUAAAAAAAAAAAAIwFAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T02:18:31.945Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 71,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\AdjustmentDetails\\Delete.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\AdjustmentDetails\\Delete.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\AdjustmentDetails\\Delete.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\AdjustmentDetails\\Delete.cshtml",
-              "ViewState": "AgIAADsAAAAAAAAAAAAIwFYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T02:17:39.968Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 73,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Adjustments\\Index.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Adjustments\\Index.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Adjustments\\Index.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Adjustments\\Index.cshtml",
-              "ViewState": "AgIAAGcAAAAAAAAAAIBJwKwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T01:13:03.56Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 74,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Adjustments\\Edit.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Adjustments\\Edit.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Adjustments\\Edit.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Adjustments\\Edit.cshtml",
-              "ViewState": "AgIAAA8AAAAAAAAAAIBJwCUAAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T01:24:37.182Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 75,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Books\\Create.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Books\\Create.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Books\\Create.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Books\\Create.cshtml",
-              "ViewState": "AgIAAE4AAAAAAAAAAIBJwGwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T01:37:44.735Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 76,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Adjustments\\Details.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Adjustments\\Details.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Adjustments\\Details.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Adjustments\\Details.cshtml",
-              "ViewState": "AgIAAFwAAAAAAAAAAAAIwHcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T01:20:46.422Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 72,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\AdjustmentDetails\\Create.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\AdjustmentDetails\\Create.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\AdjustmentDetails\\Create.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\AdjustmentDetails\\Create.cshtml",
-              "ViewState": "AgIAAD8AAAAAAAAAAIBJwF8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T09:07:36.239Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 77,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Adjustments\\Delete.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Adjustments\\Delete.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Adjustments\\Delete.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Adjustments\\Delete.cshtml",
-              "ViewState": "AgIAABIAAAAAAAAAAIBJwCQAAABQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T01:24:51.024Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 78,
-              "Title": "AccountController.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\AccountController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\AccountController.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAAGoAAAAAAAAAAAAowIQAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-24T16:30:15.184Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 80,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Index.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Catalogs\\Index.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Index.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Catalogs\\Index.cshtml",
-              "ViewState": "AgIAAKAAAAAAAAAAAIBJwL4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T02:27:40.037Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 79,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Books\\Details.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Books\\Details.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Books\\Details.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Books\\Details.cshtml",
-              "ViewState": "AgIAACIAAAAAAAAAAIBJwEAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T02:13:21.607Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 82,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Members\\Index.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Members\\Index.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Members\\Index.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Members\\Index.cshtml",
-              "ViewState": "AgIAAAcAAAAAAAAAAIBJwCgBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T04:20:40.467Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 81,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Members\\Edit.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Members\\Edit.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Members\\Edit.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Members\\Edit.cshtml",
-              "ViewState": "AgIAAKkAAAAAAAAAAAAIwLcAAABEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T04:36:27.776Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 85,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Members\\Delete.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Members\\Delete.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Members\\Delete.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Members\\Delete.cshtml",
-              "ViewState": "AgIAAFEAAAAAAAAAAIBJwHEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T04:36:06.538Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 83,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Members\\Create.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Members\\Create.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Members\\Create.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Members\\Create.cshtml",
-              "ViewState": "AgIAAGUAAAAAAAAAAAAIwCsAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T04:31:25.047Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 84,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Members\\Details.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Members\\Details.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Members\\Details.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Members\\Details.cshtml",
-              "ViewState": "AgIAAFEAAAAAAAAAAIBJwG8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T04:37:12.42Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 86,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Edit.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Catalogs\\Edit.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Edit.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Catalogs\\Edit.cshtml",
-              "ViewState": "AgIAAKUAAAAAAAAAAAAIwK0AAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T02:39:34.702Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 87,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Create.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Catalogs\\Create.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Create.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Catalogs\\Create.cshtml",
-              "ViewState": "AgIAAIYAAAAAAAAAAAAIwKEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T02:27:38.256Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 88,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Details.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Catalogs\\Details.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Details.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Catalogs\\Details.cshtml",
-              "ViewState": "AgIAAEwAAAAAAAAAAAAIwGcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T02:39:53.722Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 89,
-              "Title": "Catalog.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Catalog.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\Catalog.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Catalog.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\Catalog.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAUwB8AAABBAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-25T11:15:32.93Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 90,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Delete.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Catalogs\\Delete.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Delete.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Catalogs\\Delete.cshtml",
-              "ViewState": "AgIAAE4AAAAAAAAAAAAIwGkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T02:39:33.522Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 91,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Books\\Edit.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Books\\Edit.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Books\\Edit.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Books\\Edit.cshtml",
-              "ViewState": "AgIAADoAAAAAAAAAAIBJwFoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T02:13:19.919Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 92,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Home\\Index.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T01:37:33.139Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 101,
-              "Title": "20250701100142_InitialCreate_v2.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20250701100142_InitialCreate_v2.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Migrations\\20250701100142_InitialCreate_v2.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20250701100142_InitialCreate_v2.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Migrations\\20250701100142_InitialCreate_v2.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-01T10:01:42.323Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 94,
-              "Title": "UserDataContext.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Data\\UserDataContext.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Data\\UserDataContext.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Data\\UserDataContext.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Data\\UserDataContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-01T07:36:28.649Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 93,
-              "Title": "PurchaseDetail.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\PurchaseDetail.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\PurchaseDetail.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\PurchaseDetail.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\PurchaseDetail.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAIwCkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-01T03:46:00.936Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 95,
-              "Title": "Member.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Member.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\Member.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\Member.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\Member.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-01T07:16:56.557Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 96,
-              "Title": "LoanReminder.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\LoanReminder.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\LoanReminder.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\LoanReminder.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\LoanReminder.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-01T07:16:55.185Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 97,
-              "Title": "BookReturn.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\BookReturn.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\BookReturn.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Models\\BookReturn.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Models\\BookReturn.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAqwDIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-26T12:26:01.985Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 98,
-              "Title": "Login.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Account\\Login.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Account\\Login.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Account\\Login.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Account\\Login.cshtml",
-              "ViewState": "AgIAAAkAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-24T16:27:46.513Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 99,
-              "Title": "_ValidationScriptsPartial.cshtml",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-24T16:09:06.709Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 100,
-              "Title": "20250624151450_InitialCreate.cs",
-              "DocumentMoniker": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20250624151450_InitialCreate.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Migrations\\20250624151450_InitialCreate.cs",
-              "ToolTip": "D:\\BBU Study\\Year 4 S1\\Library System BBU\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20250624151450_InitialCreate.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Migrations\\20250624151450_InitialCreate.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-24T15:14:50.878Z"
+              "WhenOpened": "2025-10-23T12:29:24.651Z"
             }
           ]
         }

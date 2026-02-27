@@ -11,10 +11,10 @@ namespace LibrarySystemBBU.Models
         public Guid Id { get; set; }
 
         [Required, StringLength(50)]
-        public string FirstName { get; set; }   // NEW
+        public string FirstName { get; set; }
 
         [Required, StringLength(50)]
-        public string LastName { get; set; }    // NEW
+        public string LastName { get; set; }
 
         [Required, StringLength(100)]
         public string UserName { get; set; }
@@ -22,7 +22,7 @@ namespace LibrarySystemBBU.Models
         [Required, StringLength(100), EmailAddress]
         public string Email { get; set; }
 
-        [Required, StringLength(60)]
+        [Required, StringLength(200)]
         public string Password { get; set; }
 
         [StringLength(20)]
@@ -41,7 +41,7 @@ namespace LibrarySystemBBU.Models
         public DateTime? Modified { get; set; }
 
         [StringLength(100)]
-        public string? RoleName { get; set; }   // Store role as string only
+        public string? RoleName { get; set; }
 
         [StringLength(500)]
         public string? ProfilePicturePath { get; set; }
@@ -51,7 +51,15 @@ namespace LibrarySystemBBU.Models
         [StringLength(500)]
         public string? Notes { get; set; }
 
-        // --- Navigation (keep if still using Permission/Member tables, else you can remove) ---
+        // =========================
+        // Forgot Password (OTP)
+        // =========================
+        [StringLength(200)]
+        public string? PasswordResetOtpHash { get; set; }
+
+        public DateTime? PasswordResetOtpExpiresUtc { get; set; }
+
+        // --- Navigation ---
         public ICollection<Permission> Permissions { get; set; } = new List<Permission>();
         public ICollection<Member> LibraryMembers { get; set; } = new List<Member>();
 

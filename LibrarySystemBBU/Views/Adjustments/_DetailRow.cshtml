@@ -1,0 +1,52 @@
+﻿@model LibrarySystemBBU.Controllers.AdjustmentDetailRowVM
+<tr class="detail-row align-middle">
+    <!-- Hidden key for edit/update -->
+    @Html.HiddenFor(m => m.AdjustmentDetailId)
+
+    <td>
+        <div class="input-group">
+            <span class="input-group-text bg-navy text-white">
+                <i class="fa-solid fa-barcode"></i>
+            </span>
+            <select asp-for="CatalogId" class="form-select" asp-items="ViewBag.Catalogs">
+                <option value="">-- Select catalog --</option>
+            </select>
+        </div>
+        <span asp-validation-for="CatalogId" class="text-danger"></span>
+    </td>
+
+    <td style="width:140px;">
+        <div class="input-group">
+            <span class="input-group-text bg-navy text-white">
+                <i class="fa-solid fa-boxes-stacked"></i>
+            </span>
+            <input asp-for="QuantityChanged"
+                   type="number"
+                   class="form-control qty-input"
+                   inputmode="numeric"
+                   placeholder="0" />
+        </div>
+        <span asp-validation-for="QuantityChanged" class="text-danger"></span>
+    </td>
+
+    <td>
+        <div class="input-group">
+            <span class="input-group-text bg-navy text-white">
+                <i class="fa-regular fa-note-sticky"></i>
+            </span>
+            <input asp-for="Note" class="form-control" placeholder="Optional note..." />
+        </div>
+        <span asp-validation-for="Note" class="text-danger"></span>
+    </td>
+
+    <td class="text-center" style="width:80px;">
+        <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="duplicateRow(this)" title="Duplicate">
+                <i class="fa-regular fa-copy"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeDetailRow(this)" title="Remove">
+                <i class="fa-regular fa-trash-can"></i>
+            </button>
+        </div>
+    </td>
+</tr>
