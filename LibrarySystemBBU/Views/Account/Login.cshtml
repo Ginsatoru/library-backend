@@ -1,177 +1,347 @@
 ﻿@model LoginRequest
 @{
     Layout = null;
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Admin Login";
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-
     <style>
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            margin: 0;
             min-height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: radial-gradient(circle at top left, #184281 0, #160e9ee3 55%, #001f95 100%);
-            color: #fff;
-        }
-
-        .login-bg {
-            position: relative;
-            min-height: 100vh;
+            background: #0a0a1a url('/admin-lte/img/bbulogo.png') no-repeat center;
+            background-size: 520px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            overflow: hidden;
+            padding: 1rem;
+            position: relative;
         }
 
-            .login-bg::before {
+            body::before {
                 content: "";
-                position: absolute;
+                position: fixed;
                 inset: 0;
-                background: radial-gradient(circle at top left, rgb(255 255 255 / 30%), transparent 60%), radial-gradient(circle at bottom right, rgb(136 103 195 / 35%), transparent 60%), url(/admin-lte/img/bbulogo.png) no-repeat center;
-                background-size: 300px 300px;
-                opacity: 0.25;
-                filter: blur(1px);
+                background: linear-gradient(135deg, #000080 0%, #0a0a2e 50%, #000040 100%);
+                opacity: 0.92;
+                z-index: 0;
             }
 
-        .glass-card {
+            /* Subtle animated orbs */
+            body::after {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background: radial-gradient(ellipse 600px 400px at 20% 20%, rgba(0, 0, 180, 0.25) 0%, transparent 70%), radial-gradient(ellipse 500px 350px at 80% 80%, rgba(0, 0, 120, 0.2) 0%, transparent 70%);
+                z-index: 0;
+            }
+
+        .wrapper {
             position: relative;
             z-index: 1;
             width: 100%;
-            max-width: 380px;
-            padding: 2.5rem 2.25rem;
-            border-radius: 22px;
-            background: rgba(255, 255, 255, 0.10);
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(5px) brightness(1.2);
-            -webkit-backdrop-filter: blur(18px) brightness(1.2);
+            max-width: 420px;
         }
 
-            .glass-card h3 {
-                font-weight: 700;
+        .card {
+            background: #ffffff;
+            border-radius: 2rem;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: none;
+        }
+
+        .card-body {
+            padding: 2.5rem 2.25rem;
+        }
+
+        .logo-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+            .logo-wrap img {
+                height: 64px;
+                object-fit: contain;
             }
 
-            .glass-card .subtitle {
-                font-size: 0.9rem;
-                opacity: 0.8;
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+            text-align: center;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.02em;
+        }
+
+        .card-subtitle {
+            font-size: 0.875rem;
+            color: #9ca3af;
+            text-align: center;
+            margin-bottom: 1.75rem;
+        }
+
+        .badge-admin {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: #eff6ff;
+            color: #000080;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .badge-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        .form-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        .input-group-custom {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            border: 1.5px solid #e5e7eb;
+            background: #f9fafb;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            margin-bottom: 0;
+        }
+
+            .input-group-custom:focus-within {
+                border-color: #000080;
+                box-shadow: 0 0 0 3px rgba(0, 0, 128, 0.12);
+                background: #fff;
             }
 
-            .glass-card .form-label {
-                color: #f1f1f1;
-                font-weight: 500;
+            .input-group-custom svg {
+                flex-shrink: 0;
+                color: #9ca3af;
             }
 
-            .glass-card .form-control {
-                border-radius: 999px;
-                background: rgba(255, 255, 255, 0.18);
-                border: 1px solid rgba(255, 255, 255, 0.45);
-                color: #fff;
-            }
-
-                .glass-card .form-control:focus {
-                    outline: none;
-                    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.35);
-                    background: rgba(255, 255, 255, 0.25);
-                }
-
-                .glass-card .form-control::placeholder {
-                    color: rgba(240, 240, 240, 0.75);
-                }
-
-            .glass-card .form-check-label {
-                color: #f5f5f5;
-                font-size: 0.9rem;
-            }
-
-            .glass-card .btn-primary {
-                border-radius: 999px;
-                font-weight: 600;
+            .input-group-custom input {
+                flex: 1;
                 border: none;
-                box-shadow: 0 12px 24px rgba(13, 110, 253, 0.55);
+                background: transparent;
+                outline: none;
+                font-size: 0.875rem;
+                color: #111827;
             }
 
-                .glass-card .btn-primary:focus,
-                .glass-card .btn-primary:hover {
-                    box-shadow: 0 16px 32px rgba(13, 110, 253, 0.75);
+                .input-group-custom input::placeholder {
+                    color: #9ca3af;
                 }
 
-            .glass-card a {
-                color: #aad4ff;
-            }
-
-                .glass-card a:hover {
-                    color: #ffffff;
-                    text-decoration: underline;
-                }
+        .form-group {
+            margin-bottom: 1rem;
+        }
 
         .text-danger {
-            font-size: 0.85rem;
+            font-size: 0.78rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        .row-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+        }
+
+        .check-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+        }
+
+            .check-wrap input[type="checkbox"] {
+                width: 14px;
+                height: 14px;
+                accent-color: #000080;
+                cursor: pointer;
+            }
+
+            .check-wrap span {
+                font-size: 0.78rem;
+                color: #6b7280;
+            }
+
+        .forgot-link {
+            font-size: 0.78rem;
+            color: #000080;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+            .forgot-link:hover {
+                text-decoration: underline;
+                color: #000060;
+            }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.8rem;
+            background: #000080;
+            color: #fff;
+            border: none;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.1s;
+            letter-spacing: 0.01em;
+        }
+
+            .btn-login:hover {
+                background: #00006a;
+            }
+
+            .btn-login:active {
+                transform: scale(0.98);
+            }
+
+        .alert-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            border-radius: 1rem;
+            padding: 0.65rem 1rem;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #16a34a;
+            border-radius: 1rem;
+            padding: 0.65rem 1rem;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #f3f4f6;
+            margin: 1.5rem 0 0;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #9ca3af;
+            padding-top: 1rem;
         }
     </style>
 </head>
 <body>
-    <div class="login-bg">
-        <div class="glass-card">
-            <div class="text-center mb-4">
-                <h3 class="text-white">Welcome</h3>
-                <p class="subtitle">Login to continue</p>
-            </div>
+    <div class="wrapper">
+        <div class="card">
+            <div class="card-body">
 
-            @if (TempData["ResetPwdSuccess"] != null)
-            {
-                <div class="alert alert-success py-2">@TempData["ResetPwdSuccess"]</div>
-            }
-
-            <form asp-action="Login" asp-route-ReturnUrl="@ViewBag.ReturnUrl" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
-
-                <div class="mb-3">
-                    <label asp-for="UserName" class="form-label"></label>
-                    <input asp-for="UserName" class="form-control" placeholder="Enter your username or email" />
-                    <span asp-validation-for="UserName" class="text-danger"></span>
+                <!-- Logo -->
+                <div class="logo-wrap">
+                    <img src="/admin-lte/img/bbulogo.png" alt="BBU Library" onerror="this.style.display='none'" />
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Password" class="form-label"></label>
-                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
+                <!-- Admin badge -->
+                <div class="badge-wrap">
+                    <span class="badge-admin">
+                        <svg width="10" height="10" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
+                        </svg>
+                        Admin Portal
+                    </span>
                 </div>
 
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <div class="form-check">
-                        <input class="form-check-input" asp-for="RememberMe" id="RememberMe" />
-                        <label class="form-check-label" for="RememberMe">
-                            @Html.DisplayNameFor(model => model.RememberMe)
-                        </label>
+                <h2 class="card-title">Welcome back</h2>
+                <p class="card-subtitle">Sign in to your admin account</p>
+
+                <!-- Success message -->
+                @if (TempData["ResetPwdSuccess"] != null)
+                {
+                    <div class="alert-success">@TempData["ResetPwdSuccess"]</div>
+                }
+
+                <form asp-action="Login" asp-route-ReturnUrl="@ViewBag.ReturnUrl" method="post" autocomplete="off">
+
+                    <!-- Validation summary -->
+                    @{
+                        var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).ToList();
+                    }
+                    @if (errors.Any())
+                    {
+                        <div class="alert-error">@errors.First().ErrorMessage</div>
+                    }
+
+                    <!-- Username -->
+                    <div class="form-group">
+                        <label class="form-label">Username or Email</label>
+                        <div class="input-group-custom">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            <input asp-for="UserName" type="text" placeholder="Enter your username or email" />
+                        </div>
+                        <span asp-validation-for="UserName" class="text-danger"></span>
                     </div>
 
-                    <a asp-controller="Account" asp-action="ForgotPassword" class="text-decoration-none">
-                        Forgot password?
-                    </a>
-                </div>
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="input-group-custom">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            <input asp-for="Password" type="password" placeholder="Enter your password" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
 
-                <button type="submit" class="btn btn-primary w-100">
-                    🚀 Login Now
-                </button>
-            </form>
+                    <!-- Remember me + Forgot -->
+                    <div class="row-meta">
+                        <label class="check-wrap">
+                            <input asp-for="RememberMe" type="checkbox" />
+                            <span>Remember me</span>
+                        </label>
+                        <a asp-controller="Account" asp-action="ForgotPassword" class="forgot-link">
+                            Forgot password?
+                        </a>
+                    </div>
 
-            <div class="text-center mt-3">
-                <a asp-action="Register" class="text-decoration-none">
-                    No Account yet? Register here
-                </a>
+                    <button type="submit" class="btn-login">Login</button>
+                </form>
+
+                <hr class="divider" />
+                <p class="footer-note">BBU Library System &mdash; Admin Access Only</p>
             </div>
         </div>
     </div>

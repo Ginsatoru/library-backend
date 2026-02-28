@@ -65,37 +65,21 @@ namespace LibrarySystemBBU.Controllers
         }
 
         // ==========================
-        // MVC: REGISTER
+        // MVC: REGISTER — DISABLED
+        // Admin accounts are created by existing admins only via the Users panel.
         // ==========================
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
         {
-            return View();
+            return NotFound();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register(RegisterRequest request, string? returnUrl = null)
+        public IActionResult Register(RegisterRequest request, string? returnUrl = null)
         {
-            if (!ModelState.IsValid)
-                return View(request);
-
-            var result = await _userService.CreateUser(request);
-            if (!result.IsSuccess)
-            {
-                ModelState.AddModelError(string.Empty, result.Message);
-                return View(request);
-            }
-
-            var loginRequest = new LoginRequest { UserName = request.UserName, Password = request.Password };
-            var loginResult = await _userService.GetAuthenticatedUser(loginRequest);
-
-            if (loginResult.IsSuccess)
-                return RedirectToLocal(returnUrl);
-
-            ModelState.AddModelError(string.Empty, loginResult.Message);
-            return View(request);
+            return NotFound();
         }
 
         // ==========================
@@ -140,7 +124,6 @@ namespace LibrarySystemBBU.Controllers
 
             if (result.IsSuccess)
             {
-                // ✅ PASS EMAIL IN URL (reliable)
                 return RedirectToAction(nameof(ResetPassword), new { emailOrUserName = model.EmailOrUserName });
             }
 
@@ -151,13 +134,11 @@ namespace LibrarySystemBBU.Controllers
         [AllowAnonymous]
         public IActionResult ResetPassword(string? emailOrUserName)
         {
-            // ✅ always fill model from query string
             return View(new ResetPasswordViewModel
             {
                 EmailOrUserName = emailOrUserName ?? ""
             });
         }
-
 
         [HttpPost]
         [AllowAnonymous]
@@ -166,7 +147,6 @@ namespace LibrarySystemBBU.Controllers
         {
             Console.WriteLine($"RESET PASSWORD POST HIT: {model.EmailOrUserName}");
 
-            // ✅ Ensure email stays visible if validation fails
             TempData.Keep("ResetEmail");
 
             if (!ModelState.IsValid)
@@ -201,7 +181,7 @@ namespace LibrarySystemBBU.Controllers
         }
 
         // ==========================
-        // PROFILE (unchanged)
+        // PROFILE
         // ==========================
         [HttpGet]
         [Authorize]
