@@ -35,6 +35,12 @@ namespace LibrarySystemBBU.Models
         [StringLength(50)]
         public required string MemberType { get; set; }
 
+        [StringLength(150)]
+        public string? Faculty { get; set; }
+
+        [StringLength(150)]
+        public string? Subject { get; set; }
+
         [Required(ErrorMessage = "Join Date is required.")]
         [DataType(DataType.Date)]
         public DateTime JoinDate { get; set; } = DateTime.Now.Date;

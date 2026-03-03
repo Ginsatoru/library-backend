@@ -25,7 +25,6 @@ namespace LibrarySystemBBU.Controllers
             _env = env;
         }
 
-        // ----------------- CURRENT USER (as Users entity) -----------------
         private async Task<Users?> GetCurrentUserAsync()
         {
             var uname = User?.Identity?.Name;
@@ -69,13 +68,12 @@ namespace LibrarySystemBBU.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("FullName,Gender,Email,Phone,Address,MemberType,IsActive,Notes,UserId,CreatedBy,DICardNumber,TelegramChatId,TelegramUsername")]
+            [Bind("FullName,Gender,Email,Phone,Address,MemberType,Faculty,Subject,IsActive,Notes,UserId,CreatedBy,DICardNumber,TelegramChatId,TelegramUsername")]
             Member member,
             IFormFile? ProfilePicture,
             string? NewPassword,
             string? ConfirmPassword)
         {
-            // Validate password pair if provided
             if (!string.IsNullOrWhiteSpace(NewPassword) || !string.IsNullOrWhiteSpace(ConfirmPassword))
             {
                 if (string.IsNullOrWhiteSpace(NewPassword) || string.IsNullOrWhiteSpace(ConfirmPassword) || NewPassword != ConfirmPassword)
@@ -84,7 +82,6 @@ namespace LibrarySystemBBU.Controllers
                     ModelState.AddModelError("NewPassword", "Password length must be 5 - 20 characters.");
             }
 
-            // ✅ Make photo optional
             ModelState.Remove(nameof(Member.ProfilePicturePath));
             ModelState.Remove("ProfilePicturePath");
 
@@ -133,7 +130,7 @@ namespace LibrarySystemBBU.Controllers
             return View(member);
         }
 
-        // ✅ POST: Members/Edit/5 (NO current password required)
+        // POST: Members/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
@@ -145,7 +142,6 @@ namespace LibrarySystemBBU.Controllers
             var member = await _context.Members.FirstOrDefaultAsync(m => m.MemberId == id);
             if (member == null) return NotFound();
 
-            // Apply posted values onto existing member (only allowed fields)
             var updateOk = await TryUpdateModelAsync(
                 member,
                 prefix: "",
@@ -155,6 +151,8 @@ namespace LibrarySystemBBU.Controllers
                 m => m.Phone,
                 m => m.Address,
                 m => m.MemberType,
+                m => m.Faculty,
+                m => m.Subject,
                 m => m.IsActive,
                 m => m.Notes,
                 m => m.UserId,
@@ -171,12 +169,10 @@ namespace LibrarySystemBBU.Controllers
                 return View(member);
             }
 
-            // password change requested?
             bool isChangingPassword = !string.IsNullOrWhiteSpace(NewPassword) || !string.IsNullOrWhiteSpace(ConfirmPassword);
 
             if (isChangingPassword)
             {
-                // validate new + confirm
                 if (string.IsNullOrWhiteSpace(NewPassword) || string.IsNullOrWhiteSpace(ConfirmPassword) || NewPassword != ConfirmPassword)
                 {
                     ModelState.AddModelError("NewPassword", "Password and Confirm Password must match.");
@@ -189,7 +185,6 @@ namespace LibrarySystemBBU.Controllers
                 }
             }
 
-            // ✅ Make photo optional on edit as well
             ModelState.Remove(nameof(Member.ProfilePicturePath));
             ModelState.Remove("ProfilePicturePath");
 
@@ -202,7 +197,6 @@ namespace LibrarySystemBBU.Controllers
 
             member.Modified = DateTime.UtcNow;
 
-            // ✅ Apply new password WITHOUT current password
             if (isChangingPassword && !string.IsNullOrWhiteSpace(NewPassword))
             {
                 if (!member.TrySetPassword(NewPassword))
@@ -219,7 +213,6 @@ namespace LibrarySystemBBU.Controllers
                 member.LastPasswordResetAt = DateTime.UtcNow;
             }
 
-            // Handle profile picture
             try
             {
                 if (ProfilePicture != null && ProfilePicture.Length > 0)
@@ -253,7 +246,7 @@ namespace LibrarySystemBBU.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // =============== RESET PASSWORD (permission-aware) ===============
+        // GET: Members/ResetPassword
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> ResetPassword(Guid id)
@@ -268,6 +261,7 @@ namespace LibrarySystemBBU.Controllers
             return View(model: id);
         }
 
+        // POST: Members/ResetPassword
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -345,7 +339,6 @@ namespace LibrarySystemBBU.Controllers
             return _context.Members.Any(e => e.MemberId == id);
         }
 
-        // ----------- IMAGE UPLOAD HELPERS --------------
         private async Task<string> SaveProfilePicture(IFormFile profilePicture)
         {
             var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads", "members");
@@ -380,7 +373,6 @@ namespace LibrarySystemBBU.Controllers
             }
         }
 
-        // ================== EXPORT (CSV / XLS) ==================
         [HttpGet]
         public async Task<IActionResult> Export(string format = "csv")
         {
@@ -403,7 +395,6 @@ namespace LibrarySystemBBU.Controllers
             return File(csvBytes, "text/csv; charset=utf-8", "Members.csv");
         }
 
-        // ----------------- CSV / HTML helpers -----------------
         private static string CsvEscape(string? s) =>
             "\"" + (s ?? string.Empty).Replace("\"", "\"\"") + "\"";
 
@@ -419,7 +410,7 @@ namespace LibrarySystemBBU.Controllers
         private string BuildCsv(System.Collections.Generic.IEnumerable<Member> rows)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("MemberId,FullName,UserName,Gender,Email,Phone,MemberType,IsActive,JoinDate,Modified,DICardNumber,TelegramChatId,TelegramUsername,TotalLoans,ActiveLoans");
+            sb.AppendLine("MemberId,FullName,UserName,Gender,Email,Phone,MemberType,Faculty,Subject,IsActive,JoinDate,Modified,DICardNumber,TelegramChatId,TelegramUsername,TotalLoans,ActiveLoans");
 
             foreach (var m in rows)
             {
@@ -435,6 +426,8 @@ namespace LibrarySystemBBU.Controllers
                     CsvEscape(m.Email),
                     CsvText(m.Phone),
                     CsvEscape(m.MemberType),
+                    CsvEscape(m.Faculty),
+                    CsvEscape(m.Subject),
                     CsvEscape(m.IsActive ? "Active" : "Inactive"),
                     CsvDateText(m.JoinDate, "yyyy-MM-dd"),
                     CsvDateText(m.Modified, "yyyy-MM-dd HH:mm"),
@@ -463,6 +456,8 @@ namespace LibrarySystemBBU.Controllers
                           "<th>Email</th>" +
                           "<th>Phone</th>" +
                           "<th>MemberType</th>" +
+                          "<th>Faculty</th>" +
+                          "<th>Subject</th>" +
                           "<th>Status</th>" +
                           "<th>JoinDate</th>" +
                           "<th>Modified</th>" +
@@ -494,6 +489,8 @@ namespace LibrarySystemBBU.Controllers
                 sb.Append(tdText(m.Email));
                 sb.Append(tdText(m.Phone));
                 sb.Append(tdText(m.MemberType));
+                sb.Append(tdText(m.Faculty));
+                sb.Append(tdText(m.Subject));
                 sb.Append(tdText(m.IsActive ? "Active" : "Inactive"));
                 sb.Append(tdDate(m.JoinDate, "yyyy-MM-dd"));
                 sb.Append(tdDate(m.Modified, "yyyy-MM-dd HH:mm"));

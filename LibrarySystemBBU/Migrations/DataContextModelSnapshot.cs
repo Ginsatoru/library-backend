@@ -586,6 +586,10 @@ namespace LibrarySystemBBU.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("Faculty")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -650,6 +654,10 @@ namespace LibrarySystemBBU.Migrations
 
                     b.Property<bool>("StaffOnlyPasswordReset")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Subject")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("TelegramChatId")
                         .HasMaxLength(100)

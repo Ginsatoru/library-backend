@@ -111,6 +111,8 @@ namespace LibrarySystemBBU.Controllers
                 Phone = model.Phone,
                 Address = model.Address,
                 MemberType = model.MemberType,
+                Faculty = model.Faculty,
+                Subject = model.Subject,
                 JoinDate = DateTime.UtcNow.Date,
                 Modified = DateTime.UtcNow,
                 IsActive = true,

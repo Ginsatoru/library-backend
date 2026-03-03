@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
 namespace LibrarySystemBBU.Models
 {
     public class MemberRegisterViewModel
@@ -28,6 +27,14 @@ namespace LibrarySystemBBU.Models
         [Required, StringLength(50)]
         [Display(Name = "Member Type")]
         public string MemberType { get; set; } = "General";
+
+        [Required, StringLength(150)]
+        [Display(Name = "Faculty")]
+        public string Faculty { get; set; } = string.Empty;
+
+        [Required, StringLength(150)]
+        [Display(Name = "Subject")]
+        public string Subject { get; set; } = string.Empty;
 
         [Required, StringLength(20, MinimumLength = 5)]
         [DataType(DataType.Password)]

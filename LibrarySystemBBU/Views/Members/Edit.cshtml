@@ -7,8 +7,6 @@
 <link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
 
 <style>
-    /* ===== Edit member page tweaks (using global glass theme) ===== */
-
     .edit-page-header {
         display: flex;
         justify-content: space-between;
@@ -74,13 +72,11 @@
 </style>
 
 <div class="wrap">
-    <!-- Header -->
     <div class="edit-page-header">
         <h2 class="page-title mb-0">
             <span class="logo-dot"></span>
             Edit Member
         </h2>
-
         <div class="d-flex gap-2 flex-wrap">
             <a asp-action="Index" class="btn btn-glass glass-surface-pill">
                 <i class="fa-solid fa-arrow-left"></i> Back to List
@@ -88,7 +84,6 @@
         </div>
     </div>
 
-    <!-- Glass edit card -->
     <div class="card edit-member-card mt-5">
         <div class="card-body p-4">
             <h4 class="fw-bold text-center mb-3" style="color:#020617;">
@@ -97,52 +92,39 @@
 
             <form asp-action="Edit" enctype="multipart/form-data" autocomplete="off" method="post" id="memberEditForm">
                 @Html.AntiForgeryToken()
-
                 <input type="hidden" asp-for="MemberId" />
                 <input asp-for="ProfilePicturePath" type="hidden" />
-
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                 <!-- Avatar -->
                 <div class="text-center mb-3">
                     <img id="profilePreview"
                          src="@(string.IsNullOrWhiteSpace(Model.ProfilePicturePath)
-                                    ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
-                                    : Model.ProfilePicturePath)"
-                         class="avatar-3d"
-                         alt="Profile Preview" />
+                                                             ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
+                                                             : Model.ProfilePicturePath)"
+                         class="avatar-3d" alt="Profile Preview" />
                     <div class="mb-1">
                         <label class="btn btn-glass btn-sm ms-1" style="font-size:0.92em;">
                             <i class="fa fa-upload"></i> Change Photo
-                            <input type="file"
-                                   name="ProfilePicture"
-                                   id="ProfilePicture"
-                                   accept="image/*"
-                                   capture="environment"
-                                   hidden
-                                   onchange="showPreview(event);" />
+                            <input type="file" name="ProfilePicture" id="ProfilePicture" accept="image/*" capture="environment" hidden onchange="showPreview(event);" />
                         </label>
                         <div id="filenameLabel" class="filename-label"></div>
                     </div>
                     <span asp-validation-for="ProfilePicturePath" class="text-danger small"></span>
                 </div>
 
-                <!-- ===== Row 1: FullName + Gender ===== -->
+                <!-- Row 1: FullName + Gender -->
                 <div class="row g-3">
                     <div class="col-md-6">
                         <div class="mb-3 mb-md-0">
-                            <label asp-for="FullName" class="form-label">
-                                <i class="fa-solid fa-user"></i> Full Name
-                            </label>
+                            <label asp-for="FullName" class="form-label"><i class="fa-solid fa-user"></i> Full Name</label>
                             <input asp-for="FullName" class="form-control" />
                             <span asp-validation-for="FullName" class="text-danger small"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3 mb-md-0">
-                            <label asp-for="Gender" class="form-label">
-                                <i class="fa-solid fa-venus-mars"></i> Gender
-                            </label>
+                            <label asp-for="Gender" class="form-label"><i class="fa-solid fa-venus-mars"></i> Gender</label>
                             <select asp-for="Gender" class="form-select">
                                 <option value="">-- Select Gender --</option>
                                 <option>Male</option>
@@ -154,44 +136,36 @@
                     </div>
                 </div>
 
-                <!-- ===== Row 2: Email + Phone ===== -->
-                <div class="row g-3">
+                <!-- Row 2: Email + Phone -->
+                <div class="row g-3 mt-1">
                     <div class="col-md-6">
                         <div class="mb-3 mb-md-0">
-                            <label asp-for="Email" class="form-label">
-                                <i class="fa-solid fa-envelope"></i> Email
-                            </label>
+                            <label asp-for="Email" class="form-label"><i class="fa-solid fa-envelope"></i> Email</label>
                             <input asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger small"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3 mb-md-0">
-                            <label asp-for="Phone" class="form-label">
-                                <i class="fa-solid fa-phone"></i> Phone
-                            </label>
+                            <label asp-for="Phone" class="form-label"><i class="fa-solid fa-phone"></i> Phone</label>
                             <input asp-for="Phone" class="form-control" />
                             <span asp-validation-for="Phone" class="text-danger small"></span>
                         </div>
                     </div>
                 </div>
 
-                <!-- ===== Row 3: Address + MemberType ===== -->
-                <div class="row g-3">
+                <!-- Row 3: Address + MemberType -->
+                <div class="row g-3 mt-1">
                     <div class="col-md-6">
                         <div class="mb-3 mb-md-0">
-                            <label asp-for="Address" class="form-label">
-                                <i class="fa-solid fa-location-dot"></i> Address
-                            </label>
+                            <label asp-for="Address" class="form-label"><i class="fa-solid fa-location-dot"></i> Address</label>
                             <input asp-for="Address" class="form-control" />
                             <span asp-validation-for="Address" class="text-danger small"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3 mb-md-0">
-                            <label asp-for="MemberType" class="form-label">
-                                <i class="fa-solid fa-id-card-clip"></i> Member Type
-                            </label>
+                            <label asp-for="MemberType" class="form-label"><i class="fa-solid fa-id-card-clip"></i> Member Type</label>
                             <select asp-for="MemberType" class="form-select">
                                 <option value="">-- Select Type --</option>
                                 <option>Student</option>
@@ -204,57 +178,75 @@
                     </div>
                 </div>
 
-                <!-- ===== Row 4: Library ID + Telegram Chat ID ===== -->
+                <!-- Row 4: Faculty + Subject -->
                 <div class="row g-3 mt-1">
                     <div class="col-md-6">
                         <div class="mb-3 mb-md-0">
-                            <label asp-for="DICardNumber" class="form-label">
-                                <i class="fa-solid fa-id-card"></i> Library Card / Member ID
-                            </label>
+                            <label asp-for="Faculty" class="form-label"><i class="fa-solid fa-building-columns"></i> Faculty</label>
+                            <select asp-for="Faculty" class="form-select" id="editFacultySelect">
+                                <option value="">-- Select Faculty --</option>
+                                <option>Faculty of Business Administration</option>
+                                <option>Faculty of Law</option>
+                                <option>Faculty of Computer Science</option>
+                                <option>Faculty of Engineering</option>
+                                <option>Faculty of Education</option>
+                                <option>Faculty of Social Science</option>
+                                <option>Faculty of Tourism</option>
+                                <option>Faculty of Medicine</option>
+                                <option>Faculty of Architecture</option>
+                            </select>
+                            <span asp-validation-for="Faculty" class="text-danger small"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3 mb-md-0">
+                            <label asp-for="Subject" class="form-label"><i class="fa-solid fa-book-open"></i> Subject</label>
+                            <select asp-for="Subject" class="form-select" id="editSubjectSelect">
+                                <option value="">-- Select Faculty First --</option>
+                            </select>
+                            <span asp-validation-for="Subject" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 5: Library ID + Telegram Chat ID -->
+                <div class="row g-3 mt-1">
+                    <div class="col-md-6">
+                        <div class="mb-3 mb-md-0">
+                            <label asp-for="DICardNumber" class="form-label"><i class="fa-solid fa-id-card"></i> Library Card / Member ID</label>
                             <input asp-for="DICardNumber" class="form-control" />
                             <span asp-validation-for="DICardNumber" class="text-danger small"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3 mb-md-0">
-                            <label asp-for="TelegramChatId" class="form-label">
-                                <i class="fa-brands fa-telegram"></i> Telegram Chat ID
-                            </label>
+                            <label asp-for="TelegramChatId" class="form-label"><i class="fa-brands fa-telegram"></i> Telegram Chat ID</label>
                             <input asp-for="TelegramChatId" class="form-control" />
-                            <div class="help-hint">
-                                Chat ID used for sending Telegram reminders (numeric ID from your bot).
-                            </div>
+                            <div class="help-hint">Chat ID used for sending Telegram reminders (numeric ID from your bot).</div>
                             <span asp-validation-for="TelegramChatId" class="text-danger small"></span>
                         </div>
                     </div>
                 </div>
 
-                <!-- ===== Row 5: Telegram Username + Join Date ===== -->
+                <!-- Row 6: Telegram Username + Join Date -->
                 <div class="row g-3 mt-1">
                     <div class="col-md-6">
                         <div class="mb-3 mb-md-0">
-                            <label asp-for="TelegramUsername" class="form-label">
-                                <i class="fa-brands fa-telegram"></i> Telegram Username
-                            </label>
+                            <label asp-for="TelegramUsername" class="form-label"><i class="fa-brands fa-telegram"></i> Telegram Username</label>
                             <input asp-for="TelegramUsername" class="form-control" placeholder="username" />
                             <span asp-validation-for="TelegramUsername" class="text-danger small"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3 mb-md-0">
-                            <label class="form-label">
-                                <i class="fa-solid fa-calendar-plus"></i> Join Date
-                            </label>
-                            <input type="date"
-                                   class="form-control"
-                                   value="@Model.JoinDate.ToString("yyyy-MM-dd")"
-                                   readonly />
+                            <label class="form-label"><i class="fa-solid fa-calendar-plus"></i> Join Date</label>
+                            <input type="date" class="form-control" value="@Model.JoinDate.ToString("yyyy-MM-dd")" readonly />
                             <div class="form-text">Join Date is not editable.</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- ===== Row 6: Active switch + Notes ===== -->
+                <!-- Row 7: Active switch + Notes -->
                 <div class="row g-3 mt-1">
                     <div class="col-md-6">
                         <div class="form-check form-switch mb-3 mb-md-0 mt-2">
@@ -266,31 +258,25 @@
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3 mb-md-0">
-                            <label asp-for="Notes" class="form-label">
-                                <i class="fa-solid fa-note-sticky"></i> Notes
-                            </label>
+                            <label asp-for="Notes" class="form-label"><i class="fa-solid fa-note-sticky"></i> Notes</label>
                             <input asp-for="Notes" class="form-control" />
                             <span asp-validation-for="Notes" class="text-danger small"></span>
                         </div>
                     </div>
                 </div>
 
-                <!-- ===== Row 7: Linked User + Created By ===== -->
+                <!-- Row 8: Linked User + Created By -->
                 <div class="row g-3 mt-1">
                     <div class="col-md-6">
                         <div class="mb-3 mb-md-0">
-                            <label asp-for="UserId" class="form-label">
-                                <i class="fa-solid fa-user-tie"></i> Linked User
-                            </label>
+                            <label asp-for="UserId" class="form-label"><i class="fa-solid fa-user-tie"></i> Linked User</label>
                             <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
                             <span asp-validation-for="UserId" class="text-danger small"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3 mb-md-0">
-                            <label asp-for="CreatedBy" class="form-label">
-                                <i class="fa-solid fa-user"></i> Created By
-                            </label>
+                            <label asp-for="CreatedBy" class="form-label"><i class="fa-solid fa-user"></i> Created By</label>
                             <select asp-for="CreatedBy" class="form-select" asp-items="ViewBag.CreatedByList"></select>
                             <span asp-validation-for="CreatedBy" class="text-danger small"></span>
                         </div>
@@ -306,40 +292,25 @@
                     <div class="alert alert-info py-2 px-3 mb-3">
                         Leave both fields blank to keep the current password.
                     </div>
-
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="mb-3 mb-md-0">
                                 <label class="form-label">New Password</label>
                                 <div class="input-group">
-                                    <input name="NewPassword"
-                                           id="NewPassword"
-                                           type="password"
-                                           class="form-control"
-                                           placeholder="5 - 20 characters"
-                                           autocomplete="new-password" />
-                                    <button class="btn btn-outline-secondary"
-                                            type="button"
-                                            onclick="togglePw('NewPassword', this)">
+                                    <input name="NewPassword" id="NewPassword" type="password" class="form-control" placeholder="5 - 20 characters" autocomplete="new-password" />
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePw('NewPassword', this)">
                                         <i class="fa-regular fa-eye"></i>
                                     </button>
                                 </div>
                                 <div class="pwd-hint">No current password required.</div>
                             </div>
                         </div>
-
                         <div class="col-md-6">
                             <div class="mb-0">
                                 <label class="form-label">Confirm New Password</label>
                                 <div class="input-group">
-                                    <input name="ConfirmPassword"
-                                           id="ConfirmPassword"
-                                           type="password"
-                                           class="form-control"
-                                           autocomplete="new-password" />
-                                    <button class="btn btn-outline-secondary"
-                                            type="button"
-                                            onclick="togglePw('ConfirmPassword', this)">
+                                    <input name="ConfirmPassword" id="ConfirmPassword" type="password" class="form-control" autocomplete="new-password" />
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePw('ConfirmPassword', this)">
                                         <i class="fa-regular fa-eye"></i>
                                     </button>
                                 </div>
@@ -364,19 +335,46 @@
 
 @section Scripts {
     <script>
+        const facultySubjects = {
+            'Faculty of Business Administration': ['Accounting', 'Finance', 'Management', 'Marketing'],
+            'Faculty of Law': ['Legal Studies'],
+            'Faculty of Computer Science': ['Computer Science', 'Information Technology', 'Software Engineering'],
+            'Faculty of Engineering': ['Civil Engineering', 'Electrical Engineering'],
+            'Faculty of Education': ['Education', 'English for Teaching'],
+            'Faculty of Social Science': ['Sociology', 'Development Studies'],
+            'Faculty of Tourism': ['Hotel Management', 'Tourism Management'],
+            'Faculty of Medicine': ['General Medicine', 'Pharmacy'],
+            'Faculty of Architecture': ['Architecture', 'Interior Design'],
+        };
+
+        function populateSubjects(facultySelectId, subjectSelectId, selectedSubject) {
+            const faculty = document.getElementById(facultySelectId)?.value;
+            const subjectSelect = document.getElementById(subjectSelectId);
+            if (!subjectSelect) return;
+            subjectSelect.innerHTML = '<option value="">-- Select Subject --</option>';
+            const subjects = facultySubjects[faculty] || [];
+            subjects.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.textContent = s;
+                if (s === selectedSubject) opt.selected = true;
+                subjectSelect.appendChild(opt);
+            });
+            if (!subjects.length) {
+                subjectSelect.innerHTML = '<option value="">-- Select Faculty First --</option>';
+            }
+        }
+
         function showPreview(event) {
             var input = event.target;
             var reader = new FileReader();
             reader.onload = function () {
-                var preview = document.getElementById('profilePreview');
-                preview.src = reader.result;
+                document.getElementById('profilePreview').src = reader.result;
             };
-            var fileName = '';
             if (input.files && input.files[0]) {
                 reader.readAsDataURL(input.files[0]);
-                fileName = input.files[0].name;
+                document.getElementById('filenameLabel').innerText = "Selected: " + input.files[0].name;
             }
-            document.getElementById('filenameLabel').innerText = fileName ? "Selected: " + fileName : "";
         }
 
         function togglePw(id, btn) {
@@ -384,13 +382,17 @@
             if (!input) return;
             const isPw = input.type === "password";
             input.type = isPw ? "text" : "password";
-            btn.innerHTML = isPw
-                ? '<i class="fa-regular fa-eye-slash"></i>'
-                : '<i class="fa-regular fa-eye"></i>';
+            btn.innerHTML = isPw ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>';
         }
 
-        // ✅ Validate password match (only if new password is entered)
         document.addEventListener("DOMContentLoaded", function () {
+            // Populate subjects on load with existing saved value
+            populateSubjects('editFacultySelect', 'editSubjectSelect', '@Model.Subject');
+
+            document.getElementById('editFacultySelect')?.addEventListener('change', () =>
+                populateSubjects('editFacultySelect', 'editSubjectSelect', ''));
+
+            // Password validation
             const form = document.getElementById("memberEditForm");
             const newPwInput = document.getElementById("NewPassword");
             const confirmPwInput = document.getElementById("ConfirmPassword");
@@ -400,55 +402,40 @@
             function validatePw() {
                 const newPw = (newPwInput.value || "").trim();
                 const confirmPw = (confirmPwInput.value || "").trim();
-
                 err.textContent = "";
                 btnSave.disabled = false;
-
-                // No password change requested
                 if (!newPw && !confirmPw) return true;
-
                 if (newPw.length < 5 || newPw.length > 20) {
                     err.textContent = "Password must be 5–20 characters.";
                     btnSave.disabled = true;
                     return false;
                 }
-
                 if (!confirmPw) {
                     err.textContent = "Please confirm the new password.";
                     btnSave.disabled = true;
                     return false;
                 }
-
                 if (newPw !== confirmPw) {
                     err.textContent = "Passwords do not match.";
                     btnSave.disabled = true;
                     return false;
                 }
-
                 return true;
             }
 
             newPwInput.addEventListener("input", validatePw);
             confirmPwInput.addEventListener("input", validatePw);
-
             form.addEventListener("submit", function (e) {
-                if (!validatePw()) {
-                    e.preventDefault();
-                }
+                if (!validatePw()) e.preventDefault();
             });
         });
     </script>
 
-    @* Show popup when server-side set TempData["PwdError"] *@
     @if (TempData["PwdError"] != null)
     {
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Password not updated',
-                    text: '@TempData["PwdError"]'
-                });
+                Swal.fire({ icon: 'error', title: 'Password not updated', text: '@TempData["PwdError"]' });
             });
         </script>
     }

@@ -54,6 +54,8 @@ namespace LibrarySystemBBU.Controllers
                 address = member.Address,
                 gender = member.Gender,
                 memberType = member.MemberType,
+                faculty = member.Faculty,
+                subject = member.Subject,
                 joinDate = member.JoinDate,
                 isActive = member.IsActive,
                 profilePicture = member.ProfilePicturePath,
