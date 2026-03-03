@@ -6,162 +6,488 @@
 <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 <link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
 
-    <div class="wrap">
+<style>
+    /* Remove all box shadows from every element and hover states */
+    *,
+    *::before,
+    *::after,
+    :focus,
+    :hover,
+    :active,
+    .card,
+    .card:hover,
+    .kpi,
+    .kpi:hover,
+    .chip,
+    .chip:hover,
+    .btn,
+    .btn:hover,
+    .search input,
+    .search input:hover,
+    .search input:focus,
+    #search-results,
+    #search-results .result,
+    #search-results .result:hover,
+    .head,
+    .quick,
+    .wrap > *,
+    .card-body-glass,
+    .card-head,
+    .opts button,
+    .opts button:hover,
+    input[type="date"],
+    input[type="date"]:hover,
+    input[type="date"]:focus {
+        box-shadow: none !important;
+        outline: none !important;
+    }
 
-        <!-- HEADER -------------------------------------------------->
-        <div class="head">
-            <div class="title"><span class="dot"></span>Dashboard</div>
+        /* Remove all gradients */
+        .card,
+        .kpi,
+        .chip,
+        .btn,
+        .search input,
+        #search-results,
+        #search-results .result,
+        .card-body-glass,
+        .card-head,
+        .opts button,
+        input[type="date"],
+        .head,
+        .quick,
+        .wrap {
+            background: transparent !important;
+            background-image: none !important;
+        }
+
+    /* Set light gray background for cards and KPI boxes */
+    .card {
+        background-color: #f8f9fa !important;
+        border: 1px solid #e9ecef;
+    }
+
+    .kpi {
+        background-color: #f8f9fa !important;
+        border: 1px solid #e9ecef;
+    }
+
+    /* Remove gradient from chart background */
+    #monthlyChart {
+        background-color: transparent !important;
+    }
+
+    /* Remove any border that might look like a shadow */
+    .kpi,
+    .card,
+    .search input,
+    #search-results .result,
+    .chip,
+    .btn {
+        border: 1px solid #e9ecef;
+    }
+
+        /* Ensure focus states are visible but without shadows */
+        .search input:focus,
+        .btn:focus,
+        .chip:focus,
+        input[type="date"]:focus {
+            border-color: #00b3ff;
+            background-color: #ffffff !important;
+        }
+
+    /* Keep the card head subtle separation */
+    .card-head {
+        border-bottom: 1px solid #e9ecef;
+        background-color: #f8f9fa !important;
+    }
+
+    /* Card body glass style - now solid light gray */
+    .card-body-glass {
+        background-color: #f8f9fa !important;
+        padding: 1.25rem;
+    }
+
+    /* Search results background */
+    #search-results {
+        background-color: #ffffff !important;
+    }
+
+        #search-results .result:hover {
+            background-color: #f1f3f5 !important;
+        }
+
+    /* Chip buttons */
+    .chip {
+        background-color: #f8f9fa !important;
+    }
+
+        .chip:hover {
+            background-color: #e9ecef !important;
+        }
+
+    /* Buttons */
+    .btn {
+        background-color: #f8f9fa !important;
+    }
+
+        .btn:hover {
+            background-color: #e9ecef !important;
+        }
+
+    /* Date inputs */
+    input[type="date"] {
+        background-color: #ffffff !important;
+        border: 1px solid #e9ecef;
+    }
+
+    /* Search container styling - UPDATED with downward position */
+    .search {
+        position: relative;
+        width: 300px; /* Fixed width instead of flexible */
+        margin-top: 4px; /* Push search bar down */
+        margin-bottom: 4px; /* Maintain spacing */
+    }
+
+        /* Search icon styling */
+        .search .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            z-index: 10; 
+            pointer-events: none;
+            font-size: 0.9rem;
+        }
+
+        /* Search input styling with padding for icon */
+        .search input {
+            background-color: #ffffff !important;
+            width: 100%;
+            padding: 0.5rem 1rem 0.5rem 2.2rem !important; /* Smaller padding */
+            border-radius: 32px;
+            font-size: 0.9rem; /* Slightly smaller font */
+            height: 38px; /* Fixed height to match buttons */
+        }
+
+    /* Head section - UPDATED for flex layout */
+    .head {
+        background-color: transparent !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+        .head .title {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 500;
+            line-height: 1.2; /* Better line height control */
+        }
+
+            .head .title .dot {
+                display: inline-block;
+                width: 8px;
+                height: 8px;
+                background-color: #00b3ff;
+                border-radius: 50%;
+                margin-right: 12px;
+            }
+
+        /* Quick actions container */
+        .head .quick {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+    /* Quick action chips - match search height */
+    .quick .chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        height: 38px;
+    }
+
+    /* Right section with search and actions - align items to center */
+    .head-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    /* Chart container adjustments */
+    canvas {
+        background-color: transparent !important;
+    }
+
+    /* Override any Bootstrap gradient backgrounds */
+    .bg-primary, .bg-secondary, .bg-success, .bg-info, .bg-warning, .bg-danger {
+        background-image: none !important;
+    }
+
+    /* Ensure text colors remain */
+    body {
+        background-color: #ffffff;
+    }
+
+    /* REMOVE UNDERLINES ON TEXT HOVER */
+    a,
+    a:hover,
+    a:focus,
+    a:active,
+    .kpi a,
+    .kpi a:hover,
+    .kpi a:focus,
+    .kpi a:active,
+    .chip,
+    .chip:hover,
+    .chip:focus,
+    .chip:active,
+    .btn,
+    .btn:hover,
+    .btn:focus,
+    .btn:active,
+    .quick a,
+    .quick a:hover,
+    .quick a:focus,
+    .quick a:active,
+    #search-results .result,
+    #search-results .result:hover,
+    #search-results .result:focus,
+    #search-results .result:active,
+    .card a,
+    .card a:hover,
+    .card a:focus,
+    .card a:active {
+        text-decoration: none !important;
+        border-bottom: none !important;
+        outline: none !important;
+    }
+
+        /* KPI view links - keep arrow visible */
+        .kpi a i {
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+
+        .kpi a:hover i {
+            transform: translateX(4px);
+        }
+
+    /* Remove any Bootstrap link underlines */
+    .text-decoration-none {
+        text-decoration: none !important;
+    }
+
+    /* Ensure no underlines in search results */
+    #search-results .result span,
+    #search-results .result b {
+        text-decoration: none !important;
+        border-bottom: none !important;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .head {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .head-right {
+            width: 100%;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search {
+            width: 100%; /* Full width on mobile */
+            margin-top: 0; /* Reset margin on mobile */
+        }
+    }
+
+    /* Search results dropdown positioning */
+    #search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        margin-top: 4px;
+    }
+</style>
+
+<div class="wrap">
+
+    <!-- HEADER with Search and Actions in same row -->
+    <div class="head">
+        <div class="title">Dashboard</div>
+
+        <div class="head-right">
+            <!-- SEARCH - Fixed width, properly aligned with downward offset -->
+            <div class="search" role="search">
+                <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                <label class="sr-only" for="q">Search</label>
+                <input id="q" placeholder="Search anything..." autocomplete="off"
+                       aria-autocomplete="list" aria-controls="search-results" aria-expanded="false">
+                <div id="search-results" role="listbox" tabindex="-1"></div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
             <div class="quick">
                 <a class="chip" href="@Url.Action("Create", "Catalogs")"><i class="fas fa-plus"></i> Add Catalog</a>
                 <a class="chip" href="@Url.Action("Create", "Members")"><i class="fas fa-user-plus"></i> Add Member</a>
-                <a class="chip" href="@Url.Action("Create", "BookBorrows")"><i class="fas fa-file-signature"></i> New Book Borrow</a>
+                <a class="chip" href="@Url.Action("Create", "BookBorrows")"><i class="fas fa-file-signature"></i> New Borrow</a>
             </div>
         </div>
-
-        <!-- SEARCH -------------------------------------------------->
-        <div class="search" role="search">
-            <i class="fas fa-search ico" aria-hidden="true"></i>
-            <label class="sr-only" for="q">Search</label>
-            <input id="q" placeholder="Search anything (Book, Member, Book Borrow, ...)" autocomplete="off"
-                   aria-autocomplete="list" aria-controls="search-results" aria-expanded="false">
-            <div id="search-results" role="listbox" tabindex="-1"></div>
-        </div>
-
-        <!-- KPI GRID ------------------------------------------------>
-        <div class="row g-3 g-md-4 mb-1">
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="kpi">
-                    <span class="ico"><i class="fas fa-layer-group"></i></span>
-                    <div class="label">Total Catalog</div>
-                    <div class="val">@Model.TotalCatalog</div>
-                    <a href="@Url.Action("Index", "Catalogs")">View <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-            @* Total Books disabled in your code *@
-            @* <div class="col-12 col-sm-6 col-lg-3">
-            <div class="kpi">
-            <span class="ico"><i class="fas fa-book"></i></span>
-            <div class="label">Total Books</div>
-            <div class="val">@Model.TotalBooks</div>
-            <a href="@Url.Action("Index", "Books")">View <i class="fas fa-arrow-right"></i></a>
-            </div>
-            </div> *@
-
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="kpi">
-                    <span class="ico"><i class="fas fa-users"></i></span>
-                    <div class="label">Total Members</div>
-                    <div class="val">@Model.TotalMembers</div>
-                    <a href="@Url.Action("Index", "Members")">View <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-            <!-- ALL BORROWS (no filter) -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="kpi">
-                    <span class="ico"><i class="fas fa-file-signature"></i></span>
-                    <div class="label">Total Book Borrows</div>
-                    <div class="val">@Model.TotalBorrows</div>
-                    <a href="@Url.Action("Index", "BookBorrows")">View <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-            <!-- RETURNED = link to #returned -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="kpi">
-                    <span class="ico"><i class="fas fa-undo"></i></span>
-                    <div class="label">Total Returned</div>
-                    <div class="val">@Model.ReturnedBorrows</div>
-                    <a href="@Url.Action("Index", "BookBorrows")#returned">View <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-            <!-- NOT RETURN = link to #notreturned -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="kpi">
-                    <span class="ico"><i class="fas fa-times-circle"></i></span>
-                    <div class="label">Total Not Return</div>
-                    <div class="val">@Model.NotReturn</div>
-                    <a href="@Url.Action("Index", "BookBorrows")#notreturned">View <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-            <!-- OVERDUE = link to #due -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="kpi">
-                    <span class="ico"><i class="fas fa-exclamation-triangle"></i></span>
-                    <div class="label">Overdue Book Borrows</div>
-                    <div class="val">@Model.OverdueBorrows</div>
-                    <a href="@Url.Action("Index", "BookBorrows")#due">View <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-            @* Pending returns hidden *@
-            @* <div class="col-12 col-sm-6 col-lg-3">
-            <div class="kpi">
-            <span class="ico"><i class="fas fa-hourglass-half"></i></span>
-            <div class="label">Pending Returns</div>
-            <div class="val">@Model.PendingReturns</div>
-            <a href="@Url.Action("Index", "BookBorrows")">View <i class="fas fa-arrow-right"></i></a>
-            </div>
-            </div> *@
-
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="kpi">
-                    <span class="ico"><i class="fas fa-cart-shopping"></i></span>
-                    <div class="label">Total Purchases</div>
-                    <div class="val">@Model.Purchases</div>
-                    <a href="@Url.Action("Index", "Purchases")">View <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-            <!-- NEW: ADJUSTMENTS KPI -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="kpi">
-                    <span class="ico"><i class="fas fa-sliders-h"></i></span>
-                    <div class="label">Total Adjustments</div>
-                    <div class="val">@Model.Adjustments</div>
-                    <a href="@Url.Action("Index", "Adjustments")">View <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <!-- CHART + EXPORT ----------------------------------------->
-        <div class="card mt-3" style="border-radius: var(--radius-lg);">
-            <div class="card-head">
-                <div class="card-title">
-                    <i class="fas fa-chart-line"></i>
-                    Monthly Book Borrow Statistics
-                </div>
-                <form id="excelForm" class="opts" method="get" action="@Url.Action("DownloadExcel", "Dashboard")">
-                    <label class="sr-only" for="startDate">Start</label>
-                    <input id="startDate" name="start" type="date" required>
-                    <label class="sr-only" for="endDate">End</label>
-                    <input id="endDate" name="end" type="date" required>
-
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <label class="me-2"><input type="checkbox" name="totals" value="TotalBorrows" checked> Book Borrows</label>
-                        <label class="me-2"><input type="checkbox" name="totals" value="ReturnedBorrows" checked> Returned</label>
-                        <label class="me-2"><input type="checkbox" name="totals" value="NotReturn" checked> Not Return</label>
-                        <label class="me-2"><input type="checkbox" name="totals" value="OverdueBorrows"> Overdue</label>
-                        <label class="me-2"><input type="checkbox" name="totals" value="Purchases"> Purchases</label>
-                        <label class="me-2"><input type="checkbox" name="totals" value="Adjustments"> Adjustments</label>
-                        <label class="me-2"><input type="checkbox" name="totals" value="TotalBooks"> Books</label>
-                        <label class="me-2"><input type="checkbox" name="totals" value="TotalMembers"> Members</label>
-                    </div>
-
-                    <button type="submit" class="btn btn-sm px-3">
-                        <i class="fas fa-download me-1"></i> Download Excel
-                    </button>
-                </form>
-            </div>
-            <div class="card-body-glass">
-                <canvas id="monthlyChart" height="76" aria-label="Monthly book borrow chart" role="img"></canvas>
-            </div>
-        </div>
-
     </div>
+
+    <!-- KPI GRID ------------------------------------------------>
+    <div class="row g-3 g-md-4 mb-1">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="kpi">
+                <span class="ico"><i class="fas fa-layer-group"></i></span>
+                <div class="label">Total Catalog</div>
+                <div class="val">@Model.TotalCatalog</div>
+                <a href="@Url.Action("Index", "Catalogs")">View <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        @* Total Books disabled in your code *@
+        @* <div class="col-12 col-sm-6 col-lg-3">
+        <div class="kpi">
+        <span class="ico"><i class="fas fa-book"></i></span>
+        <div class="label">Total Books</div>
+        <div class="val">@Model.TotalBooks</div>
+        <a href="@Url.Action("Index", "Books")">View <i class="fas fa-arrow-right"></i></a>
+        </div>
+        </div> *@
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="kpi">
+                <span class="ico"><i class="fas fa-users"></i></span>
+                <div class="label">Total Members</div>
+                <div class="val">@Model.TotalMembers</div>
+                <a href="@Url.Action("Index", "Members")">View <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <!-- ALL BORROWS (no filter) -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="kpi">
+                <span class="ico"><i class="fas fa-file-signature"></i></span>
+                <div class="label">Total Book Borrows</div>
+                <div class="val">@Model.TotalBorrows</div>
+                <a href="@Url.Action("Index", "BookBorrows")">View <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <!-- RETURNED = link to #returned -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="kpi">
+                <span class="ico"><i class="fas fa-undo"></i></span>
+                <div class="label">Total Returned</div>
+                <div class="val">@Model.ReturnedBorrows</div>
+                <a href="@Url.Action("Index", "BookBorrows")#returned">View <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <!-- NOT RETURN = link to #notreturned -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="kpi">
+                <span class="ico"><i class="fas fa-times-circle"></i></span>
+                <div class="label">Total Not Return</div>
+                <div class="val">@Model.NotReturn</div>
+                <a href="@Url.Action("Index", "BookBorrows")#notreturned">View <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <!-- OVERDUE = link to #due -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="kpi">
+                <span class="ico"><i class="fas fa-exclamation-triangle"></i></span>
+                <div class="label">Overdue Book Borrows</div>
+                <div class="val">@Model.OverdueBorrows</div>
+                <a href="@Url.Action("Index", "BookBorrows")#due">View <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        @* Pending returns hidden *@
+        @* <div class="col-12 col-sm-6 col-lg-3">
+        <div class="kpi">
+        <span class="ico"><i class="fas fa-hourglass-half"></i></span>
+        <div class="label">Pending Returns</div>
+        <div class="val">@Model.PendingReturns</div>
+        <a href="@Url.Action("Index", "BookBorrows")">View <i class="fas fa-arrow-right"></i></a>
+        </div>
+        </div> *@
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="kpi">
+                <span class="ico"><i class="fas fa-cart-shopping"></i></span>
+                <div class="label">Total Purchases</div>
+                <div class="val">@Model.Purchases</div>
+                <a href="@Url.Action("Index", "Purchases")">View <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <!-- NEW: ADJUSTMENTS KPI -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="kpi">
+                <span class="ico"><i class="fas fa-sliders-h"></i></span>
+                <div class="label">Total Adjustments</div>
+                <div class="val">@Model.Adjustments</div>
+                <a href="@Url.Action("Index", "Adjustments")">View <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHART + EXPORT ----------------------------------------->
+    <div class="card mt-3" style="border-radius: var(--radius-lg);">
+        <div class="card-head">
+            <div class="card-title">
+                <i class="fas fa-chart-line"></i>
+                Monthly Book Borrow Statistics
+            </div>
+            <form id="excelForm" class="opts" method="get" action="@Url.Action("DownloadExcel", "Dashboard")">
+                <label class="sr-only" for="startDate">Start</label>
+                <input id="startDate" name="start" type="date" required>
+                <label class="sr-only" for="endDate">End</label>
+                <input id="endDate" name="end" type="date" required>
+
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <label class="me-2"><input type="checkbox" name="totals" value="TotalBorrows" checked> Book Borrows</label>
+                    <label class="me-2"><input type="checkbox" name="totals" value="ReturnedBorrows" checked> Returned</label>
+                    <label class="me-2"><input type="checkbox" name="totals" value="NotReturn" checked> Not Return</label>
+                    <label class="me-2"><input type="checkbox" name="totals" value="OverdueBorrows"> Overdue</label>
+                    <label class="me-2"><input type="checkbox" name="totals" value="Purchases"> Purchases</label>
+                    <label class="me-2"><input type="checkbox" name="totals" value="Adjustments"> Adjustments</label>
+                    <label class="me-2"><input type="checkbox" name="totals" value="TotalBooks"> Books</label>
+                    <label class="me-2"><input type="checkbox" name="totals" value="TotalMembers"> Members</label>
+                </div>
+
+                <button type="submit" class="btn btn-sm px-3">
+                    <i class="fas fa-download me-1"></i> Download Excel
+                </button>
+            </form>
+        </div>
+        <div class="card-body-glass">
+            <canvas id="monthlyChart" height="76" aria-label="Monthly book borrow chart" role="img"></canvas>
+        </div>
+    </div>
+
+</div>
 
 <script src="~/jquery/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -172,11 +498,7 @@
     const labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthlyLabels));
     const series = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthlyBorrowStats));
 
-    const grad = ctx.createLinearGradient(0, 0, 0, 260);
-    grad.addColorStop(0, 'rgba(0, 179, 255, 0.55)');
-    grad.addColorStop(0.5, 'rgba(0, 0, 122, 0.45)');
-    grad.addColorStop(1, 'rgba(15, 23, 42, 0.02)');
-
+    // Solid color for chart background (no gradient)
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -185,7 +507,7 @@
                 label: 'Book Borrows',
                 data: series,
                 fill: true,
-                backgroundColor: grad,
+                backgroundColor: 'rgba(0, 179, 255, 0.1)', // Solid light blue fill
                 borderColor: '#00b3ff',
                 borderWidth: 2,
                 tension: 0.35,
@@ -208,15 +530,15 @@
                     beginAtZero: true,
                     ticks: {
                         precision: 0,
-                        color: '#e5e7eb'
+                        color: '#6c757d'
                     },
                     grid: {
-                        color: 'rgba(148, 163, 184, 0.3)'
+                        color: 'rgba(108, 117, 125, 0.2)'
                     }
                 },
                 x: {
                     ticks: {
-                        color: '#e5e7eb'
+                        color: '#6c757d'
                     },
                     grid: {
                         display: false

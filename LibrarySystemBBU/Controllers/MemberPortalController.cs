@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace LibrarySystemBBU.Controllers
 {
-    [Authorize(Roles = "Member")]
+    [Authorize(AuthenticationSchemes = "MemberCookie", Roles = "Member")]
     public class MemberPortalController : Controller
     {
         private readonly DataContext _context;
@@ -193,13 +193,13 @@ namespace LibrarySystemBBU.Controllers
                     isPaid = b.IsPaid,
                     borrowingFee = b.BorrowingFee,
                     returnDate = b.BookReturns
-                                    .OrderByDescending(r => r.ReturnDate)
-                                    .Select(r => (DateTime?)r.ReturnDate)
-                                    .FirstOrDefault(),
+                                     .OrderByDescending(r => r.ReturnDate)
+                                     .Select(r => (DateTime?)r.ReturnDate)
+                                     .FirstOrDefault(),
                     fineAmount = b.BookReturns
-                                    .OrderByDescending(r => r.ReturnDate)
-                                    .Select(r => (decimal?)r.FineAmount)
-                                    .FirstOrDefault(),
+                                     .OrderByDescending(r => r.ReturnDate)
+                                     .Select(r => (decimal?)r.FineAmount)
+                                     .FirstOrDefault(),
                     books = b.LoanBookDetails.Select(d => new {
                         catalogTitle = d.Catalog != null ? d.Catalog.Title : "Unknown",
                         conditionOut = d.ConditionOut,

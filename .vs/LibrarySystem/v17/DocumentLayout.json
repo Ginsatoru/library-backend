@@ -3,8 +3,48 @@
   "WorkspaceRootPath": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\controllers\\memberportalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\memberportalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\controllers\\memberauthcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\memberauthcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\account\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\account\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\shared\\_navbar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\shared\\_navbar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\services\\userserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\services\\userserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\account\\resetpassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -15,28 +55,12 @@
       "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\account\\forgotpassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\controllers\\memberauthcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\memberauthcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\migrations\\20260226151735_addmemberwishlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\migrations\\20260226151735_addmemberwishlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\data\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\data\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\controllers\\memberportalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\memberportalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -106,37 +130,141 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
+              "Title": "Profile.cshtml",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Account\\Profile.cshtml",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Account\\Profile.cshtml",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Account\\Profile.cshtml",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\Account\\Profile.cshtml",
+              "ViewState": "AgIAACkCAAAAAAAAAAAuwCoCAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-03T06:28:40.723Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "DashboardController.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\DashboardController.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\DashboardController.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\DashboardController.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\DashboardController.cs",
+              "ViewState": "AgIAALgAAAAAAAAAAAAuwNUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T05:55:40.889Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "_Navbar.cshtml",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Shared\\_Navbar.cshtml",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Shared\\_Navbar.cshtml",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Shared\\_Navbar.cshtml",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\Shared\\_Navbar.cshtml",
+              "ViewState": "AgIAAGUAAAAAAAAAAAAuwIIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-03T05:54:31.914Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\appsettings.json",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\appsettings.json",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\appsettings.json",
+              "RelativeToolTip": "LibrarySystemBBU\\appsettings.json",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAowB4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-03-03T05:21:38.805Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Program.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Program.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Program.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Program.cs",
+              "ViewState": "AgIAAE0AAAAAAAAAAAAuwF0AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T11:23:16.244Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Dashboard\\Index.cshtml",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Dashboard\\Index.cshtml",
-              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Dashboard\\Index.cshtml*",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Dashboard\\Index.cshtml*",
-              "ViewState": "AgIAACIBAAAAAAAAAAAQwDABAAAuAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Dashboard\\Index.cshtml",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\Dashboard\\Index.cshtml",
+              "ViewState": "AgIAAD8BAAAAAAAAAAAwwFUBAABRAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-02-28T17:23:28.337Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ResetPassword.cshtml",
-              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Account\\ResetPassword.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Account\\ResetPassword.cshtml",
-              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Account\\ResetPassword.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Account\\ResetPassword.cshtml",
-              "ViewState": "AgIAACsBAAAAAAAAAAAAwD4BAABLAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-02-28T17:22:21.86Z",
+              "DocumentIndex": 7,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAADMBAAAAAAAAAAAuwFABAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-28T17:14:41.085Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
+              "Title": "MemberAuthController.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\MemberAuthController.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\MemberAuthController.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\MemberAuthController.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\MemberAuthController.cs",
+              "ViewState": "AgIAAFICAAAAAAAAAAAuwGECAABMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-28T16:46:45.715Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MemberPortalController.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\MemberPortalController.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\MemberPortalController.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\MemberPortalController.cs*",
+              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\MemberPortalController.cs*",
+              "ViewState": "AgIAAGYBAAAAAAAAAAAuwHEBAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-26T15:08:44.462Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Account\\Login.cshtml",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAFEBAAAAAAAAAAAqwE8BAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-02-28T17:15:38.918Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
               "Title": "ForgotPassword.cshtml",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Account\\ForgotPassword.cshtml",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Account\\ForgotPassword.cshtml",
@@ -144,51 +272,11 @@
               "RelativeToolTip": "LibrarySystemBBU\\Views\\Account\\ForgotPassword.cshtml",
               "ViewState": "AgIAAB4BAAAAAAAAAAAAwDMBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-02-28T17:21:48.206Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-28T17:21:48.206Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Login.cshtml",
-              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Account\\Login.cshtml",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Account\\Login.cshtml",
-              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Account\\Login.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\Account\\Login.cshtml",
-              "ViewState": "AgIAAEEBAAAAAAAAAAAAwEwBAAA0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-02-28T17:15:38.918Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AccountController.cs",
-              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\AccountController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\AccountController.cs",
-              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAAEQBAAAAAAAAAAAQwFABAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T17:14:41.085Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "MemberAuthController.cs",
-              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\MemberAuthController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\MemberAuthController.cs",
-              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\MemberAuthController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\MemberAuthController.cs",
-              "ViewState": "AgIAAFQCAAAAAAAAAAAAAGcCAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-28T16:46:45.715Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 13,
               "Title": "20260226151735_AddMemberWishlist.cs",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20260226151735_AddMemberWishlist.cs",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Migrations\\20260226151735_AddMemberWishlist.cs",
@@ -196,12 +284,35 @@
               "RelativeToolTip": "LibrarySystemBBU\\Migrations\\20260226151735_AddMemberWishlist.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAsAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-26T15:17:35.229Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-26T15:17:35.229Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 11,
+              "Title": "ResetPassword.cshtml",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Account\\ResetPassword.cshtml",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Account\\ResetPassword.cshtml",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Account\\ResetPassword.cshtml",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\Account\\ResetPassword.cshtml",
+              "ViewState": "AgIAACsBAAAAAAAAAAAAwD4BAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-02-28T17:22:21.86Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "UserServiceImpl.cs",
+              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Services\\UserServiceImpl.cs",
+              "RelativeDocumentMoniker": "LibrarySystemBBU\\Services\\UserServiceImpl.cs",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Services\\UserServiceImpl.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Services\\UserServiceImpl.cs",
+              "ViewState": "AgIAACIBAAAAAAAAAAAQwCsBAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T11:29:16.538Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
               "Title": "DataContext.cs",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Data\\DataContext.cs",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Data\\DataContext.cs",
@@ -213,19 +324,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "MemberPortalController.cs",
-              "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\MemberPortalController.cs",
-              "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\MemberPortalController.cs",
-              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\MemberPortalController.cs",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\MemberPortalController.cs",
-              "ViewState": "AgIAAHMBAAAAAAAAAAA1wHcBAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-26T15:08:44.462Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 16,
               "Title": "MemberWishlist.cs",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Models\\MemberWishlist.cs",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\MemberWishlist.cs",
@@ -237,7 +336,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 15,
               "Title": "UsersController.cs",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\UsersController.cs",
@@ -249,7 +348,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 18,
               "Title": "Create.cshtml",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\LibraryLogs\\Create.cshtml",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\LibraryLogs\\Create.cshtml",
@@ -261,7 +360,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 19,
               "Title": "Delete.cshtml",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\LibraryLogs\\Delete.cshtml",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\LibraryLogs\\Delete.cshtml",
@@ -273,7 +372,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 20,
               "Title": "Edit.cshtml",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\LibraryLogs\\Edit.cshtml",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\LibraryLogs\\Edit.cshtml",
@@ -285,7 +384,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 21,
               "Title": "Edit.cshtml",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Edit.cshtml",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Users\\Edit.cshtml",
@@ -297,7 +396,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 22,
               "Title": "Details.cshtml",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\LibraryLogs\\Details.cshtml",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\LibraryLogs\\Details.cshtml",
@@ -309,7 +408,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 23,
               "Title": "Create.cshtml",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Users\\Create.cshtml",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Users\\Create.cshtml",
@@ -321,7 +420,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 24,
               "Title": "LibraryLog.cs",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Models\\LibraryLog.cs",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Models\\LibraryLog.cs",
@@ -333,7 +432,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 25,
               "Title": "Create.cshtml",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Create.cshtml",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Catalogs\\Create.cshtml",
@@ -345,7 +444,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 26,
               "Title": "Details.cshtml",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\Catalogs\\Details.cshtml",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\Catalogs\\Details.cshtml",
@@ -357,7 +456,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 17,
               "Title": "LibrarySystemBBU.csproj",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\LibrarySystemBBU.csproj",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\LibrarySystemBBU.csproj",
@@ -369,7 +468,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 27,
               "Title": "20251024035519_Add_LibraryLogItems.cs",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20251024035519_Add_LibraryLogItems.cs",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Migrations\\20251024035519_Add_LibraryLogItems.cs",
@@ -381,7 +480,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 28,
               "Title": "20251024014812_AddLibraryLogs.cs",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20251024014812_AddLibraryLogs.cs",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Migrations\\20251024014812_AddLibraryLogs.cs",
@@ -393,7 +492,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 29,
               "Title": "20251023122924_AddInLibraryReads.cs",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Migrations\\20251023122924_AddInLibraryReads.cs",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Migrations\\20251023122924_AddInLibraryReads.cs",

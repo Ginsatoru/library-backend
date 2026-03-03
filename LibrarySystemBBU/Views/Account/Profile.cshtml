@@ -9,371 +9,694 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
 
 <style>
-    .profile-page {
+    :root {
+        --navy: #000080;
+        --bg: transparent; /* removed wrapper bg */
+        --card: #ffffff;
+        --border: #e5e7eb;
+        --muted: #6b7280;
+        --text: #111827;
+        --shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+    }
+
+    /* Page */
+    .profile-wrap {
         min-height: calc(100vh - 120px);
+        background: var(--bg);
+        padding: 32px 16px;
+    }
+
+    .profile-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .profile-header {
+        margin-bottom: 20px;
+    }
+
+        .profile-header h1 {
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            font-weight: 800;
+            color: var(--text);
+            margin: 0 0 6px 0;
+            letter-spacing: -0.02em;
+        }
+
+        .profile-header p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+    /* Layout */
+    .profile-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+        align-items: start;
+    }
+
+    @@media (min-width: 1024px) {
+        .profile-grid {
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+        }
+    }
+
+    /* Cards */
+    .cardx {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 2rem;
+        box-shadow: var(--shadow);
+    }
+
+    .cardx-body {
+        padding: 18px;
+    }
+
+    .cardx-title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .cardx-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0;
+    }
+
+    .divider {
+        border-top: 1px solid #f3f4f6;
+        margin: 16px 0;
+    }
+
+    /* Buttons */
+    .btnx {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 0;
+        cursor: pointer;
+        text-decoration: none;
+        user-select: none;
+        transition: transform .12s ease, background .12s ease, box-shadow .12s ease, opacity .12s ease;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+        .btnx:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+    .btnx-primary {
+        background: var(--navy);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 999px;
+    }
+
+        .btnx-primary:hover {
+            background: rgba(0, 0, 128, 0.92);
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 16px 40px rgba(0, 0, 128, 0.20);
+        }
+
+    .btnx-ghost {
+        background: #f3f4f6;
+        color: #374151;
+        border: 1px solid #e5e7eb;
+        padding: 10px 14px;
+        border-radius: 999px;
+    }
+
+        .btnx-ghost:hover {
+            background: #e5e7eb;
+            color: #111827;
+            transform: translateY(-1px);
+        }
+
+    .btnx-soft {
+        background: rgba(59, 130, 246, 0.12);
+        color: var(--navy);
+        border: 1px solid rgba(59, 130, 246, 0.18);
+        padding: 12px 14px;
+        border-radius: 14px;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+        .btnx-soft:hover {
+            background: rgba(59, 130, 246, 0.18);
+            transform: translateY(-1px);
+        }
+
+    /* Left profile card */
+    .photo-shell {
+        padding: 6px;
+    }
+
+    .photo-box {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background: #f3f4f6;
+        border-radius: 1.5rem;
+        overflow: hidden;
+    }
+
+        .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+    .photo-fallback {
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 40px 16px;
+        background: linear-gradient(135deg, #f1f5f9, #eff6ff);
+        color: #cbd5e1;
+        font-size: 56px;
     }
 
-    .glass-card .card-body {
-        background: transparent !important;
-    }
-
-    .glass-card {
-        position: relative;
-        max-width: 1100px;
-        margin: 0 auto;
-        border-radius: 28px;
-        overflow: hidden;
-        background: rgba(255, 255, 255, 0.65);
-        border: 1px solid rgba(148, 163, 184, 0.45);
-        box-shadow: 0 22px 60px rgba(15, 23, 42, 0.20);
-        backdrop-filter: blur(18px);
-        -webkit-backdrop-filter: blur(18px);
-    }
-
-        .glass-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 10% 0%, rgba(255, 255, 255, 0.7), transparent 55%), radial-gradient(circle at 100% 100%, rgba(191, 219, 254, 0.25), transparent 55%);
-            opacity: 0.6;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .glass-card > * {
-            position: relative;
-            z-index: 1;
-        }
-
-    .glass-header {
-        padding: 14px 24px;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.38);
-        background: linear-gradient( 135deg, rgba(255, 255, 255, 0.35), rgba(226, 232, 240, 0.10) );
-        backdrop-filter: blur(18px);
-        -webkit-backdrop-filter: blur(18px);
-    }
-
-    .glass-body {
-        background: transparent;
-        border-radius: 0 0 28px 28px;
-    }
-
-    .pill-badge {
+    .photo-action {
+        position: absolute;
+        right: 12px;
+        bottom: 12px;
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.92);
+        border: 1px solid rgba(229, 231, 235, 0.9);
+        box-shadow: 0 10px 25px rgba(15,23,42,0.12);
         display: inline-flex;
         align-items: center;
-        padding: 0.2rem 0.7rem;
-        border-radius: 999px;
-        font-size: 0.75rem;
-        letter-spacing: .04em;
-        text-transform: uppercase;
-        background: rgba(219, 234, 254, 0.9);
-        color: #1d4ed8;
-        border: 1px solid rgba(191, 219, 254, 0.9);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        justify-content: center;
     }
 
-    .avatar-frame {
-        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.35);
-        border: 3px solid #bfdbfe;
-    }
-
-    .btn-main {
-        background: linear-gradient(135deg, #3b82f6, #6366f1);
-        border: none;
-        border-radius: 999px;
-        color: #f9fafb;
-        font-weight: 600;
-        padding-inline: 24px;
-        box-shadow: 0 18px 40px rgba(37, 99, 235, 0.45);
-        transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
-    }
-
-        .btn-main:hover {
+        .photo-action:hover {
+            background: #fff;
             transform: translateY(-1px);
-            box-shadow: 0 24px 50px rgba(37, 99, 235, 0.55);
-            filter: brightness(1.04);
-            color: #f9fafb;
         }
 
-    .btn-ghost {
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.85);
-        background: rgba(255, 255, 255, 0.7);
-        color: #374151;
-        font-weight: 500;
-        padding-inline: 18px;
-        transition: background 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+    .name-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
     }
 
-        .btn-ghost:hover {
-            background: rgba(229, 231, 235, 0.95);
-            box-shadow: 0 6px 18px rgba(148, 163, 184, 0.4);
-            transform: translateY(-1px);
-            color: #111827;
+        .name-row h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.2;
         }
 
-    .profile-dl dt {
-        color: #6b7280;
-        font-size: 0.78rem;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
+    .status-badge {
+        width: 24px;
+        height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .profile-dl dd {
-        color: #111827;
+    .subtext {
+        margin-top: 4px;
+        color: var(--muted);
         font-size: 0.9rem;
     }
 
-    .divider-dashed {
-        border-top: 1px dashed rgba(148, 163, 184, 0.5);
-        margin-block: 1rem;
+    .stats-row {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        flex-wrap: wrap;
     }
 
-    .label-soft {
-        font-size: 0.8rem;
-        color: #6b7280;
+    .stat {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #4b5563;
+        font-size: 0.9rem;
+        font-weight: 600;
     }
 
-    .input-soft,
-    .textarea-soft {
-        background: rgba(255, 255, 255, 0.96);
-        border: 1px solid rgba(148, 163, 184, 0.7);
-        color: #111827;
-        border-radius: 12px;
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-    }
-
-        .input-soft:focus,
-        .textarea-soft:focus {
-            background: #ffffff;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4);
-            color: #111827;
-        }
-
-        .input-soft::placeholder,
-        .textarea-soft::placeholder {
+        .stat i {
             color: #9ca3af;
         }
 
-    .text-danger {
-        font-size: 0.82rem;
+    .since {
+        margin-top: 10px;
+        color: #9ca3af;
+        font-size: 0.78rem;
     }
 
-    .modal-content.glass-modal {
-        position: relative;
-        border-radius: 22px;
-        background: rgba(25, 63, 153, 0.58);
-        border: 1px solid rgba(148, 163, 184, 0.45);
-        box-shadow: 0 28px 70px rgba(15, 23, 42, 0.7);
-        overflow: hidden;
-        backdrop-filter: blur(26px);
-        -webkit-backdrop-filter: blur(26px);
-        color: #f9fafb;
+    /* Right info blocks */
+    .field {
+        margin-bottom: 12px;
     }
 
-        .modal-content.glass-modal::before {
-            content: "";
-            position: absolute;
-            inset: -30px;
-            background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.22), transparent 55%), radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.35), transparent 60%);
-            opacity: 0.9;
-            z-index: -1;
+        .field label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 6px;
+            letter-spacing: .02em;
+            text-transform: uppercase;
         }
 
-    .glass-modal .modal-title,
-    .glass-modal .label-soft,
-    .glass-modal .form-text,
-    .glass-modal .small,
-    .glass-modal h5,
-    .glass-modal p {
-        color: #f9fafb;
-    }
-
-    .glass-modal .close {
-        opacity: 0.85;
-    }
-
-        .glass-modal .close span {
-            color: #f9fafb;
-            font-size: 1.4rem;
-        }
-
-    .glass-modal .input-soft,
-    .glass-modal .textarea-soft {
-        background: rgba(15, 23, 42, 0.55);
-        border: 1px solid rgba(148, 163, 184, 0.85);
-        color: #f9fafb;
+    .readonly-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        background: #f9fafb;
+        border: 1px solid #f3f4f6;
         border-radius: 14px;
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        color: var(--text);
+        min-height: 44px;
     }
 
-        .glass-modal .input-soft::placeholder,
-        .glass-modal .textarea-soft::placeholder {
-            color: rgba(209, 213, 219, 0.85);
+        .readonly-row i {
+            color: #9ca3af;
+            width: 18px;
+            text-align: center;
         }
 
-        .glass-modal .input-soft:focus,
-        .glass-modal .textarea-soft:focus {
-            background: rgba(15, 23, 42, 0.8);
-            border-color: #60a5fa;
-            box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.6);
-            color: #f9fafb;
+        .readonly-row .muted {
+            color: #6b7280;
         }
 
-    .modal-avatar-wrapper {
-        text-align: center;
-        margin-bottom: 0.75rem;
-    }
-
-    .modal-avatar {
-        width: 80px;
-        height: 80px;
-        object-fit: cover;
+    .readonly-chip {
+        margin-left: auto;
+        font-size: 0.74rem;
+        padding: 6px 10px;
         border-radius: 999px;
-        border: 3px solid rgba(255, 255, 255, 0.9);
-        box-shadow: 0 14px 32px rgba(15, 23, 42, 0.9);
-        margin-bottom: 0.4rem;
+        background: #f3f4f6;
+        color: #9ca3af;
+        border: 1px solid #e5e7eb;
+        font-weight: 700;
     }
 
-    .modal-avatar-name {
-        font-weight: 600;
-        font-size: 1rem;
-        color: #f9fafb;
+    /* Info boxes */
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
     }
 
-    .modal-avatar-username {
-        font-size: 0.8rem;
-        color: rgba(226, 232, 240, 0.85);
+    @@media (min-width: 640px) {
+        .info-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    .info-box {
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: rgba(59, 130, 246, 0.08);
+        border: 1px solid rgba(59, 130, 246, 0.12);
+    }
+
+        .info-box .k {
+            font-size: 0.78rem;
+            color: #6b7280;
+            margin-bottom: 2px;
+        }
+
+        .info-box .v {
+            font-weight: 800;
+            color: #111827;
+            font-size: 0.95rem;
+        }
+
+        .info-box.indigo {
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.12);
+        }
+
+    .ok {
+        color: #16a34a;
+        font-weight: 800;
+    }
+
+    .bad {
+        color: #ef4444;
+        font-weight: 800;
+    }
+
+    /* Bootstrap modal overrides */
+    .modal-backdrop.show {
+        opacity: .55;
+    }
+
+    .modal-content {
+        border: 0;
+        border-radius: 2rem;
+        overflow: hidden;
+        box-shadow: 0 30px 80px rgba(15,23,42,0.35);
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #f3f4f6;
+        padding: 16px 18px;
+        background: #fff;
+    }
+
+    .modal-title {
+        font-weight: 900;
+        color: #111827;
+        letter-spacing: -0.01em;
+    }
+
+    .modal-body {
+        padding: 18px;
+        background: #fff;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #f3f4f6;
+        padding: 14px 18px;
+        background: #fff;
+    }
+
+    .modal-close-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        border: 1px solid #e5e7eb;
+        background: #f9fafb;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform .12s ease, background .12s ease;
+    }
+
+        .modal-close-btn:hover {
+            background: #f3f4f6;
+            transform: translateY(-1px);
+        }
+
+    /* Inputs */
+    .inputx,
+    .textareax {
+        width: 100%;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 12px;
+        color: #111827;
+        outline: none;
+        transition: box-shadow .12s ease, border-color .12s ease, background .12s ease;
+    }
+
+        .inputx:focus,
+        .textareax:focus {
+            background: #fff;
+            border-color: rgba(0, 0, 128, 0.35);
+            box-shadow: 0 0 0 3px rgba(0, 0, 128, 0.10);
+        }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    @@media (min-width: 768px) {
+        .form-row.two {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .form-row.three {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+    }
+
+    .upload-hint {
+        font-size: 0.78rem;
+        color: #9ca3af;
+        margin-top: 6px;
+    }
+
+    .text-danger {
+        font-size: .82rem;
+    }
+
+    .swal2-popup {
+        border-radius: 1.25rem !important;
     }
 </style>
 
-<div class="profile-page">
-    <div class="col-md-12 col-lg-12 col-xl-10">
-        <div class="glass-card">
-            <div class="glass-header d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-2">
-                    <span class="pill-badge">
-                        <i class="fa-solid fa-shield-heart me-1"></i> Profile
-                    </span>
-                    <span class="small text-muted">Manage your account details</span>
-                </div>
-                <a asp-controller="Home" asp-action="Index" class="btn btn-ghost btn-sm">
-                    <i class="fa-solid fa-house me-1"></i> Dashboard
-                </a>
-            </div>
+<div class="profile-wrap">
+    <div class="profile-container">
 
-            <div class="card-body p-4 p-md-5 glass-body">
-                <!-- Top section: avatar + basic info -->
-                <div class="text-center mb-4">
-                    @{
-                        var fallbackAvatar = "https://ui-avatars.com/api/?name="
-                        + (Model.FirstName + "+" + Model.LastName)
-                        + "&background=60a5fa&color=fff&size=128";
+        <div class="profile-header">
+            <h1>My Profile</h1>
+            <p>Manage your account information and preferences</p>
+        </div>
 
-                        var avatarSrc = string.IsNullOrEmpty(Model.ProfilePicturePath)
-                        ? fallbackAvatar
-                        : Url.Content(Model.ProfilePicturePath);
-                    }
+        <div class="profile-grid">
 
-                    <img src="@avatarSrc"
-                         class="rounded-circle avatar-frame mb-3"
-                         style="width:96px; height:96px; object-fit:cover;"
-                         alt="Profile Picture" />
+            <!-- LEFT: Profile card -->
+            <div>
+                <div class="cardx">
+                    <div class="photo-shell">
+                        <div class="photo-box">
+                            @{
+                                var fallbackAvatar = "https://ui-avatars.com/api/?name="
+                                + (Model.FirstName + "+" + Model.LastName)
+                                + "&background=60a5fa&color=fff&size=256";
 
-                    <div class="fw-semibold" style="font-size: 1.2rem;">
-                        @Model.FirstName @Model.LastName
+                                var avatarSrc = string.IsNullOrEmpty(Model.ProfilePicturePath)
+                                ? fallbackAvatar
+                                : Url.Content(Model.ProfilePicturePath);
+                            }
+
+                            @if (!string.IsNullOrEmpty(avatarSrc))
+                            {
+                                <img src="@avatarSrc" alt="Profile" />
+                            }
+                            else
+                            {
+                                <div class="photo-fallback">
+                                    <i class="fa-regular fa-user"></i>
+                                </div>
+                            }
+
+                            <!-- Camera opens SAME edit modal (one edit target) -->
+                            <button type="button" class="photo-action" id="btnOpenEditFromPhoto" title="Edit profile">
+                                <i class="fa-solid fa-camera"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="text-muted small">@Model.UserName</div>
-                    <div class="text-muted small">@Model.Email</div>
-                </div>
 
-                <div class="divider-dashed"></div>
+                    <div class="cardx-body">
+                        <div class="name-row">
+                            <h2>@Model.FirstName @Model.LastName</h2>
 
-                <!-- READ-ONLY SUMMARY (always DB values) -->
-                <dl class="row mb-4 profile-dl" style="justify-content:center; align-items:center">
-                    <dt class="col-sm-4"><i class="fa fa-phone"></i> Phone</dt>
-                    <dd class="col-sm-8">@Model.Phone</dd>
+                            <span class="status-badge" title="@(Model.IsActive ? "Active" : "Inactive")">
+                                @if (Model.IsActive)
+                                {
+                                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                        <polygon points="12.0,0.5 15.01,3.73 19.39,3.19 19.62,7.6 23.33,10.0 20.67,13.53 21.96,17.75 17.66,18.74 15.93,22.81 12.0,20.8 8.07,22.81 6.34,18.74 2.04,17.75 3.33,13.53 0.67,10.0 4.38,7.6 4.61,3.19 8.99,3.73" fill="#22c55e"></polygon>
+                                        <path d="M8.5 12.5l2.5 2.5 5-5.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                                    </svg>
+                                }
+                                else
+                                {
+                                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                        <polygon points="12.0,0.5 15.01,3.73 19.39,3.19 19.62,7.6 23.33,10.0 20.67,13.53 21.96,17.75 17.66,18.74 15.93,22.81 12.0,20.8 8.07,22.81 6.34,18.74 2.04,17.75 3.33,13.53 0.67,10.0 4.38,7.6 4.61,3.19 8.99,3.73" fill="#f87171"></polygon>
+                                        <path d="M9.5 9.5l5 5M14.5 9.5l-5 5" stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none"></path>
+                                    </svg>
+                                }
+                            </span>
+                        </div>
 
-                    <dt class="col-sm-4"><i class="fa fa-location-dot"></i> Address</dt>
-                    <dd class="col-sm-8">@Model.Address</dd>
+                        <div class="subtext">@Model.RoleName</div>
 
-                    <dt class="col-sm-4"><i class="fa fa-venus-mars"></i> Gender</dt>
-                    <dd class="col-sm-8">@Model.Gender</dd>
+                        <div class="divider"></div>
 
-                    <dt class="col-sm-4"><i class="fa fa-calendar-days"></i> DOB</dt>
-                    <dd class="col-sm-8">@Model.DateOfBirth?.ToString("yyyy-MM-dd")</dd>
+                        <div class="stats-row">
+                            <div class="stat">
+                                <i class="fa-regular fa-id-card"></i>
+                                <span>@(string.IsNullOrWhiteSpace(Model.UserName) ? "—" : Model.UserName)</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fa-solid fa-user-tag"></i>
+                                <span>@(string.IsNullOrWhiteSpace(Model.RoleName) ? "—" : Model.RoleName)</span>
+                            </div>
+                        </div>
 
-                    <dt class="col-sm-4"><i class="fa fa-user-tag"></i> Role</dt>
-                    <dd class="col-sm-8">@Model.RoleName</dd>
-
-                    <dt class="col-sm-4"><i class="fa fa-toggle-on"></i> Active</dt>
-                    <dd class="col-sm-8">@(Model.IsActive ? "Yes" : "No")</dd>
-
-                    <dt class="col-sm-4"><i class="fa fa-note-sticky"></i> Notes</dt>
-                    <dd class="col-sm-8">@Model.Notes</dd>
-
-                    <dt class="col-sm-4"><i class="fa fa-clock"></i> Created</dt>
-                    <dd class="col-sm-8">@Model.Created?.ToString("yyyy-MM-dd HH:mm")</dd>
-
-                    <dt class="col-sm-4"><i class="fa fa-pen-to-square"></i> Modified</dt>
-                    <dd class="col-sm-8">@Model.Modified?.ToString("yyyy-MM-dd HH:mm")</dd>
-                </dl>
-
-                <div class="divider-dashed"></div>
-
-                <div class="text-center">
-                    <button type="button"
-                            class="btn btn-main"
-                            id="btnOpenEdit">
-                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit Profile
-                    </button>
+                        @if (Model.Created.HasValue)
+                        {
+                            <div class="since">
+                                Member since @Model.Created.Value.ToString("MMMM yyyy")
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
+
+            <!-- RIGHT: Personal info -->
+            <div>
+                <div class="cardx">
+                    <div class="cardx-body">
+
+                        <div class="cardx-title-row">
+                            <h3 class="cardx-title">Personal Information</h3>
+
+                            <!-- single edit button -->
+                            <button type="button" class="btnx btnx-primary" id="btnOpenEdit">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                <span>Edit</span>
+                            </button>
+                        </div>
+
+                        <div class="field">
+                            <label>Full Name</label>
+                            <div class="readonly-row">
+                                <i class="fa-regular fa-user"></i>
+                                <span>@Model.FirstName @Model.LastName</span>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Email Address</label>
+                            <div class="readonly-row">
+                                <i class="fa-regular fa-envelope"></i>
+                                <span class="muted">@Model.Email</span>
+                                <span class="readonly-chip">Cannot be changed</span>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Phone</label>
+                            <div class="readonly-row">
+                                <i class="fa-solid fa-phone"></i>
+                                <span>@(string.IsNullOrWhiteSpace(Model.Phone) ? "—" : Model.Phone)</span>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Address</label>
+                            <div class="readonly-row">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>@(string.IsNullOrWhiteSpace(Model.Address) ? "—" : Model.Address)</span>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Gender</label>
+                            <div class="readonly-row">
+                                <i class="fa-solid fa-venus-mars"></i>
+                                <span>@(string.IsNullOrWhiteSpace(Model.Gender) ? "—" : Model.Gender)</span>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <h3 class="cardx-title" style="margin:0 0 12px 0;">Account Information</h3>
+
+                        <div class="field">
+                            <label>Role</label>
+                            <div class="readonly-row">
+                                <i class="fa-solid fa-user-tag"></i>
+                                <span class="muted">@Model.RoleName</span>
+                                <span class="readonly-chip">Read only</span>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Notes</label>
+                            <div class="readonly-row" style="align-items:flex-start;">
+                                <i class="fa-regular fa-note-sticky" style="margin-top:2px;"></i>
+                                <span class="muted">@(string.IsNullOrWhiteSpace(Model.Notes) ? "—" : Model.Notes)</span>
+                            </div>
+                        </div>
+
+                        <div class="info-grid">
+                            <div class="info-box">
+                                <div class="k">Member Since</div>
+                                <div class="v">
+                                    @(Model.Created.HasValue? Model.Created.Value.ToString("MMMM dd, yyyy") : "—")
+                                </div>
+                            </div>
+                            <div class="info-box indigo">
+                                <div class="k">Account Status</div>
+                                <div class="v @(Model.IsActive ? "ok" : "bad")">
+                                    @(Model.IsActive ? "Active" : "Inactive")
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- REMOVED: Security card + security note -->
+            </div>
+
         </div>
     </div>
 </div>
 
 <!-- ===========================
      EDIT PROFILE MODAL
+     (ALL editable fields are here)
 =========================== -->
-<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true" style="z-index:10000;">
+<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true" style="z-index: 10000;">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content glass-modal">
-            <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title" id="editProfileModalLabel">
-                    <i class="fa-solid fa-pen-to-square me-1"></i> Edit Profile
-                </h5>
-                <button type="button" class="close" id="btnCloseEdit" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <div style="font-size:.82rem;color:#6b7280;font-weight:800;letter-spacing:.08em;text-transform:uppercase;">
+                        Edit
+                    </div>
+                    <h5 class="modal-title" id="editProfileModalLabel" style="margin:2px 0 0 0;">
+                        Profile Settings
+                    </h5>
+                </div>
+                <button type="button" class="modal-close-btn" id="btnCloseEdit" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <div class="modal-body pt-2">
+            <div class="modal-body">
                 @{
                     var modalFallbackAvatar = "https://ui-avatars.com/api/?name="
                     + (Model.FirstName + "+" + Model.LastName)
-                    + "&background=60a5fa&color=fff&size=128";
+                    + "&background=60a5fa&color=fff&size=256";
 
                     var modalAvatarSrc = string.IsNullOrEmpty(Model.ProfilePicturePath)
                     ? modalFallbackAvatar
                     : Url.Content(Model.ProfilePicturePath);
                 }
-                <div class="modal-avatar-wrapper">
+
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
                     <img src="@modalAvatarSrc"
                          alt="Profile picture"
-                         class="modal-avatar" />
-                    <div class="modal-avatar-name">@Model.FirstName @Model.LastName</div>
-                    <div class="modal-avatar-username">@Model.UserName</div>
+                         style="width:64px;height:64px;border-radius:999px;object-fit:cover;border:2px solid #e5e7eb;box-shadow:0 12px 28px rgba(15,23,42,.18);" />
+                    <div>
+                        <div style="font-weight:900;color:#111827;line-height:1.1;">@Model.FirstName @Model.LastName</div>
+                        <div style="color:#6b7280;font-size:.86rem;">@Model.UserName</div>
+                    </div>
                 </div>
 
                 <form asp-action="UpdateProfile"
@@ -381,6 +704,7 @@
                       enctype="multipart/form-data"
                       id="editProfileForm">
                     @Html.AntiForgeryToken()
+
                     <div asp-validation-summary="All" class="text-danger mb-2"></div>
 
                     <!-- Hidden fields -->
@@ -393,111 +717,108 @@
                     <!-- Hidden CurrentPassword filled by SweetAlert -->
                     <input type="hidden" asp-for="CurrentPassword" id="CurrentPasswordHidden" />
 
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label class="label-soft">New Profile Picture</label>
-                            <input asp-for="Picture" class="form-control input-soft" type="file" />
+                    <div class="form-row two" style="margin-bottom:12px;">
+                        <div>
+                            <label style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;">
+                                New Profile Picture
+                            </label>
+                            <input asp-for="Picture" class="inputx" type="file" />
                             <span asp-validation-for="Picture" class="text-danger"></span>
-                            <div class="form-text">
-                                Leave empty to keep current picture.
-                            </div>
+                            <div class="upload-hint">Leave empty to keep current picture.</div>
                         </div>
 
-                        <div class="col-md-8">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label asp-for="FirstName" class="label-soft"></label>
-                                    <input asp-for="FirstName" class="form-control input-soft" />
-                                    <span asp-validation-for="FirstName" class="text-danger"></span>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label asp-for="LastName" class="label-soft"></label>
-                                    <input asp-for="LastName" class="form-control input-soft" />
-                                    <span asp-validation-for="LastName" class="text-danger"></span>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label asp-for="Email" class="label-soft"></label>
-                                    <input asp-for="Email" class="form-control input-soft" />
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label asp-for="Phone" class="label-soft"></label>
-                                    <input asp-for="Phone" class="form-control input-soft" />
-                                    <span asp-validation-for="Phone" class="text-danger"></span>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label asp-for="Address" class="label-soft"></label>
-                                    <input asp-for="Address" class="form-control input-soft" />
-                                    <span asp-validation-for="Address" class="text-danger"></span>
-                                </div>
-
-                                <!-- Role editable; server will only save if Admin -->
-                                <div class="col-md-6 mb-3">
-                                    <label asp-for="RoleName" class="label-soft"></label>
-                                    <input asp-for="RoleName" class="form-control input-soft" />
-                                    <span asp-validation-for="RoleName" class="text-danger"></span>
-                                </div>
-
-                                <div class="col-md-3 mb-3">
-                                    <label asp-for="Gender" class="label-soft"></label>
-                                    <input asp-for="Gender" class="form-control input-soft" />
-                                    <span asp-validation-for="Gender" class="text-danger"></span>
-                                </div>
-
-                                <div class="col-md-3 mb-3">
-                                    <label asp-for="DateOfBirth" class="label-soft"></label>
-                                    <input asp-for="DateOfBirth" class="form-control input-soft" type="date" />
-                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label asp-for="Notes" class="label-soft"></label>
-                                    <textarea asp-for="Notes" class="form-control textarea-soft" rows="2"></textarea>
-                                    <span asp-validation-for="Notes" class="text-danger"></span>
-                                </div>
-                            </div>
+                        <div>
+                            <label asp-for="Email" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
+                            <input asp-for="Email" class="inputx" readonly />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <div class="upload-hint">Email cannot be changed.</div>
                         </div>
-
                     </div>
 
-                    <div class="divider-dashed"></div>
+                    <div class="form-row two" style="margin-bottom:12px;">
+                        <div>
+                            <label asp-for="FirstName" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
+                            <input asp-for="FirstName" class="inputx" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <label asp-for="LastName" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
+                            <input asp-for="LastName" class="inputx" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="NewPassword" class="label-soft">
-                                <i class="fa-solid fa-key"></i> New password (optional)
+                    <div class="form-row two" style="margin-bottom:12px;">
+                        <div>
+                            <label asp-for="Phone" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
+                            <input asp-for="Phone" class="inputx" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <label asp-for="Address" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
+                            <input asp-for="Address" class="inputx" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row three" style="margin-bottom:12px;">
+                        <!-- Role editable; server will only save if Admin -->
+                        <div>
+                            <label asp-for="RoleName" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
+                            <input asp-for="RoleName" class="inputx" />
+                            <span asp-validation-for="RoleName" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <label asp-for="Gender" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
+                            <input asp-for="Gender" class="inputx" />
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <label asp-for="DateOfBirth" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
+                            <input asp-for="DateOfBirth" class="inputx" type="date" />
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:12px;">
+                        <label asp-for="Notes" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
+                        <textarea asp-for="Notes" class="textareax" rows="2"></textarea>
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <h5 style="font-weight:900;color:#111827;margin:0 0 10px 0;">Change Password</h5>
+
+                    <div class="form-row two">
+                        <div>
+                            <label asp-for="NewPassword" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;">
+                                New password (optional)
                             </label>
-                            <input asp-for="NewPassword" class="form-control input-soft" />
+                            <input asp-for="NewPassword" class="inputx" type="password" autocomplete="new-password" />
                             <span asp-validation-for="NewPassword" class="text-danger"></span>
-                            <div class="form-text">
-                                Leave blank if you don't want to change your password.
-                            </div>
+                            <div class="upload-hint">Leave blank if you don't want to change your password.</div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="ConfirmNewPassword" class="label-soft">
-                                Confirm new password
-                            </label>
-                            <input asp-for="ConfirmNewPassword" class="form-control input-soft" />
+                        <div>
+                            <label asp-for="ConfirmNewPassword" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
+                            <input asp-for="ConfirmNewPassword" class="inputx" type="password" autocomplete="new-password" />
                             <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
                         </div>
-                    </div>
-
-                    <div class="mt-3 d-flex justify-content-end gap-2">
-                        <button type="button" class="btn btn-ghost" id="btnCancelEdit">
-                            Cancel
-                        </button>
-                        <button type="button" class="btn btn-main" id="btnSaveProfileModal">
-                            <i class="fa-solid fa-save me-1"></i> Save changes
-                        </button>
                     </div>
                 </form>
             </div>
 
+            <div class="modal-footer">
+                <button type="button" class="btnx btnx-ghost" id="btnCancelEdit">
+                    <i class="fa-solid fa-xmark"></i>
+                    Cancel
+                </button>
+                <button type="button" class="btnx btnx-primary" id="btnSaveProfileModal">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Save changes
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -511,16 +832,19 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const editBtn = document.getElementById('btnOpenEdit');
+            const editFromPhoto = document.getElementById('btnOpenEditFromPhoto');
+
             const form = document.getElementById('editProfileForm');
             const saveBtn = document.getElementById('btnSaveProfileModal');
             const hiddenPwd = document.getElementById('CurrentPasswordHidden');
+
             const modalElement = document.getElementById('editProfileModal');
             const cancelBtn = document.getElementById('btnCancelEdit');
             const closeBtn = document.getElementById('btnCloseEdit');
 
             function showModal() {
                 if (window.bootstrap && bootstrap.Modal) {
-                    const modal = new bootstrap.Modal(modalElement);
+                    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
                     modal.show();
                 } else if (window.$ && typeof $(modalElement).modal === 'function') {
                     $(modalElement).modal('show');
@@ -530,33 +854,17 @@
             function hideModal() {
                 if (window.bootstrap && bootstrap.Modal) {
                     const instance = bootstrap.Modal.getInstance(modalElement);
-                    if (instance) {
-                        instance.hide();
-                    } else {
-                        const modal = new bootstrap.Modal(modalElement);
-                        modal.hide();
-                    }
+                    if (instance) instance.hide();
                 } else if (window.$ && typeof $(modalElement).modal === 'function') {
                     $(modalElement).modal('hide');
                 }
             }
 
-            if (editBtn && modalElement) {
-                editBtn.addEventListener('click', function () {
-                    showModal();
-                });
-            }
+            if (editBtn) editBtn.addEventListener('click', showModal);
+            if (editFromPhoto) editFromPhoto.addEventListener('click', showModal);
 
-            if (cancelBtn) {
-                cancelBtn.addEventListener('click', function () {
-                    hideModal();
-                });
-            }
-            if (closeBtn) {
-                closeBtn.addEventListener('click', function () {
-                    hideModal();
-                });
-            }
+            if (cancelBtn) cancelBtn.addEventListener('click', hideModal);
+            if (closeBtn) closeBtn.addEventListener('click', hideModal);
 
             if (form && saveBtn && hiddenPwd) {
                 saveBtn.addEventListener('click', async function (e) {
@@ -624,11 +932,9 @@
                     title: 'Update failed',
                     text: errorMsg
                 }).then(() => {
-                    // reopen modal so user sees their form again
                     showModal();
                 });
             } else if (openEdit) {
-                // fallback: if flag set but no explicit error message
                 showModal();
             }
         });

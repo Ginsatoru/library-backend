@@ -1121,4 +1121,5 @@ C:\Users\NETTECH-STORE\OneDrive - AAAPOS\Web Projects\School\Backend\LibrarySyst
 C:\Users\NETTECH-STORE\OneDrive - AAAPOS\Web Projects\School\Backend\LibrarySystem\LibrarySystem\LibrarySystemBBU\obj\Debug\net8.0\LibrarySystemBBU.pdb
 C:\Users\NETTECH-STORE\OneDrive - AAAPOS\Web Projects\School\Backend\LibrarySystem\LibrarySystem\LibrarySystemBBU\obj\Debug\net8.0\LibrarySystemBBU.genruntimeconfig.cache
 C:\Users\NETTECH-STORE\OneDrive - AAAPOS\Web Projects\School\Backend\LibrarySystem\LibrarySystem\LibrarySystemBBU\obj\Debug\net8.0\ref\LibrarySystemBBU.dll
+C:\Users\NETTECH-STORE\OneDrive - AAAPOS\Web Projects\School\Backend\LibrarySystem\LibrarySystem\LibrarySystemBBU\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\NETTECH-STORE\OneDrive - AAAPOS\Web Projects\School\Backend\LibrarySystem\LibrarySystem\LibrarySystemBBU\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

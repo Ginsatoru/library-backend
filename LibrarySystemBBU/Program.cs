@@ -6,16 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
 builder.Services.AddScoped<DapperFactory>();
 builder.Services.AddHttpContextAccessor();
-
 builder.Services.AddScoped<IReportService, ReportService>();
 
-// Email sender + options
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("Smtp"));
 builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
 
@@ -27,34 +23,16 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// CORS — allow React dev server
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("ReactFrontend", policy =>
-    {
-        policy
-            .WithOrigins(
-                "http://localhost:5173",  // Vite default
-                "http://localhost:5174",  // Vite alternate
-                "http://localhost:3000"   // fallback
-            )
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials(); // required for cookie auth
-    });
-});
-
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
+        options.Cookie.Name = ".AdminAuth";
         options.LoginPath = "/Account/Login";
         options.LogoutPath = "/Account/Logout";
         options.AccessDeniedPath = "/Account/AccessDenied";
         options.ReturnUrlParameter = "ReturnUrl";
         options.ExpireTimeSpan = TimeSpan.FromDays(1);
         options.SlidingExpiration = true;
-
-        // Prevent cookie auth from redirecting API/JSON requests — return 401 instead
         options.Events.OnRedirectToLogin = ctx =>
         {
             if (ctx.Request.Path.StartsWithSegments("/MemberAuth") &&
@@ -66,13 +44,29 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
             ctx.Response.Redirect(ctx.RedirectUri);
             return Task.CompletedTask;
         };
+    })
+    .AddCookie("MemberCookie", options =>
+    {
+        options.Cookie.Name = ".MemberAuth";
+        options.Cookie.HttpOnly = true;
+        options.ExpireTimeSpan = TimeSpan.FromDays(1);
+        options.SlidingExpiration = true;
+        options.Events.OnRedirectToLogin = ctx =>
+        {
+            ctx.Response.StatusCode = 401;
+            return Task.CompletedTask;
+        };
+        options.Events.OnRedirectToAccessDenied = ctx =>
+        {
+            ctx.Response.StatusCode = 403;
+            return Task.CompletedTask;
+        };
     });
 
 builder.Services.AddAuthorization();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                       ?? throw new Exception("Connection string 'DefaultConnection' not found.");
-
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(connectionString);
@@ -95,22 +89,15 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-// Do NOT redirect to HTTPS in dev — React runs on HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
 
 app.UseStaticFiles();
-
 app.UseRouting();
-
-// CORS must come before Auth
-app.UseCors("ReactFrontend");
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseSession();
 
 app.MapControllerRoute(

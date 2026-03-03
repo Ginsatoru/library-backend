@@ -19,6 +19,8 @@ namespace LibrarySystemBBU.Controllers
 {
     public class MemberAuthController : Controller
     {
+        private const string MemberScheme = "MemberCookie";
+
         private readonly DataContext _context;
         private readonly IConfiguration _config;
 
@@ -67,11 +69,11 @@ namespace LibrarySystemBBU.Controllers
                 success = true,
                 member = new
                 {
-                    memberId       = member.MemberId,
-                    fullName       = member.FullName,
-                    email          = member.Email,
-                    phone          = member.Phone,
-                    memberType     = member.MemberType,
+                    memberId = member.MemberId,
+                    fullName = member.FullName,
+                    email = member.Email,
+                    phone = member.Phone,
+                    memberType = member.MemberType,
                     profilePicture = member.ProfilePicturePath
                 }
             });
@@ -103,16 +105,16 @@ namespace LibrarySystemBBU.Controllers
 
             var member = new Member
             {
-                MemberId   = Guid.NewGuid(),
-                FullName   = model.FullName,
-                Email      = model.Email,
-                Phone      = model.Phone,
-                Address    = model.Address,
+                MemberId = Guid.NewGuid(),
+                FullName = model.FullName,
+                Email = model.Email,
+                Phone = model.Phone,
+                Address = model.Address,
                 MemberType = model.MemberType,
-                JoinDate   = DateTime.UtcNow.Date,
-                Modified   = DateTime.UtcNow,
-                IsActive   = true,
-                CreatedBy  = "Self-Register"
+                JoinDate = DateTime.UtcNow.Date,
+                Modified = DateTime.UtcNow,
+                IsActive = true,
+                CreatedBy = "Self-Register"
             };
 
             if (!member.TrySetPassword(model.Password))
@@ -130,11 +132,11 @@ namespace LibrarySystemBBU.Controllers
                 success = true,
                 member = new
                 {
-                    memberId       = member.MemberId,
-                    fullName       = member.FullName,
-                    email          = member.Email,
-                    phone          = member.Phone,
-                    memberType     = member.MemberType,
+                    memberId = member.MemberId,
+                    fullName = member.FullName,
+                    email = member.Email,
+                    phone = member.Phone,
+                    memberType = member.MemberType,
                     profilePicture = member.ProfilePicturePath
                 }
             });
@@ -242,7 +244,7 @@ namespace LibrarySystemBBU.Controllers
         [HttpPost]
         public async Task<IActionResult> LogoutJson()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(MemberScheme);
             return Ok(new { success = true });
         }
 
@@ -289,14 +291,14 @@ namespace LibrarySystemBBU.Controllers
             {
                 MemberId = Guid.NewGuid(),
                 FullName = model.FullName,
-                Email    = model.Email,
-                Phone    = model.Phone,
-                Address  = model.Address,
+                Email = model.Email,
+                Phone = model.Phone,
+                Address = model.Address,
                 MemberType = model.MemberType,
-                JoinDate   = DateTime.UtcNow.Date,
-                Modified   = DateTime.UtcNow,
-                IsActive   = true,
-                CreatedBy  = "Self-Register"
+                JoinDate = DateTime.UtcNow.Date,
+                Modified = DateTime.UtcNow,
+                IsActive = true,
+                CreatedBy = "Self-Register"
             };
 
             if (!member.TrySetPassword(model.Password))
@@ -319,7 +321,7 @@ namespace LibrarySystemBBU.Controllers
         // GET: /MemberAuth/ConnectTelegram
         // ----------------------------------------
         [HttpGet]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = MemberScheme)]
         public async Task<IActionResult> ConnectTelegram()
         {
             var memberIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -545,7 +547,7 @@ namespace LibrarySystemBBU.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(MemberScheme);
             return RedirectToAction("Login", "MemberAuth");
         }
 
@@ -564,17 +566,17 @@ namespace LibrarySystemBBU.Controllers
                 new Claim("AccountType", "Member")
             };
 
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var identity = new ClaimsIdentity(claims, MemberScheme);
             var principal = new ClaimsPrincipal(identity);
 
             await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
+                MemberScheme,
                 principal,
                 new AuthenticationProperties
                 {
                     IsPersistent = rememberMe,
-                    IssuedUtc    = DateTime.UtcNow,
-                    ExpiresUtc   = DateTime.UtcNow.AddDays(1)
+                    IssuedUtc = DateTime.UtcNow,
+                    ExpiresUtc = DateTime.UtcNow.AddDays(1)
                 });
         }
 
@@ -585,11 +587,11 @@ namespace LibrarySystemBBU.Controllers
         {
             try
             {
-                var host     = _config["Smtp:Host"];
-                var portStr  = _config["Smtp:Port"];
+                var host = _config["Smtp:Host"];
+                var portStr = _config["Smtp:Port"];
                 var username = _config["Smtp:Username"];
                 var password = _config["Smtp:Password"];
-                var from     = _config["Smtp:From"] ?? username;
+                var from = _config["Smtp:From"] ?? username;
 
                 if (string.IsNullOrWhiteSpace(host) ||
                     string.IsNullOrWhiteSpace(portStr) ||
@@ -606,7 +608,7 @@ namespace LibrarySystemBBU.Controllers
                 using var client = new SmtpClient(host, port)
                 {
                     Credentials = new NetworkCredential(username, password),
-                    EnableSsl   = true
+                    EnableSsl = true
                 };
 
                 using var message = new MailMessage(from, to, subject, body);
