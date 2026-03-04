@@ -31,6 +31,31 @@ namespace LibrarySystemBBU.Controllers
         }
 
         // ----------------------------------------
+        // GET: /MemberAuth/AdminContact
+        // Public endpoint for React frontend footer
+        // ----------------------------------------
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> AdminContact()
+        {
+            var admin = await _context.Users
+                .OrderBy(u => u.Created)
+                .Select(u => new
+                {
+                    fullName = (u.FirstName + " " + u.LastName).Trim(),
+                    email = u.Email,
+                    phone = u.Phone,
+                    address = u.Address
+                })
+                .FirstOrDefaultAsync();
+
+            if (admin == null)
+                return NotFound(new { success = false, message = "No admin found." });
+
+            return Json(admin);
+        }
+
+        // ----------------------------------------
         // POST: /MemberAuth/LoginJson
         // ----------------------------------------
         [HttpPost]

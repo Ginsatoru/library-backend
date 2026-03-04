@@ -11,7 +11,7 @@
 <style>
     :root {
         --navy: #000080;
-        --bg: transparent; /* removed wrapper bg */
+        --bg: transparent;
         --card: #ffffff;
         --border: #e5e7eb;
         --muted: #6b7280;
@@ -19,7 +19,6 @@
         --shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
     }
 
-    /* Page */
     .profile-wrap {
         min-height: calc(100vh - 120px);
         background: var(--bg);
@@ -49,7 +48,6 @@
             font-size: 0.95rem;
         }
 
-    /* Layout */
     .profile-grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -64,7 +62,6 @@
         }
     }
 
-    /* Cards */
     .cardx {
         background: var(--card);
         border: 1px solid var(--border);
@@ -96,7 +93,6 @@
         margin: 16px 0;
     }
 
-    /* Buttons */
     .btnx {
         display: inline-flex;
         align-items: center;
@@ -159,7 +155,6 @@
             transform: translateY(-1px);
         }
 
-    /* Left profile card */
     .photo-shell {
         padding: 6px;
     }
@@ -266,7 +261,6 @@
         font-size: 0.78rem;
     }
 
-    /* Right info blocks */
     .field {
         margin-bottom: 12px;
     }
@@ -314,7 +308,6 @@
         font-weight: 700;
     }
 
-    /* Info boxes */
     .info-grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -361,7 +354,6 @@
         font-weight: 800;
     }
 
-    /* Bootstrap modal overrides */
     .modal-backdrop.show {
         opacity: .55;
     }
@@ -414,7 +406,6 @@
             transform: translateY(-1px);
         }
 
-    /* Inputs */
     .inputx,
     .textareax {
         width: 100%;
@@ -432,6 +423,11 @@
             background: #fff;
             border-color: rgba(0, 0, 128, 0.35);
             box-shadow: 0 0 0 3px rgba(0, 0, 128, 0.10);
+        }
+
+        .inputx[readonly] {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
     .form-row {
@@ -501,7 +497,6 @@
                                 </div>
                             }
 
-                            <!-- Camera opens SAME edit modal (one edit target) -->
                             <button type="button" class="photo-action" id="btnOpenEditFromPhoto" title="Edit profile">
                                 <i class="fa-solid fa-camera"></i>
                             </button>
@@ -562,8 +557,6 @@
 
                         <div class="cardx-title-row">
                             <h3 class="cardx-title">Personal Information</h3>
-
-                            <!-- single edit button -->
                             <button type="button" class="btnx btnx-primary" id="btnOpenEdit">
                                 <i class="fa-solid fa-pen-to-square"></i>
                                 <span>Edit</span>
@@ -580,11 +573,21 @@
 
                         <div class="field">
                             <label>Email Address</label>
-                            <div class="readonly-row">
-                                <i class="fa-regular fa-envelope"></i>
-                                <span class="muted">@Model.Email</span>
-                                <span class="readonly-chip">Cannot be changed</span>
-                            </div>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Librarian"))
+                            {
+                                <div class="readonly-row">
+                                    <i class="fa-regular fa-envelope"></i>
+                                    <span>@Model.Email</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="readonly-row">
+                                    <i class="fa-regular fa-envelope"></i>
+                                    <span class="muted">@Model.Email</span>
+                                    <span class="readonly-chip">Cannot be changed</span>
+                                </div>
+                            }
                         </div>
 
                         <div class="field">
@@ -649,18 +652,13 @@
 
                     </div>
                 </div>
-
-                <!-- REMOVED: Security card + security note -->
             </div>
 
         </div>
     </div>
 </div>
 
-<!-- ===========================
-     EDIT PROFILE MODAL
-     (ALL editable fields are here)
-=========================== -->
+<!-- EDIT PROFILE MODAL -->
 <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true" style="z-index: 10000;">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -707,14 +705,12 @@
 
                     <div asp-validation-summary="All" class="text-danger mb-2"></div>
 
-                    <!-- Hidden fields -->
                     <input type="hidden" asp-for="Id" />
                     <input type="hidden" asp-for="ProfilePicturePath" />
                     <input type="hidden" asp-for="Created" />
                     <input type="hidden" asp-for="Modified" />
                     <input type="hidden" asp-for="IsActive" />
                     <input type="hidden" asp-for="UserName" />
-                    <!-- Hidden CurrentPassword filled by SweetAlert -->
                     <input type="hidden" asp-for="CurrentPassword" id="CurrentPasswordHidden" />
 
                     <div class="form-row two" style="margin-bottom:12px;">
@@ -729,9 +725,18 @@
 
                         <div>
                             <label asp-for="Email" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
-                            <input asp-for="Email" class="inputx" readonly />
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                            <div class="upload-hint">Email cannot be changed.</div>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Librarian"))
+                            {
+                                <input asp-for="Email" class="inputx" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                                <div class="upload-hint">You can update the email address.</div>
+                            }
+                            else
+                            {
+                                <input asp-for="Email" class="inputx" readonly />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                                <div class="upload-hint">Email cannot be changed.</div>
+                            }
                         </div>
                     </div>
 
@@ -762,10 +767,16 @@
                     </div>
 
                     <div class="form-row three" style="margin-bottom:12px;">
-                        <!-- Role editable; server will only save if Admin -->
                         <div>
                             <label asp-for="RoleName" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
-                            <input asp-for="RoleName" class="inputx" />
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <input asp-for="RoleName" class="inputx" />
+                            }
+                            else
+                            {
+                                <input asp-for="RoleName" class="inputx" readonly />
+                            }
                             <span asp-validation-for="RoleName" class="text-danger"></span>
                         </div>
                         <div>
@@ -799,7 +810,6 @@
                             <span asp-validation-for="NewPassword" class="text-danger"></span>
                             <div class="upload-hint">Leave blank if you don't want to change your password.</div>
                         </div>
-
                         <div>
                             <label asp-for="ConfirmNewPassword" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
                             <input asp-for="ConfirmNewPassword" class="inputx" type="password" autocomplete="new-password" />
@@ -862,7 +872,6 @@
 
             if (editBtn) editBtn.addEventListener('click', showModal);
             if (editFromPhoto) editFromPhoto.addEventListener('click', showModal);
-
             if (cancelBtn) cancelBtn.addEventListener('click', hideModal);
             if (closeBtn) closeBtn.addEventListener('click', hideModal);
 
@@ -870,11 +879,8 @@
                 saveBtn.addEventListener('click', async function (e) {
                     e.preventDefault();
 
-                    // client-side validation if available
                     if (typeof $ !== 'undefined' && typeof $(form).valid === 'function') {
-                        if (!$(form).valid()) {
-                            return;
-                        }
+                        if (!$(form).valid()) return;
                     }
 
                     hideModal();
@@ -904,7 +910,6 @@
                     });
 
                     if (!result.isConfirmed || !result.value) {
-                        // user cancelled -> reopen modal so they can keep editing
                         showModal();
                         return;
                     }
@@ -919,19 +924,11 @@
             const openEdit = '@(TempData["OpenEditModal"] ?? "")';
 
             if (successMsg) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Profile updated',
-                    text: successMsg
-                });
+                Swal.fire({ icon: 'success', title: 'Profile updated', text: successMsg });
             }
 
             if (errorMsg) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Update failed',
-                    text: errorMsg
-                }).then(() => {
+                Swal.fire({ icon: 'error', title: 'Update failed', text: errorMsg }).then(() => {
                     showModal();
                 });
             } else if (openEdit) {
