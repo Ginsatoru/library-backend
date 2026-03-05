@@ -96,6 +96,13 @@ namespace LibrarySystemBBU.Data
             modelBuilder.Entity(BookBorrowDetailEntity());
 
             // ========================
+            //       BOOK VIEWER
+            // ========================
+            modelBuilder.Entity<CatalogPdfView>()
+    .HasIndex(v => new { v.CatalogId, v.ViewerKey })
+    .IsUnique();
+
+            // ========================
             //       BOOK BORROW
             // ========================
             modelBuilder.Entity<BookBorrow>()
@@ -436,6 +443,7 @@ namespace LibrarySystemBBU.Data
         public DbSet<Adjustment> Adjustments { get; set; } = null!;
         public DbSet<AdjustmentDetail> AdjustmentDetails { get; set; } = null!;
         public DbSet<Purchase> Purchases { get; set; } = null!;
+        public DbSet<CatalogPdfView> CatalogPdfViews { get; set; }
         public DbSet<PurchaseDetail> PurchaseDetails { get; set; } = null!;
         public DbSet<LibraryLog> LibraryLogs { get; set; } = null!;
         public DbSet<LibraryLogItem> LibraryLogItems { get; set; } = null!;

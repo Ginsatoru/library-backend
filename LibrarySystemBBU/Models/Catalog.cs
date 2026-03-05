@@ -40,9 +40,15 @@ namespace LibrarySystemBBU.Models
 
         [StringLength(500)]
         public string? PdfFilePath { get; set; }
+
         public int BorrowCount { get; set; } = 0;
         public int InLibraryCount { get; set; } = 0;
+
+        // Lifetime unique PDF viewers
+        public int PdfViewerCount { get; set; } = 0;
+
         public ICollection<Book> Books { get; set; } = new List<Book>();
+        public ICollection<CatalogPdfView> PdfViews { get; set; } = new List<CatalogPdfView>();
     }
 
     public class Book
@@ -72,12 +78,9 @@ namespace LibrarySystemBBU.Models
         public DateTime Created { get; set; } = DateTime.UtcNow;
         public DateTime Modified { get; set; } = DateTime.UtcNow;
 
-
         public Catalog Catalog { get; set; } = default!;
-
         public ICollection<PurchaseDetail> PurchaseDetails { get; set; } = new List<PurchaseDetail>();
         public ICollection<BookBorrowDetail> BookBorrowDetail { get; set; } = new List<BookBorrowDetail>();
-
         public string? Title { get; internal set; }
     }
 }

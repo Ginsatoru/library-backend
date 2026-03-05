@@ -769,14 +769,7 @@
                     <div class="form-row three" style="margin-bottom:12px;">
                         <div>
                             <label asp-for="RoleName" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <input asp-for="RoleName" class="inputx" />
-                            }
-                            else
-                            {
-                                <input asp-for="RoleName" class="inputx" readonly />
-                            }
+                            <input asp-for="RoleName" class="inputx" readonly />
                             <span asp-validation-for="RoleName" class="text-danger"></span>
                         </div>
                         <div>

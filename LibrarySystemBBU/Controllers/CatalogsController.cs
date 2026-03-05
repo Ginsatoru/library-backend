@@ -7,10 +7,12 @@ using System.Net;
 using System.Threading.Tasks;
 using LibrarySystemBBU.Data;
 using LibrarySystemBBU.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace LibrarySystemBBU.Controllers
 {
@@ -368,8 +370,8 @@ namespace LibrarySystemBBU.Controllers
                 Author = vm.Author,
                 ISBN = vm.ISBN,
                 Category = vm.Category,
-                TotalCopies = vm.TotalCopies,          // ✅ server-calculated
-                AvailableCopies = vm.AvailableCopies,  // ✅ server-calculated
+                TotalCopies = vm.TotalCopies,
+                AvailableCopies = vm.AvailableCopies,
                 ImagePath = vm.ImagePath,
                 PdfFilePath = vm.PdfFilePath
             };
@@ -390,6 +392,46 @@ namespace LibrarySystemBBU.Controllers
             }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // ---------- API: Track PDF Viewer ----------
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> TrackPdfViewer(Guid id)
+        {
+            var catalog = await _context.Catalogs
+                .FirstOrDefaultAsync(c => c.CatalogId == id);
+
+            if (catalog == null)
+                return NotFound(new { success = false, message = "Catalog not found." });
+
+            // Build viewer key: SHA-256 of IP + UserAgent
+            var ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            var ua = Request.Headers["User-Agent"].ToString();
+            var raw = $"{ip}|{ua}|{id}";
+
+            using var sha = SHA256.Create();
+            var hash = sha.ComputeHash(Encoding.UTF8.GetBytes(raw));
+            var viewerKey = Convert.ToHexString(hash).ToLowerInvariant();
+
+            // Check if this viewer already recorded for this catalog
+            var alreadyViewed = await _context.CatalogPdfViews
+                .AnyAsync(v => v.CatalogId == id && v.ViewerKey == viewerKey);
+
+            if (!alreadyViewed)
+            {
+                _context.CatalogPdfViews.Add(new CatalogPdfView
+                {
+                    CatalogId = id,
+                    ViewerKey = viewerKey,
+                    ViewedAt = DateTime.UtcNow,
+                });
+
+                catalog.PdfViewerCount++;
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { success = true, pdfViewerCount = catalog.PdfViewerCount });
         }
 
         // ---------- Edit GET ----------
@@ -520,8 +562,8 @@ namespace LibrarySystemBBU.Controllers
             catalog.Author = vm.Author;
             catalog.ISBN = vm.ISBN;
             catalog.Category = vm.Category;
-            catalog.TotalCopies = vm.TotalCopies;          // ✅ server-calculated
-            catalog.AvailableCopies = vm.AvailableCopies;  // ✅ server-calculated
+            catalog.TotalCopies = vm.TotalCopies;
+            catalog.AvailableCopies = vm.AvailableCopies;
 
             // sync books
             var postedFilled = vm.Books.Where(Filled).ToList();
@@ -566,67 +608,71 @@ namespace LibrarySystemBBU.Controllers
         }
 
         // ---------- API: List ----------
-[HttpGet]
-public async Task<IActionResult> IndexJson()
-{
-    var catalogs = await _context.Catalogs
-        .Include(c => c.Books)
-        .AsNoTracking()
-        .OrderBy(c => c.Title)
-        .Select(c => new
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> IndexJson()
         {
-            catalogId       = c.CatalogId,
-            title           = c.Title,
-            author          = c.Author,
-            isbn            = c.ISBN,
-            category        = c.Category,
-            totalCopies     = c.TotalCopies,
-            availableCopies = c.AvailableCopies,
-            borrowCount     = c.BorrowCount,
-            inLibraryCount  = c.InLibraryCount,
-            imagePath       = c.ImagePath,
-            hasPdf          = !string.IsNullOrEmpty(c.PdfFilePath)
-        })
-        .ToListAsync();
+            var catalogs = await _context.Catalogs
+                .Include(c => c.Books)
+                .AsNoTracking()
+                .OrderBy(c => c.Title)
+                .Select(c => new
+                {
+                    catalogId = c.CatalogId,
+                    title = c.Title,
+                    author = c.Author,
+                    isbn = c.ISBN,
+                    category = c.Category,
+                    totalCopies = c.TotalCopies,
+                    availableCopies = c.AvailableCopies,
+                    borrowCount = c.BorrowCount,
+                    inLibraryCount = c.InLibraryCount,
+                    imagePath = c.ImagePath,
+                    hasPdf = !string.IsNullOrEmpty(c.PdfFilePath),
+                    pdfViewerCount = c.PdfViewerCount
+                })
+                .ToListAsync();
 
-    return Json(catalogs);
-}
+            return Json(catalogs);
+        }
 
-// ---------- API: Single ----------
-[HttpGet]
-public async Task<IActionResult> DetailsJson(Guid id)
-{
-    var c = await _context.Catalogs
-        .Include(c => c.Books)
-        .AsNoTracking()
-        .FirstOrDefaultAsync(cat => cat.CatalogId == id);
-
-    if (c == null) return NotFound(new { success = false, message = "Catalog not found." });
-
-    return Json(new
-    {
-        catalogId       = c.CatalogId,
-        title           = c.Title,
-        author          = c.Author,
-        isbn            = c.ISBN,
-        category        = c.Category,
-        totalCopies     = c.TotalCopies,
-        availableCopies = c.AvailableCopies,
-        borrowCount     = c.BorrowCount,
-        inLibraryCount  = c.InLibraryCount,
-        imagePath       = c.ImagePath,
-        pdfFilePath     = c.PdfFilePath,
-        hasPdf          = !string.IsNullOrEmpty(c.PdfFilePath),
-        books           = c.Books.Select(b => new
+        // ---------- API: Single ----------
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> DetailsJson(Guid id)
         {
-            bookId          = b.BookId,
-            barcode         = b.Barcode,
-            status          = b.Status,
-            location        = b.Location,
-            acquisitionDate = b.AcquisitionDate
-        })
-    });
-}
+            var c = await _context.Catalogs
+                .Include(c => c.Books)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(cat => cat.CatalogId == id);
+
+            if (c == null) return NotFound(new { success = false, message = "Catalog not found." });
+
+            return Json(new
+            {
+                catalogId = c.CatalogId,
+                title = c.Title,
+                author = c.Author,
+                isbn = c.ISBN,
+                category = c.Category,
+                totalCopies = c.TotalCopies,
+                availableCopies = c.AvailableCopies,
+                borrowCount = c.BorrowCount,
+                inLibraryCount = c.InLibraryCount,
+                imagePath = c.ImagePath,
+                pdfFilePath = c.PdfFilePath,
+                pdfViewerCount = c.PdfViewerCount,
+                hasPdf = !string.IsNullOrEmpty(c.PdfFilePath),
+                books = c.Books.Select(b => new
+                {
+                    bookId = b.BookId,
+                    barcode = b.Barcode,
+                    status = b.Status,
+                    location = b.Location,
+                    acquisitionDate = b.AcquisitionDate
+                })
+            });
+        }
 
         // ---------- Delete ----------
         public async Task<IActionResult> Delete(Guid? id)

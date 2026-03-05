@@ -47,7 +47,6 @@
 <!-- LIST VIEW -->
 <div id="view-list">
     <div class="table-wrap glass-surface">
-        <!-- added glass-table class here -->
         <table class="table table-striped align-middle glass-table" id="catalogsTable">
             <thead>
                 <tr>
@@ -57,9 +56,9 @@
                     <th>Category</th>
                     <th class="text-end">Total</th>
                     <th class="text-end">Available</th>
-                    <!-- NEW: usage columns -->
                     <th class="text-end">Borrowed</th>
                     <th class="text-end">Read in Library</th>
+                    <th class="text-end">PDF Viewers</th>
                     <th style="min-width:220px;"></th>
                 </tr>
             </thead>
@@ -85,6 +84,7 @@
                         <td class="text-end">@c.AvailableCopies</td>
                         <td class="text-end">@c.BorrowCount</td>
                         <td class="text-end">@c.InLibraryCount</td>
+                        <td class="text-end">@c.PdfViewerCount</td>
                         <td class="text-nowrap actions">
                             <a class="btn-glass btn-outline btn-sm glass-surface-pill" asp-action="Details" asp-route-id="@c.CatalogId"><i class="bi bi-eye"></i> Details</a>
                             <a class="btn-glass btn-outline btn-sm glass-surface-pill" asp-action="Edit" asp-route-id="@c.CatalogId"><i class="bi bi-pencil-square"></i> Edit</a>
@@ -144,9 +144,9 @@
                 <div class="stats">
                     <span class="chip"><i class="bi bi-collection"></i> Total @c.TotalCopies</span>
                     <span class="chip"><i class="bi bi-box-seam"></i> Avail @c.AvailableCopies</span>
-                    <!-- NEW usage chips -->
                     <span class="chip"><i class="bi bi-box-arrow-in-down"></i> Borrowed @c.BorrowCount</span>
                     <span class="chip"><i class="bi bi-building"></i> In Lib @c.InLibraryCount</span>
+                    <span class="chip"><i class="bi bi-eye"></i> PDF Views @c.PdfViewerCount</span>
                 </div>
             </div>
 
