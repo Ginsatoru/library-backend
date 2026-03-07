@@ -58,6 +58,14 @@
               "target": "Package",
               "version": "[7.0.5, )"
             },
+            "ExcelDataReader": {
+              "target": "Package",
+              "version": "[3.8.0, )"
+            },
+            "ExcelDataReader.DataSet": {
+              "target": "Package",
+              "version": "[3.8.0, )"
+            },
             "Logger_Core": {
               "target": "Package",
               "version": "[1.0.0, )"

@@ -3,321 +3,614 @@
 
 @{
     ViewData["Title"] = "Catalogs";
-    var totalCatalogs = Model?.Count() ?? 0;
-    var sumTotalCopies = Model?.Sum(x => x.TotalCopies) ?? 0;
-    var sumAvailable = Model?.Sum(x => x.AvailableCopies) ?? 0;
-
-    // For Card view: show exactly 4 items (1 row x 4 columns)
-    var four = (Model ?? Enumerable.Empty<LibrarySystemBBU.Models.Catalog>()).Take(4).ToList();
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-<h2 class="page-title"><span class="logo-dot"></span> Catalogs</h2>
-
-<div class="toolbar glass-surface">
-    <a class="btn-glass btn-brand" asp-action="Create"><i class="bi bi-plus-circle"></i> Create New</a>
-
-    <div class="segmented" role="group" aria-label="View">
-        <button type="button" class="btn-toggle active" data-view="list"><i class="bi bi-list-ul"></i> List</button>
-        <button type="button" class="btn-toggle" data-view="cards"><i class="bi bi-grid-3x3-gap"></i> Cards</button>
-    </div>
-
-    <div class="search-wrap">
-        <i class="bi bi-search search-icon"></i>
-        <input id="globalSearch" class="search-input" placeholder="Search title, author, ISBN, category…" />
-        <button class="search-clear" type="button" id="clearSearch" title="Clear"><i class="bi bi-x-circle"></i></button>
-    </div>
-
-    <!-- SINGLE EXPORT BUTTON (Catalog + Book, EN+KH in one file) -->
-    <div class="d-flex align-items-center gap-2 ms-2">
-        <a class="btn-glass btn-outline glass-surface-pill"
-           asp-action="Export">
-            <i class="bi bi-download"></i> Export
-        </a>
-    </div>
-
-    <div class="ms-auto d-flex align-items-center gap-2">
-        <span class="pill glass-surface-pill"><i class="bi bi-journal-text"></i> Catalogs: <strong id="statCount">@totalCatalogs</strong></span>
-        <span class="pill glass-surface-pill"><i class="bi bi-collection"></i> Total Copies: <strong id="statTotal">@sumTotalCopies</strong></span>
-        <span class="pill glass-surface-pill"><i class="bi bi-box-seam"></i> Available: <strong id="statAvail">@sumAvailable</strong></span>
-    </div>
-</div>
-
-<!-- LIST VIEW -->
-<div id="view-list">
-    <div class="table-wrap glass-surface">
-        <table class="table table-striped align-middle glass-table" id="catalogsTable">
-            <thead>
-                <tr>
-                    <th style="min-width:220px;">Title</th>
-                    <th>Author</th>
-                    <th>ISBN</th>
-                    <th>Category</th>
-                    <th class="text-end">Total</th>
-                    <th class="text-end">Available</th>
-                    <th class="text-end">Borrowed</th>
-                    <th class="text-end">Read in Library</th>
-                    <th class="text-end">PDF Viewers</th>
-                    <th style="min-width:220px;"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var c in Model)
-                {
-                    var barcodes = c.Books == null
-                    ? ""
-                    : string.Join(" ", c.Books.Select(b => b.Barcode));
-
-                    <tr data-title="@c.Title"
-                        data-author="@c.Author"
-                        data-isbn="@c.ISBN"
-                        data-category="@c.Category"
-                        data-total="@c.TotalCopies"
-                        data-avail="@c.AvailableCopies"
-                        data-barcodes="@barcodes">
-                        <td>@c.Title</td>
-                        <td>@c.Author</td>
-                        <td>@c.ISBN</td>
-                        <td>@c.Category</td>
-                        <td class="text-end">@c.TotalCopies</td>
-                        <td class="text-end">@c.AvailableCopies</td>
-                        <td class="text-end">@c.BorrowCount</td>
-                        <td class="text-end">@c.InLibraryCount</td>
-                        <td class="text-end">@c.PdfViewerCount</td>
-                        <td class="text-nowrap actions">
-                            <a class="btn-glass btn-outline btn-sm glass-surface-pill" asp-action="Details" asp-route-id="@c.CatalogId"><i class="bi bi-eye"></i> Details</a>
-                            <a class="btn-glass btn-outline btn-sm glass-surface-pill" asp-action="Edit" asp-route-id="@c.CatalogId"><i class="bi bi-pencil-square"></i> Edit</a>
-                            <a class="btn-glass btn-outline btn-sm glass-surface-pill" asp-action="Delete" asp-route-id="@c.CatalogId"><i class="bi bi-trash3"></i> Delete</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Pagination controls (List view only) -->
-    <div class="pager" id="listPager">
-        <button type="button" class="btn-glass btn-outline glass-surface-pill" id="prevPage"><i class="bi bi-chevron-left"></i> Prev</button>
-        <span class="page-info" id="pageInfo">Page 1 / 1</span>
-        <button type="button" class="btn-glass btn-outline glass-surface-pill" id="nextPage">Next <i class="bi bi-chevron-right"></i></button>
-    </div>
-</div>
-
-<!-- CARD VIEW (exactly 1 row x 4 columns; only 4 items rendered) -->
-<div class="cards-wrap" id="view-cards" style="display:none">
-    @foreach (var c in four)
-    {
-        var title = c.Title ?? "";
-        var author = c.Author ?? "";
-        var isbn = c.ISBN ?? "";
-        var category = c.Category ?? "";
-        var image = string.IsNullOrWhiteSpace(c.ImagePath) ? null : c.ImagePath;
-        var barcodesCard = c.Books == null
-        ? ""
-        : string.Join(" ", c.Books.Select(b => b.Barcode));
-
-        <div class="catalog-card"
-             data-title="@title"
-             data-author="@author"
-             data-isbn="@isbn"
-             data-category="@category"
-             data-total="@c.TotalCopies"
-             data-avail="@c.AvailableCopies"
-             data-barcodes="@barcodesCard">
-            <div class="catalog-card-cover">
-                @if (!string.IsNullOrWhiteSpace(image))
-                {
-                    <img src="@image" alt="@title cover" />
-                }
-                else
-                {
-                    <div class="placeholder"><i class="bi bi-image"></i></div>
-                }
-            </div>
-
-            <div class="catalog-card-body">
-                <div class="title"><i class="bi bi-journal-bookmark"></i> @title</div>
-                <div class="meta"><i class="bi bi-person"></i> @author</div>
-                <div class="meta"><i class="bi bi-upc-scan"></i> @isbn</div>
-                <div class="meta"><i class="bi bi-tags"></i> @category</div>
-                <div class="stats">
-                    <span class="chip"><i class="bi bi-collection"></i> Total @c.TotalCopies</span>
-                    <span class="chip"><i class="bi bi-box-seam"></i> Avail @c.AvailableCopies</span>
-                    <span class="chip"><i class="bi bi-box-arrow-in-down"></i> Borrowed @c.BorrowCount</span>
-                    <span class="chip"><i class="bi bi-building"></i> In Lib @c.InLibraryCount</span>
-                    <span class="chip"><i class="bi bi-eye"></i> PDF Views @c.PdfViewerCount</span>
-                </div>
-            </div>
-
-            <div class="catalog-card-actions">
-                <a class="btn-glass btn-outline btn-sm" asp-action="Details" asp-route-id="@c.CatalogId"><i class="bi bi-eye"></i> Details</a>
-                <a class="btn-glass btn-outline btn-sm" asp-action="Edit" asp-route-id="@c.CatalogId"><i class="bi bi-pencil-square"></i> Edit</a>
-                <a class="btn-glass btn-outline btn-sm" asp-action="Delete" asp-route-id="@c.CatalogId"><i class="bi bi-trash3"></i> Delete</a>
-            </div>
-        </div>
+<style>
+    .cat-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
+
+    .cat-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .cat-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .cat-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .cat-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .cat-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+        .cat-btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+    .cat-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .cat-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+
+    .cat-segmented {
+        display: flex;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .cat-seg-btn {
+        padding: 6px 14px;
+        font-size: .82rem;
+        font-weight: 500;
+        border: none;
+        background: #fff;
+        color: #6b7280;
+        cursor: pointer;
+        transition: background .15s, color .15s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .cat-seg-btn:not(:last-child) {
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .cat-seg-btn.active {
+            background: #f3f4f6;
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .cat-search-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 6px 12px;
+        background: #fff;
+        flex: 1;
+        min-width: 200px;
+        max-width: 360px;
+        transition: border-color .15s;
+    }
+
+        .cat-search-wrap:focus-within {
+            border-color: #000080;
+        }
+
+        .cat-search-wrap i {
+            color: #9ca3af;
+            font-size: .85rem;
+        }
+
+    .cat-search-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: .83rem;
+        color: #111827;
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .cat-search-input::placeholder {
+            color: #9ca3af;
+        }
+
+    .cat-search-clear {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #d1d5db;
+        padding: 0;
+        font-size: .85rem;
+    }
+
+        .cat-search-clear:hover {
+            color: #6b7280;
+        }
+
+    .cat-stats {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        flex-wrap: wrap;
+    }
+
+    .cat-stat-pill {
+        font-size: .78rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 4px 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+    }
+
+        .cat-stat-pill strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .cat-loading {
+        text-align: center;
+        padding: 3rem 0;
+        color: #6b7280;
+        font-size: .88rem;
+    }
+
+    .cat-table-wrap {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+
+    .cat-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .cat-table thead th {
+            padding: 11px 16px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .cat-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background .1s;
+        }
+
+            .cat-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .cat-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+        .cat-table tbody td {
+            padding: 11px 16px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+            .cat-table tbody td.muted {
+                color: #6b7280;
+            }
+
+        .cat-table .text-end {
+            text-align: right;
+        }
+
+    .cat-pager {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 0;
+    }
+
+    .cat-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 18px;
+        margin-bottom: 1rem;
+    }
+
+    .cat-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: box-shadow .2s, transform .2s;
+    }
+
+        .cat-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,.07);
+            transform: translateY(-2px);
+        }
+
+    .cat-card-cover {
+        height: 350px;
+        overflow: hidden;
+        background: #f3f4f6;
+        flex-shrink: 0;
+    }
+
+        .cat-card-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+            transition: transform .3s ease;
+        }
+
+    .cat-card:hover .cat-card-cover img {
+        transform: scale(1.03);
+    }
+
+    .cat-card-body {
+        padding: 14px 14px 8px;
+        flex: 1;
+    }
+
+    .cat-card-title {
+        font-size: .875rem;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 6px;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .cat-card-meta {
+        font-size: .74rem;
+        color: #6b7280;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 3px;
+    }
+
+        .cat-card-meta i {
+            font-size: .7rem;
+            flex-shrink: 0;
+        }
+
+    .cat-card-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 8px 14px 10px;
+        border-top: 1px solid #f3f4f6;
+        margin-top: 8px;
+    }
+
+    .cat-card-chip {
+        font-size: .68rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 2px 7px;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+
+    .cat-card-actions {
+        display: flex;
+        gap: 5px;
+        padding: 8px 14px 12px;
+        border-top: 1px solid #f3f4f6;
+    }
+
+        .cat-card-actions a {
+            flex: 1;
+            text-align: center;
+            padding: 5px 4px;
+            font-size: .72rem;
+            font-weight: 500;
+            border-radius: 7px;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+            text-decoration: none;
+            background: #fff;
+            transition: background .15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            font-family: 'Inter', sans-serif;
+        }
+
+            .cat-card-actions a:hover {
+                background: #f3f4f6;
+                color: #111827;
+                text-decoration: none;
+            }
+</style>
+
+<div class="cat-page">
+
+    <div class="cat-page-title">Catalogs</div>
+
+    <div class="cat-toolbar">
+        <a class="cat-btn cat-btn-primary" asp-action="Create"><i class="bi bi-plus-circle"></i> Create New</a>
+
+        <div class="cat-segmented">
+            <button type="button" class="cat-seg-btn active" data-view="list"><i class="bi bi-list-ul"></i> List</button>
+            <button type="button" class="cat-seg-btn" data-view="cards"><i class="bi bi-grid-3x3-gap"></i> Cards</button>
+        </div>
+
+        <div class="cat-search-wrap">
+            <i class="bi bi-search"></i>
+            <input id="globalSearch" class="cat-search-input" placeholder="Search title, author, ISBN, category…" />
+            <button class="cat-search-clear" type="button" id="clearSearch"><i class="bi bi-x-circle"></i></button>
+        </div>
+
+        <a class="cat-btn" asp-action="Export"><i class="bi bi-download"></i> Export</a>
+        <button type="button" class="cat-btn" id="openImportBtn"><i class="bi bi-upload"></i> Import</button>
+
+        <div class="cat-stats">
+            <span class="cat-stat-pill"><i class="bi bi-journal-text"></i> Catalogs: <strong id="statCount">—</strong></span>
+            <span class="cat-stat-pill"><i class="bi bi-collection"></i> Total Copies: <strong id="statTotal">—</strong></span>
+            <span class="cat-stat-pill"><i class="bi bi-box-seam"></i> Available: <strong id="statAvail">—</strong></span>
+        </div>
+    </div>
+
+    <div id="loadingIndicator" class="cat-loading" style="display:none;">
+        <div class="spinner-border" role="status" style="width:1.4rem;height:1.4rem;border-width:2px;color:#000080;"></div>
+        <div class="mt-2">Loading catalogs…</div>
+    </div>
+
+    <!-- LIST VIEW -->
+    <div id="view-list">
+        <div class="cat-table-wrap">
+            <table class="cat-table">
+                <thead>
+                    <tr>
+                        <th style="min-width:200px;">Title</th>
+                        <th>Author</th>
+                        <th>ISBN</th>
+                        <th>Category</th>
+                        <th class="text-end">Total</th>
+                        <th class="text-end">Available</th>
+                        <th class="text-end">Borrowed</th>
+                        <th class="text-end">Read in Library</th>
+                        <th class="text-end">PDF Viewers</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="catalogTableBody">
+                    <tr><td colspan="10" style="text-align:center;color:#9ca3af;padding:2rem;">Loading…</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="cat-pager" id="listPager">
+            <button type="button" class="cat-btn" id="prevPage"><i class="bi bi-chevron-left"></i> Prev</button>
+            <span id="pageInfo" style="font-size:.82rem;color:#6b7280;">Page 1 / 1</span>
+            <button type="button" class="cat-btn" id="nextPage">Next <i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <!-- CARD VIEW -->
+    <div class="cat-cards-grid" id="view-cards" style="display:none;"></div>
+    <div class="cat-pager" id="cardPager" style="display:none;">
+        <button type="button" class="cat-btn" id="cardPrevPage"><i class="bi bi-chevron-left"></i> Prev</button>
+        <span id="cardPageInfo" style="font-size:.82rem;color:#6b7280;">Page 1 / 1</span>
+        <button type="button" class="cat-btn" id="cardNextPage">Next <i class="bi bi-chevron-right"></i></button>
+    </div>
+
 </div>
+
+@await Html.PartialAsync("_ImportModal")
 
 @section Scripts {
     <script>
         (function () {
-            const search = document.getElementById('globalSearch');
-            const clearBtn = document.getElementById('clearSearch');
-            const statCount = document.getElementById('statCount');
-            const statTotal = document.getElementById('statTotal');
-            const statAvail = document.getElementById('statAvail');
+            const FALLBACK = 'https://www.forewordreviews.com/books/covers/fallback-position.jpg';
 
-            const btns = document.querySelectorAll('.segmented .btn-toggle');
-            const viewList = document.getElementById('view-list');
-            const viewCards = document.getElementById('view-cards');
-            const pager = document.getElementById('listPager');
-            const prevBtn = document.getElementById('prevPage');
-            const nextBtn = document.getElementById('nextPage');
-            const pageInfo = document.getElementById('pageInfo');
+            let allCatalogs = [], filtered = [];
+            let pageIndex = 1, cardPageIndex = 1;
+            const pageSize = 50, cardPageSize = 20;
+            let viewMode = 'list';
 
-            let pageSize = 10;
-            let pageIndex = 1;
+            const search       = document.getElementById('globalSearch');
+            const clearBtn     = document.getElementById('clearSearch');
+            const statCount    = document.getElementById('statCount');
+            const statTotal    = document.getElementById('statTotal');
+            const statAvail    = document.getElementById('statAvail');
+            const btns         = document.querySelectorAll('.cat-seg-btn');
+            const viewList     = document.getElementById('view-list');
+            const viewCards    = document.getElementById('view-cards');
+            const tbody        = document.getElementById('catalogTableBody');
+            const loader       = document.getElementById('loadingIndicator');
+            const prevBtn      = document.getElementById('prevPage');
+            const nextBtn      = document.getElementById('nextPage');
+            const pageInfo     = document.getElementById('pageInfo');
+            const cardPager    = document.getElementById('cardPager');
+            const cardPrevBtn  = document.getElementById('cardPrevPage');
+            const cardNextBtn  = document.getElementById('cardNextPage');
+            const cardPageInfo = document.getElementById('cardPageInfo');
 
-            btns.forEach(b => {
-                b.addEventListener('click', () => {
-                    btns.forEach(x => x.classList.remove('active'));
-                    b.classList.add('active');
-                    const v = b.getAttribute('data-view');
-                    if (v === 'cards') {
-                        viewCards.style.display = 'grid';
-                        document.querySelector('#view-list .table-wrap').style.display = 'none';
-                        pager.style.display = 'none';
-                    } else {
-                        viewCards.style.display = 'none';
-                        document.querySelector('#view-list .table-wrap').style.display = 'block';
-                        pager.style.display = 'flex';
-                        pageIndex = 1;
-                        apply();
-                    }
-                    apply();
-                });
-            });
-
-            function getAllRows() {
-                return Array.from(document.querySelectorAll('#catalogsTable tbody tr'));
+            async function loadCatalogs() {
+                loader.style.display = 'block';
+                viewList.style.display = 'none';
+                try {
+                    allCatalogs = await (await fetch('@Url.Action("IndexJson", "Catalogs")')).json();
+                } catch (e) {
+                    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:#dc2626;padding:2rem;">Failed to load: ${e.message}</td></tr>`;
+                } finally {
+                    loader.style.display = 'none';
+                    viewList.style.display = 'block';
+                }
+                apply();
             }
 
-            function apply() {
+            function applyFilter() {
                 const q = (search.value || '').trim().toLowerCase();
+                filtered = !q ? allCatalogs : allCatalogs.filter(c =>
+                    (c.title||'').toLowerCase().includes(q) ||
+                    (c.author||'').toLowerCase().includes(q) ||
+                    (c.isbn||'').toLowerCase().includes(q) ||
+                    (c.category||'').toLowerCase().includes(q));
+            }
 
-                // LIST
-                const rows = getAllRows();
-                rows.forEach(tr => {
-                    const text = [
-                        tr.dataset.title || '',
-                        tr.dataset.author || '',
-                        tr.dataset.isbn || '',
-                        tr.dataset.category || '',
-                        tr.dataset.barcodes || '',
-                        tr.dataset.total || '',
-                        tr.dataset.avail || ''
-                    ].join(' ').toLowerCase();
+            function updateStats() {
+                statCount.textContent = filtered.length.toLocaleString();
+                statTotal.textContent = filtered.reduce((s,c) => s+(c.totalCopies||0), 0).toLocaleString();
+                statAvail.textContent = filtered.reduce((s,c) => s+(c.availableCopies||0), 0).toLocaleString();
+            }
 
-                    const show = !q || text.includes(q);
-                    tr.dataset._filtered = show ? '1' : '0';
-                });
+            function renderList() {
+                const tp = Math.max(1, Math.ceil(filtered.length / pageSize));
+                pageIndex = Math.min(Math.max(1, pageIndex), tp);
+                const slice = filtered.slice((pageIndex-1)*pageSize, pageIndex*pageSize);
+                tbody.innerHTML = slice.length === 0
+                    ? '<tr><td colspan="10" style="text-align:center;color:#9ca3af;padding:2rem;">No catalogs found.</td></tr>'
+                    : slice.map(c => `<tr>
+                        <td style="font-weight:500;color:#111827;">${esc(c.title)}</td>
+                        <td class="muted">${esc(c.author)}</td>
+                        <td class="muted">${esc(c.isbn)}</td>
+                        <td class="muted">${esc(c.category)}</td>
+                        <td class="text-end">${c.totalCopies}</td>
+                        <td class="text-end">${c.availableCopies}</td>
+                        <td class="text-end">${c.borrowCount}</td>
+                        <td class="text-end">${c.inLibraryCount}</td>
+                        <td class="text-end">${c.pdfViewerCount}</td>
+                        <td style="white-space:nowrap;display:flex;gap:4px;padding:8px 16px;">
+                            <a class="cat-btn" style="padding:4px 10px;font-size:.74rem;" href="/Catalogs/Details/${c.catalogId}"><i class="bi bi-eye"></i> Details</a>
+                            <a class="cat-btn" style="padding:4px 10px;font-size:.74rem;" href="/Catalogs/Edit/${c.catalogId}"><i class="bi bi-pencil-square"></i> Edit</a>
+                            <a class="cat-btn" style="padding:4px 10px;font-size:.74rem;" href="/Catalogs/Delete/${c.catalogId}"><i class="bi bi-trash3"></i> Delete</a>
+                        </td></tr>`).join('');
+                pageInfo.textContent = `Page ${filtered.length ? pageIndex : 0} / ${filtered.length ? tp : 0}`;
+                prevBtn.disabled = pageIndex <= 1 || !filtered.length;
+                nextBtn.disabled = pageIndex >= tp || !filtered.length;
+            }
 
-                paginate();
+            function renderCards() {
+                const tp = Math.max(1, Math.ceil(filtered.length / cardPageSize));
+                cardPageIndex = Math.min(Math.max(1, cardPageIndex), tp);
+                const slice = filtered.slice((cardPageIndex-1)*cardPageSize, cardPageIndex*cardPageSize);
+                viewCards.innerHTML = slice.map(c => `
+                    <div class="cat-card">
+                        <div class="cat-card-cover">
+                            <img src="${c.imagePath ? esc(c.imagePath) : FALLBACK}" alt="${esc(c.title)}" onerror="this.src='${FALLBACK}'" />
+                        </div>
+                        <div class="cat-card-body">
+                            <div class="cat-card-title">${esc(c.title)}</div>
+                            <div class="cat-card-meta"><i class="bi bi-person"></i>${esc(c.author)||'—'}</div>
+                            <div class="cat-card-meta"><i class="bi bi-upc-scan"></i>${esc(c.isbn)||'—'}</div>
+                            <div class="cat-card-meta"><i class="bi bi-tags"></i>${esc(c.category)||'—'}</div>
+                        </div>
+                        <div class="cat-card-stats">
+                            <span class="cat-card-chip"><i class="bi bi-collection"></i>Total ${c.totalCopies}</span>
+                            <span class="cat-card-chip"><i class="bi bi-box-seam"></i>Avail ${c.availableCopies}</span>
+                            <span class="cat-card-chip"><i class="bi bi-box-arrow-in-down"></i>${c.borrowCount} Borrowed</span>
+                            <span class="cat-card-chip"><i class="bi bi-building"></i>${c.inLibraryCount} In Lib</span>
+                            <span class="cat-card-chip"><i class="bi bi-eye"></i>${c.pdfViewerCount} PDF</span>
+                        </div>
+                        <div class="cat-card-actions">
+                            <a href="/Catalogs/Details/${c.catalogId}"><i class="bi bi-eye"></i>Details</a>
+                            <a href="/Catalogs/Edit/${c.catalogId}"><i class="bi bi-pencil-square"></i>Edit</a>
+                            <a href="/Catalogs/Delete/${c.catalogId}"><i class="bi bi-trash3"></i>Delete</a>
+                        </div>
+                    </div>`).join('');
+                cardPageInfo.textContent = `Page ${filtered.length ? cardPageIndex : 0} / ${filtered.length ? tp : 0}`;
+                cardPrevBtn.disabled = cardPageIndex <= 1 || !filtered.length;
+                cardNextBtn.disabled = cardPageIndex >= tp || !filtered.length;
+            }
 
-                // CARDS
-                document.querySelectorAll('#view-cards .catalog-card').forEach(card => {
-                    const text = [
-                        card.dataset.title || '',
-                        card.dataset.author || '',
-                        card.dataset.isbn || '',
-                        card.dataset.category || '',
-                        card.dataset.barcodes || '',
-                        card.dataset.total || '',
-                        card.dataset.avail || ''
-                    ].join(' ').toLowerCase();
+            function apply() { applyFilter(); updateStats(); viewMode === 'list' ? renderList() : renderCards(); }
 
-                    const show = !q || text.includes(q);
-                    card.style.display = show ? '' : 'none';
-                });
+            function esc(s) { return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
 
-                const usingCards =
-                    (viewCards.style.display !== 'none' &&
-                        document.querySelector('#view-list .table-wrap').style.display === 'none');
-
-                let count = 0, sumT = 0, sumA = 0;
-
-                if (usingCards) {
-                    document.querySelectorAll('#view-cards .catalog-card').forEach(card => {
-                        if (card.style.display === 'none') return;
-                        count++;
-                        sumT += parseInt(card.dataset.total || '0');
-                        sumA += parseInt(card.dataset.avail || '0');
-                    });
+            btns.forEach(b => b.addEventListener('click', () => {
+                btns.forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                viewMode = b.getAttribute('data-view');
+                if (viewMode === 'cards') {
+                    viewCards.style.display = 'grid'; viewList.style.display = 'none';
+                    cardPager.style.display = 'flex'; cardPageIndex = 1;
                 } else {
-                    document.querySelectorAll('#catalogsTable tbody tr').forEach(tr => {
-                        if (tr.style.display === 'none') return;
-                        count++;
-                        sumT += parseInt(tr.dataset.total || '0');
-                        sumA += parseInt(tr.dataset.avail || '0');
-                    });
+                    viewCards.style.display = 'none'; cardPager.style.display = 'none';
+                    viewList.style.display = 'block'; pageIndex = 1;
                 }
-
-                statCount.textContent = count.toString();
-                statTotal.textContent = sumT.toString();
-                statAvail.textContent = sumA.toString();
-            }
-
-            function paginate() {
-                const rows = getAllRows().filter(r => r.dataset._filtered === '1');
-
-                const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
-                if (pageIndex > totalPages) pageIndex = totalPages;
-                if (pageIndex < 1) pageIndex = 1;
-
-                let start = (pageIndex - 1) * pageSize;
-                let end = start + pageSize;
-
-                getAllRows().forEach(r => {
-                    if (r.dataset._filtered === '0') { r.style.display = 'none'; return; }
-                    r.style.display = 'none';
-                });
-
-                rows.slice(start, end).forEach(r => r.style.display = '');
-
-                pageInfo.textContent = `Page ${rows.length ? pageIndex : 0} / ${rows.length ? Math.ceil(rows.length / pageSize) : 0}`;
-                prevBtn.disabled = (pageIndex <= 1 || rows.length === 0);
-                nextBtn.disabled = (pageIndex >= Math.ceil(rows.length / pageSize) || rows.length === 0);
-            }
-
-            // live search while typing
-            search.addEventListener('input', () => {
-                pageIndex = 1;
                 apply();
-            });
+            }));
 
-            // press Enter in search box
-            search.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    pageIndex = 1;
-                    apply();
-                }
-            });
+            let st;
+            search.addEventListener('input', () => { clearTimeout(st); st = setTimeout(() => { pageIndex = 1; cardPageIndex = 1; apply(); }, 200); });
+            search.addEventListener('keydown', e => { if (e.key==='Enter') { e.preventDefault(); pageIndex=1; apply(); } });
+            clearBtn.addEventListener('click', () => { search.value=''; search.focus(); pageIndex=1; cardPageIndex=1; apply(); });
 
-            clearBtn.addEventListener('click', () => {
-                search.value = '';
-                search.focus();
-                pageIndex = 1;
-                apply();
-            });
+            prevBtn.addEventListener('click',     () => { pageIndex--;     apply(); });
+            nextBtn.addEventListener('click',     () => { pageIndex++;     apply(); });
+            cardPrevBtn.addEventListener('click', () => { cardPageIndex--; apply(); });
+            cardNextBtn.addEventListener('click', () => { cardPageIndex++; apply(); });
 
-            prevBtn.addEventListener('click', () => { pageIndex--; apply(); });
-            nextBtn.addEventListener('click', () => { pageIndex++; apply(); });
-
-            document.querySelector('#view-list .table-wrap').style.display = 'block';
-            pager.style.display = 'flex';
-            apply();
+            loadCatalogs();
         })();
     </script>
 }

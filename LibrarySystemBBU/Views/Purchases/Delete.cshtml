@@ -3,91 +3,310 @@
     ViewData["Title"] = "Delete Purchase";
 }
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
 <style>
-    :root {
-        --navy: #000080;
+    .pdel-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-    .text-navy {
-        color: var(--navy) !important;
+    .pdel-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    .bg-navy {
-        background-color: var(--navy) !important;
-    }
+        .pdel-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #dc2626;
+            display: inline-block;
+            flex-shrink: 0;
+        }
 
-    .elev-card {
-        border: 1px solid rgba(0,0,0,.06);
-        border-radius: 1rem;
+    .pdel-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
         background: #fff;
-        box-shadow: 0 10px 24px rgba(0,0,128,.10);
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
     }
 
-    .kv .key {
-        min-width: 11rem;
+        .pdel-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+        .pdel-btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+    .pdel-btn-danger {
+        background: #dc2626;
+        color: #fff;
+        border-color: #dc2626;
+    }
+
+        .pdel-btn-danger:hover {
+            background: #b91c1c;
+            color: #fff;
+            border-color: #b91c1c;
+        }
+
+    .pdel-header-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 1.25rem;
+    }
+
+    .pdel-warn {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 16px;
+        border-radius: 10px;
+        margin-bottom: 1.25rem;
+        background: #fef9c3;
+        border: 1px solid #fde68a;
+        color: #854d0e;
+        font-size: .84rem;
+    }
+
+        .pdel-warn i {
+            font-size: 1rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+    .pdel-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 1.25rem;
+    }
+
+    .pdel-card-header {
+        padding: 14px 20px;
+        border-bottom: 1px solid #f3f4f6;
+        font-size: .7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .07em;
+        color: #9ca3af;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: #f9fafb;
+    }
+
+    .pdel-card-body {
+        padding: 20px;
+    }
+
+    .pdel-kv-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px 24px;
+    }
+
+    @@media (max-width: 600px) {
+        .pdel-kv-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .pdel-kv-key {
+        font-size: .72rem;
         font-weight: 600;
-        color: var(--navy);
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        color: #9ca3af;
+        margin-bottom: 3px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
     }
 
-    .kv .val {
-        word-break: break-word;
+    .pdel-kv-val {
+        font-size: .88rem;
+        color: #111827;
+        font-weight: 500;
     }
+
+    .pdel-supplier-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: .75rem;
+        font-weight: 600;
+        background: #f0f2ff;
+        color: #000080;
+        border: 1px solid #c7cbee;
+        border-radius: 20px;
+        padding: 3px 10px;
+    }
+
+    .pdel-table-wrap {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 1.25rem;
+    }
+
+    .pdel-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .pdel-table thead th {
+            padding: 11px 16px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .pdel-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+            .pdel-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+        .pdel-table tbody td {
+            padding: 11px 16px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+        .pdel-table .text-end {
+            text-align: right;
+        }
+
+    .pdel-confirm-card {
+        background: #fff;
+        border: 1px solid #fecaca;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 1.25rem;
+    }
+
+    .pdel-check-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: .84rem;
+        color: #374151;
+        cursor: pointer;
+        user-select: none;
+    }
+
+        .pdel-check-label input[type=checkbox] {
+            accent-color: #dc2626;
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0;
+        }
 </style>
 
-<div class="container mt-4">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
-        <h2 class="mb-0 text-navy d-flex align-items-center gap-2">
-            <i class="fa-regular fa-trash-can"></i> Delete Purchase
-        </h2>
-        <a asp-action="Index" class="btn btn-outline-secondary">
-            <i class="fa-solid fa-list me-1"></i> Back to List
+<div class="pdel-page">
+
+    <div class="pdel-header-bar">
+        <div class="pdel-page-title" style="margin-bottom:0;">Delete Purchase</div>
+        <a asp-action="Index" class="pdel-btn">
+            <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
 
-    <div class="alert alert-warning mt-3 d-flex align-items-center" role="alert">
-        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+    <div class="pdel-warn">
+        <i class="bi bi-exclamation-triangle-fill"></i>
         <div><strong>Are you sure?</strong> This action is permanent and cannot be undone.</div>
     </div>
 
-    <div class="elev-card p-3 p-md-4 mt-3">
-        <div class="row gy-3 kv">
-            <div class="col-12 col-md-6 d-flex">
-                <div class="key me-2"><i class="fa-regular fa-calendar-days me-1"></i>Purchase Date</div>
-                <div class="val">@Model.PurchaseDate.ToString("yyyy-MM-dd")</div>
-            </div>
-            <div class="col-12 col-md-6 d-flex">
-                <div class="key me-2"><i class="fa-solid fa-truck me-1"></i>Supplier</div>
-                <div class="val"><span class="badge rounded-pill bg-navy">@Model.Supplier</span></div>
-            </div>
-            <div class="col-12 col-md-6 d-flex">
-                <div class="key me-2"><i class="fa-solid fa-arrow-up-1-9 me-1"></i>Total Quantity</div>
-                <div class="val">@Model.Quantity</div>
-            </div>
-            <div class="col-12 col-md-6 d-flex">
-                <div class="key me-2"><i class="fa-solid fa-sack-dollar me-1"></i>Total Cost</div>
-                <div class="val">@Model.Cost.ToString("N2")</div>
+    <!-- Info card -->
+    <div class="pdel-card">
+        <div class="pdel-card-header"><i class="bi bi-receipt"></i> Purchase Information</div>
+        <div class="pdel-card-body">
+            <div class="pdel-kv-grid">
+                <div>
+                    <div class="pdel-kv-key"><i class="bi bi-calendar3"></i> Purchase Date</div>
+                    <div class="pdel-kv-val">@Model.PurchaseDate.ToString("yyyy-MM-dd")</div>
+                </div>
+                <div>
+                    <div class="pdel-kv-key"><i class="bi bi-truck"></i> Supplier</div>
+                    <div class="pdel-kv-val">
+                        @if (!string.IsNullOrWhiteSpace(Model.Supplier))
+                        {
+                            <span class="pdel-supplier-pill"><i class="bi bi-truck"></i> @Model.Supplier</span>
+                        }
+                        else
+                        {
+
+                            <span style="color:#9ca3af;">—</span>
+                        }
+                    </div>
+                </div>
+                <div>
+                    <div class="pdel-kv-key"><i class="bi bi-123"></i> Total Quantity</div>
+                    <div class="pdel-kv-val">@Model.Quantity</div>
+                </div>
+                <div>
+                    <div class="pdel-kv-key"><i class="bi bi-cash-coin"></i> Total Cost</div>
+                    <div class="pdel-kv-val">@Model.Cost.ToString("N2")</div>
+                </div>
             </div>
         </div>
     </div>
 
-    @* Optional: show line items if available *@
+    <!-- Line items (if any) -->
     @if (Model?.PurchaseDetails != null && Model.PurchaseDetails.Any())
     {
-        <div class="table-responsive mt-3">
-            <table class="table table-sm table-hover table-striped table-bordered align-middle mb-0">
-                <thead class="table-light">
-                    <tr class="text-navy">
-                        <th><i class="fa-solid fa-book me-1"></i>Book</th>
-                        <th class="text-end"><i class="fa-solid fa-arrow-up-1-9 me-1"></i>Quantity</th>
-                        <th class="text-end"><i class="fa-solid fa-dollar-sign me-1"></i>Unit Price</th>
-                        <th class="text-end"><i class="fa-solid fa-calculator me-1"></i>Line Total</th>
+        <div class="pdel-table-wrap">
+            <table class="pdel-table">
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th class="text-end">Quantity</th>
+                        <th class="text-end">Unit Price</th>
+                        <th class="text-end">Line Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var d in Model.PurchaseDetails.OrderBy(x => x.PurchaseDetailId))
                     {
                         <tr>
-                            <td>@d.Book?.Title (@d.BookId)</td>
+                            <td style="font-weight:500;color:#111827;">@d.Book?.Title (@d.BookId)</td>
                             <td class="text-end">@d.Quantity</td>
                             <td class="text-end">@d.UnitPrice.ToString("N2")</td>
                             <td class="text-end">@d.LineTotal.ToString("N2")</td>
@@ -98,68 +317,70 @@
         </div>
     }
 
-    <form asp-action="Delete" method="post" id="deleteForm" class="elev-card mt-3">
+    <!-- Confirm form -->
+    <div class="pdel-confirm-card">
+        <label class="pdel-check-label" for="confirmChk">
+            <input type="checkbox" id="confirmChk" />
+            I understand this will permanently delete the purchase and all its line items.
+        </label>
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button type="button" class="pdel-btn pdel-btn-danger" id="openConfirm" disabled>
+            <i class="bi bi-trash3"></i> Delete
+        </button>
+        <a asp-action="Index" class="pdel-btn">
+            <i class="bi bi-x-lg"></i> Cancel
+        </a>
+    </div>
+
+    <form asp-action="Delete" method="post" id="deleteForm" style="display:none;">
         @Html.AntiForgeryToken()
-        <div class="p-3 p-md-4">
-            <input type="hidden" asp-for="PurchaseId" />
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="confirmChk">
-                <label class="form-check-label" for="confirmChk">
-                    I understand this will permanently delete the purchase.
-                </label>
-            </div>
-
-            <div class="mt-3 d-flex flex-wrap gap-2">
-                <button type="button" class="btn btn-danger" id="openConfirm" disabled>
-                    <i class="fa-regular fa-trash-can me-1"></i> Delete
-                </button>
-                <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="fa-solid fa-xmark me-1"></i> Cancel
-                </a>
-            </div>
-        </div>
+        <input type="hidden" asp-for="PurchaseId" />
     </form>
 </div>
 
-@* Confirm modal *@
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title d-flex align-items-center gap-2" id="confirmModalLabel">
-                    <i class="fa-regular fa-trash-can"></i> Confirm Deletion
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                You are about to permanently delete this purchase. This cannot be undone.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-danger" form="deleteForm">
-                    <i class="fa-regular fa-trash-can me-1"></i> Yes, delete it
-                </button>
-            </div>
+<!-- Confirm modal -->
+<div id="delBackdrop" style="display:none;position:fixed;inset:0;background:rgba(17,24,39,.35);backdrop-filter:blur(3px);z-index:1040;"></div>
+<div id="delModal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1050;width:min(400px,92vw);background:#fff;border-radius:14px;border:1px solid #e5e7eb;box-shadow:0 20px 60px rgba(0,0,0,.12);font-family:'Inter',sans-serif;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;gap:10px;">
+        <span style="width:34px;height:34px;border-radius:8px;background:#fef2f2;border:1px solid #fecaca;display:flex;align-items:center;justify-content:center;color:#dc2626;font-size:1rem;flex-shrink:0;">
+            <i class="bi bi-trash3"></i>
+        </span>
+        <div>
+            <div style="font-weight:700;font-size:.95rem;color:#111827;">Confirm Deletion</div>
+            <div style="font-size:.73rem;color:#9ca3af;">This cannot be undone</div>
         </div>
+        <button onclick="closeDelModal()" style="margin-left:auto;width:30px;height:30px;border-radius:7px;border:1px solid #e5e7eb;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:.85rem;">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+    <div style="padding:18px 20px;font-size:.84rem;color:#374151;line-height:1.6;">
+        You are about to permanently delete this purchase. This cannot be undone.
+    </div>
+    <div style="padding:12px 20px;border-top:1px solid #f3f4f6;display:flex;justify-content:flex-end;gap:8px;">
+        <button onclick="closeDelModal()" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:.82rem;font-weight:500;cursor:pointer;border:1px solid #e5e7eb;background:#fff;color:#374151;font-family:'Inter',sans-serif;">
+            Cancel
+        </button>
+        <button onclick="document.getElementById('deleteForm').submit()" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:.82rem;font-weight:500;cursor:pointer;border:1px solid #dc2626;background:#dc2626;color:#fff;font-family:'Inter',sans-serif;">
+            <i class="bi bi-trash3"></i> Yes, delete it
+        </button>
     </div>
 </div>
 
 @section Scripts {
     <script>
         (() => {
-            const chk = document.getElementById('confirmChk');
-            const btn = document.getElementById('openConfirm');
-            const modalEl = document.getElementById('confirmModal');
+            const chk     = document.getElementById('confirmChk');
+            const btn     = document.getElementById('openConfirm');
+            const backdrop = document.getElementById('delBackdrop');
+            const modal    = document.getElementById('delModal');
 
-            chk?.addEventListener('change', () => {
-                btn.disabled = !chk.checked;
-            });
+            chk?.addEventListener('change', () => { btn.disabled = !chk.checked; });
+            btn?.addEventListener('click',  () => { backdrop.style.display = 'block'; modal.style.display = 'block'; });
 
-            btn?.addEventListener('click', () => {
-                const modal = new bootstrap.Modal(modalEl);
-                modal.show();
-            });
+            window.closeDelModal = () => { backdrop.style.display = 'none'; modal.style.display = 'none'; };
+            backdrop?.addEventListener('click', window.closeDelModal);
         })();
     </script>
 }

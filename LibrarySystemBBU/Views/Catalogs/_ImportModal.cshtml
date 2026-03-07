@@ -1,0 +1,1058 @@
+﻿@* Views/Catalogs/_ImportModal.cshtml *@
+
+<style>
+    /* ── Backdrop & Modal shell ── */
+    #importBackdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(17, 24, 39, .35);
+        backdrop-filter: blur(3px);
+        z-index: 1040;
+        animation: impFadeIn .2s ease;
+    }
+
+    #importModal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1050;
+        width: min(820px, 95vw);
+        max-height: 92vh;
+        overflow-y: auto;
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, .12), 0 4px 16px rgba(0, 0, 0, .06);
+        padding: 0;
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+        animation: impSlideUp .22s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    @@keyframes impFadeIn {
+        from {
+            opacity: 0
+        }
+
+        to {
+            opacity: 1
+        }
+    }
+
+    @@keyframes impSlideUp {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -47%)
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%)
+        }
+    }
+
+    /* ── Header ── */
+    .imp-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 22px 16px;
+        border-bottom: 1px solid #f3f4f6;
+        position: sticky;
+        top: 0;
+        background: #fff;
+        z-index: 2;
+        border-radius: 14px 14px 0 0;
+    }
+
+    .imp-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .imp-header-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: #eff2ff;
+        border: 1px solid #d4d8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000080;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .imp-header-title {
+        font-weight: 700;
+        font-size: .95rem;
+        color: #111827;
+        line-height: 1.2;
+    }
+
+    .imp-header-sub {
+        font-size: .73rem;
+        color: #9ca3af;
+        margin-top: 1px;
+    }
+
+    .imp-close-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 7px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+        font-size: .85rem;
+        transition: background .15s, color .15s, border-color .15s;
+        flex-shrink: 0;
+    }
+
+        .imp-close-btn:hover {
+            background: #f3f4f6;
+            color: #111827;
+            border-color: #d1d5db;
+        }
+
+    /* ── Step bar ── */
+    .imp-stepbar {
+        display: flex;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .imp-step {
+        flex: 1;
+        padding: 11px 0;
+        text-align: center;
+        font-size: .73rem;
+        font-weight: 600;
+        color: #9ca3af;
+        border-bottom: 2px solid transparent;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        cursor: default;
+        transition: color .2s, border-color .2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+        .imp-step .imp-step-num {
+            width: 19px;
+            height: 19px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: #9ca3af;
+            font-size: .68rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .2s, color .2s;
+        }
+
+        .imp-step.active {
+            color: #000080;
+            border-bottom-color: #000080;
+        }
+
+            .imp-step.active .imp-step-num {
+                background: #000080;
+                color: #fff;
+            }
+
+        .imp-step.done {
+            color: #16a34a;
+            border-bottom-color: #16a34a;
+        }
+
+            .imp-step.done .imp-step-num {
+                background: #16a34a;
+                color: #fff;
+            }
+
+    /* ── Body ── */
+    .imp-body {
+        padding: 24px 22px;
+    }
+
+    /* ── Upload zone ── */
+    .imp-dropzone {
+        border: 1.5px dashed #d1d5db;
+        border-radius: 10px;
+        padding: 40px 24px;
+        text-align: center;
+        cursor: pointer;
+        background: #fafafa;
+        transition: border-color .2s, background .2s;
+    }
+
+        .imp-dropzone:hover,
+        .imp-dropzone.drag-over {
+            border-color: #000080;
+            background: #f5f6ff;
+        }
+
+    .imp-dropzone-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        background: #eff2ff;
+        border: 1px solid #d4d8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+        color: #000080;
+        font-size: 1.3rem;
+    }
+
+    .imp-dropzone-title {
+        font-weight: 600;
+        font-size: .88rem;
+        color: #111827;
+        margin-bottom: 3px;
+    }
+
+    .imp-dropzone-sub {
+        font-size: .76rem;
+        color: #9ca3af;
+    }
+
+    /* ── File chosen pill ── */
+    .imp-file-pill {
+        display: none;
+        align-items: center;
+        gap: 9px;
+        margin-top: 10px;
+        padding: 9px 13px;
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 8px;
+    }
+
+    .imp-file-pill-name {
+        font-size: .83rem;
+        color: #166534;
+        font-weight: 600;
+        flex: 1;
+    }
+
+    .imp-file-pill-clear {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #9ca3af;
+        font-size: .88rem;
+        padding: 2px 5px;
+        border-radius: 5px;
+        transition: background .15s;
+    }
+
+        .imp-file-pill-clear:hover {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+    /* ── Alert ── */
+    .imp-alert {
+        margin-top: 10px;
+        padding: 10px 13px;
+        border-radius: 8px;
+        font-size: .81rem;
+        border: 1px solid #fecaca;
+        background: #fef2f2;
+        color: #b91c1c;
+        display: none;
+        align-items: center;
+        gap: 7px;
+    }
+
+    /* ── Info note ── */
+    .imp-note {
+        padding: 11px 14px;
+        border-radius: 8px;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        font-size: .79rem;
+        color: #6b7280;
+        margin-bottom: 18px;
+        line-height: 1.6;
+    }
+
+        .imp-note strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .imp-note a {
+            color: #000080;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+            .imp-note a:hover {
+                text-decoration: underline;
+            }
+
+    /* ── Section label (same as toolbar uppercase labels) ── */
+    .imp-section-label {
+        font-size: .7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .07em;
+        color: #9ca3af;
+        margin-bottom: 8px;
+        margin-top: 16px;
+    }
+
+        .imp-section-label:first-child {
+            margin-top: 0;
+        }
+
+    /* ── Field checkboxes ── */
+    .imp-fields-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+    }
+
+    .imp-field-label {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 9px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: .83rem;
+        font-weight: 500;
+        color: #374151;
+        background: #fff;
+        transition: all .15s;
+        user-select: none;
+    }
+
+        .imp-field-label.checked {
+            border-color: #b8bcdf;
+            background: #f0f2ff;
+            color: #000080;
+        }
+
+        .imp-field-label input[type=checkbox] {
+            accent-color: #000080;
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+    .imp-field-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        background: #f3f4f6;
+        color: #6b7280;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: .75rem;
+        flex-shrink: 0;
+        transition: background .15s, color .15s;
+    }
+
+    .imp-field-label.checked .imp-field-icon {
+        background: #d8dbf5;
+        color: #000080;
+    }
+
+    .imp-fields-note {
+        font-size: .77rem;
+        color: #9ca3af;
+        margin-bottom: 14px;
+        line-height: 1.55;
+    }
+
+    /* ── Summary cards ── */
+    .imp-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-bottom: 18px;
+    }
+
+    .imp-summary-card {
+        border-radius: 10px;
+        padding: 13px 10px;
+        text-align: center;
+        border: 1px solid transparent;
+    }
+
+    .imp-summary-num {
+        font-size: 1.5rem;
+        font-weight: 800;
+        line-height: 1;
+        margin-bottom: 4px;
+    }
+
+    .imp-summary-lbl {
+        font-size: .7rem;
+        font-weight: 500;
+        opacity: .8;
+    }
+
+    /* ── Field tags — match cat-stat-pill ── */
+    .imp-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: .72rem;
+        font-weight: 600;
+        background: #f9fafb;
+        color: #374151;
+        border: 1px solid #e5e7eb;
+    }
+
+    /* ── Error accordion ── */
+    .imp-error-box {
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        background: #fff8f8;
+        margin-bottom: 14px;
+        overflow: hidden;
+    }
+
+    .imp-error-header {
+        padding: 9px 13px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: .8rem;
+        font-weight: 600;
+        color: #dc2626;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .imp-error-body {
+        max-height: 130px;
+        overflow-y: auto;
+        border-top: 1px solid #fecaca;
+        padding: 8px 13px;
+        font-size: .76rem;
+        color: #7f1d1d;
+    }
+
+    .imp-error-row {
+        padding: 3px 0;
+        border-bottom: 1px solid #fee2e2;
+    }
+
+        .imp-error-row:last-child {
+            border-bottom: none;
+        }
+
+    /* ── Preview table — match cat-table ── */
+    .imp-table-wrap {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        overflow: auto;
+        max-height: 230px;
+        margin-bottom: 14px;
+    }
+
+    .imp-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .79rem;
+    }
+
+        .imp-table thead th {
+            padding: 9px 14px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .7rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            white-space: nowrap;
+        }
+
+        .imp-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background .1s;
+        }
+
+            .imp-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .imp-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+        .imp-table tbody td {
+            padding: 9px 14px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+            .imp-table tbody td.muted {
+                color: #9ca3af;
+            }
+
+    /* ── Badges ── */
+    .imp-badge {
+        display: inline-block;
+        padding: 2px 7px;
+        border-radius: 20px;
+        font-size: .67rem;
+        font-weight: 700;
+        letter-spacing: .03em;
+    }
+
+    .imp-badge-new {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .imp-badge-update {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .imp-badge-copy {
+        background: #fef9c3;
+        color: #854d0e;
+    }
+
+    /* ── Good label ── */
+    .imp-good-label {
+        font-size: .78rem;
+        font-weight: 600;
+        color: #374151;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 8px;
+    }
+
+        .imp-good-label::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #000080;
+        }
+
+    /* ── Result box ── */
+    .imp-result {
+        display: none;
+        border-radius: 8px;
+        padding: 14px 16px;
+        margin-bottom: 14px;
+        font-size: .83rem;
+        line-height: 1.6;
+    }
+
+        .imp-result.success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+
+        .imp-result.error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+        }
+
+    .imp-result-reload {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 8px;
+        padding: 6px 14px;
+        background: #000080;
+        color: #fff;
+        border: none;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: .8rem;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        transition: background .15s;
+    }
+
+        .imp-result-reload:hover {
+            background: #00006a;
+        }
+
+    /* ── Footer buttons — match cat-btn ── */
+    .imp-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 4px;
+        padding-top: 14px;
+        border-top: 1px solid #f3f4f6;
+    }
+
+    .imp-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 16px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .imp-btn:hover:not(:disabled) {
+            background: #f9fafb;
+            color: #111827;
+        }
+
+        .imp-btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+    .imp-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .imp-btn-primary:hover:not(:disabled) {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+</style>
+
+<!-- Backdrop -->
+<div id="importBackdrop"></div>
+
+<!-- Modal -->
+<div id="importModal">
+
+    <!-- Header -->
+    <div class="imp-header">
+        <div class="imp-header-left">
+            <div class="imp-header-icon"><i class="bi bi-upload"></i></div>
+            <div>
+                <div class="imp-header-title">Import Catalogs</div>
+                <div class="imp-header-sub" id="importStepLabel">Step 1 of 3 — Upload File</div>
+            </div>
+        </div>
+        <button class="imp-close-btn" id="closeImportBtn" title="Close">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <!-- Step bar -->
+    <div class="imp-stepbar">
+        <div class="imp-step active" data-step="1"><span class="imp-step-num">1</span> Upload</div>
+        <div class="imp-step" data-step="2"><span class="imp-step-num">2</span> Fields</div>
+        <div class="imp-step" data-step="3"><span class="imp-step-num">3</span> Preview &amp; Confirm</div>
+    </div>
+
+    <!-- Body -->
+    <div class="imp-body">
+
+        <!-- ── Step 1: Upload ── -->
+        <div id="impStep1">
+            <div class="imp-note">
+                Upload a <strong>.xls</strong>, <strong>.xlsx</strong>, or <strong>.csv</strong> file.
+                Must contain at minimum a <strong>Catalog Title</strong> column.
+                Use the <a href="@Url.Action("Export", "Catalogs")">Export file</a> as your template.
+            </div>
+            <div class="imp-dropzone" id="impDropZone">
+                <div class="imp-dropzone-icon"><i class="bi bi-file-earmark-spreadsheet"></i></div>
+                <div class="imp-dropzone-title">Click to browse or drag &amp; drop</div>
+                <div class="imp-dropzone-sub">.xls &nbsp;·&nbsp; .xlsx &nbsp;·&nbsp; .csv supported</div>
+                <input type="file" id="impFileInput" accept=".xls,.xlsx,.csv,.tsv" style="display:none;" />
+            </div>
+            <div class="imp-file-pill" id="impFileChosen">
+                <i class="bi bi-file-earmark-check" style="color:#16a34a;font-size:1rem;flex-shrink:0;"></i>
+                <span class="imp-file-pill-name" id="impFileName"></span>
+                <button class="imp-file-pill-clear" id="impFileClear" title="Remove"><i class="bi bi-x"></i></button>
+            </div>
+            <div class="imp-alert" id="impStep1Error">
+                <i class="bi bi-exclamation-circle"></i>
+                <span id="impStep1ErrorMsg"></span>
+            </div>
+            <div class="imp-footer">
+                <span style="font-size:.76rem;color:#d1d5db;">Supports any row count</span>
+                <button class="imp-btn imp-btn-primary" id="impPreviewBtn" disabled>
+                    Parse &amp; Preview <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Step 2: Field Selection ── -->
+        <div id="impStep2" style="display:none;">
+            <div class="imp-fields-note">
+                Select which fields to <strong>update</strong> on existing records.
+                New catalogs and book copies are always fully created regardless of selection.
+                Uncheck any field you want to leave untouched.
+            </div>
+            <div class="imp-section-label">Catalog Fields</div>
+            <div class="imp-fields-grid" style="margin-bottom:0;">
+                @foreach (var f in new[] { ("title", "Title", "bi-journal-text"), ("author", "Author", "bi-person"), ("isbn", "ISBN", "bi-upc-scan"), ("category", "Category", "bi-tags") })
+                {
+                    <label class="imp-field-label checked" data-field="@f.Item1">
+                        <input type="checkbox" class="imp-field-check" value="@f.Item1" checked />
+                        <span class="imp-field-icon"><i class="bi @f.Item3"></i></span>
+                        @f.Item2
+                    </label>
+                }
+            </div>
+            <div class="imp-section-label">
+                Book Copy Fields
+                <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#d1d5db;">(existing copies only)</span>
+            </div>
+            <div class="imp-fields-grid">
+                @foreach (var f in new[] { ("status", "Copy Status", "bi-circle-half"), ("location", "Location", "bi-geo-alt"), ("acquisitiondate", "Acq. Date", "bi-calendar3") })
+                {
+                    <label class="imp-field-label checked" data-field="@f.Item1">
+                        <input type="checkbox" class="imp-field-check" value="@f.Item1" checked />
+                        <span class="imp-field-icon"><i class="bi @f.Item3"></i></span>
+                        @f.Item2
+                    </label>
+                }
+            </div>
+            <div class="imp-footer">
+                <button class="imp-btn" id="impBackToStep1"><i class="bi bi-arrow-left"></i> Back</button>
+                <button class="imp-btn imp-btn-primary" id="impToStep3Btn">Next <i class="bi bi-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- ── Step 3: Preview & Confirm ── -->
+        <div id="impStep3" style="display:none;">
+            <div class="imp-summary-grid" id="impSummary"></div>
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:5px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #f3f4f6;">
+                <span style="font-size:.72rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-right:2px;">Updating:</span>
+                <span id="impFieldTags"></span>
+            </div>
+            <div id="impErrorSection" style="display:none;">
+                <div class="imp-error-box">
+                    <div class="imp-error-header" id="impErrorToggle">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <span id="impErrorCount"></span>
+                        <i class="bi bi-chevron-down" style="margin-left:auto;font-size:.68rem;" id="impErrorChevron"></i>
+                    </div>
+                    <div class="imp-error-body" id="impErrorList" style="display:none;"></div>
+                </div>
+            </div>
+            <div class="imp-good-label" id="impGoodLabel"></div>
+            <div class="imp-table-wrap">
+                <table class="imp-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>ISBN</th>
+                            <th>Category</th>
+                            <th>Barcode</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="impPreviewBody"></tbody>
+                </table>
+            </div>
+            <div class="imp-result" id="impResultBox"></div>
+            <div class="imp-footer">
+                <button class="imp-btn" id="impBackToStep2"><i class="bi bi-arrow-left"></i> Back</button>
+                <button class="imp-btn imp-btn-primary" id="impConfirmBtn">
+                    <i class="bi bi-check2-circle"></i> Confirm Import
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    (function () {
+        const backdrop       = document.getElementById('importBackdrop');
+        const modal          = document.getElementById('importModal');
+        const openBtn        = document.getElementById('openImportBtn');
+        const closeBtn       = document.getElementById('closeImportBtn');
+        const stepLabel      = document.getElementById('importStepLabel');
+        const stepIndicators = document.querySelectorAll('.imp-step');
+
+        const step1El = document.getElementById('impStep1');
+        const step2El = document.getElementById('impStep2');
+        const step3El = document.getElementById('impStep3');
+
+        const dropZone   = document.getElementById('impDropZone');
+        const fileInput  = document.getElementById('impFileInput');
+        const fileChosen = document.getElementById('impFileChosen');
+        const fileNameEl = document.getElementById('impFileName');
+        const fileClear  = document.getElementById('impFileClear');
+        const step1Error = document.getElementById('impStep1Error');
+        const step1ErrMsg= document.getElementById('impStep1ErrorMsg');
+        const previewBtn = document.getElementById('impPreviewBtn');
+
+        const backTo1  = document.getElementById('impBackToStep1');
+        const toStep3  = document.getElementById('impToStep3Btn');
+        const backTo2  = document.getElementById('impBackToStep2');
+        const confirmBtn = document.getElementById('impConfirmBtn');
+
+        const previewUrl = '@Url.Action("ImportPreview", "Catalogs")';
+        const confirmUrl = '@Url.Action("ImportConfirm", "Catalogs")';
+
+        let previewData  = null;
+        let selectedFile = null;
+
+        function getToken() {
+            return document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+        }
+
+        function openModal()  { backdrop.style.display = 'block'; modal.style.display = 'block'; goStep(1); }
+        function closeModal() { backdrop.style.display = 'none';  modal.style.display = 'none';  resetModal(); }
+
+        function resetModal() {
+            selectedFile = null; previewData = null;
+            fileInput.value = '';
+            fileChosen.style.display = 'none';
+            step1Error.style.display = 'none';
+            setBtnState(previewBtn, false, 'Parse &amp; Preview <i class="bi bi-arrow-right"></i>');
+            setBtnState(confirmBtn, true,  '<i class="bi bi-check2-circle"></i> Confirm Import');
+            confirmBtn.style.display = '';
+            backTo2.style.display    = '';
+            document.getElementById('impResultBox').className     = 'imp-result';
+            document.getElementById('impResultBox').style.display = 'none';
+            document.getElementById('impPreviewBody').innerHTML   = '';
+            document.getElementById('impSummary').innerHTML       = '';
+            document.getElementById('impErrorSection').style.display = 'none';
+            document.getElementById('impErrorList').innerHTML     = '';
+            document.getElementById('impFieldTags').innerHTML     = '';
+        }
+
+        function setBtnState(btn, enabled, html) {
+            btn.disabled = !enabled;
+            if (html) btn.innerHTML = html;
+        }
+
+        function goStep(n) {
+            [step1El, step2El, step3El].forEach((el, i) => el.style.display = i === n - 1 ? 'block' : 'none');
+            stepIndicators.forEach(el => {
+                const s = parseInt(el.dataset.step);
+                el.classList.remove('active', 'done');
+                if      (s === n) el.classList.add('active');
+                else if (s < n)   el.classList.add('done');
+            });
+            const labels = [
+                'Step 1 of 3 — Upload File',
+                'Step 2 of 3 — Select Fields',
+                'Step 3 of 3 — Preview & Confirm'
+            ];
+            stepLabel.textContent = labels[n - 1];
+            modal.scrollTop = 0;
+        }
+
+        openBtn.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+        backdrop.addEventListener('click', closeModal);
+
+        dropZone.addEventListener('click',    () => fileInput.click());
+        dropZone.addEventListener('dragover', e  => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+        dropZone.addEventListener('dragleave',    () => dropZone.classList.remove('drag-over'));
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault(); dropZone.classList.remove('drag-over');
+            if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
+        });
+        fileInput.addEventListener('change', () => { if (fileInput.files[0]) setFile(fileInput.files[0]); });
+
+        function setFile(f) {
+            selectedFile = f;
+            fileNameEl.textContent = f.name;
+            fileChosen.style.display = 'flex';
+            step1Error.style.display = 'none';
+            setBtnState(previewBtn, true);
+        }
+
+        fileClear.addEventListener('click', () => {
+            selectedFile = null; fileInput.value = '';
+            fileChosen.style.display = 'none';
+            setBtnState(previewBtn, false);
+        });
+
+        previewBtn.addEventListener('click', async () => {
+            if (!selectedFile) return;
+            setBtnState(previewBtn, false, '<i class="bi bi-hourglass-split"></i> Parsing…');
+            step1Error.style.display = 'none';
+            const form = new FormData();
+            form.append('file', selectedFile);
+            try {
+                const res  = await fetch(previewUrl, { method: 'POST', body: form, headers: { 'RequestVerificationToken': getToken() } });
+                const data = await res.json();
+                if (!data.success) {
+                    step1ErrMsg.textContent   = data.message;
+                    step1Error.style.display  = 'flex';
+                } else {
+                    previewData = data;
+                    goStep(2);
+                }
+            } catch (e) {
+                step1ErrMsg.textContent  = 'Network error: ' + e.message;
+                step1Error.style.display = 'flex';
+            }
+            setBtnState(previewBtn, !!selectedFile, 'Parse &amp; Preview <i class="bi bi-arrow-right"></i>');
+        });
+
+        backTo1.addEventListener('click', () => goStep(1));
+        toStep3.addEventListener('click', () => { if (previewData) { buildStep3(); goStep(3); } });
+        backTo2.addEventListener('click', () => goStep(2));
+
+        document.querySelectorAll('.imp-field-label').forEach(label => {
+            const cb = label.querySelector('input');
+            function sync() { label.classList.toggle('checked', cb.checked); }
+            cb.addEventListener('change', sync); sync();
+        });
+
+        function getSelectedFields() {
+            return Array.from(document.querySelectorAll('.imp-field-check:checked')).map(c => c.value);
+        }
+
+        document.getElementById('impErrorToggle').addEventListener('click', () => {
+            const body    = document.getElementById('impErrorList');
+            const chevron = document.getElementById('impErrorChevron');
+            const open    = body.style.display !== 'none';
+            body.style.display  = open ? 'none' : 'block';
+            chevron.className   = open ? 'bi bi-chevron-down' : 'bi bi-chevron-up';
+            chevron.style.marginLeft = 'auto'; chevron.style.fontSize = '.68rem';
+        });
+
+        function buildStep3() {
+            const d      = previewData;
+            const fields = getSelectedFields();
+
+            const cards = [
+                { num: d.goodRows,        lbl: 'Valid Rows',   bg: '#f0fdf4', border: '#bbf7d0', color: '#16a34a' },
+                { num: d.errorRows,       lbl: 'Skipped',      bg: '#fef2f2', border: '#fecaca', color: '#dc2626' },
+                { num: d.newCatalogs,     lbl: 'New Catalogs', bg: '#f0f2ff', border: '#c7cbee', color: '#000080' },
+                { num: d.updatedCatalogs, lbl: 'To Update',    bg: '#eff6ff', border: '#bfdbfe', color: '#2563eb' },
+            ];
+            document.getElementById('impSummary').innerHTML = cards.map(c => `
+                <div class="imp-summary-card" style="background:${c.bg};border-color:${c.border};">
+                    <div class="imp-summary-num" style="color:${c.color};">${c.num.toLocaleString()}</div>
+                    <div class="imp-summary-lbl" style="color:${c.color};">${c.lbl}</div>
+                </div>`).join('');
+
+            const labelMap = { title:'Title', author:'Author', isbn:'ISBN', category:'Category', status:'Status', location:'Location', acquisitiondate:'Acq. Date' };
+            document.getElementById('impFieldTags').innerHTML = fields.length
+                ? fields.map(f => `<span class="imp-tag"><i class="bi bi-check2"></i>${labelMap[f] || f}</span>`).join('')
+                : '<span style="color:#d1d5db;font-size:.76rem;font-style:italic;">None selected</span>';
+
+            const errRows = d.rows.filter(r => r.hasError);
+            const errSec  = document.getElementById('impErrorSection');
+            if (errRows.length) {
+                errSec.style.display = 'block';
+                document.getElementById('impErrorCount').textContent = `${d.errorRows.toLocaleString()} row(s) with errors — will be skipped`;
+                document.getElementById('impErrorList').innerHTML = errRows
+                    .map(r => `<div class="imp-error-row">Row <strong>${r.rowNumber}</strong>: ${r.title || '(no title)'} — <span style="color:#ef4444;">${r.error}</span></div>`)
+                    .join('');
+            } else {
+                errSec.style.display = 'none';
+            }
+
+            const goodRows = d.rows.filter(r => !r.hasError);
+            document.getElementById('impGoodLabel').textContent =
+                `${d.goodRows.toLocaleString()} row(s) ready to import (showing first ${goodRows.length})`;
+
+            document.getElementById('impPreviewBody').innerHTML = goodRows.map(r => `
+                <tr>
+                    <td class="muted">${r.rowNumber}</td>
+                    <td style="font-weight:600;color:#111827;">${r.title || ''}</td>
+                    <td class="muted">${r.author || ''}</td>
+                    <td class="muted">${r.isbn || ''}</td>
+                    <td class="muted">${r.category || ''}</td>
+                    <td class="muted">${r.barcode || ''}</td>
+                    <td class="muted">${r.status || ''}</td>
+                    <td style="white-space:nowrap;">
+                        ${r.isNewCatalog
+                            ? '<span class="imp-badge imp-badge-new">NEW</span>'
+                            : '<span class="imp-badge imp-badge-update">UPDATE</span>'}
+                        ${r.isNewBook && r.barcode ? ' <span class="imp-badge imp-badge-copy">+COPY</span>' : ''}
+                    </td>
+                </tr>`).join('');
+        }
+
+        confirmBtn.addEventListener('click', async () => {
+            if (!previewData) return;
+            setBtnState(confirmBtn, false, '<i class="bi bi-hourglass-split"></i> Importing…');
+            try {
+                const res  = await fetch(confirmUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': getToken() },
+                    body: JSON.stringify({ fields: getSelectedFields() })
+                });
+                const data = await res.json();
+                const box  = document.getElementById('impResultBox');
+
+                if (data.success) {
+                    box.className     = 'imp-result success';
+                    box.style.display = 'block';
+                    box.innerHTML = `<div style="display:flex;align-items:flex-start;gap:9px;">
+                        <i class="bi bi-check-circle-fill" style="font-size:1rem;margin-top:2px;flex-shrink:0;"></i>
+                        <div>
+                            <strong>Import complete</strong><br>
+                            <span style="opacity:.85;">${data.message}</span><br>
+                            <button class="imp-result-reload" onclick="location.reload()">
+                                <i class="bi bi-arrow-clockwise"></i> Refresh to see changes
+                            </button>
+                        </div>
+                    </div>`;
+                    confirmBtn.style.display = 'none';
+                    backTo2.style.display    = 'none';
+                } else {
+                    box.className     = 'imp-result error';
+                    box.style.display = 'block';
+                    box.innerHTML = `<div style="display:flex;align-items:flex-start;gap:9px;">
+                        <i class="bi bi-x-circle-fill" style="font-size:1rem;margin-top:2px;flex-shrink:0;"></i>
+                        <div><strong>Import failed</strong><br>${data.message}</div>
+                    </div>`;
+                    setBtnState(confirmBtn, true, '<i class="bi bi-check2-circle"></i> Confirm Import');
+                }
+            } catch (e) {
+                const box     = document.getElementById('impResultBox');
+                box.className = 'imp-result error';
+                box.style.display = 'block';
+                box.innerHTML = `<i class="bi bi-x-circle-fill"></i> Network error: ${e.message}`;
+                setBtnState(confirmBtn, true, '<i class="bi bi-check2-circle"></i> Confirm Import');
+            }
+        });
+
+    })();
+</script>

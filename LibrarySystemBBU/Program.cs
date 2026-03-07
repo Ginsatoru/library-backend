@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
 builder.Services.AddScoped<DapperFactory>();
@@ -13,6 +14,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("Smtp"));
 builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
+
+// ── Session ──────────────────────────────────────────────────────────────────
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -20,6 +23,8 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
@@ -35,13 +40,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
             var isJson = ctx.Request.Headers["Accept"].ToString().Contains("application/json")
                       || ctx.Request.Headers["X-Requested-With"].ToString() == "XMLHttpRequest"
                       || ctx.Request.Path.Value?.EndsWith("Json", StringComparison.OrdinalIgnoreCase) == true;
-
             if (isJson)
             {
                 ctx.Response.StatusCode = 401;
                 return Task.CompletedTask;
             }
-
             ctx.Response.Redirect(ctx.RedirectUri);
             return Task.CompletedTask;
         };
@@ -63,22 +66,27 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
             return Task.CompletedTask;
         };
     });
+
 builder.Services.AddAuthorization();
+
+// ── Database ─────────────────────────────────────────────────────────────────
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                       ?? throw new Exception("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<DataContext>(options =>
-{
-    options.UseSqlServer(connectionString);
-});
+    options.UseSqlServer(connectionString));
+
 builder.Services.AddHttpClient();
 builder.Services.Configure<LibrarySystemBBU.Services.TelegramOptions>(
-    builder.Configuration.GetSection("Telegram")
-);
+    builder.Configuration.GetSection("Telegram"));
 builder.Services.AddSingleton<ITelegramService, TelegramService>();
 builder.Services.AddHostedService<OverdueLoanReminderService>();
+
 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
+// ── Build ─────────────────────────────────────────────────────────────────────
 var app = builder.Build();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -88,12 +96,15 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
+
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
+
 app.Run();

@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<LibrarySystemBBU.Models.Purchase>
+@using System.Linq
 
 @{
     ViewData["Title"] = "Purchases";
@@ -16,131 +17,370 @@
 }
 
 @functions {
-    // Reuse the same label logic as BuildBookSelectList / Details:
-    // 1) Prefer Book.Title (+ " — ISBN" if available)
-    // 2) else Catalog.Title (+ " — ISBN" if available)
-    // 3) else "Book #<id>" (optionally " — <Barcode>")
     string BookLabel(LibrarySystemBBU.Models.Book? b)
     {
         if (b == null) return string.Empty;
-
         var baseTitle = !string.IsNullOrWhiteSpace(b.Title)
             ? b.Title
-            : (!string.IsNullOrWhiteSpace(b.Catalog?.Title)
-                ? b.Catalog!.Title
-                : $"Book #{b.BookId}");
-
+            : (!string.IsNullOrWhiteSpace(b.Catalog?.Title) ? b.Catalog!.Title : $"Book #{b.BookId}");
         var text = !string.IsNullOrWhiteSpace(b.Catalog?.ISBN)
-            ? $"{baseTitle} — {b.Catalog!.ISBN}"
-            : baseTitle;
-
+            ? $"{baseTitle} — {b.Catalog!.ISBN}" : baseTitle;
         if (text.StartsWith("Book #") && !string.IsNullOrWhiteSpace(b.Barcode))
             text = $"{text} — {b.Barcode}";
-
         return text;
     }
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-    /* Mobile purchase card (use global glass variables) */
-    .purchase-card {
-        border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, .55);
-        background: rgba(255, 255, 255, .90);
-        box-shadow: var(--shadow-2);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-        transition: transform .18s, box-shadow .18s;
+    .pur-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-        .purchase-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
+    .pur-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .pur-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
-        .purchase-card .badge {
-            font-size: .75rem;
+    .pur-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .pur-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .pur-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
         }
+
+        .pur-btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+    .pur-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .pur-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+
+    .pur-segmented {
+        display: flex;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .pur-seg-btn {
+        padding: 6px 13px;
+        font-size: .82rem;
+        font-weight: 500;
+        border: none;
+        background: #fff;
+        color: #6b7280;
+        cursor: pointer;
+        transition: background .15s, color .15s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .pur-seg-btn:not(:last-child) {
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .pur-seg-btn.active {
+            background: #f3f4f6;
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .pur-search-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 6px 12px;
+        background: #fff;
+        flex: 1;
+        min-width: 200px;
+        max-width: 360px;
+        transition: border-color .15s;
+    }
+
+        .pur-search-wrap:focus-within {
+            border-color: #000080;
+        }
+
+        .pur-search-wrap i {
+            color: #9ca3af;
+            font-size: .85rem;
+        }
+
+    .pur-search-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: .83rem;
+        color: #111827;
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .pur-search-input::placeholder {
+            color: #9ca3af;
+        }
+
+    .pur-search-clear {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #d1d5db;
+        padding: 0;
+        font-size: .85rem;
+    }
+
+        .pur-search-clear:hover {
+            color: #6b7280;
+        }
+
+    .pur-select {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 6px 10px;
+        font-size: .82rem;
+        font-family: 'Inter', sans-serif;
+        color: #374151;
+        background: #fff;
+        cursor: pointer;
+        outline: none;
+    }
+
+        .pur-select:focus {
+            border-color: #000080;
+        }
+
+    .pur-stats {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        flex-wrap: wrap;
+    }
+
+    .pur-stat-pill {
+        font-size: .78rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 4px 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+    }
+
+        .pur-stat-pill strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .pur-table-wrap {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+
+    .pur-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .pur-table thead th {
+            padding: 11px 16px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .pur-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background .1s;
+        }
+
+            .pur-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .pur-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+        .pur-table tbody td {
+            padding: 11px 16px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+            .pur-table tbody td.muted {
+                color: #6b7280;
+            }
+
+        .pur-table .text-end {
+            text-align: right;
+        }
+
+    .pur-supplier-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: .72rem;
+        font-weight: 600;
+        background: #f0f2ff;
+        color: #000080;
+        border: 1px solid #c7cbee;
+        border-radius: 20px;
+        padding: 2px 9px;
+    }
+
+    .pur-pager {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 0;
+    }
+
+    #purNoMatches {
+        text-align: center;
+        padding: 2rem;
+        color: #9ca3af;
+        font-size: .85rem;
+        display: none;
+    }
 </style>
 
-<h2 class="page-title">
-    <span class="logo-dot"></span> Purchases
-</h2>
+<div class="pur-page">
 
-<div class="toolbar">
-    <a asp-action="Create" class="btn-glass btn-brand">
-        <i class="bi bi-plus-circle"></i> New Purchase
-    </a>
+    <div class="pur-page-title">Purchases</div>
 
-    <div class="segmented" role="group" aria-label="Date filters">
-        <button type="button" class="btn-toggle active" data-filter="all">
-            <i class="bi bi-grid"></i> All
-        </button>
-        <button type="button" class="btn-toggle" data-filter="thisMonth">
-            <i class="bi bi-calendar-month"></i> This Month
-        </button>
-        <button type="button" class="btn-toggle" data-filter="last30">
-            <i class="bi bi-clock-history"></i> Last 30 Days
-        </button>
-        <button type="button" class="btn-toggle" data-filter="today">
-            <i class="bi bi-calendar-event"></i> Today
-        </button>
-    </div>
+    <div class="pur-toolbar">
+        <a asp-action="Create" class="pur-btn pur-btn-primary">
+            <i class="bi bi-plus-circle"></i> New Purchase
+        </a>
 
-    <div class="d-flex align-items-center gap-2">
-        <select id="supplierFilter" class="form-select form-select-sm">
+        <div class="pur-segmented">
+            <button type="button" class="pur-seg-btn active" data-filter="all">
+                <i class="bi bi-grid"></i> All
+            </button>
+            <button type="button" class="pur-seg-btn" data-filter="thisMonth">
+                <i class="bi bi-calendar-month"></i> This Month
+            </button>
+            <button type="button" class="pur-seg-btn" data-filter="last30">
+                <i class="bi bi-clock-history"></i> Last 30
+            </button>
+            <button type="button" class="pur-seg-btn" data-filter="today">
+                <i class="bi bi-calendar-event"></i> Today
+            </button>
+        </div>
+
+        <select id="supplierFilter" class="pur-select">
             <option value="">All suppliers</option>
             @foreach (var s in suppliers)
             {
                 <option value="@s">@s</option>
             }
         </select>
-    </div>
 
-    <div class="search-wrap">
-        <i class="bi bi-search search-icon"></i>
-        <input id="globalSearch"
-               class="search-input"
-               placeholder="Search (date, book, supplier, qty, cost, notes)…" />
-        <button class="search-clear"
-                type="button"
-                id="clearSearch"
-                title="Clear">
-            <i class="bi bi-x-circle"></i>
-        </button>
-    </div>
+        <div class="pur-search-wrap">
+            <i class="bi bi-search"></i>
+            <input id="globalSearch" class="pur-search-input"
+                   placeholder="Search date, book, supplier, qty, cost…" />
+            <button class="pur-search-clear" type="button" id="clearSearch">
+                <i class="bi bi-x-circle"></i>
+            </button>
+        </div>
 
-    <div class="ms-auto d-flex align-items-center gap-2">
-        <span class="pill">
-            <i class="bi bi-layers"></i>
-            Total: <strong id="statTotal">@total</strong>
-        </span>
-        <span class="pill">
-            <i class="bi bi-123"></i>
-            Qty: <strong id="statQty">@qtySum</strong>
-        </span>
-        <span class="pill">
-            <i class="bi bi-cash-coin"></i>
-            Cost: <strong id="statCost">@costSum.ToString("N2")</strong>
-        </span>
-
-        <!-- Updated: server-side Excel export -->
-        <a asp-action="Export" class="btn-glass btn-outline">
-            <i class="bi bi-file-earmark-excel"></i> Export
+        <a asp-action="Export" class="pur-btn">
+            <i class="bi bi-download"></i> Export
         </a>
-    </div>
-</div>
 
-<!-- GLASS CARD: TABLE (desktop) -->
-<div class="card-glass glas-all-style mt-3">
-    <div class="section-title">
-        <i class="bi bi-table"></i> Purchases List
+        <div class="pur-stats">
+            <span class="pur-stat-pill">
+                <i class="bi bi-layers"></i> Total: <strong id="statTotal">@total</strong>
+            </span>
+            <span class="pur-stat-pill">
+                <i class="bi bi-123"></i> Qty: <strong id="statQty">@qtySum</strong>
+            </span>
+            <span class="pur-stat-pill">
+                <i class="bi bi-cash-coin"></i> Cost: <strong id="statCost">@costSum.ToString("N2")</strong>
+            </span>
+        </div>
     </div>
 
-    <div class="table-wrap d-none d-md-block">
-        <table id="purchasesTable" class="table table-striped align-middle mb-0 glass-table">
+    <div class="pur-table-wrap">
+        <table class="pur-table" id="purchasesTable">
             <thead>
                 <tr>
                     <th>Purchase Date</th>
@@ -149,7 +389,7 @@
                     <th class="text-end">Quantity</th>
                     <th class="text-end">Cost</th>
                     <th>Notes</th>
-                    <th style="min-width:210px;"></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -159,33 +399,30 @@
                         data-supplier="@((item.Supplier ?? "").ToLower())"
                         data-qty="@item.Quantity"
                         data-cost="@item.Cost">
-                        <td>@item.PurchaseDate.ToString("yyyy-MM-dd")</td>
-                        <td>@BookLabel(item.Book)</td>
+                        <td class="muted">@item.PurchaseDate.ToString("yyyy-MM-dd")</td>
+                        <td style="font-weight:500;color:#111827;">@BookLabel(item.Book)</td>
                         <td>
                             @if (!string.IsNullOrWhiteSpace(item.Supplier))
                             {
-                                <span class="pill">
+                                <span class="pur-supplier-pill">
                                     <i class="bi bi-truck"></i> @item.Supplier
                                 </span>
                             }
                         </td>
                         <td class="text-end">@item.Quantity</td>
                         <td class="text-end">@item.Cost.ToString("N2")</td>
-                        <td>@item.Notes</td>
-                        <td class="text-nowrap">
-                            <a asp-action="Details"
-                               asp-route-id="@item.PurchaseId"
-                               class="btn-glass btn-outline btn-sm">
+                        <td class="muted">@item.Notes</td>
+                        <td style="white-space:nowrap;display:flex;gap:4px;padding:8px 16px;">
+                            <a class="pur-btn" style="padding:4px 10px;font-size:.74rem;"
+                               asp-action="Details" asp-route-id="@item.PurchaseId">
                                 <i class="bi bi-eye"></i> Details
                             </a>
-                            <a asp-action="Edit"
-                               asp-route-id="@item.PurchaseId"
-                               class="btn-glass btn-outline btn-sm">
+                            <a class="pur-btn" style="padding:4px 10px;font-size:.74rem;"
+                               asp-action="Edit" asp-route-id="@item.PurchaseId">
                                 <i class="bi bi-pencil-square"></i> Edit
                             </a>
-                            <a asp-action="Delete"
-                               asp-route-id="@item.PurchaseId"
-                               class="btn-glass btn-outline btn-sm">
+                            <a class="pur-btn" style="padding:4px 10px;font-size:.74rem;"
+                               asp-action="Delete" asp-route-id="@item.PurchaseId">
                                 <i class="bi bi-trash3"></i> Delete
                             </a>
                         </td>
@@ -193,192 +430,110 @@
                 }
             </tbody>
         </table>
-    </div>
-</div>
-
-<!-- GLASS CARD: MOBILE CARDS -->
-<div class="card-glass glas-all-style mt-3 d-md-none">
-    <div class="section-title">
-        <i class="bi bi-phone"></i> Purchases (mobile view)
+        <div id="purNoMatches">No matching results for your filters / search.</div>
     </div>
 
-    <div id="cardsList" class="d-grid gap-3 mt-2">
-        @foreach (var item in Model)
-        {
-            <div class="purchase-card p-3"
-                 data-date="@item.PurchaseDate.ToString("yyyy-MM-dd")"
-                 data-supplier="@((item.Supplier ?? "").ToLower())"
-                 data-qty="@item.Quantity"
-                 data-cost="@item.Cost">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="fw-bold">
-                            <i class="bi bi-calendar2-week me-1"></i>
-                            @item.PurchaseDate.ToString("yyyy-MM-dd")
-                        </div>
-                        <div class="mt-1">
-                            <i class="bi bi-book me-1"></i>@BookLabel(item.Book)
-                        </div>
-                        @if (!string.IsNullOrWhiteSpace(item.Supplier))
-                        {
-                            <div class="mt-1">
-                                <span class="badge rounded-pill text-bg-primary">
-                                    <i class="bi bi-truck me-1"></i>@item.Supplier
-                                </span>
-                            </div>
-                        }
-                    </div>
-                    <div class="d-flex flex-wrap gap-1">
-                        <a asp-action="Details"
-                           asp-route-id="@item.PurchaseId"
-                           class="btn btn-sm btn-outline-secondary">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                        <a asp-action="Edit"
-                           asp-route-id="@item.PurchaseId"
-                           class="btn btn-sm btn-outline-primary">
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
-                        <a asp-action="Delete"
-                           asp-route-id="@item.PurchaseId"
-                           class="btn btn-sm btn-outline-danger">
-                            <i class="bi bi-trash"></i>
-                        </a>
-                    </div>
-                </div>
-                <hr class="my-3" />
-                <div class="row g-2 small">
-                    <div class="col-12">
-                        <i class="bi bi-123 me-1"></i><strong>Quantity:</strong> @item.Quantity
-                    </div>
-                    <div class="col-12">
-                        <i class="bi bi-cash-coin me-1"></i><strong>Cost:</strong> @item.Cost.ToString("N2")
-                    </div>
-                    <div class="col-12">
-                        <i class="bi bi-stickies me-1"></i><strong>Notes:</strong> @item.Notes
-                    </div>
-                </div>
-            </div>
-        }
+    <div class="pur-pager">
+        <button type="button" class="pur-btn" id="prevPage">
+            <i class="bi bi-chevron-left"></i> Prev
+        </button>
+        <span id="pageInfo" style="font-size:.82rem;color:#6b7280;">Page 1 / 1</span>
+        <button type="button" class="pur-btn" id="nextPage">
+            Next <i class="bi bi-chevron-right"></i>
+        </button>
     </div>
-</div>
 
-<div id="noMatches" class="alert alert-warning mt-3 d-none" role="alert">
-    <i class="bi bi-question-circle"></i> No matching results for your filters/search.
 </div>
 
 @section Scripts {
     <script>
         (() => {
-            const $ = s => document.querySelector(s);
-            const $$ = s => Array.from(document.querySelectorAll(s));
+            const PAGE_SIZE = 50;
+            let pageIndex = 1;
+            let activeFilter = 'all';
 
-            const segBtns = $$('.segmented .btn-toggle');
-            const search = $('#globalSearch');
-            const clearBtn = $('#clearSearch');
-            const supSel = $('#supplierFilter');
-            const noMsg = $('#noMatches');
-
-            const rows = () => $$('#purchasesTable tbody tr');
-            const cards = () => $$('#cardsList .purchase-card');
-
-            const statTotal = $('#statTotal');
-            const statQty = $('#statQty');
-            const statCost = $('#statCost');
+            const search     = document.getElementById('globalSearch');
+            const clearBtn   = document.getElementById('clearSearch');
+            const supSel     = document.getElementById('supplierFilter');
+            const segBtns    = Array.from(document.querySelectorAll('.pur-seg-btn'));
+            const statTotal  = document.getElementById('statTotal');
+            const statQty    = document.getElementById('statQty');
+            const statCost   = document.getElementById('statCost');
+            const prevBtn    = document.getElementById('prevPage');
+            const nextBtn    = document.getElementById('nextPage');
+            const pageInfo   = document.getElementById('pageInfo');
+            const noMsg      = document.getElementById('purNoMatches');
+            const allRows    = Array.from(document.querySelectorAll('#purchasesTable tbody tr'));
 
             const today = new Date(new Date().toISOString().slice(0, 10));
             const addDays = (d, n) => new Date(d.getTime() + n * 86400000);
             const firstOfMonth = d => new Date(d.getFullYear(), d.getMonth(), 1);
 
-            function inPreset(date, preset) {
+            function inPreset(dateStr, preset) {
                 if (!preset || preset === 'all') return true;
-                const dt = new Date(date);
-                if (preset === 'today') {
-                    return dt.getTime() === today.getTime();
-                }
-                if (preset === 'last30') {
-                    const from = addDays(today, -30);
-                    return dt >= from && dt <= today;
-                }
-                if (preset === 'thisMonth') {
-                    const from = firstOfMonth(today);
-                    return dt >= from && dt <= today;
-                }
+                const dt = new Date(dateStr);
+                if (preset === 'today')     return dt.getTime() === today.getTime();
+                if (preset === 'last30')    return dt >= addDays(today, -30) && dt <= today;
+                if (preset === 'thisMonth') return dt >= firstOfMonth(today) && dt <= today;
                 return true;
             }
 
-            function matchSupplier(el, supplier) {
-                if (!supplier) return true;
-                const s = (el.getAttribute('data-supplier') || '').toLowerCase();
-                return s === supplier.toLowerCase();
-            }
+            function apply() {
+                const q   = (search.value || '').trim().toLowerCase();
+                const sup = supSel.value.toLowerCase();
 
-            const norm = s => (s || '').toLowerCase().trim();
-            function matchSearch(el, q) {
-                if (!q) return true;
-                const txt = (el.innerText || el.textContent || '').toLowerCase();
-                return txt.includes(q);
-            }
-
-            function applyUI(preset) {
-                segBtns.forEach(b => b.classList.remove('active'));
-                const active = segBtns.find(b => b.dataset.filter === preset);
-                if (active) active.classList.add('active');
-
-                const q = norm(search.value);
-                const sup = supSel.value;
-
-                let vis = 0, qty = 0, cost = 0;
-
-                const show = (el, showIt) => { el.style.display = showIt ? '' : 'none'; };
-
-                // table rows
-                rows().forEach(r => {
-                    const dt = r.getAttribute('data-date');
-                    const ok = inPreset(dt, preset) && matchSupplier(r, sup) && matchSearch(r, q);
-                    show(r, ok);
-                    if (ok) {
-                        vis++;
-                        qty += parseInt(r.getAttribute('data-qty') || '0');
-                        cost += parseFloat(r.getAttribute('data-cost') || '0');
-                    }
+                const matched = allRows.filter(r => {
+                    const dt   = r.getAttribute('data-date');
+                    const rs   = r.getAttribute('data-supplier') || '';
+                    const txt  = (r.innerText || '').toLowerCase();
+                    return inPreset(dt, activeFilter)
+                        && (!sup || rs === sup)
+                        && (!q   || txt.includes(q));
                 });
 
-                // mobile cards
-                cards().forEach(c => {
-                    const dt = c.getAttribute('data-date');
-                    const ok = inPreset(dt, preset) && matchSupplier(c, sup) && matchSearch(c, q);
-                    show(c, ok);
+                // Stats
+                let qty = 0, cost = 0;
+                matched.forEach(r => {
+                    qty  += parseInt(r.getAttribute('data-qty')  || '0');
+                    cost += parseFloat(r.getAttribute('data-cost') || '0');
                 });
-
-                statTotal.textContent = vis.toString();
-                statQty.textContent = qty.toString();
-                statCost.textContent = (isNaN(cost) ? 0 : cost)
+                statTotal.textContent = matched.length.toLocaleString();
+                statQty.textContent   = qty.toString();
+                statCost.textContent  = (isNaN(cost) ? 0 : cost)
                     .toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                noMsg.classList.toggle('d-none', vis !== 0);
+
+                // Pagination
+                const tp = Math.max(1, Math.ceil(matched.length / PAGE_SIZE));
+                pageIndex = Math.min(Math.max(1, pageIndex), tp);
+                const visible = new Set(
+                    matched.slice((pageIndex - 1) * PAGE_SIZE, pageIndex * PAGE_SIZE)
+                );
+
+                allRows.forEach(r => r.style.display = visible.has(r) ? '' : 'none');
+
+                pageInfo.textContent = `Page ${matched.length ? pageIndex : 0} / ${matched.length ? tp : 0}`;
+                prevBtn.disabled = pageIndex <= 1 || !matched.length;
+                nextBtn.disabled = pageIndex >= tp || !matched.length;
+                noMsg.style.display = matched.length === 0 ? 'block' : 'none';
             }
 
-            segBtns.forEach(b => b.addEventListener('click', () => applyUI(b.dataset.filter)));
+            segBtns.forEach(b => b.addEventListener('click', () => {
+                segBtns.forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                activeFilter = b.dataset.filter;
+                pageIndex = 1;
+                apply();
+            }));
 
-            search.addEventListener('input', () => {
-                const active = document.querySelector('.segmented .btn-toggle.active')?.dataset.filter || 'all';
-                applyUI(active);
-            });
+            let st;
+            search.addEventListener('input', () => { clearTimeout(st); st = setTimeout(() => { pageIndex = 1; apply(); }, 200); });
+            clearBtn.addEventListener('click', () => { search.value = ''; pageIndex = 1; apply(); });
+            supSel.addEventListener('change', () => { pageIndex = 1; apply(); });
 
-            clearBtn.addEventListener('click', () => {
-                search.value = '';
-                search.focus();
-                const active = document.querySelector('.segmented .btn-toggle.active')?.dataset.filter || 'all';
-                applyUI(active);
-            });
+            prevBtn.addEventListener('click', () => { pageIndex--; apply(); });
+            nextBtn.addEventListener('click', () => { pageIndex++; apply(); });
 
-            supSel.addEventListener('change', () => {
-                const active = document.querySelector('.segmented .btn-toggle.active')?.dataset.filter || 'all';
-                applyUI(active);
-            });
-
-            // init
-            applyUI('all');
+            apply();
         })();
     </script>
 }

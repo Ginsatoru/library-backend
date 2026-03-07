@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "xAoR6Kj9VWQ=",
+  "dgSpecHash": "Yq9Iy6gJn14=",
   "success": true,
   "projectFilePath": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\LibrarySystemBBU.csproj",
   "expectedPackageFiles": [
@@ -10,6 +10,8 @@
     "C:\\Users\\NETTECH-STORE\\.nuget\\packages\\epplus\\7.0.5\\epplus.7.0.5.nupkg.sha512",
     "C:\\Users\\NETTECH-STORE\\.nuget\\packages\\epplus.interfaces\\6.1.1\\epplus.interfaces.6.1.1.nupkg.sha512",
     "C:\\Users\\NETTECH-STORE\\.nuget\\packages\\epplus.system.drawing\\6.1.1\\epplus.system.drawing.6.1.1.nupkg.sha512",
+    "C:\\Users\\NETTECH-STORE\\.nuget\\packages\\exceldatareader\\3.8.0\\exceldatareader.3.8.0.nupkg.sha512",
+    "C:\\Users\\NETTECH-STORE\\.nuget\\packages\\exceldatareader.dataset\\3.8.0\\exceldatareader.dataset.3.8.0.nupkg.sha512",
     "C:\\Users\\NETTECH-STORE\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\NETTECH-STORE\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\NETTECH-STORE\\.nuget\\packages\\humanizer.core.af\\2.14.1\\humanizer.core.af.2.14.1.nupkg.sha512",

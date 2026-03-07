@@ -5,144 +5,305 @@
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-<h2 class="page-title">
-    <span class="logo-dot"></span> Catalog Details
-</h2>
+<style>
+    .cat-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+    }
 
-<div class="toolbar">
-    <a asp-action="Index" class="btn-glass btn-outline">
-        <i class="bi bi-arrow-left-circle"></i> Back
-    </a>
+    .cat-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-    <a asp-action="Edit"
-       asp-route-id="@Model.CatalogId"
-       class="btn-glass btn-brand">
-        <i class="bi bi-pencil-square"></i> Edit
-    </a>
+        .cat-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
 
-    <div class="ms-auto d-flex align-items-center gap-2">
-        <span class="pill">
-            <i class="bi bi-journal-text"></i>
-            Title: <strong>@Model.Title</strong>
-        </span>
-        <span class="pill">
-            <i class="bi bi-collection"></i>
-            Total: <strong>@Model.TotalCopies</strong>
-        </span>
-        <span class="pill">
-            <i class="bi bi-box-seam"></i>
-            Available: <strong>@Model.AvailableCopies</strong>
-        </span>
-        <span class="pill">
-            <i class="bi bi-book"></i>
-            Books: <strong>@booksCount</strong>
-        </span>
-    </div>
-</div>
+    .cat-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+    }
 
-<form class="readonly">
-    <input asp-for="CatalogId" type="hidden" />
+    .cat-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
 
-    <!-- ===== CARD 1: Catalog Info + Files ===== -->
-    <div class="card-glass glas-all-style mt-3">
-        <div class="section-title">
-            <i class="bi bi-journal-text"></i> Catalog Info
+        .cat-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+    .cat-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .cat-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+        }
+
+    .cat-stat-pill {
+        font-size: .78rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 4px 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+    }
+
+        .cat-stat-pill strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .cat-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 20px 24px;
+        margin-bottom: 16px;
+    }
+
+    .cat-card-header {
+        font-size: .75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: #6b7280;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .form-label {
+        font-size: .82rem;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .form-control {
+        font-size: .83rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 7px 11px;
+        font-family: 'Inter', sans-serif;
+        color: #374151;
+        width: 100%;
+        background: #f9fafb;
+    }
+
+    .preview-img {
+        max-height: 130px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        object-fit: cover;
+    }
+
+    .embed-pdf {
+        width: 100%;
+        height: 320px;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        margin-top: 8px;
+    }
+
+    .cat-table-wrap {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .cat-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .82rem;
+    }
+
+        .cat-table thead th {
+            padding: 9px 14px;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .74rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        .cat-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background .1s;
+        }
+
+            .cat-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .cat-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+        .cat-table tbody td {
+            padding: 9px 14px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+    .status-badge {
+        font-size: .72rem;
+        font-weight: 500;
+        border-radius: 20px;
+        padding: 3px 10px;
+        display: inline-block;
+        border: 1px solid #e5e7eb;
+        background: #f9fafb;
+        color: #374151;
+    }
+
+    .status-available {
+        background: #f0fdf4;
+        border-color: #bbf7d0;
+        color: #166534;
+    }
+
+    .status-borrowed {
+        background: #fffbeb;
+        border-color: #fde68a;
+        color: #92400e;
+    }
+
+    .no-data {
+        color: #9ca3af;
+        font-size: .83rem;
+    }
+</style>
+
+<div class="cat-page">
+    <div class="cat-page-title">Catalog Details</div>
+
+    <div class="cat-toolbar">
+        <a asp-action="Index" class="cat-btn"><i class="bi bi-arrow-left"></i> Back</a>
+        <a asp-action="Edit" asp-route-id="@Model.CatalogId" class="cat-btn cat-btn-primary"><i class="bi bi-pencil-square"></i> Edit</a>
+        <div class="ms-auto d-flex align-items-center gap-2 flex-wrap">
+            <span class="cat-stat-pill"><i class="bi bi-journal-text"></i> <strong>@Model.Title</strong></span>
+            <span class="cat-stat-pill"><i class="bi bi-collection"></i> Total: <strong>@Model.TotalCopies</strong></span>
+            <span class="cat-stat-pill"><i class="bi bi-box-seam"></i> Available: <strong>@Model.AvailableCopies</strong></span>
+            <span class="cat-stat-pill"><i class="bi bi-book"></i> Books: <strong>@booksCount</strong></span>
         </div>
+    </div>
 
+    <div class="cat-card">
+        <div class="cat-card-header"><i class="bi bi-journal-text"></i> Catalog Info</div>
         <div class="row g-3">
             <div class="col-md-6">
                 <label class="form-label">Title</label>
                 <input class="form-control" value="@Model.Title" disabled />
             </div>
-
             <div class="col-md-6">
                 <label class="form-label">Author</label>
                 <input class="form-control" value="@Model.Author" disabled />
             </div>
-
             <div class="col-md-4">
                 <label class="form-label">ISBN</label>
-                <div class="input-group">
-                    <span class="input-group-text">
-                        <i class="bi bi-upc-scan"></i>
-                    </span>
-                    <input class="form-control" value="@Model.ISBN" disabled />
-                </div>
+                <input class="form-control" value="@Model.ISBN" disabled />
             </div>
-
             <div class="col-md-4">
                 <label class="form-label">Category</label>
-                <div class="input-group">
-                    <span class="input-group-text">
-                        <i class="bi bi-tags"></i>
-                    </span>
-                    <input class="form-control" value="@Model.Category" disabled />
-                </div>
+                <input class="form-control" value="@Model.Category" disabled />
             </div>
-
             <div class="col-md-2">
                 <label class="form-label">Total Copies</label>
                 <input class="form-control" value="@Model.TotalCopies" disabled />
             </div>
-
             <div class="col-md-2">
                 <label class="form-label">Available</label>
                 <input class="form-control" value="@Model.AvailableCopies" disabled />
             </div>
 
-            <!-- Image preview -->
             <div class="col-md-6">
                 <label class="form-label">Cover Image</label>
                 @if (!string.IsNullOrWhiteSpace(Model.ImagePath))
                 {
                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <img src="@Model.ImagePath"
-                             class="preview-img"
-                             alt="cover" />
-                        <a href="@Model.ImagePath"
-                           target="_blank"
-                           class="btn-glass btn-outline btn-sm">
-                            <i class="bi bi-box-arrow-up-right"></i> Open Image
-                        </a>
+                        <img src="@Model.ImagePath" class="preview-img" alt="cover" />
+                        <a href="@Model.ImagePath" target="_blank" class="cat-btn" style="padding:4px 10px;font-size:.75rem;"><i class="bi bi-box-arrow-up-right"></i> Open</a>
                     </div>
                 }
                 else
                 {
-                    <div class="text-muted">No image uploaded.</div>
+                    <div class="no-data">No image uploaded.</div>
                 }
             </div>
 
-            <!-- PDF preview -->
             <div class="col-md-6">
                 <label class="form-label">PDF</label>
                 @if (!string.IsNullOrWhiteSpace(Model.PdfFilePath))
                 {
-                    <div class="d-flex align-items-center gap-2 flex-wrap mb-2">
-                        <a href="@Model.PdfFilePath"
-                           target="_blank"
-                           class="btn-glass btn-outline btn-sm">
-                            <i class="bi bi-box-arrow-up-right"></i> Open PDF
-                        </a>
+                    <div class="mb-2">
+                        <a href="@Model.PdfFilePath" target="_blank" class="cat-btn" style="padding:4px 10px;font-size:.75rem;"><i class="bi bi-box-arrow-up-right"></i> Open PDF</a>
                     </div>
                     <iframe class="embed-pdf" src="@Model.PdfFilePath"></iframe>
                 }
                 else
                 {
-                    <div class="text-muted">No PDF attached.</div>
+                    <div class="no-data">No PDF attached.</div>
                 }
             </div>
         </div>
     </div>
 
-    <!-- ===== CARD 2: Books ===== -->
-    <div class="card-glass glas-all-style mt-3">
-        <div class="section-title">
-            <i class="bi bi-book"></i> Books
-        </div>
-
-        <div class="table-wrap">
-            <table class="table table-sm table-bordered align-middle">
+    <div class="cat-card">
+        <div class="cat-card-header"><i class="bi bi-book"></i> Books</div>
+        <div class="cat-table-wrap">
+            <table class="cat-table">
                 <thead>
                     <tr>
                         <th>Barcode</th>
@@ -157,36 +318,28 @@
                         foreach (var b in Model.Books)
                         {
                             <tr>
-                                <td>@b.Barcode</td>
+                                <td style="font-weight:500;">@b.Barcode</td>
                                 <td>
-                                    <span class="pill">@b.Status</span>
+                                    <span class="status-badge @(b.Status?.ToLower() == "available" ? "status-available" : b.Status?.ToLower() == "borrowed" ? "status-borrowed" : "")">
+                                        @b.Status
+                                    </span>
                                 </td>
-                                <td>@b.Location</td>
-                                <td>@b.AcquisitionDate.ToString("yyyy-MM-dd")</td>
+                                <td style="color:#6b7280;">@b.Location</td>
+                                <td style="color:#6b7280;">@b.AcquisitionDate.ToString("yyyy-MM-dd")</td>
                             </tr>
                         }
                     }
                     else
                     {
-                        <tr>
-                            <td colspan="4" class="text-center text-muted">
-                                No book items for this catalog.
-                            </td>
-                        </tr>
+                        <tr><td colspan="4" style="text-align:center;color:#9ca3af;padding:1.5rem;">No book items for this catalog.</td></tr>
                     }
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="mt-3 d-flex gap-2">
-        <a asp-action="Edit"
-           asp-route-id="@Model.CatalogId"
-           class="btn-glass btn-brand">
-            <i class="bi bi-pencil-square"></i> Edit
-        </a>
-        <a asp-action="Index" class="btn-glass btn-outline">
-            <i class="bi bi-arrow-left-circle"></i> Back
-        </a>
+    <div class="d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.CatalogId" class="cat-btn cat-btn-primary"><i class="bi bi-pencil-square"></i> Edit</a>
+        <a asp-action="Index" class="cat-btn"><i class="bi bi-arrow-left"></i> Back</a>
     </div>
-</form>
+</div>

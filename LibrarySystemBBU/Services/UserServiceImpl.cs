@@ -68,7 +68,7 @@ namespace LibrarySystemBBU.Services
                 IsActive = true
             };
 
-            await _context.Users.AddAsync(user);
+            await _context.Users.AddAsync((Users)user);
             var saved = await _context.SaveChangesAsync() > 0;
 
             return saved

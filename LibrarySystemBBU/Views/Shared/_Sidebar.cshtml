@@ -413,8 +413,9 @@
         } catch (e) { }
 
         // 2) PERSIST COLLAPSED MENUS
-        var keyPrefix = 'bbu.sidebar.collapse.';
-        document.querySelectorAll('.main-sidebar .collapse[data-persist="true"]').forEach(function (el) {
+            var keyPrefix = 'bbu.sidebar.collapse.';
+    if (typeof bootstrap === 'undefined') return;
+    document.querySelectorAll('.main-sidebar .collapse[data-persist="true"]').forEach(function (el) {
             var id = el.id; if (!id) return;
             var saved = localStorage.getItem(keyPrefix + id);
             if (saved === '1') {

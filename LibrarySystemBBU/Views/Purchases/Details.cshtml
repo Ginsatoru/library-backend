@@ -7,161 +7,353 @@
 }
 
 @functions {
-    // Build a friendly book label consistent with BuildBookSelectList in the controller:
-    // 1) Prefer Book.Title (with " — ISBN" when available)
-    // 2) else Catalog.Title (with " — ISBN" when available)
-    // 3) else "Book #<id>" (optionally " — <Barcode>" if present)
     string BookLabel(LibrarySystemBBU.Models.Book? b)
     {
         if (b == null) return string.Empty;
-
         var baseTitle = !string.IsNullOrWhiteSpace(b.Title)
             ? b.Title
-            : (!string.IsNullOrWhiteSpace(b.Catalog?.Title)
-                ? b.Catalog!.Title
-                : $"Book #{b.BookId}");
-
+            : (!string.IsNullOrWhiteSpace(b.Catalog?.Title) ? b.Catalog!.Title : $"Book #{b.BookId}");
         var text = !string.IsNullOrWhiteSpace(b.Catalog?.ISBN)
-            ? $"{baseTitle} — {b.Catalog!.ISBN}"
-            : baseTitle;
-
+            ? $"{baseTitle} — {b.Catalog!.ISBN}" : baseTitle;
         if (text.StartsWith("Book #") && !string.IsNullOrWhiteSpace(b.Barcode))
             text = $"{text} — {b.Barcode}";
-
         return text;
     }
 }
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
 <style>
-    :root {
-        --navy: #000080;
+    .pd-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-    .text-navy {
-        color: var(--navy) !important;
+    .pd-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    .bg-navy {
-        background-color: var(--navy) !important;
-    }
-
-    .btn-navy {
-        --bs-btn-color: #fff;
-        --bs-btn-bg: var(--navy);
-        --bs-btn-border-color: var(--navy);
-        --bs-btn-hover-bg: #000066;
-        --bs-btn-hover-border-color: #000066;
-        --bs-btn-active-bg: #000055;
-        --bs-btn-active-border-color: #000055;
-    }
-
-    /* 3D card look */
-    .elev-card {
-        border: 1px solid rgba(0,0,0,.06);
-        border-radius: 1rem;
-        background: #fff;
-        box-shadow: 0 10px 24px rgba(0,0,128,.10);
-        transition: transform .18s ease, box-shadow .18s ease;
-    }
-
-        .elev-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 16px 36px rgba(0,0,128,.16);
+        .pd-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
-    .kv .key {
-        min-width: 11rem;
-        font-weight: 600;
-        color: var(--navy);
-    }
-
-    .kv .val {
-        word-break: break-word;
-    }
-
-    .search-wrap {
-        border: 1px solid rgba(0,0,128,.25);
-        border-radius: .75rem;
-        padding: .5rem .75rem;
+    .pd-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
         background: #fff;
-        box-shadow: 0 4px 14px rgba(0,0,128,.08);
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
     }
 
-    .table thead th {
-        vertical-align: middle;
+        .pd-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+    .pd-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .pd-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+
+    .pd-header-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 1.25rem;
+    }
+
+    .pd-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 20px 24px;
+        margin-bottom: 1.25rem;
+    }
+
+    .pd-card-title {
+        font-size: .7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .07em;
+        color: #9ca3af;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .pd-kv-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px 24px;
+    }
+
+    @@media (max-width: 600px) {
+        .pd-kv-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .pd-kv-item {
+    }
+
+    .pd-kv-key {
+        font-size: .72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        color: #9ca3af;
+        margin-bottom: 3px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .pd-kv-val {
+        font-size: .88rem;
+        color: #111827;
+        font-weight: 500;
+    }
+
+    .pd-supplier-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: .75rem;
+        font-weight: 600;
+        background: #f0f2ff;
+        color: #000080;
+        border: 1px solid #c7cbee;
+        border-radius: 20px;
+        padding: 3px 10px;
+    }
+
+    .pd-search-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 6px 12px;
+        background: #fff;
+        min-width: 240px;
+        transition: border-color .15s;
+    }
+
+        .pd-search-wrap:focus-within {
+            border-color: #000080;
+        }
+
+        .pd-search-wrap i {
+            color: #9ca3af;
+            font-size: .85rem;
+        }
+
+    .pd-search-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: .83rem;
+        color: #111827;
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .pd-search-input::placeholder {
+            color: #9ca3af;
+        }
+
+    .pd-table-wrap {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+
+    .pd-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .pd-table thead th {
+            padding: 11px 16px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .pd-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background .1s;
+        }
+
+            .pd-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .pd-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+        .pd-table tbody td {
+            padding: 11px 16px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+            .pd-table tbody td.muted {
+                color: #6b7280;
+            }
+
+        .pd-table tfoot td, .pd-table tfoot th {
+            padding: 10px 16px;
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            font-weight: 600;
+            font-size: .82rem;
+            color: #111827;
+        }
+
+        .pd-table .text-end {
+            text-align: right;
+        }
+
+    .pd-count-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: .72rem;
+        font-weight: 600;
+        background: #f0f2ff;
+        color: #000080;
+        border: 1px solid #c7cbee;
+        border-radius: 20px;
+        padding: 2px 9px;
     }
 </style>
 
-<div class="container mt-4 card-glass glas-all-style">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
-        <h2 class="mb-0 text-navy d-flex align-items-center gap-2">
-            <i class="fa-solid fa-receipt"></i> Purchase Details
-        </h2>
-        <div class="d-flex gap-2">
-            <a asp-action="Edit" asp-route-id="@Model.PurchaseId" class="btn btn-navy">
-                <i class="fa-regular fa-pen-to-square me-1"></i> Edit
+<div class="pd-page">
+
+    <div class="pd-header-bar">
+        <div class="pd-page-title" style="margin-bottom:0;">Purchase Details</div>
+        <div style="display:flex;gap:8px;">
+            <a asp-action="Edit" asp-route-id="@Model.PurchaseId" class="pd-btn pd-btn-primary">
+                <i class="bi bi-pencil-square"></i> Edit
             </a>
-            <a asp-action="Index" class="btn btn-outline-secondary">
-                <i class="fa-solid fa-arrow-left me-1"></i> Back
+            <a asp-action="Index" class="pd-btn">
+                <i class="bi bi-arrow-left"></i> Back
             </a>
         </div>
     </div>
 
-    <!-- Header info -->
-    <div class="elev-card p-3 p-md-4 mt-3">
-        <div class="row gy-3 kv">
-            <div class="col-12 col-md-6 d-flex">
-                <div class="key me-2"><i class="fa-regular fa-calendar-days me-1"></i>Purchase Date</div>
-                <div class="val">@Model.PurchaseDate.ToString("yyyy-MM-dd")</div>
+    <!-- Info card -->
+    <div class="pd-card">
+        <div class="pd-card-title"><i class="bi bi-receipt"></i> Purchase Information</div>
+        <div class="pd-kv-grid">
+            <div class="pd-kv-item">
+                <div class="pd-kv-key"><i class="bi bi-calendar3"></i> Purchase Date</div>
+                <div class="pd-kv-val">@Model.PurchaseDate.ToString("yyyy-MM-dd")</div>
             </div>
-            <div class="col-12 col-md-6 d-flex">
-                <div class="key me-2"><i class="fa-solid fa-book me-1"></i>Book</div>
-                <div class="val">@BookLabel(Model.Book)</div>
+            <div class="pd-kv-item">
+                <div class="pd-kv-key"><i class="bi bi-book"></i> Book</div>
+                <div class="pd-kv-val">@BookLabel(Model.Book)</div>
             </div>
-            <div class="col-12 col-md-6 d-flex">
-                <div class="key me-2"><i class="fa-solid fa-truck me-1"></i>Supplier</div>
-                <div class="val"><span class="badge rounded-pill bg-navy">@Model.Supplier</span></div>
+            <div class="pd-kv-item">
+                <div class="pd-kv-key"><i class="bi bi-truck"></i> Supplier</div>
+                <div class="pd-kv-val">
+                    @if (!string.IsNullOrWhiteSpace(Model.Supplier))
+                    {
+                        <span class="pd-supplier-pill"><i class="bi bi-truck"></i> @Model.Supplier</span>
+                    }
+                    else
+                    {
+
+                        <span class="muted">—</span>
+                    }
+                </div>
             </div>
-            <div class="col-12 col-md-6 d-flex">
-                <div class="key me-2"><i class="fa-solid fa-sack-dollar me-1"></i>Cost</div>
-                <div class="val">@Model.Cost.ToString("N2")</div>
+            <div class="pd-kv-item">
+                <div class="pd-kv-key"><i class="bi bi-cash-coin"></i> Total Cost</div>
+                <div class="pd-kv-val">@Model.Cost.ToString("N2")</div>
             </div>
-            <div class="col-12 d-flex">
-                <div class="key me-2"><i class="fa-regular fa-note-sticky me-1"></i>Notes</div>
-                <div class="val">@Model.Notes</div>
+            <div class="pd-kv-item" style="grid-column:1/-1;">
+                <div class="pd-kv-key"><i class="bi bi-stickies"></i> Notes</div>
+                <div class="pd-kv-val">@(string.IsNullOrWhiteSpace(Model.Notes) ? "—" : Model.Notes)</div>
             </div>
         </div>
     </div>
 
-    <!-- Line items header + search -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mt-4">
-        <h5 class="mb-0 text-navy d-flex align-items-center gap-2">
-            <i class="fa-solid fa-table-list"></i> Line Items
-            <span class="badge rounded-pill bg-navy ms-1" id="rowsCountBadge">@details.Count item@(details.Count == 1 ? "" : "s")</span>
-        </h5>
-        <div class="search-wrap d-flex align-items-center gap-2 w-100 w-md-auto">
-            <i class="fa-solid fa-magnifying-glass text-navy"></i>
-            <input id="lineSearch" type="search" class="form-control border-0 p-0"
-                   placeholder="ស្វែងរកគ្រប់ជួរឈរ (Book / Qty / Unit Price / Line Total)" />
+    <!-- Line items -->
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:.88rem;font-weight:600;color:#111827;">Line Items</span>
+            <span class="pd-count-pill" id="rowsCountBadge">
+                @details.Count item@(details.Count == 1 ? "" : "s")
+            </span>
+        </div>
+        <div class="pd-search-wrap">
+            <i class="bi bi-search"></i>
+            <input id="lineSearch" class="pd-search-input"
+                   placeholder="Search book, qty, price…" />
         </div>
     </div>
 
-    <!-- Line items table -->
-    <div class="table-responsive mt-2">
-        <table class="table table-sm table-hover table-striped table-bordered align-middle mb-0" id="detailsTbl">
-            <thead class="table-light">
-                <tr class="text-navy">
-                    <th><i class="fa-solid fa-book me-1"></i>Book</th>
-                    <th class="text-end"><i class="fa-solid fa-arrow-up-1-9 me-1"></i>Quantity</th>
-                    <th class="text-end"><i class="fa-solid fa-dollar-sign me-1"></i>Unit Price</th>
-                    <th class="text-end"><i class="fa-solid fa-calculator me-1"></i>Line Total</th>
+    <div class="pd-table-wrap">
+        <table class="pd-table" id="detailsTbl">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th class="text-end">Quantity</th>
+                    <th class="text-end">Unit Price</th>
+                    <th class="text-end">Line Total</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var d in details)
                 {
                     <tr>
-                        <td>@BookLabel(d.Book)</td>
+                        <td style="font-weight:500;color:#111827;">@BookLabel(d.Book)</td>
                         <td class="text-end">@d.Quantity</td>
                         <td class="text-end">@d.UnitPrice.ToString("N2")</td>
                         <td class="text-end">@d.LineTotal.ToString("N2")</td>
@@ -169,66 +361,61 @@
                 }
                 @if (!details.Any())
                 {
-                    <tr><td colspan="4" class="text-center text-muted">No line items.</td></tr>
+                    <tr><td colspan="4" style="text-align:center;color:#9ca3af;padding:2rem;">No line items.</td></tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
-                    <th class="text-end">Totals (visible):</th>
-                    <th class="text-end"><span id="tQty">0</span></th>
-                    <th class="text-end">—</th>
-                    <th class="text-end"><span id="tCost">0.00</span></th>
+                    <td>Totals (visible)</td>
+                    <td class="text-end"><span id="tQty">0</span></td>
+                    <td class="text-end">—</td>
+                    <td class="text-end"><span id="tCost">0.00</span></td>
                 </tr>
             </tfoot>
         </table>
     </div>
+
 </div>
 
 @section Scripts {
     <script>
         (() => {
-            const input = document.getElementById('lineSearch');
-            const tbl = document.getElementById('detailsTbl');
-            const rows = Array.from(tbl.querySelectorAll('tbody tr'));
-            const rowsCountBadge = document.getElementById('rowsCountBadge');
-            const tQty = document.getElementById('tQty');
-            const tCost = document.getElementById('tCost');
+            const input  = document.getElementById('lineSearch');
+            const tbl    = document.getElementById('detailsTbl');
+            const rows   = Array.from(tbl.querySelectorAll('tbody tr'));
+            const badge  = document.getElementById('rowsCountBadge');
+            const tQty   = document.getElementById('tQty');
+            const tCost  = document.getElementById('tCost');
 
-            const norm = s => (s||'').toString().toLowerCase();
-            const matchAll = (txt, q) => {
-                const terms = norm(q).split(/\s+/).filter(Boolean);
-                const h = norm(txt);
-                return terms.every(t => h.includes(t));
-            };
+            const norm = s => (s || '').toString().toLowerCase();
             const parseNum = v => {
-                const n = parseFloat((v||'').toString().replace(/,/g,''));
+                const n = parseFloat((v || '').toString().replace(/,/g, ''));
                 return Number.isFinite(n) ? n : 0;
             };
-            const recalcTotals = () => {
-                let qty = 0, cost = 0, visible = 0;
+
+            function recalc() {
+                let qty = 0, cost = 0, vis = 0;
                 rows.forEach(tr => {
                     if (tr.style.display !== 'none') {
-                        visible++;
+                        vis++;
                         qty  += parseNum(tr.children[1]?.innerText);
                         cost += parseNum(tr.children[3]?.innerText);
                     }
                 });
-                rowsCountBadge.textContent = `${visible} item${visible===1?'':'s'}`;
-                tQty.textContent = qty.toString();
-                tCost.textContent = (cost||0).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
-            };
-            const applyFilter = (q) => {
+                badge.textContent = `${vis} item${vis === 1 ? '' : 's'}`;
+                tQty.textContent  = qty.toString();
+                tCost.textContent = cost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+
+            function applyFilter(q) {
                 rows.forEach(tr => {
-                    const txt = tr.innerText || tr.textContent || '';
-                    tr.style.display = matchAll(txt, q) ? '' : 'none';
+                    tr.style.display = norm(tr.innerText).includes(norm(q)) ? '' : 'none';
                 });
-                recalcTotals();
-            };
+                recalc();
+            }
 
             input?.addEventListener('input', e => applyFilter(e.target.value));
-
-            // initial totals
-            recalcTotals();
+            recalc();
         })();
     </script>
 }

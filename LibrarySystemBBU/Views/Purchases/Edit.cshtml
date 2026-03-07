@@ -7,159 +7,408 @@
     var list = (Model.PurchaseDetails ?? Enumerable.Empty<LibrarySystemBBU.Models.PurchaseDetail>()).ToList();
 }
 
-<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <style>
-    :root {
-        --navy: #000080;
+    .pe-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-    .text-navy {
-        color: var(--navy) !important;
-    }
-
-    .bg-navy {
-        background-color: var(--navy) !important;
-    }
-
-    .btn-navy {
-        --bs-btn-color: #fff;
-        --bs-btn-bg: var(--navy);
-        --bs-btn-border-color: var(--navy);
-        --bs-btn-hover-bg: #000066;
-        --bs-btn-hover-border-color: #000066;
-        --bs-btn-active-bg: #000055;
-        --bs-btn-active-border-color: #000055;
-    }
-
-    .elev-card {
-        border: 1px solid rgba(0,0,0,.06);
-        border-radius: 1rem;
-        background: #fff;
-        box-shadow: 0 10px 24px rgba(0,0,128,.10);
-    }
-
-    .section-title {
-        color: var(--navy);
+    .pe-page-title {
+        font-size: 1.5rem;
         font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    .table thead th {
-        vertical-align: middle;
-    }
+        .pe-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
 
-    .sticky-actions {
-        position: sticky;
-        bottom: -1px;
-        z-index: 3;
+    .pe-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
         background: #fff;
-        border-top: 1px solid rgba(0,0,0,.08);
-        box-shadow: 0 -8px 20px rgba(0,0,128,.08);
-        border-bottom-left-radius: 1rem;
-        border-bottom-right-radius: 1rem;
-        padding: .75rem;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
     }
 
-    .w-45 {
-        width: 45%
+        .pe-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+        .pe-btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+    .pe-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
     }
 
-    .w-20 {
-        width: 20%
+        .pe-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+
+    .pe-header-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 1.25rem;
     }
 
-    .w-15 {
-        width: 15%
+    .pe-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 1.25rem;
     }
 
-    .w-5 {
-        width: 5%
+    .pe-card-header {
+        padding: 14px 20px;
+        border-bottom: 1px solid #f3f4f6;
+        font-size: .7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .07em;
+        color: #9ca3af;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: #f9fafb;
     }
-    /* Select2 height sync with Bootstrap */
+
+    .pe-card-body {
+        padding: 20px;
+    }
+
+    .pe-label {
+        display: block;
+        font-size: .75rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 5px;
+    }
+
+    .pe-input {
+        width: 100%;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: .84rem;
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+        background: #fff;
+        outline: none;
+        transition: border-color .15s;
+    }
+
+        .pe-input:focus {
+            border-color: #000080;
+            box-shadow: 0 0 0 3px rgba(0,0,128,.07);
+        }
+
+    .pe-form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 2fr;
+        gap: 16px;
+    }
+
+    @@media (max-width: 700px) {
+        .pe-form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Table */
+    .pe-table-wrap {
+        overflow-x: auto;
+    }
+
+    .pe-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .pe-table thead th {
+            padding: 11px 14px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .pe-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+            .pe-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+        .pe-table tbody td {
+            padding: 10px 14px;
+            vertical-align: middle;
+        }
+
+        .pe-table tfoot td {
+            padding: 10px 14px;
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            font-weight: 600;
+            font-size: .82rem;
+        }
+
+        .pe-table .text-end {
+            text-align: right;
+        }
+
+    .pe-row-input {
+        border: 1px solid #e5e7eb;
+        border-radius: 7px;
+        padding: 7px 10px;
+        font-size: .83rem;
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+        background: #fff;
+        width: 100%;
+        outline: none;
+        transition: border-color .15s;
+    }
+
+        .pe-row-input:focus {
+            border-color: #000080;
+        }
+
+        .pe-row-input[readonly] {
+            background: #f9fafb;
+            color: #6b7280;
+        }
+
+    .pe-row-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pe-remove-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 7px;
+        border: 1px solid #fecaca;
+        background: #fff;
+        color: #dc2626;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: .8rem;
+        transition: background .15s;
+    }
+
+        .pe-remove-btn:hover {
+            background: #fef2f2;
+        }
+
+    .pe-sticky-footer {
+        position: sticky;
+        bottom: 0;
+        background: #fff;
+        border-top: 1px solid #e5e7eb;
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 0 0 14px 14px;
+        z-index: 10;
+    }
+
+    .pe-footer-note {
+        font-size: .76rem;
+        color: #9ca3af;
+    }
+
+    /* Select2 sync */
     .select2-container .select2-selection--single {
-        height: 38px;
+        height: 36px;
+        border-radius: 7px;
+        border-color: #e5e7eb;
     }
 
     .select2-container--default .select2-selection--single .select2-selection__rendered {
-        line-height: 38px;
+        line-height: 36px;
+        font-size: .83rem;
+        font-family: 'Inter', sans-serif;
     }
 
     .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 38px;
+        height: 36px;
     }
 
-    .input-group {
-        flex-wrap: nowrap;
-        gap: 2px;
+    .select2-container--default.select2-container--focus .select2-selection--single {
+        border-color: #000080;
+    }
+
+    .dr-input {
+        border: 1px solid #e5e7eb;
+        border-radius: 7px;
+        padding: 7px 10px;
+        font-size: .83rem;
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+        background: #fff;
+        width: 100%;
+        outline: none;
+        transition: border-color .15s;
+        text-align: right;
+    }
+
+        .dr-input:focus {
+            border-color: #000080;
+            box-shadow: 0 0 0 3px rgba(0,0,128,.06);
+        }
+
+        .dr-input[readonly] {
+            background: #f9fafb;
+            color: #9ca3af;
+            cursor: default;
+        }
+
+    .dr-remove-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 7px;
+        border: 1px solid #fecaca;
+        background: #fff;
+        color: #dc2626;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: .8rem;
+        transition: background .15s;
+        flex-shrink: 0;
+    }
+
+        .dr-remove-btn:hover {
+            background: #fef2f2;
+        }
+
+    .dr-auto-label {
+        font-size: .68rem;
+        color: #9ca3af;
+        display: block;
+        text-align: right;
+        margin-top: 2px;
     }
 </style>
 
-<div class="container mt-4">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
-        <h2 class="mb-0 text-navy d-flex align-items-center gap-2">
-            <i class="fa-solid fa-pen-to-square"></i> Edit Purchase
-        </h2>
-        <a asp-action="Index" class="btn btn-outline-secondary">
-            <i class="fa-solid fa-list me-1"></i> Back to List
+<div class="pe-page">
+
+    <div class="pe-header-bar">
+        <div class="pe-page-title" style="margin-bottom:0;">Edit Purchase</div>
+        <a asp-action="Index" class="pe-btn">
+            <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
 
-    <form asp-action="Edit" method="post" class="elev-card mt-3">
+    <form asp-action="Edit" method="post">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="PurchaseId" />
-        <div class="p-3 p-md-4">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
 
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <label asp-for="PurchaseDate" class="form-label">
-                        <i class="fa-regular fa-calendar-days me-1 text-navy"></i>@Html.DisplayNameFor(m => m.PurchaseDate)
-                    </label>
-                    <input asp-for="PurchaseDate" class="form-control" />
-                    <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+        <!-- Header fields -->
+        <div class="pe-card">
+            <div class="pe-card-header"><i class="bi bi-receipt"></i> Purchase Information</div>
+            <div class="pe-card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" style="font-size:.82rem;"></div>
+                <div class="pe-form-grid">
+                    <div>
+                        <label asp-for="PurchaseDate" class="pe-label">
+                            <i class="bi bi-calendar3" style="color:#000080;"></i> Purchase Date
+                        </label>
+                        <input asp-for="PurchaseDate" class="pe-input" />
+                        <span asp-validation-for="PurchaseDate" class="text-danger" style="font-size:.75rem;"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Supplier" class="pe-label">
+                            <i class="bi bi-truck" style="color:#000080;"></i> Supplier
+                        </label>
+                        <input asp-for="Supplier" class="pe-input" />
+                        <span asp-validation-for="Supplier" class="text-danger" style="font-size:.75rem;"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Notes" class="pe-label">
+                            <i class="bi bi-stickies" style="color:#000080;"></i> Notes
+                        </label>
+                        <input asp-for="Notes" class="pe-input" />
+                        <span asp-validation-for="Notes" class="text-danger" style="font-size:.75rem;"></span>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <label asp-for="Supplier" class="form-label">
-                        <i class="fa-solid fa-truck me-1 text-navy"></i>@Html.DisplayNameFor(m => m.Supplier)
-                    </label>
-                    <input asp-for="Supplier" class="form-control" />
-                    <span asp-validation-for="Supplier" class="text-danger"></span>
-                </div>
-                <div class="col-md-5">
-                    <label asp-for="Notes" class="form-label">
-                        <i class="fa-regular fa-note-sticky me-1 text-navy"></i>@Html.DisplayNameFor(m => m.Notes)
-                    </label>
-                    <input asp-for="Notes" class="form-control" />
-                    <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Line items -->
+        <div class="pe-card">
+            <div class="pe-card-header" style="justify-content:space-between;">
+                <span style="display:flex;align-items:center;gap:6px;">
+                    <i class="bi bi-table"></i> Line Items
+                </span>
+                <div style="display:flex;gap:6px;">
+                    <button type="button" class="pe-btn" id="add3Btn" style="font-size:.76rem;padding:5px 11px;">
+                        <i class="bi bi-plus-circle"></i> Add 3 Rows
+                    </button>
+                    <button type="button" class="pe-btn pe-btn-primary" id="addRowBtn" style="font-size:.76rem;padding:5px 11px;">
+                        <i class="bi bi-plus-circle"></i> Add Row
+                    </button>
                 </div>
             </div>
 
-            <hr class="my-4" />
-
-            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                <h5 class="section-title m-0 d-flex align-items-center gap-2">
-                    <i class="fa-solid fa-table-list"></i> Line Items
-                </h5>
-                <div class="d-flex gap-2">
-                    <button type="button" class="btn btn-outline-secondary" id="add3Btn">
-                        <i class="fa-solid fa-plus me-1"></i> Add 3 Rows
-                    </button>
-                    <button type="button" class="btn btn-navy" id="addRowBtn">
-                        <i class="fa-solid fa-plus me-1"></i> Add Row
-                    </button>
-                </div>
-            </div>
-
-            <div class="table-responsive mt-2">
-                <table class="table table-sm table-hover table-striped table-bordered align-middle" id="detailsTable">
-                    <thead class="table-light">
-                        <tr class="text-navy">
-                            <th class="w-45"><i class="fa-solid fa-book me-1"></i>Book (searchable)</th>
-                            <th class="text-end w-15"><i class="fa-solid fa-arrow-up-1-9 me-1"></i>Quantity</th>
-                            <th class="text-end w-20"><i class="fa-solid fa-dollar-sign me-1"></i>Unit Price</th>
-                            <th class="text-end w-20"><i class="fa-solid fa-calculator me-1"></i>Line Total</th>
-                            <th class="w-5"></th>
+            <div class="pe-table-wrap">
+                <table class="pe-table" id="detailsTable">
+                    <thead>
+                        <tr>
+                            <th style="min-width:260px;">Book</th>
+                            <th class="text-end" style="width:110px;">Quantity</th>
+                            <th class="text-end" style="width:130px;">Unit Price</th>
+                            <th class="text-end" style="width:130px;">Line Total</th>
+                            <th style="width:46px;"></th>
                         </tr>
                     </thead>
                     <tbody id="detailBody">
@@ -172,29 +421,28 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th class="text-end">Totals:</th>
-                            <th class="text-end"><span id="footerQty">0</span></th>
-                            <th class="text-end">—</th>
-                            <th class="text-end"><span id="footerCost">0.00</span></th>
-                            <th></th>
+                            <td>Totals</td>
+                            <td class="text-end"><span id="footerQty">0</span></td>
+                            <td class="text-end">—</td>
+                            <td class="text-end"><span id="footerCost">0.00</span></td>
+                            <td></td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
-        </div>
 
-        <div class="sticky-actions d-flex justify-content-between align-items-center gap-2">
-            <div class="small text-muted d-flex align-items-center gap-2">
-                <i class="fa-regular fa-circle-question"></i>
-                Line totals = Quantity × Unit Price (auto)
-            </div>
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-navy">
-                    <i class="fa-solid fa-floppy-disk me-1"></i> Save
-                </button>
-                <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="fa-solid fa-xmark me-1"></i> Cancel
-                </a>
+            <div class="pe-sticky-footer">
+                <span class="pe-footer-note">
+                    <i class="bi bi-info-circle"></i> Line Total = Quantity × Unit Price (auto)
+                </span>
+                <div style="display:flex;gap:8px;">
+                    <button type="submit" class="pe-btn pe-btn-primary">
+                        <i class="bi bi-floppy-disk"></i> Save
+                    </button>
+                    <a asp-action="Index" class="pe-btn">
+                        <i class="bi bi-x-lg"></i> Cancel
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -207,60 +455,59 @@
                                 new ViewDataDictionary(ViewData) {
                                 { "index", "__index__" },
                                 { "bookSelect", bookSelect }
-                                }
-                                )
+                                })
             </tbody>
         </table>
     </form>
+
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
-    <!-- jQuery + Select2 -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
     <script>
         (function () {
-            const body = document.getElementById('detailBody');
-            const template = document.getElementById('detailRowTemplate').innerHTML;
-            const addBtn = document.getElementById('addRowBtn');
-            const add3Btn = document.getElementById('add3Btn');
-            const footerQty = document.getElementById('footerQty');
+            const body       = document.getElementById('detailBody');
+            const template   = document.getElementById('detailRowTemplate').innerHTML;
+            const addBtn     = document.getElementById('addRowBtn');
+            const add3Btn    = document.getElementById('add3Btn');
+            const footerQty  = document.getElementById('footerQty');
             const footerCost = document.getElementById('footerCost');
 
-            function initSelect2(scope){
+            function initSelect2(scope) {
                 $(scope).find('select.book-select').select2({
-                    placeholder: 'Search book by title…',
-                    width: '100%'
+                    placeholder: 'Search book by title, ISBN, barcode…',
+                    width: '100%',
+                    minimumInputLength: 1,
+                    delay: 300,
+                    ajax: {
+                        url: '/Purchases/SearchBooks',
+                        dataType: 'json',
+                        data: function (params) {
+                            return { term: params.term, page: params.page || 1 };
+                        },
+                        processResults: function (data) {
+                            return { results: data.results, pagination: data.pagination };
+                        }
+                    }
                 });
             }
 
-            function parseNum(v, decimals) {
+            function parseNum(v, dp) {
                 const n = parseFloat(v);
-                if (Number.isFinite(n)) return decimals != null ? Number(n.toFixed(decimals)) : n;
-                return 0;
-            }
-            function formatMoney(n) {
-                return (n ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                return Number.isFinite(n) ? (dp != null ? Number(n.toFixed(dp)) : n) : 0;
             }
 
             function recalcFooter() {
                 let qty = 0, cost = 0;
                 body.querySelectorAll('tr').forEach(tr => {
-                    const q  = tr.querySelector('input[id$="__Quantity"]');
-                    const lt = tr.querySelector('input[id$="__LineTotal"]');
-                    qty  += parseNum(q?.value || '0', 0);
-                    cost += parseNum(lt?.value || '0', 2);
+                    qty  += parseNum(tr.querySelector('input[id$="__Quantity"]')?.value  || '0', 0);
+                    cost += parseNum(tr.querySelector('input[id$="__LineTotal"]')?.value || '0', 2);
                 });
-                footerQty.textContent = qty.toString();
-                footerCost.textContent = formatMoney(cost);
-            }
-
-            function clampNonNegative(input, decimals) {
-                const n = parseNum(input.value || '0', decimals);
-                if (n < 0) input.value = Math.abs(n).toFixed(decimals ?? 0);
+                footerQty.textContent  = qty.toString();
+                footerCost.textContent = (isNaN(cost) ? 0 : cost)
+                    .toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             }
 
             function wireRow(tr) {
@@ -268,11 +515,8 @@
                 const up = tr.querySelector('input[id$="__UnitPrice"]');
                 const lt = tr.querySelector('input[id$="__LineTotal"]');
                 if (lt) lt.readOnly = true;
-
                 function recalc() {
-                    if (q) clampNonNegative(q, 0);
-                    if (up) clampNonNegative(up, 2);
-                    const qty = parseNum(q?.value || '0', 0);
+                    const qty   = parseNum(q?.value  || '0', 0);
                     const price = parseNum(up?.value || '0', 2);
                     if (lt) lt.value = (qty * price).toFixed(2);
                     recalcFooter();
@@ -282,12 +526,12 @@
                 recalc();
             }
 
-            function addRow(focus=true) {
-                const index = body.querySelectorAll('tr').length;
-                const html = template.replaceAll('__index__', index);
+            function addRow(focus = true) {
+                const index   = body.querySelectorAll('tr').length;
+                const html    = template.replaceAll('__index__', index);
                 const wrapper = document.createElement('tbody');
                 wrapper.innerHTML = html.trim();
-                const tr = wrapper.firstElementChild;
+                const tr = wrapper.querySelector("tr");
                 body.appendChild(tr);
                 initSelect2(tr);
                 wireRow(tr);
@@ -295,31 +539,24 @@
                 recalcFooter();
             }
 
-            // Wire existing rows (from server)
-            Array.from(body.querySelectorAll('tr')).forEach(function(tr){
-                initSelect2(tr);
-                wireRow(tr);
-            });
+            Array.from(body.querySelectorAll('tr')).forEach(tr => { initSelect2(tr); wireRow(tr); });
 
-            // Add row buttons
-            addBtn.addEventListener('click', () => addRow(true));
+            addBtn.addEventListener('click',  () => addRow(true));
             add3Btn.addEventListener('click', () => { addRow(false); addRow(false); addRow(true); });
 
-            // Remove row (delegated; uses .btn-remove-row inside partial)
             document.addEventListener('click', function (e) {
                 const btn = e.target.closest('.btn-remove-row');
                 if (btn) {
                     e.preventDefault();
                     const tr = btn.closest('tr');
-                    if (tr && tr.parentNode) {
-                        $(tr).find('select.book-select').each(function(){ $(this).select2('destroy'); });
+                    if (tr?.parentNode) {
+                        $(tr).find('select.book-select').each(function () { $(this).select2('destroy'); });
                         tr.parentNode.removeChild(tr);
                         recalcFooter();
                     }
                 }
             });
 
-            // Initial footer totals
             recalcFooter();
         })();
     </script>

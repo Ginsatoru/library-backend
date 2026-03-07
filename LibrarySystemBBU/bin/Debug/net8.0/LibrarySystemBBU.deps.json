@@ -10,6 +10,8 @@
         "dependencies": {
           "BCrypt.Net-Next": "2.1.3",
           "EPPlus": "7.0.5",
+          "ExcelDataReader": "3.8.0",
+          "ExcelDataReader.DataSet": "3.8.0",
           "Logger_Core": "1.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.11",
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "8.0.6",
@@ -100,6 +102,25 @@
           "lib/net7.0/EPPlus.System.Drawing.dll": {
             "assemblyVersion": "6.1.1.0",
             "fileVersion": "6.1.1.0"
+          }
+        }
+      },
+      "ExcelDataReader/3.8.0": {
+        "runtime": {
+          "lib/net8.0/ExcelDataReader.dll": {
+            "assemblyVersion": "3.8.0.0",
+            "fileVersion": "3.8.0.0"
+          }
+        }
+      },
+      "ExcelDataReader.DataSet/3.8.0": {
+        "dependencies": {
+          "ExcelDataReader": "3.8.0"
+        },
+        "runtime": {
+          "lib/net8.0/ExcelDataReader.DataSet.dll": {
+            "assemblyVersion": "3.8.0.0",
+            "fileVersion": "3.8.0.0"
           }
         }
       },
@@ -2199,6 +2220,20 @@
       "sha512": "sha512-lRF5gHYrmkHOOiLMI0t6q8zNYjUrzRgAM5BCXumv5xiqXko8fx3AWI+HCNZfhEqVFGOop+42KfR5GiUcCoyoMw==",
       "path": "epplus.system.drawing/6.1.1",
       "hashPath": "epplus.system.drawing.6.1.1.nupkg.sha512"
+    },
+    "ExcelDataReader/3.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kbUsldc5Fn9IKgzL2nr4VvN/mKqPqn8zGXUZpA7uL6svCA4psF+qMK519EhMvderpU4pAJoqk9DWpiSIkiZtXA==",
+      "path": "exceldatareader/3.8.0",
+      "hashPath": "exceldatareader.3.8.0.nupkg.sha512"
+    },
+    "ExcelDataReader.DataSet/3.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+eQg5oinHir7ayE/rF4dedvy8J6FBDG8RDyKFQsS/VZG9ygrnNgW6U8JSlrfGfe3DxYgbVoVwYV9Hbk63JQJFQ==",
+      "path": "exceldatareader.dataset/3.8.0",
+      "hashPath": "exceldatareader.dataset.3.8.0.nupkg.sha512"
     },
     "Humanizer/2.14.1": {
       "type": "package",
