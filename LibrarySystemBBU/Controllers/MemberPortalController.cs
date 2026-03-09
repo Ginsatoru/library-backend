@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using LibrarySystemBBU.Data;
 using LibrarySystemBBU.Models;
@@ -360,6 +361,76 @@ namespace LibrarySystemBBU.Controllers
             return Ok(new { success = true, message = "Removed from wishlist." });
         }
 
+        // ----------------------------------------
+        // POST /MemberPortal/TelegramWidgetCallback
+        // ----------------------------------------
+        [HttpPost]
+        public async Task<IActionResult> TelegramWidgetCallback([FromBody] TelegramWidgetData data)
+        {
+            var member = await GetCurrentMemberAsync();
+            if (member == null) return Unauthorized();
+
+            // 1. Check auth_date is present and not older than 1 day
+            var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            if (data.AuthDate == 0 || now - data.AuthDate > 86400)
+                return Ok(new { success = false, message = "Telegram auth expired. Please try again." });
+
+            // 2. Verify the hash using bot token
+            var botToken = _config["Telegram:BotToken"] ?? "";
+            var isValid = VerifyTelegramHash(data, botToken);
+            if (!isValid)
+                return Ok(new { success = false, message = "Invalid Telegram data. Verification failed." });
+
+            // 3. Save to member
+            member.TelegramUserId = data.Id;
+            member.TelegramChatId = data.Id.ToString();
+            member.TelegramUsername = data.Username?.Trim();
+            member.Modified = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+            return Ok(new { success = true, message = "Telegram connected successfully!", username = data.Username });
+        }
+
+        // ----------------------------------------
+        // POST /MemberPortal/DisconnectTelegram
+        // ----------------------------------------
+        [HttpPost]
+        public async Task<IActionResult> DisconnectTelegram()
+        {
+            var member = await GetCurrentMemberAsync();
+            if (member == null) return Unauthorized();
+
+            member.TelegramUserId = null;
+            member.TelegramChatId = null;
+            member.TelegramUsername = null;
+            member.Modified = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+            return Ok(new { success = true, message = "Telegram disconnected." });
+        }
+
+        private static bool VerifyTelegramHash(TelegramWidgetData data, string botToken)
+        {
+            var fields = new System.Collections.Generic.SortedDictionary<string, string>();
+            fields["auth_date"] = data.AuthDate.ToString();
+            if (!string.IsNullOrEmpty(data.FirstName)) fields["first_name"] = data.FirstName;
+            if (!string.IsNullOrEmpty(data.LastName)) fields["last_name"] = data.LastName;
+            fields["id"] = data.Id.ToString();
+            if (!string.IsNullOrEmpty(data.PhotoUrl)) fields["photo_url"] = data.PhotoUrl;
+            if (!string.IsNullOrEmpty(data.Username)) fields["username"] = data.Username;
+
+            var dataCheckString = string.Join("\n", fields.Select(f => $"{f.Key}={f.Value}"));
+
+            using var sha256 = System.Security.Cryptography.SHA256.Create();
+            var secretKey = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(botToken));
+
+            using var hmac = new System.Security.Cryptography.HMACSHA256(secretKey);
+            var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(dataCheckString));
+            var computedHex = BitConverter.ToString(computedHash).Replace("-", "").ToLower();
+
+            return computedHex == data.Hash;
+        }
+
         // ---- Request Models ----
         public class MemberUpdateRequest
         {
@@ -385,6 +456,31 @@ namespace LibrarySystemBBU.Controllers
         public class WishlistRequest
         {
             public Guid CatalogId { get; set; }
+        }
+
+        // ---- Telegram Widget Data Model ----
+        public class TelegramWidgetData
+        {
+            [JsonPropertyName("id")]
+            public long Id { get; set; }
+
+            [JsonPropertyName("first_name")]
+            public string? FirstName { get; set; }
+
+            [JsonPropertyName("last_name")]
+            public string? LastName { get; set; }
+
+            [JsonPropertyName("username")]
+            public string? Username { get; set; }
+
+            [JsonPropertyName("photo_url")]
+            public string? PhotoUrl { get; set; }
+
+            [JsonPropertyName("auth_date")]
+            public long AuthDate { get; set; }
+
+            [JsonPropertyName("hash")]
+            public string? Hash { get; set; }
         }
     }
 }

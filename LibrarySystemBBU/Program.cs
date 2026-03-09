@@ -7,7 +7,13 @@ using OfficeOpenXml;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        // Respect [JsonPropertyName] attributes on model classes
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    });
+
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
 builder.Services.AddScoped<DapperFactory>();
 builder.Services.AddHttpContextAccessor();
@@ -103,6 +109,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
+// ── Routes ────────────────────────────────────────────────────────────────────
+// /api prefix route — allows React frontend calls via /api/Controller/Action
+app.MapControllerRoute(
+    name: "api",
+    pattern: "api/{controller}/{action}/{id?}");
+
+// Default route — admin MVC side
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
