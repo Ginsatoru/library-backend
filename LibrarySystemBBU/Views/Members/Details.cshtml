@@ -113,8 +113,8 @@
         <div class="card-body px-4 py-4">
             <div class="text-center mb-3">
                 <img src="@(string.IsNullOrWhiteSpace(Model.ProfilePicturePath)
-                                                 ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
-                                                 : Model.ProfilePicturePath)"
+                                                                      ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
+                                                                      : Model.ProfilePicturePath)"
                      class="member-detail-avatar" alt="Profile Picture" />
                 <h3 class="fw-bold mb-1" style="color:#020617;">
                     <i class="fa-solid fa-user"></i> @Model.FullName
@@ -143,9 +143,6 @@
 
                 <dt class="col-sm-4 details-label"><i class="fa-solid fa-building-columns"></i> Faculty</dt>
                 <dd class="col-sm-8 details-value">@Model.Faculty</dd>
-
-                <dt class="col-sm-4 details-label"><i class="fa-solid fa-book-open"></i> Subject</dt>
-                <dd class="col-sm-8 details-value">@Model.Subject</dd>
 
                 <dt class="col-sm-4 details-label"><i class="fa-solid fa-id-card"></i> Library ID</dt>
                 <dd class="col-sm-8 details-value">@Model.DICardNumber</dd>

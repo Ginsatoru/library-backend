@@ -100,8 +100,8 @@
                 <div class="text-center mb-3">
                     <img id="profilePreview"
                          src="@(string.IsNullOrWhiteSpace(Model.ProfilePicturePath)
-                                                             ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
-                                                             : Model.ProfilePicturePath)"
+                                                                                      ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
+                                                                                      : Model.ProfilePicturePath)"
                          class="avatar-3d" alt="Profile Preview" />
                     <div class="mb-1">
                         <label class="btn btn-glass btn-sm ms-1" style="font-size:0.92em;">
@@ -178,33 +178,23 @@
                     </div>
                 </div>
 
-                <!-- Row 4: Faculty + Subject -->
+                <!-- Row 4: Faculty (full width) -->
                 <div class="row g-3 mt-1">
-                    <div class="col-md-6">
+                    <div class="col-12">
                         <div class="mb-3 mb-md-0">
                             <label asp-for="Faculty" class="form-label"><i class="fa-solid fa-building-columns"></i> Faculty</label>
                             <select asp-for="Faculty" class="form-select" id="editFacultySelect">
                                 <option value="">-- Select Faculty --</option>
-                                <option>Faculty of Business Administration</option>
-                                <option>Faculty of Law</option>
-                                <option>Faculty of Computer Science</option>
-                                <option>Faculty of Engineering</option>
-                                <option>Faculty of Education</option>
-                                <option>Faculty of Social Science</option>
-                                <option>Faculty of Tourism</option>
-                                <option>Faculty of Medicine</option>
-                                <option>Faculty of Architecture</option>
+                                <option>Business Administration</option>
+                                <option>Science and Technology</option>
+                                <option>Engineering and Architecture</option>
+                                <option>Law and Social Sciences</option>
+                                <option>Tourism and Hospitality</option>
+                                <option>Economics and Agricultural Sciences</option>
+                                <option>Arts, Humanities, and Languages</option>
+                                <option>School of Doctoral Studies</option>
                             </select>
                             <span asp-validation-for="Faculty" class="text-danger small"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="Subject" class="form-label"><i class="fa-solid fa-book-open"></i> Subject</label>
-                            <select asp-for="Subject" class="form-select" id="editSubjectSelect">
-                                <option value="">-- Select Faculty First --</option>
-                            </select>
-                            <span asp-validation-for="Subject" class="text-danger small"></span>
                         </div>
                     </div>
                 </div>
@@ -335,36 +325,6 @@
 
 @section Scripts {
     <script>
-        const facultySubjects = {
-            'Faculty of Business Administration': ['Accounting', 'Finance', 'Management', 'Marketing'],
-            'Faculty of Law': ['Legal Studies'],
-            'Faculty of Computer Science': ['Computer Science', 'Information Technology', 'Software Engineering'],
-            'Faculty of Engineering': ['Civil Engineering', 'Electrical Engineering'],
-            'Faculty of Education': ['Education', 'English for Teaching'],
-            'Faculty of Social Science': ['Sociology', 'Development Studies'],
-            'Faculty of Tourism': ['Hotel Management', 'Tourism Management'],
-            'Faculty of Medicine': ['General Medicine', 'Pharmacy'],
-            'Faculty of Architecture': ['Architecture', 'Interior Design'],
-        };
-
-        function populateSubjects(facultySelectId, subjectSelectId, selectedSubject) {
-            const faculty = document.getElementById(facultySelectId)?.value;
-            const subjectSelect = document.getElementById(subjectSelectId);
-            if (!subjectSelect) return;
-            subjectSelect.innerHTML = '<option value="">-- Select Subject --</option>';
-            const subjects = facultySubjects[faculty] || [];
-            subjects.forEach(s => {
-                const opt = document.createElement('option');
-                opt.value = s;
-                opt.textContent = s;
-                if (s === selectedSubject) opt.selected = true;
-                subjectSelect.appendChild(opt);
-            });
-            if (!subjects.length) {
-                subjectSelect.innerHTML = '<option value="">-- Select Faculty First --</option>';
-            }
-        }
-
         function showPreview(event) {
             var input = event.target;
             var reader = new FileReader();
@@ -386,13 +346,6 @@
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-            // Populate subjects on load with existing saved value
-            populateSubjects('editFacultySelect', 'editSubjectSelect', '@Model.Subject');
-
-            document.getElementById('editFacultySelect')?.addEventListener('change', () =>
-                populateSubjects('editFacultySelect', 'editSubjectSelect', ''));
-
-            // Password validation
             const form = document.getElementById("memberEditForm");
             const newPwInput = document.getElementById("NewPassword");
             const confirmPwInput = document.getElementById("ConfirmPassword");

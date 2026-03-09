@@ -172,33 +172,23 @@
                     </div>
                 </div>
 
-                <!-- Row 4: Faculty + Subject -->
+                <!-- Row 4: Faculty (full width) -->
                 <div class="row g-3 mt-1">
-                    <div class="col-md-6">
+                    <div class="col-12">
                         <div class="mb-3 mb-md-0">
                             <label asp-for="Faculty" class="form-label"><i class="fa-solid fa-building-columns"></i> Faculty</label>
-                            <select asp-for="Faculty" class="form-select" id="createFacultySelect">
+                            <select asp-for="Faculty" class="form-select">
                                 <option value="">-- Select Faculty --</option>
-                                <option>Faculty of Business Administration</option>
-                                <option>Faculty of Law</option>
-                                <option>Faculty of Computer Science</option>
-                                <option>Faculty of Engineering</option>
-                                <option>Faculty of Education</option>
-                                <option>Faculty of Social Science</option>
-                                <option>Faculty of Tourism</option>
-                                <option>Faculty of Medicine</option>
-                                <option>Faculty of Architecture</option>
+                                <option>Business Administration</option>
+                                <option>Science and Technology</option>
+                                <option>Engineering and Architecture</option>
+                                <option>Law and Social Sciences</option>
+                                <option>Tourism and Hospitality</option>
+                                <option>Economics and Agricultural Sciences</option>
+                                <option>Arts, Humanities, and Languages</option>
+                                <option>School of Doctoral Studies</option>
                             </select>
                             <span asp-validation-for="Faculty" class="text-danger small"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="Subject" class="form-label"><i class="fa-solid fa-book-open"></i> Subject</label>
-                            <select asp-for="Subject" class="form-select" id="createSubjectSelect">
-                                <option value="">-- Select Faculty First --</option>
-                            </select>
-                            <span asp-validation-for="Subject" class="text-danger small"></span>
                         </div>
                     </div>
                 </div>
@@ -317,36 +307,6 @@
 
 @section Scripts {
     <script>
-        const facultySubjects = {
-            'Faculty of Business Administration': ['Accounting', 'Finance', 'Management', 'Marketing'],
-            'Faculty of Law': ['Legal Studies'],
-            'Faculty of Computer Science': ['Computer Science', 'Information Technology', 'Software Engineering'],
-            'Faculty of Engineering': ['Civil Engineering', 'Electrical Engineering'],
-            'Faculty of Education': ['Education', 'English for Teaching'],
-            'Faculty of Social Science': ['Sociology', 'Development Studies'],
-            'Faculty of Tourism': ['Hotel Management', 'Tourism Management'],
-            'Faculty of Medicine': ['General Medicine', 'Pharmacy'],
-            'Faculty of Architecture': ['Architecture', 'Interior Design'],
-        };
-
-        function populateSubjects(facultySelectId, subjectSelectId, selectedSubject) {
-            const faculty = document.getElementById(facultySelectId)?.value;
-            const subjectSelect = document.getElementById(subjectSelectId);
-            if (!subjectSelect) return;
-            subjectSelect.innerHTML = '<option value="">-- Select Subject --</option>';
-            const subjects = facultySubjects[faculty] || [];
-            subjects.forEach(s => {
-                const opt = document.createElement('option');
-                opt.value = s;
-                opt.textContent = s;
-                if (s === selectedSubject) opt.selected = true;
-                subjectSelect.appendChild(opt);
-            });
-            if (!subjects.length) {
-                subjectSelect.innerHTML = '<option value="">-- Select Faculty First --</option>';
-            }
-        }
-
         function showPreview(event) {
             var input = event.target;
             var reader = new FileReader();
@@ -373,11 +333,6 @@
             input.type = isPw ? "text" : "password";
             btn.innerHTML = isPw ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>';
         }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('createFacultySelect')?.addEventListener('change', () =>
-                populateSubjects('createFacultySelect', 'createSubjectSelect', ''));
-        });
     </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

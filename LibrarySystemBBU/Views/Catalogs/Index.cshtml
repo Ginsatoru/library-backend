@@ -405,7 +405,7 @@
 
         <div class="cat-search-wrap">
             <i class="bi bi-search"></i>
-            <input id="globalSearch" class="cat-search-input" placeholder="Search title, author, ISBN, category…" />
+            <input id="globalSearch" class="cat-search-input" placeholder="Search title, author, ISBN, faculty, category…" />
             <button class="cat-search-clear" type="button" id="clearSearch"><i class="bi bi-x-circle"></i></button>
         </div>
 
@@ -433,6 +433,7 @@
                         <th style="min-width:200px;">Title</th>
                         <th>Author</th>
                         <th>ISBN</th>
+                        <th>Faculty</th>
                         <th>Category</th>
                         <th class="text-end">Total</th>
                         <th class="text-end">Available</th>
@@ -443,7 +444,7 @@
                     </tr>
                 </thead>
                 <tbody id="catalogTableBody">
-                    <tr><td colspan="10" style="text-align:center;color:#9ca3af;padding:2rem;">Loading…</td></tr>
+                    <tr><td colspan="11" style="text-align:center;color:#9ca3af;padding:2rem;">Loading…</td></tr>
                 </tbody>
             </table>
         </div>
@@ -500,7 +501,7 @@
                 try {
                     allCatalogs = await (await fetch('@Url.Action("IndexJson", "Catalogs")')).json();
                 } catch (e) {
-                    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:#dc2626;padding:2rem;">Failed to load: ${e.message}</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;color:#dc2626;padding:2rem;">Failed to load: ${e.message}</td></tr>`;
                 } finally {
                     loader.style.display = 'none';
                     viewList.style.display = 'block';
@@ -514,6 +515,7 @@
                     (c.title||'').toLowerCase().includes(q) ||
                     (c.author||'').toLowerCase().includes(q) ||
                     (c.isbn||'').toLowerCase().includes(q) ||
+                    (c.faculty||'').toLowerCase().includes(q) ||
                     (c.category||'').toLowerCase().includes(q));
             }
 
@@ -528,11 +530,12 @@
                 pageIndex = Math.min(Math.max(1, pageIndex), tp);
                 const slice = filtered.slice((pageIndex-1)*pageSize, pageIndex*pageSize);
                 tbody.innerHTML = slice.length === 0
-                    ? '<tr><td colspan="10" style="text-align:center;color:#9ca3af;padding:2rem;">No catalogs found.</td></tr>'
+                    ? '<tr><td colspan="11" style="text-align:center;color:#9ca3af;padding:2rem;">No catalogs found.</td></tr>'
                     : slice.map(c => `<tr>
                         <td style="font-weight:500;color:#111827;">${esc(c.title)}</td>
                         <td class="muted">${esc(c.author)}</td>
                         <td class="muted">${esc(c.isbn)}</td>
+                        <td class="muted">${esc(c.faculty)}</td>
                         <td class="muted">${esc(c.category)}</td>
                         <td class="text-end">${c.totalCopies}</td>
                         <td class="text-end">${c.availableCopies}</td>
@@ -562,6 +565,7 @@
                             <div class="cat-card-title">${esc(c.title)}</div>
                             <div class="cat-card-meta"><i class="bi bi-person"></i>${esc(c.author)||'—'}</div>
                             <div class="cat-card-meta"><i class="bi bi-upc-scan"></i>${esc(c.isbn)||'—'}</div>
+                            ${c.faculty ? `<div class="cat-card-meta"><i class="bi bi-mortarboard"></i>${esc(c.faculty)}</div>` : ''}
                             <div class="cat-card-meta"><i class="bi bi-tags"></i>${esc(c.category)||'—'}</div>
                         </div>
                         <div class="cat-card-stats">

@@ -37,6 +37,7 @@ namespace LibrarySystemBBU.Controllers
             public string Author { get; set; } = "";
             public string ISBN { get; set; } = "";
             public string Category { get; set; } = "";
+            public string? Faculty { get; set; }
             public int TotalCopies { get; set; }
             public int AvailableCopies { get; set; }
             public string? ImagePath { get; set; }
@@ -99,6 +100,7 @@ namespace LibrarySystemBBU.Controllers
             vm.Author = vm.Author?.Trim() ?? "";
             vm.ISBN = vm.ISBN?.Trim() ?? "";
             vm.Category = vm.Category?.Trim() ?? "";
+            vm.Faculty = string.IsNullOrWhiteSpace(vm.Faculty) ? null : vm.Faculty!.Trim();
             vm.ImagePath = string.IsNullOrWhiteSpace(vm.ImagePath) ? null : vm.ImagePath!.Trim();
             vm.PdfFilePath = string.IsNullOrWhiteSpace(vm.PdfFilePath) ? null : vm.PdfFilePath!.Trim();
             vm.Books ??= new();
@@ -129,6 +131,7 @@ namespace LibrarySystemBBU.Controllers
             Author = c.Author,
             ISBN = c.ISBN,
             Category = c.Category,
+            Faculty = c.Faculty,
             TotalCopies = c.TotalCopies,
             AvailableCopies = c.AvailableCopies,
             ImagePath = c.ImagePath,
@@ -234,7 +237,7 @@ namespace LibrarySystemBBU.Controllers
             var sb = new StringBuilder();
             sb.AppendLine("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>");
             sb.AppendLine("<table border='1'><thead><tr>");
-            sb.AppendLine("<th>Catalog Title</th><th>Author</th><th>ISBN</th><th>Category</th>");
+            sb.AppendLine("<th>Catalog Title</th><th>Author</th><th>ISBN</th><th>Category</th><th>Faculty</th>");
             sb.AppendLine("<th>Total Copies</th><th>Available Copies</th><th>Borrowed</th><th>Read in Library</th><th>PDF Viewers</th>");
             sb.AppendLine("<th>Copy Barcode</th><th>Copy Status</th><th>Location</th><th>Acquisition Date</th>");
             sb.AppendLine("</tr></thead><tbody>");
@@ -247,7 +250,7 @@ namespace LibrarySystemBBU.Controllers
                     foreach (var b in books)
                     {
                         sb.AppendLine("<tr>");
-                        sb.AppendLine($"<td>{H(c.Title)}</td><td>{H(c.Author)}</td><td>{H(c.ISBN)}</td><td>{H(c.Category)}</td>");
+                        sb.AppendLine($"<td>{H(c.Title)}</td><td>{H(c.Author)}</td><td>{H(c.ISBN)}</td><td>{H(c.Category)}</td><td>{H(c.Faculty)}</td>");
                         sb.AppendLine($"<td>{c.TotalCopies}</td><td>{c.AvailableCopies}</td><td>{c.BorrowCount}</td><td>{c.InLibraryCount}</td><td>{c.PdfViewerCount}</td>");
                         sb.AppendLine($"<td>{H(b.Barcode)}</td><td>{H(b.Status)}</td><td>{H(b.Location)}</td><td>{H(b.AcquisitionDate.ToString("yyyy-MM-dd"))}</td>");
                         sb.AppendLine("</tr>");
@@ -256,7 +259,7 @@ namespace LibrarySystemBBU.Controllers
                 else
                 {
                     sb.AppendLine("<tr>");
-                    sb.AppendLine($"<td>{H(c.Title)}</td><td>{H(c.Author)}</td><td>{H(c.ISBN)}</td><td>{H(c.Category)}</td>");
+                    sb.AppendLine($"<td>{H(c.Title)}</td><td>{H(c.Author)}</td><td>{H(c.ISBN)}</td><td>{H(c.Category)}</td><td>{H(c.Faculty)}</td>");
                     sb.AppendLine($"<td>{c.TotalCopies}</td><td>{c.AvailableCopies}</td><td>{c.BorrowCount}</td><td>{c.InLibraryCount}</td><td>{c.PdfViewerCount}</td>");
                     sb.AppendLine("<td></td><td></td><td></td><td></td>");
                     sb.AppendLine("</tr>");
@@ -271,9 +274,6 @@ namespace LibrarySystemBBU.Controllers
         }
 
         // ---------- IMPORT: Preview ----------
-        // FIX: Uses GroupBy to avoid duplicate key crashes.
-        //      Only sends a sample of rows to the browser (not all 100k).
-        //      Stores all good rows in session for ImportConfirm to read.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ImportPreview(IFormFile file)
@@ -299,7 +299,6 @@ namespace LibrarySystemBBU.Controllers
             if (rawRows.Count < 2)
                 return Json(new { success = false, message = "File has no data rows." });
 
-            // Map header → column index
             var header = rawRows[0].Select(h => h.ToLowerInvariant().Trim()).ToArray();
 
             int Col(params string[] names)
@@ -321,13 +320,11 @@ namespace LibrarySystemBBU.Controllers
             int iLoc = Col("location");
             int iAcq = Col("acquisition date", "acquisitiondate");
 
-            // FIX: Load existing catalogs for matching
             var allCatalogs = await _context.Catalogs
                 .Include(c => c.Books)
                 .AsNoTracking()
                 .ToListAsync();
 
-            // FIX: GroupBy to safely handle duplicate titles/ISBNs in DB
             var catalogByISBN = allCatalogs
                 .Where(c => !string.IsNullOrWhiteSpace(c.ISBN))
                 .GroupBy(c => c.ISBN!.Trim(), StringComparer.OrdinalIgnoreCase)
@@ -365,7 +362,6 @@ namespace LibrarySystemBBU.Controllers
                 if (string.IsNullOrWhiteSpace(row.Title))
                     errs.Add("Title is required");
 
-                // Match catalog by ISBN first, then title
                 Catalog? matched = null;
                 if (!string.IsNullOrWhiteSpace(row.ISBN) && catalogByISBN.TryGetValue(row.ISBN, out var byISBN))
                     matched = byISBN;
@@ -410,11 +406,8 @@ namespace LibrarySystemBBU.Controllers
             var newCats = goodRows.Count(r => r.IsNewCatalog);
             var updCats = goodRows.Count(r => !r.IsNewCatalog && r.MatchedCatalogId != null);
 
-            // FIX: Store all good rows in session — don't send 100k rows to the browser
-            HttpContext.Session.SetString("ImportRows",
-                JsonSerializer.Serialize(goodRows));
+            HttpContext.Session.SetString("ImportRows", JsonSerializer.Serialize(goodRows));
 
-            // FIX: Only send a small sample to the browser for preview display
             const int previewLimit = 50;
             var previewSample = errorRows.Take(previewLimit)
                 .Concat(goodRows.Take(previewLimit))
@@ -434,14 +427,10 @@ namespace LibrarySystemBBU.Controllers
         }
 
         // ---------- IMPORT: Confirm ----------
-        // FIX: Reads rows from session (not from request body).
-        //      Uses batched SaveChanges every 500 records.
-        //      Uses GroupBy-safe dictionary building.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ImportConfirm([FromBody] ImportConfirmRequest request)
         {
-            // FIX: Read rows from session instead of request body
             var json = HttpContext.Session.GetString("ImportRows");
             if (string.IsNullOrEmpty(json))
                 return Json(new { success = false, message = "Session expired or no preview data found. Please re-upload the file." });
@@ -466,7 +455,6 @@ namespace LibrarySystemBBU.Controllers
                 .Include(c => c.Books)
                 .ToListAsync();
 
-            // FIX: GroupBy-safe dictionary building
             var catalogByISBN = allCatalogs
                 .Where(c => !string.IsNullOrWhiteSpace(c.ISBN))
                 .GroupBy(c => c.ISBN!.Trim(), StringComparer.OrdinalIgnoreCase)
@@ -559,7 +547,6 @@ namespace LibrarySystemBBU.Controllers
                         booksUpdated++;
                     }
 
-                    // FIX: Batch save every 500 operations
                     operationCount++;
                     if (operationCount % batchSize == 0)
                         await _context.SaveChangesAsync();
@@ -568,10 +555,8 @@ namespace LibrarySystemBBU.Controllers
 
             try
             {
-                // Final save for remaining records
                 await _context.SaveChangesAsync();
 
-                // Recalculate TotalCopies / AvailableCopies for touched catalogs
                 var touchedIds = rows
                     .Where(r => r.MatchedCatalogId != null)
                     .Select(r => Guid.Parse(r.MatchedCatalogId!))
@@ -583,7 +568,6 @@ namespace LibrarySystemBBU.Controllers
                     .Where(c => touchedIds.Contains(c.CatalogId))
                     .ToListAsync();
 
-                // FIX: Only load recently created catalogs, not ALL catalogs
                 var newlyCreatedCatalogs = await _context.Catalogs
                     .Include(c => c.Books)
                     .OrderByDescending(c => c.CatalogId)
@@ -598,8 +582,6 @@ namespace LibrarySystemBBU.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-
-                // FIX: Clear session after successful import
                 HttpContext.Session.Remove("ImportRows");
             }
             catch (Exception ex)
@@ -669,6 +651,7 @@ namespace LibrarySystemBBU.Controllers
                 Author = vm.Author,
                 ISBN = vm.ISBN,
                 Category = vm.Category,
+                Faculty = vm.Faculty,
                 TotalCopies = vm.TotalCopies,
                 AvailableCopies = vm.AvailableCopies,
                 ImagePath = vm.ImagePath,
@@ -751,8 +734,13 @@ namespace LibrarySystemBBU.Controllers
             if (vm.PdfFile != null) { var p = await SaveFileAsync(vm.PdfFile, "pdfs", new[] { ".pdf" }); if (!string.IsNullOrWhiteSpace(p)) catalog.PdfFilePath = p; }
             if (!ModelState.IsValid) return View(MapToVM(catalog));
 
-            catalog.Title = vm.Title; catalog.Author = vm.Author; catalog.ISBN = vm.ISBN;
-            catalog.Category = vm.Category; catalog.TotalCopies = vm.TotalCopies; catalog.AvailableCopies = vm.AvailableCopies;
+            catalog.Title = vm.Title;
+            catalog.Author = vm.Author;
+            catalog.ISBN = vm.ISBN;
+            catalog.Category = vm.Category;
+            catalog.Faculty = vm.Faculty;
+            catalog.TotalCopies = vm.TotalCopies;
+            catalog.AvailableCopies = vm.AvailableCopies;
 
             var pFilled = vm.Books.Where(Filled).ToList();
             var dbBooks = catalog.Books.ToList();
@@ -786,6 +774,7 @@ namespace LibrarySystemBBU.Controllers
                     author = c.Author,
                     isbn = c.ISBN,
                     category = c.Category,
+                    faculty = c.Faculty,
                     totalCopies = c.TotalCopies,
                     availableCopies = c.AvailableCopies,
                     borrowCount = c.BorrowCount,
@@ -811,6 +800,7 @@ namespace LibrarySystemBBU.Controllers
                 author = c.Author,
                 isbn = c.ISBN,
                 category = c.Category,
+                faculty = c.Faculty,
                 totalCopies = c.TotalCopies,
                 availableCopies = c.AvailableCopies,
                 borrowCount = c.BorrowCount,

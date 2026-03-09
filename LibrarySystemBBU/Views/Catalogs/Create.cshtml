@@ -137,7 +137,7 @@
         display: block;
     }
 
-    .form-control {
+    .form-control, .form-select {
         font-size: .83rem;
         border: 1px solid #e5e7eb;
         border-radius: 8px;
@@ -149,7 +149,7 @@
         background: #fff;
     }
 
-        .form-control:focus {
+        .form-control:focus, .form-select:focus {
             border-color: #000080;
             box-shadow: 0 0 0 3px rgba(0,0,128,.07);
             outline: none;
@@ -273,8 +273,33 @@
                     <span asp-validation-for="ISBN" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
+                    <label class="form-label">Faculty</label>
+                    <select asp-for="Faculty" class="form-select">
+                        <option value="">-- Select Faculty --</option>
+                        <option>Business Administration</option>
+                        <option>Science and Technology</option>
+                        <option>Engineering and Architecture</option>
+                        <option>Law and Social Sciences</option>
+                        <option>Tourism and Hospitality</option>
+                        <option>Economics and Agricultural Sciences</option>
+                        <option>Arts, Humanities, and Languages</option>
+                        <option>School of Doctoral Studies</option>
+                    </select>
+                    <span asp-validation-for="Faculty" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
                     <label class="form-label">Category</label>
-                    <input asp-for="Category" class="form-control" />
+                    <select asp-for="Category" class="form-select">
+                        <option value="">-- Select Category --</option>
+                        <option>Magazine</option>
+                        <option>History</option>
+                        <option>Core Curriculum Book</option>
+                        <option>Copy Book</option>
+                        <option>Print Book</option>
+                        <option>Research Work</option>
+                        <option>Doctoral Research and Thesis</option>
+                        <option>Master's Degree Research Work</option>
+                    </select>
                     <span asp-validation-for="Category" class="text-danger"></span>
                 </div>
                 <div class="col-md-2">

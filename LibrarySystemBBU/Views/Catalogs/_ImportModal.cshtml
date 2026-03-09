@@ -725,7 +725,7 @@
             </div>
             <div class="imp-section-label">Catalog Fields</div>
             <div class="imp-fields-grid" style="margin-bottom:0;">
-                @foreach (var f in new[] { ("title", "Title", "bi-journal-text"), ("author", "Author", "bi-person"), ("isbn", "ISBN", "bi-upc-scan"), ("category", "Category", "bi-tags") })
+                @foreach (var f in new[] { ("title", "Title", "bi-journal-text"), ("author", "Author", "bi-person"), ("isbn", "ISBN", "bi-upc-scan"), ("faculty", "Faculty", "bi-mortarboard"), ("category", "Category", "bi-tags") })
                 {
                     <label class="imp-field-label checked" data-field="@f.Item1">
                         <input type="checkbox" class="imp-field-check" value="@f.Item1" checked />
@@ -970,7 +970,7 @@
                     <div class="imp-summary-lbl" style="color:${c.color};">${c.lbl}</div>
                 </div>`).join('');
 
-            const labelMap = { title:'Title', author:'Author', isbn:'ISBN', category:'Category', status:'Status', location:'Location', acquisitiondate:'Acq. Date' };
+            const labelMap = { title:'Title', author:'Author', isbn:'ISBN', faculty:'Faculty', category:'Category', status:'Status', location:'Location', acquisitiondate:'Acq. Date' };
             document.getElementById('impFieldTags').innerHTML = fields.length
                 ? fields.map(f => `<span class="imp-tag"><i class="bi bi-check2"></i>${labelMap[f] || f}</span>`).join('')
                 : '<span style="color:#d1d5db;font-size:.76rem;font-style:italic;">None selected</span>';
