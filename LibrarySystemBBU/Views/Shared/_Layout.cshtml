@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
     <link rel="stylesheet" href="~/css/style.css" />
+
     <!-- Custom Styles -->
     <style>
         body {
@@ -30,7 +31,6 @@
             min-height: 93vh;
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 9px;
             background: #f3f4f6;
@@ -41,7 +41,6 @@
             border-radius: 8px;
         }
 
-        /* Navbar Styling */
         .navbar .input-group .form-control {
             border-radius: 2rem;
             font-size: 0.95rem;
@@ -74,9 +73,6 @@
         .gap-3 {
             gap: 1rem !important;
         }
-
-        
-        
     </style>
 
     @RenderSection("Head", required: false)
@@ -86,10 +82,10 @@
     <div class="wrapper">
         <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="~/admin-lte/img/bbulogo.png" alt="bbulogo" height="135" width="135"/>
+            <img class="animation__shake" src="~/admin-lte/img/bbulogo.png" alt="bbulogo" height="135" width="135" />
         </div>
 
-        <!-- Navbar -->
+        <!-- Navbar (SignalR connection is initialized after all scripts below) -->
         <partial name="_Navbar" />
 
         <!-- Sidebar -->
@@ -109,7 +105,7 @@
         <aside class="control-sidebar control-sidebar-dark"></aside>
     </div>
 
-    <!-- Scripts -->
+    <!-- Core Scripts (must come before SignalR init) -->
     <script src="~/jquery/jquery.min.js"></script>
     <script src="~/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/admin-lte/js/adminlte.min.js"></script>
@@ -117,13 +113,16 @@
     <!-- Plugins -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-    <script src="plugins/raphael/raphael.min.js"></script>
-    <script src="plugins/chart.js/Chart.min.js"></script>
 
-    <!-- Optional AdminLTE Demo Scripts -->
-    <script src="dist/js/demo.js"></script>
-    <script src="dist/js/pages/dashboard2.js"></script>
+    <!-- SignalR (loaded after Bootstrap so dropdown works correctly) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+
+    <!-- Initialize SignalR hub (defined in _Navbar, safe to call now) -->
+    <script>
+        if (typeof window._initAdminHub === 'function') {
+            window._initAdminHub();
+        }
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

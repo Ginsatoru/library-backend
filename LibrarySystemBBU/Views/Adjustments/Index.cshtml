@@ -9,391 +9,511 @@
             ? "—"
             : (string.IsNullOrWhiteSpace(c.ISBN) ? c.Title : $"{c.Title} ({c.ISBN})");
 
-    var today = DateTime.Today;
-
     var total = Model?.Count() ?? 0;
     var inc = Model?.Count(x => x.QuantityChange >= 0) ?? 0;
     var dec = total - inc;
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-    :root {
-        --brand: #01008C;
-        --brand-50: #e6e6ff;
-        --brand-100: #dfe0ff;
-        --brand-200: #bfc2ff;
-        --brand-300: #9aa1ff;
-        --brand-400: #6666ff;
-        --brand-500: #3d3dff;
-        --brand-600: #1a1aff;
-        --brand-700: #0d0dd6;
-        --brand-800: #05057a;
-        --brand-900: #03034f;
-        --text: #0f0f2e;
-        --muted: #6b7280;
-        --success: #22c55e;
-        --warning: #f59e0b;
-        --danger: #ef4444;
-        --glass-bg: rgba(255,255,255,.16);
-        --glass-border: rgba(255,255,255,.28);
-        --depth-1: 0 6px 16px rgba(1,0,140,.15);
-        --depth-2: 0 12px 28px rgba(1,0,140,.18);
-        --depth-3: 0 16px 40px rgba(1,0,140,.22);
+    .adj-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-    body {
-        background: radial-gradient(60rem 30rem at -10% 0%, rgba(1,0,140,.12), transparent 60%), radial-gradient(60rem 40rem at 120% 10%, rgba(1,0,140,.10), transparent 60%), linear-gradient(180deg,#f7f8ff 0%,#ffffff 100%);
-        color: var(--text);
-    }
-
-    .page-title {
-        display: flex;
-        align-items: center;
-        gap: .6rem;
-        margin: 0 0 .75rem;
-        font-weight: 800;
-        letter-spacing: .3px;
-        text-shadow: 0 2px 0 rgba(255,255,255,.85);
-    }
-
-    .logo-dot {
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: conic-gradient(from 45deg,var(--brand),var(--brand-400),var(--brand));
-        box-shadow: 0 0 0 3px var(--brand-50),0 4px 10px rgba(1,0,140,.30);
-    }
-
-    .toolbar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        align-items: center;
-        padding: 12px 14px;
-        border-radius: 16px;
-        border: 1px solid var(--glass-border);
-        background: linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.65));
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        box-shadow: var(--depth-2);
-    }
-
-        .toolbar:hover {
-            transform: translateY(-2px);
-            transition: .25s ease;
-        }
-
-    .btn-glass {
-        border: 1px solid rgba(255,255,255,.55);
-        background: linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,.55));
-        color: var(--brand-800);
-        padding: 8px 14px;
-        border-radius: 999px;
-        font-weight: 600;
-        box-shadow: var(--depth-1);
-        display: inline-flex;
-        align-items: center;
-        gap: .5rem;
-        transition: transform .18s ease, box-shadow .18s ease;
-    }
-
-        .btn-glass:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--depth-2);
-        }
-
-    .btn-brand {
-        background: linear-gradient(180deg,var(--brand-400),var(--brand));
-        color: #fff;
-        border-color: rgba(255,255,255,.35);
-        text-shadow: 0 1px 0 rgba(0,0,0,.25);
-    }
-
-    .btn-outline {
-        background: linear-gradient(180deg,rgba(255,255,255,.65),rgba(255,255,255,.4));
-        color: var(--brand-800);
-    }
-
-    .segmented {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-
-        .segmented .btn-toggle {
-            padding: 8px 14px;
-            border-radius: 999px;
-            font-weight: 600;
-            cursor: pointer;
-            border: 1px solid rgba(1,0,140,.25);
-            background: linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,.55));
-            box-shadow: var(--depth-1);
-        }
-
-            .segmented .btn-toggle.active {
-                color: #fff;
-                background: linear-gradient(180deg,var(--brand-400),var(--brand));
-                border-color: var(--brand-300);
-                text-shadow: 0 1px 0 rgba(0,0,0,.25);
-            }
-
-    .search-wrap {
-        position: relative;
-        flex: 1 1 320px;
-        min-width: 220px;
-    }
-
-    .search-input {
-        width: 100%;
-        padding: 10px 44px 10px 40px;
-        border-radius: 999px;
-        outline: none;
-        border: 1px solid rgba(1,0,140,.20);
-        background: linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.75));
-        box-shadow: inset 0 1px 2px rgba(0,0,0,.05), var(--depth-1);
-        transition: box-shadow .2s, transform .2s;
-    }
-
-        .search-input:focus {
-            box-shadow: 0 0 0 4px rgba(1,0,140,.15), var(--depth-2);
-            transform: translateY(-1px);
-        }
-
-    .search-icon {
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: .8;
-    }
-
-    .search-clear {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        opacity: .75;
-    }
-
-    .table-wrap {
-        margin-top: 12px;
-        overflow: auto;
-        border-radius: 16px;
-        border: 1px solid rgba(1,0,140,.12);
-        background: linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.85));
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        box-shadow: var(--depth-3);
-    }
-
-    thead th {
-        position: sticky;
-        top: 0;
-        background: linear-gradient(180deg,var(--brand-50),rgba(255,255,255,.92));
-        color: var(--brand-800);
+    .adj-page-title {
+        font-size: 1.5rem;
         font-weight: 700;
-        border-bottom: 2px solid var(--brand-200);
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    tbody tr {
-        transition: transform .15s, box-shadow .15s, background .15s;
-    }
-
-        tbody tr:hover {
-            transform: translateY(-1px);
-            box-shadow: inset 0 0 0 9999px rgba(1,0,140,.03);
+        .adj-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
-    .btn-chip {
-        padding: 6px 10px;
-        border-radius: 999px;
-        font-size: .85rem;
-        border: 1px solid rgba(1,0,140,.25);
-        background: linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.7));
+    .adj-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .adj-btn {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        box-shadow: 0 4px 10px rgba(1,0,140,.10);
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
     }
 
-    .badge-plus {
-        background: rgba(34,197,94,.10);
+        .adj-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+        .adj-btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+    .adj-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .adj-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+
+    .adj-btn-success {
+        background: #f0fdf4;
         color: #15803d;
+        border-color: #bbf7d0;
+    }
+
+        .adj-btn-success:hover {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #86efac;
+            text-decoration: none;
+        }
+
+    .adj-segmented {
+        display: flex;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .adj-seg-btn {
+        padding: 6px 14px;
+        font-size: .82rem;
+        font-weight: 500;
+        border: none;
+        background: #fff;
+        color: #6b7280;
+        cursor: pointer;
+        transition: background .15s, color .15s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .adj-seg-btn:not(:last-child) {
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .adj-seg-btn.active {
+            background: #f3f4f6;
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .adj-search-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 6px 12px;
+        background: #fff;
+        flex: 1;
+        min-width: 200px;
+        max-width: 360px;
+        transition: border-color .15s;
+    }
+
+        .adj-search-wrap:focus-within {
+            border-color: #000080;
+        }
+
+        .adj-search-wrap i {
+            color: #9ca3af;
+            font-size: .85rem;
+        }
+
+    .adj-search-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: .83rem;
+        color: #111827;
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .adj-search-input::placeholder {
+            color: #9ca3af;
+        }
+
+    .adj-search-clear {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #d1d5db;
+        padding: 0;
+        font-size: .85rem;
+    }
+
+        .adj-search-clear:hover {
+            color: #6b7280;
+        }
+
+    .adj-stats {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        flex-wrap: wrap;
+    }
+
+    .adj-stat-pill {
+        font-size: .78rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 4px 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+    }
+
+        .adj-stat-pill strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .adj-table-wrap {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+
+    .adj-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .adj-table thead th {
+            padding: 11px 16px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .adj-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background .1s;
+        }
+
+            .adj-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .adj-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+        .adj-table tbody td {
+            padding: 11px 16px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+            .adj-table tbody td.muted {
+                color: #6b7280;
+            }
+
+        .adj-table .text-end {
+            text-align: right;
+        }
+
+    .badge-plus {
+        background: #dcfce7;
+        color: #166534;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: .78rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
     }
 
     .badge-minus {
-        background: rgba(239,68,68,.12);
-        color: #b91c1c;
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: .78rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
     }
 
-    .bi {
-        vertical-align: -.125em;
+    .adj-actions {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .adj-action-btn {
+        padding: 4px 10px;
+        font-size: .74rem;
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: background .15s;
+    }
+
+        .adj-action-btn:hover {
+            background: #f3f4f6;
+            color: #111827;
+            text-decoration: none;
+        }
+
+    .alert-warning {
+        background: #fffbeb;
+        border: 1px solid #fef3c7;
+        border-radius: 12px;
+        padding: 1rem;
+        color: #92400e;
+        font-size: .88rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 </style>
 
-<h2 class="page-title"><span class="logo-dot"></span> Adjustments</h2>
+<div class="adj-page">
 
-<div class="toolbar">
-    <a asp-action="Create" class="btn-glass btn-brand"><i class="bi bi-plus-circle"></i> Create Adjustment</a>
+    <div class="adj-page-title">Adjustments</div>
 
-    <div class="segmented" role="group" aria-label="Filters">
-        <button type="button" class="btn-toggle active" data-filter="all"><i class="bi bi-grid"></i> All</button>
-       @*  <button type="button" class="btn-toggle" data-filter="increase"><i class="bi bi-graph-up-arrow"></i> Increase</button> *@
-       @*  <button type="button" class="btn-toggle" data-filter="decrease"><i class="bi bi-graph-down-arrow"></i> Decrease</button> *@
-        <button type="button" class="btn-toggle" data-filter="damage"><i class="bi bi-tools"></i> Damage</button>
-        <button type="button" class="btn-toggle" data-filter="lost"><i class="bi bi-x-octagon"></i> Lost</button>
-      @*   <button type="button" class="btn-toggle" data-filter="correction"><i class="bi bi-pencil-square"></i> Correction</button> *@
+    <div class="adj-toolbar">
+        <a class="adj-btn adj-btn-primary" asp-action="Create"><i class="bi bi-plus-circle"></i> Create Adjustment</a>
+
+        <div class="adj-segmented">
+            <button type="button" class="adj-seg-btn active" data-filter="all"><i class="bi bi-grid"></i> All</button>
+            <button type="button" class="adj-seg-btn" data-filter="damage"><i class="bi bi-tools"></i> Damage</button>
+            <button type="button" class="adj-seg-btn" data-filter="lost"><i class="bi bi-x-octagon"></i> Lost</button>
+        </div>
+
+        <div class="adj-search-wrap">
+            <i class="bi bi-search"></i>
+            <input id="globalSearch" class="adj-search-input" placeholder="Search date, type, catalog, reason, user…" />
+            <button class="adj-search-clear" type="button" id="clearSearch"><i class="bi bi-x-circle"></i></button>
+        </div>
+
+        <a class="adj-btn" asp-action="Export"><i class="bi bi-download"></i> Export</a>
+
+        <div class="adj-stats">
+            <span class="adj-stat-pill"><i class="bi bi-layers"></i> Total: <strong id="statTotal">@total</strong></span>
+            <span class="adj-stat-pill"><i class="bi bi-arrow-up-circle-fill" style="color:#22c55e"></i> + <strong id="statInc">@inc</strong></span>
+            <span class="adj-stat-pill"><i class="bi bi-arrow-down-circle-fill" style="color:#ef4444"></i> − <strong id="statDec">@dec</strong></span>
+        </div>
     </div>
 
-    <div class="search-wrap">
-        <i class="bi bi-search search-icon"></i>
-        <input id="globalSearch" class="search-input" placeholder="Search anything… (date, type, catalog, qty, reason, user)" />
-        <button class="search-clear" type="button" id="clearSearch" title="Clear"><i class="bi bi-x-circle"></i></button>
-    </div>
-
-    <div class="d-flex align-items-center gap-2 ms-auto">
-        <span class="btn-chip"><i class="bi bi-layers"></i> Total: <strong id="statTotal">@total</strong></span>
-        <span class="btn-chip"><i class="bi bi-arrow-up-circle-fill" style="color:var(--success)"></i> + <strong id="statInc">@inc</strong></span>
-        <span class="btn-chip"><i class="bi bi-arrow-down-circle-fill" style="color:var(--danger)"></i> − <strong id="statDec">@dec</strong></span>
-
-        <!-- Updated: use server-side Excel export -->
-        <a asp-action="Export" class="btn-glass btn-outline">
-            <i class="bi bi-file-earmark-excel"></i> Export
-        </a>
-    </div>
-</div>
-
-<div class="table-wrap">
-    <table class="table table-striped align-middle" id="adjTable">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Catalog</th>
-                <th>Quantity</th>
-                <th>Reason</th>
-                <th>Adjusted By</th>
-                <th style="min-width:230px;"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                foreach (var item in Model)
+    <div class="adj-table-wrap">
+        <table class="adj-table" id="adjTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Catalog</th>
+                    <th>Quantity</th>
+                    <th>Reason</th>
+                    <th>Adjusted By</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
                 {
-                    var qty = item.QuantityChange;
-                    var badgeClass = qty >= 0 ? "badge-plus" : "badge-minus";
-                    <tr data-type="@item.AdjustmentType.ToLower()"
-                        data-date="@item.AdjustmentDate.ToString("yyyy-MM-dd")"
-                        data-user="@((item.AdjustedByUser?.UserName ?? "—").ToLower())">
-                        <td>@item.AdjustmentDate.ToString("yyyy-MM-dd")</td>
-                        <td>@item.AdjustmentType</td>
-                        <td>@CatalogLabel(item.Catalog)</td>
-                        <td>
-                            <span class="btn-chip @badgeClass">
-                                @(qty >= 0 ? "+" : "−") @Math.Abs(qty)
-                            </span>
-                        </td>
-                        <td>@item.Reason</td>
-                        <td>@(item.AdjustedByUser?.UserName ?? "—")</td>
-                        <td class="text-nowrap">
-                            <a class="btn-glass btn-outline btn-sm" asp-action="Details" asp-route-id="@item.AdjustmentId"><i class="bi bi-eye"></i> Details</a>
-                            <a class="btn-glass btn-outline btn-sm" asp-action="Edit" asp-route-id="@item.AdjustmentId"><i class="bi bi-pencil-square"></i> Edit</a>
-                            <a class="btn-glass btn-outline btn-sm" asp-action="Delete" asp-route-id="@item.AdjustmentId"><i class="bi bi-trash3"></i> Delete</a>
+                    foreach (var item in Model)
+                    {
+                        var qty = item.QuantityChange;
+                        var badgeClass = qty >= 0 ? "badge-plus" : "badge-minus";
+                        var icon = qty >= 0 ? "bi-arrow-up-circle-fill" : "bi-arrow-down-circle-fill";
+                        <tr data-type="@item.AdjustmentType.ToString().ToLower()">
+                            <td class="muted">@item.AdjustmentDate.ToString("yyyy-MM-dd")</td>
+                            <td>@item.AdjustmentType</td>
+                            <td>@CatalogLabel(item.Catalog)</td>
+                            <td>
+                                <span class="@badgeClass">
+                                    <i class="bi @icon"></i>
+                                    @(qty >= 0 ? "+" : "−") @Math.Abs(qty)
+                                </span>
+                            </td>
+                            <td class="muted">@item.Reason</td>
+                            <td class="muted">@(item.AdjustedByUser?.UserName ?? "—")</td>
+                            <td>
+                                <div class="adj-actions">
+                                    <a class="adj-action-btn" asp-action="Details" asp-route-id="@item.AdjustmentId"><i class="bi bi-eye"></i> Details</a>
+                                    <a class="adj-action-btn" asp-action="Edit" asp-route-id="@item.AdjustmentId"><i class="bi bi-pencil-square"></i> Edit</a>
+                                    <a class="adj-action-btn" asp-action="Delete" asp-route-id="@item.AdjustmentId"><i class="bi bi-trash3"></i> Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" style="text-align:center; color:#9ca3af; padding:2rem;">
+                            <i class="bi bi-inboxes" style="font-size:1.2rem;"></i>
+                            <div class="mt-2">No adjustments found.</div>
                         </td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="7" class="text-center text-muted py-4">
-                        <i class="bi bi-inboxes"></i> No adjustments found.
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 
-<div id="noMatches" class="alert alert-warning mt-3 d-none" role="alert">
-    <i class="bi bi-question-circle"></i> No matching results for your filters.
+    <div id="noMatches" class="alert-warning d-none">
+        <i class="bi bi-question-circle"></i>
+        <span>No matching results for your filters.</span>
+    </div>
+
 </div>
 
 @section Scripts {
     <script>
-        (() => {
-            const $ = sel => document.querySelector(sel);
-            const $$ = sel => Array.from(document.querySelectorAll(sel));
+        (function() {
+            const filterBtns = document.querySelectorAll('.adj-seg-btn');
+            const search = document.getElementById('globalSearch');
+            const clearBtn = document.getElementById('clearSearch');
+            const table = document.getElementById('adjTable');
+            const rows = () => Array.from(document.querySelectorAll('#adjTable tbody tr'));
+            const noMsg = document.getElementById('noMatches');
 
-            const segBtns = $$('.segmented .btn-toggle');
-            const search = $('#globalSearch');
-            const clear = $('#clearSearch');
-            const rows = () => $$('#adjTable tbody tr');
-            const noMsg = $('#noMatches');
+            const statTotal = document.getElementById('statTotal');
+            const statInc = document.getElementById('statInc');
+            const statDec = document.getElementById('statDec');
 
-            const statTotal = $('#statTotal');
-            const statInc = $('#statInc');
-            const statDec = $('#statDec');
+            function applyFilter() {
+                const activeFilter = document.querySelector('.adj-seg-btn.active')?.dataset.filter || 'all';
+                const searchTerm = (search.value || '').trim().toLowerCase();
 
-            function applyUI(filter) {
-                segBtns.forEach(b => b.classList.remove('active'));
-                const active = segBtns.find(b => b.dataset.filter === filter);
-                if (active) active.classList.add('active');
+                let visibleCount = 0;
+                let incCount = 0;
+                let decCount = 0;
 
-                const q = (search.value || '').trim().toLowerCase();
+                rows().forEach(row => {
+                    if (row.cells.length === 1) return; // Skip "No adjustments" row
 
-                let vis = 0, inc = 0, dec = 0;
-
-                rows().forEach(r => {
-                    const type = (r.dataset.type || '').toLowerCase();
-                    const text = (r.innerText || '').toLowerCase();
+                    const type = (row.dataset.type || '').toLowerCase();
+                    const text = row.innerText.toLowerCase();
 
                     let show = true;
 
-                    if (filter && filter !== 'all') {
-                        show = type === filter;
+                    // Apply type filter
+                    if (activeFilter !== 'all') {
+                        show = type === activeFilter;
                     }
 
-                    if (show && q) {
-                        show = text.includes(q);
+                    // Apply search filter
+                    if (show && searchTerm) {
+                        show = text.includes(searchTerm);
                     }
 
-                    r.style.display = show ? '' : 'none';
+                    row.style.display = show ? '' : 'none';
 
                     if (show) {
-                        vis++;
-                        // Determine plus/minus from badge class
-                        const isPlus = r.querySelector('.badge-plus') !== null;
-                        if (isPlus) inc++; else dec++;
+                        visibleCount++;
+                        // Check if it's increase or decrease
+                        const qtyCell = row.cells[3];
+                        if (qtyCell) {
+                            const isPlus = qtyCell.querySelector('.badge-plus') !== null;
+                            if (isPlus) incCount++; else decCount++;
+                        }
                     }
                 });
 
-                noMsg.classList.toggle('d-none', vis !== 0);
-                statTotal.textContent = vis;
-                statInc.textContent = inc;
-                statDec.textContent = dec;
+                // Update stats
+                statTotal.textContent = visibleCount;
+                statInc.textContent = incCount;
+                statDec.textContent = decCount;
+
+                // Show/hide no results message
+                noMsg.classList.toggle('d-none', visibleCount > 0);
             }
 
-            // events
-            segBtns.forEach(b => b.addEventListener('click', () => applyUI(b.dataset.filter)));
-            search.addEventListener('input', () => {
-                const active = document.querySelector('.segmented .btn-toggle.active')?.dataset.filter || 'all';
-                applyUI(active);
-            });
-            clear.addEventListener('click', () => {
-                search.value = ''; search.focus();
-                const active = document.querySelector('.segmented .btn-toggle.active')?.dataset.filter || 'all';
-                applyUI(active);
+            // Filter button clicks
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    applyFilter();
+                });
             });
 
-            // init
-            applyUI('all');
+            // Search with debounce
+            let searchTimeout;
+            search.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(applyFilter, 200);
+            });
+
+            // Clear search
+            clearBtn.addEventListener('click', () => {
+                search.value = '';
+                search.focus();
+                applyFilter();
+            });
+
+            // Initial filter
+            applyFilter();
         })();
     </script>
 }

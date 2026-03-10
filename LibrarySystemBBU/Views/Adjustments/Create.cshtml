@@ -15,95 +15,294 @@
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-<div class="container mt-4">
+<style>
+    .adj-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+    }
 
-    <h2 class="page-title">
-        <span class="logo-dot"></span>
-        Create Adjustment
-    </h2>
+    .adj-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-    <div class="toolbar">
-        <a asp-action="Index" class="btn-glass btn-outline">
-            <i class="bi bi-arrow-left-circle"></i> Back
+        .adj-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .adj-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .adj-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .adj-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+    .adj-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .adj-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+
+    .adj-stat-pill {
+        font-size: .78rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 4px 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+    }
+
+        .adj-stat-pill strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .adj-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .adj-section-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .adj-table-wrap {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .adj-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .adj-table thead th {
+            padding: 11px 16px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .adj-table tbody td {
+            padding: 11px 16px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+    .adj-form-label {
+        font-size: .8rem;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: .25rem;
+    }
+
+    .adj-form-control {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: .85rem;
+        transition: border-color .15s;
+    }
+
+        .adj-form-control:focus {
+            outline: none;
+            border-color: #000080;
+        }
+
+    .adj-form-select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: .85rem;
+        background-color: #fff;
+    }
+
+    .adj-btn-sm {
+        padding: 4px 10px;
+        font-size: .74rem;
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: background .15s;
+    }
+
+        .adj-btn-sm:hover {
+            background: #f3f4f6;
+        }
+
+    .adj-btn-danger {
+        background: #fee2e2;
+        color: #991b1b;
+        border-color: #fecaca;
+    }
+
+        .adj-btn-danger:hover {
+            background: #fecaca;
+        }
+
+    .text-danger {
+        color: #dc2626;
+        font-size: .75rem;
+        margin-top: .25rem;
+    }
+</style>
+
+<div class="adj-page">
+    <div class="adj-page-title">Create Adjustment</div>
+
+    <div class="adj-toolbar">
+        <a asp-action="Index" class="adj-btn">
+            <i class="bi bi-arrow-left"></i> Back
         </a>
 
-        <span class="pill">
+        <span class="adj-stat-pill">
             <i class="bi bi-list-ol"></i>
             Rows: <strong id="statRows">@Model.Details.Count</strong>
         </span>
 
-        <span class="pill">
+        <span class="adj-stat-pill">
             <i class="bi bi-plus-slash-minus"></i>
             Total Change: <strong id="statQty">0</strong>
         </span>
 
-        <span class="pill">
+        <span class="adj-stat-pill">
             <i class="bi bi-funnel"></i>
             Type: <strong id="statType">@Model.AdjustmentType</strong>
         </span>
 
-        <button type="submit" form="adjForm" class="btn-glass btn-brand ms-auto">
+        <button type="submit" form="adjForm" class="adj-btn adj-btn-primary ms-auto">
             <i class="bi bi-check2-circle"></i> Save
         </button>
     </div>
 
-    <form asp-action="Create" method="post" id="adjForm" class="mt-3">
+    <form asp-action="Create" method="post" id="adjForm">
         @Html.AntiForgeryToken()
 
-        <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
         <!-- Adjustment Info -->
-        <div class="card-glass glas-all-style">
-            <div class="section-title">
+        <div class="adj-card">
+            <div class="adj-section-title">
                 <i class="bi bi-sliders"></i> Adjustment Info
             </div>
 
             <div class="row g-3">
                 <div class="col-md-4">
-                    <label asp-for="CatalogId" class="form-label"></label>
-                    <select asp-for="CatalogId"
-                            class="form-select"
-                            id="headerCatalog"
-                            asp-items="Model.Catalogs ?? new SelectList(Enumerable.Empty<SelectListItem>())"></select>
+                    <div class="adj-form-label">Catalog</div>
+                    <select asp-for="CatalogId" class="adj-form-select" id="headerCatalog" asp-items="Model.Catalogs ?? new SelectList(Enumerable.Empty<SelectListItem>())">
+                        <option value="">-- Select catalog --</option>
+                    </select>
                     <span asp-validation-for="CatalogId" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-4">
-                    <label asp-for="AdjustmentType" class="form-label"></label>
-                    <select asp-for="AdjustmentType"
-                            class="form-select"
-                            id="adjType"
-                            asp-items="Model.AdjustmentTypes ?? new SelectList(Enumerable.Empty<SelectListItem>())"></select>
+                    <div class="adj-form-label">Adjustment Type</div>
+                    <select asp-for="AdjustmentType" class="adj-form-select" id="adjType" asp-items="Model.AdjustmentTypes ?? new SelectList(Enumerable.Empty<SelectListItem>())">
+                        <option value="">-- Select type --</option>
+                    </select>
                     <span asp-validation-for="AdjustmentType" class="text-danger"></span>
-                    <div class="form-text mt-1" id="typeHint">
-                        Tip: For <strong>Damage/Lost</strong>, each row is one copy; for enter quantities.
+                    <div class="text-muted mt-1" style="font-size:.75rem;" id="typeHint">
+                        Tip: For <strong>Damage/Lost</strong>, each row is one copy; for Correction enter quantities.
                     </div>
                 </div>
 
                 <div class="col-md-4">
-                    <label asp-for="AdjustmentDate" class="form-label"></label>
-                    <input asp-for="AdjustmentDate" class="form-control" type="date" />
+                    <div class="adj-form-label">Adjustment Date</div>
+                    <input asp-for="AdjustmentDate" class="adj-form-control" type="date" />
                     <span asp-validation-for="AdjustmentDate" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-4">
-                    <label asp-for="QuantityChange" class="form-label">Total Quantity Change (auto)</label>
-                    <input asp-for="QuantityChange" class="form-control" id="qtyTotal" readonly />
+                    <div class="adj-form-label">Total Quantity Change (auto)</div>
+                    <input asp-for="QuantityChange" class="adj-form-control" id="qtyTotal" readonly />
                     <span asp-validation-for="QuantityChange" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-8">
-                    <label asp-for="Reason" class="form-label"></label>
-                    <input asp-for="Reason" class="form-control" />
+                    <div class="adj-form-label">Reason</div>
+                    <input asp-for="Reason" class="adj-form-control" />
                     <span asp-validation-for="Reason" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-4">
-                    <label asp-for="AdjustedByUserId" class="form-label">Adjusted By</label>
-                    <select asp-for="AdjustedByUserId"
-                            class="form-select"
-                            asp-items="Model.Users ?? new SelectList(Enumerable.Empty<SelectListItem>())">
+                    <div class="adj-form-label">Adjusted By</div>
+                    <select asp-for="AdjustedByUserId" class="adj-form-select" asp-items="Model.Users ?? new SelectList(Enumerable.Empty<SelectListItem>())">
                         <option value="">-- Select user --</option>
                     </select>
                     <span asp-validation-for="AdjustedByUserId" class="text-danger"></span>
@@ -112,22 +311,18 @@
         </div>
 
         <!-- Details -->
-        <div class="card-glass glas-all-style mt-3">
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
-                <div class="section-title mb-0">
+        <div class="adj-card mt-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="adj-section-title mb-0">
                     <i class="bi bi-list-check"></i> Details
                 </div>
 
-                <div class="d-flex gap-2 flex-wrap">
-                    <button type="button"
-                            class="btn-glass btn-outline"
-                            id="addRowBtn">
-                        <i class="bi bi-plus-circle"></i> Add row
-                    </button>
-                </div>
+                <button type="button" class="adj-btn" id="addRowBtn">
+                    <i class="bi bi-plus-circle"></i> Add row
+                </button>
             </div>
 
-            @* Hidden Select for initial server-side options (used for edit/first render) *@
+            <!-- Hidden Select for initial server-side options -->
             <select id="bookOptionsSource" class="d-none">
                 @if (Model.Books != null)
                 {
@@ -144,19 +339,13 @@
 
             <span asp-validation-for="Details" class="text-danger"></span>
 
-            <div class="table-wrap mt-2">
-                <table class="table table-sm table-bordered align-middle mb-0" id="detailsTable">
+            <div class="adj-table-wrap">
+                <table class="adj-table" id="detailsTable">
                     <thead>
                         <tr>
-                            <th class="book-col" style="width:35%">
-                                <i class="bi bi-upc-scan me-1"></i> Book / Barcode
-                            </th>
-                            <th style="width:15%">
-                                <i class="bi bi-plus-slash-minus me-1"></i> Qty
-                            </th>
-                            <th>
-                                <i class="bi bi-stickies me-1"></i> Note
-                            </th>
+                            <th class="book-col" style="width:35%">Book / Barcode</th>
+                            <th style="width:15%">Qty</th>
+                            <th>Note</th>
                             <th style="width:60px"></th>
                         </tr>
                     </thead>
@@ -168,32 +357,24 @@
                                 <input type="hidden" asp-for="Details[@i].CatalogId" class="row-catalog" />
 
                                 <td class="book-cell">
-                                    <select asp-for="Details[@i].BookId"
-                                            class="form-select book-select"
-                                            asp-items="Model.Books ?? new List<SelectListItem>()">
+                                    <select asp-for="Details[@i].BookId" class="adj-form-select book-select" asp-items="Model.Books ?? new List<SelectListItem>()">
                                         <option value="">-- select book --</option>
                                     </select>
                                     <span asp-validation-for="Details[@i].BookId" class="text-danger"></span>
                                 </td>
 
                                 <td>
-                                    <input asp-for="Details[@i].QuantityChanged"
-                                           class="form-control qty-input"
-                                           type="number" />
+                                    <input asp-for="Details[@i].QuantityChanged" class="adj-form-control qty-input" type="number" />
                                     <span asp-validation-for="Details[@i].QuantityChanged" class="text-danger"></span>
                                 </td>
 
                                 <td>
-                                    <input asp-for="Details[@i].Note" class="form-control" />
+                                    <input asp-for="Details[@i].Note" class="adj-form-control" />
                                     <span asp-validation-for="Details[@i].Note" class="text-danger"></span>
                                 </td>
 
                                 <td class="text-center">
-                                    <button type="button"
-                                            class="btn btn-sm btn-outline-danger"
-                                            onclick="removeDetailRow(this)">
-                                        ×
-                                    </button>
+                                    <button type="button" class="adj-btn-sm adj-btn-danger" onclick="removeDetailRow(this)">×</button>
                                 </td>
                             </tr>
                         }
@@ -203,11 +384,11 @@
         </div>
 
         <div class="mt-3 d-flex gap-2">
-            <button type="submit" class="btn-glass btn-brand">
+            <button type="submit" class="adj-btn adj-btn-primary">
                 <i class="bi bi-check2-circle"></i> Save
             </button>
-            <a asp-action="Index" class="btn-glass btn-outline">
-                <i class="bi bi-arrow-left-circle"></i> Cancel
+            <a asp-action="Index" class="adj-btn">
+                <i class="bi bi-arrow-left"></i> Cancel
             </a>
         </div>
     </form>
@@ -228,13 +409,13 @@
 
         const booksUrl = '@Url.Action("GetBooksForCatalog", "Adjustments")';
 
-        let currentBooks = []; // from AJAX, filtered by catalog
+        let currentBooks = [];
 
         function normalizeByType(v) {
             if (Number.isNaN(v)) return 0;
             const t = adjType?.value || '';
             if (t === 'Damage' || t === 'Lost') return -Math.abs(v);
-            return v; // Correction / other
+            return v;
         }
 
         function recalcTotal() {
@@ -247,18 +428,10 @@
                 sum += normalizeByType(raw);
             });
 
-            if (qtyTotal) {
-                qtyTotal.value = sum;
-            }
-            if (statQty) {
-                statQty.textContent = sum;
-            }
-            if (statRows) {
-                statRows.textContent = rows;
-            }
-            if (statType && adjType) {
-                statType.textContent = adjType.value || '—';
-            }
+            if (qtyTotal) qtyTotal.value = sum;
+            if (statQty) statQty.textContent = sum;
+            if (statRows) statRows.textContent = rows;
+            if (statType && adjType) statType.textContent = adjType.value || '—';
 
             updateTypeHint(sum);
         }
@@ -269,7 +442,7 @@
             const t = adjType?.value || '';
             if (t === 'Damage' || t === 'Lost') {
                 hint.innerHTML = "For <strong>Damage/Lost</strong>, each row represents <strong>one copy</strong>. Current total: <strong>" + sum + "</strong>";
-            }else {
+            } else {
                 hint.innerHTML = "Tip: Enter positive or negative numbers as needed (Correction). Current total: <strong>" + sum + "</strong>";
             }
         }
@@ -293,7 +466,6 @@
                 if (sel) sel.disabled = !showBook;
             });
 
-            // For Damage/Lost, force qty = 1 and readonly
             document.querySelectorAll('.qty-input').forEach(inp => {
                 if (showBook) {
                     inp.value = 1;
@@ -320,7 +492,7 @@
                 currentBooks = await response.json();
                 updateAllBookSelects();
             } catch (e) {
-                console.error('Error loading books for catalog', e);
+                console.error('Error loading books', e);
             }
         }
 
@@ -340,14 +512,12 @@
                 });
             });
 
-            // Also push CatalogId into hidden per-row field
             const catId = headerCatalog?.value || '';
             detailsBody.querySelectorAll('.row-catalog').forEach(h => {
                 h.value = catId;
             });
         }
 
-        // Initial wiring + total
         wireQtyInputs(detailsBody);
         adjType?.addEventListener('change', () => {
             updateBookColumnVisibility();
@@ -367,22 +537,22 @@
             const row = document.createElement('tr');
             row.className = 'detail-row';
             row.innerHTML = `
-                        <input name="Details[${index}].AdjustmentDetailId" type="hidden" />
-                        <input name="Details[${index}].CatalogId" class="row-catalog" type="hidden" value="${headerCatalog.value || ''}" />
-                        <td class="book-cell">
-                            <select name="Details[${index}].BookId" class="form-select book-select">
-                                <option value="">-- select book --</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input name="Details[${index}].QuantityChanged" class="form-control qty-input" type="number" />
-                        </td>
-                        <td>
-                            <input name="Details[${index}].Note" class="form-control" />
-                        </td>
-                        <td class="text-center">
-                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeDetailRow(this)">×</button>
-                        </td>`;
+                <input type="hidden" name="Details[${index}].AdjustmentDetailId" />
+                <input type="hidden" name="Details[${index}].CatalogId" class="row-catalog" value="${headerCatalog.value || ''}" />
+                <td class="book-cell">
+                    <select name="Details[${index}].BookId" class="adj-form-select book-select">
+                        <option value="">-- select book --</option>
+                    </select>
+                </td>
+                <td>
+                    <input name="Details[${index}].QuantityChanged" class="adj-form-control qty-input" type="number" />
+                </td>
+                <td>
+                    <input name="Details[${index}].Note" class="adj-form-control" />
+                </td>
+                <td class="text-center">
+                    <button type="button" class="adj-btn-sm adj-btn-danger" onclick="removeDetailRow(this)">×</button>
+                </td>`;
 
             detailsBody.appendChild(row);
             wireQtyInputs(row);

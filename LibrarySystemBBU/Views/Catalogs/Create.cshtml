@@ -407,7 +407,7 @@
             const tr    = document.createElement('tr');
             tr.innerHTML = `
                 <td><input name="Books[${idx}].BookId" value="0" type="hidden"/><input name="Books[${idx}].CatalogId" value="00000000-0000-0000-0000-000000000000" type="hidden"/><input name="Books[${idx}].Barcode" class="form-control"/></td>
-                <td><input name="Books[${idx}].Status" class="form-control" value="Available"/></td>
+                <td><select name="Books[${idx}].Status" class="form-select"><option value="Available" selected>Available</option><option value="Borrowed">Borrowed</option><option value="Lost">Lost</option><option value="Damaged">Damaged</option></select></td>
                 <td><input name="Books[${idx}].Location" class="form-control"/></td>
                 <td><input name="Books[${idx}].AcquisitionDate" type="date" class="form-control" value="${today}"/></td>
                 <td class="text-center"><button type="button" class="cat-remove-btn" onclick="removeBookRow(this)"><i class="bi bi-x-lg"></i></button></td>`;

@@ -182,6 +182,7 @@ wwwroot\jquery-validate\localization\methods_pt.js
 wwwroot\jquery-validate\localization\methods_pt.min.js
 wwwroot\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js
 wwwroot\jquery\jquery.min.js
+wwwroot\templates\CatalogImportTemplate.xlsx
 wwwroot\uploads\28a43fa6-bc08-46af-84d0-d2b95822bc3c_Lesson 6 Function.pdf
 wwwroot\uploads\3e4ac152-76aa-4d07-a2eb-65dfdbbcb85b_Lucid_Origin_A_tranquil_Japanese_zen_garden_scene_with_a_multi_3.jpg
 wwwroot\uploads\45928cf4-dfec-4b77-bcd8-3e7a79e930d4_SoKun Nheus (2).png
@@ -221,6 +222,8 @@ wwwroot\uploads\members\02c2038b-28e2-4068-ba99-83eb8c787db2.png
 wwwroot\uploads\members\0c23e139-dac5-4fb5-8987-a3163bf00bff.webp
 wwwroot\uploads\members\2616404f-4a52-4c34-b178-8bb6841263d4.png
 wwwroot\uploads\members\4e01beb5-bb75-4fd6-9c4d-a713a3d839b9.jpg
+wwwroot\uploads\members\69836b02-4f66-434e-9943-b464bfd3163e.jpg
+wwwroot\uploads\members\6ffae53f-991b-4e2e-a2ef-2396d929d843.png
 wwwroot\uploads\members\9c94bf2a-19e9-42a4-a9a0-ade1a1883752.jpg
 wwwroot\uploads\members\9d3199b7-da31-4019-9660-cfb2b4ee34e1.png
 wwwroot\uploads\members\c861448d-85b8-474c-b8fa-0635c593be63.jpg

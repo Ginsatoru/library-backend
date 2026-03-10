@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using LibrarySystemBBU.Data;
+using LibrarySystemBBU.Hubs;
 using LibrarySystemBBU.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystemBBU.Controllers
 {
@@ -17,11 +19,13 @@ namespace LibrarySystemBBU.Controllers
     {
         private readonly DataContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IHubContext<NotificationHub> _hub;
 
-        public UsersController(DataContext context, IWebHostEnvironment webHostEnvironment)
+        public UsersController(DataContext context, IWebHostEnvironment webHostEnvironment, IHubContext<NotificationHub> hub)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _hub = hub;
         }
 
         private void PopulateRolesDropDownList(object selectedRole = null)
@@ -66,19 +70,24 @@ namespace LibrarySystemBBU.Controllers
                 user.Created = DateTime.UtcNow;
                 user.Modified = DateTime.UtcNow;
 
-                // ✅ Hash the password before saving
                 if (!string.IsNullOrWhiteSpace(user.Password))
-                {
                     user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                }
 
                 if (ProfilePicture != null && ProfilePicture.Length > 0)
-                {
                     user.ProfilePicturePath = await SaveProfilePicture(ProfilePicture);
-                }
 
                 _context.Add(user);
                 await _context.SaveChangesAsync();
+
+                // ── SignalR ──
+                await _hub.Clients.All.SendAsync("NewUserCreated", new
+                {
+                    userId = user.Id,
+                    fullName = $"{user.FirstName} {user.LastName}".Trim(),
+                    userName = user.UserName,
+                    role = user.RoleName
+                });
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -124,11 +133,8 @@ namespace LibrarySystemBBU.Controllers
                 existingUser.IsActive = user.IsActive;
                 existingUser.Modified = DateTime.UtcNow;
 
-               
                 if (!string.IsNullOrWhiteSpace(user.Password))
-                {
                     existingUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                }
 
                 if (ProfilePicture != null && ProfilePicture.Length > 0)
                 {
@@ -178,10 +184,7 @@ namespace LibrarySystemBBU.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UsersExists(Guid id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
+        private bool UsersExists(Guid id) => _context.Users.Any(e => e.Id == id);
 
         private async Task<string> SaveProfilePicture(IFormFile profilePicture)
         {
@@ -200,9 +203,7 @@ namespace LibrarySystemBBU.Controllers
             var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
-            {
                 await profilePicture.CopyToAsync(stream);
-            }
 
             return $"/uploads/profiles/{uniqueFileName}";
         }
@@ -210,13 +211,9 @@ namespace LibrarySystemBBU.Controllers
         private void DeleteProfilePicture(string profilePicturePath)
         {
             if (string.IsNullOrEmpty(profilePicturePath)) return;
-
             var filePath = Path.Combine(_webHostEnvironment.WebRootPath, profilePicturePath.TrimStart('/'));
             if (System.IO.File.Exists(filePath))
-            {
-                try { System.IO.File.Delete(filePath); }
-                catch {  }
-            }
+                try { System.IO.File.Delete(filePath); } catch { }
         }
     }
 }

@@ -87,6 +87,19 @@
             border-color: #00006a;
         }
 
+    .cat-btn-green {
+        background: #f0fdf4;
+        color: #15803d;
+        border-color: #bbf7d0;
+    }
+
+        .cat-btn-green:hover {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #86efac;
+            text-decoration: none;
+        }
+
     .cat-segmented {
         display: flex;
         border: 1px solid #e5e7eb;
@@ -266,7 +279,7 @@
 
     .cat-cards-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        grid-template-columns: repeat(6, 1fr);
         gap: 18px;
         margin-bottom: 1rem;
     }
@@ -287,7 +300,7 @@
         }
 
     .cat-card-cover {
-        height: 350px;
+        height: 260px;
         overflow: hidden;
         background: #f3f4f6;
         flex-shrink: 0;
@@ -307,15 +320,15 @@
     }
 
     .cat-card-body {
-        padding: 14px 14px 8px;
+        padding: 10px 12px 6px;
         flex: 1;
     }
 
     .cat-card-title {
-        font-size: .875rem;
+        font-size: .84rem;
         font-weight: 600;
         color: #111827;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
         line-height: 1.4;
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -341,7 +354,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 4px;
-        padding: 8px 14px 10px;
+        padding: 6px 12px 8px;
         border-top: 1px solid #f3f4f6;
         margin-top: 8px;
     }
@@ -361,7 +374,7 @@
     .cat-card-actions {
         display: flex;
         gap: 5px;
-        padding: 8px 14px 12px;
+        padding: 6px 12px 10px;
         border-top: 1px solid #f3f4f6;
     }
 
@@ -411,6 +424,7 @@
 
         <a class="cat-btn" asp-action="Export"><i class="bi bi-download"></i> Export</a>
         <button type="button" class="cat-btn" id="openImportBtn"><i class="bi bi-upload"></i> Import</button>
+        <a class="cat-btn cat-btn-green" asp-action="DownloadTemplate"><i class="bi bi-file-earmark-excel"></i> Template</a>
 
         <div class="cat-stats">
             <span class="cat-stat-pill"><i class="bi bi-journal-text"></i> Catalogs: <strong id="statCount">—</strong></span>
@@ -470,7 +484,7 @@
 @section Scripts {
     <script>
         (function () {
-            const FALLBACK = 'https://www.forewordreviews.com/books/covers/fallback-position.jpg';
+            const FALLBACK = 'https://img.freepik.com/free-photo/close-book-with-blue-cover_1101-92.jpg';
 
             let allCatalogs = [], filtered = [];
             let pageIndex = 1, cardPageIndex = 1;

@@ -4,451 +4,451 @@
     var today = DateTime.Today;
 }
 
-<!-- Anti-Forgery for AJAX -->
 <form id="__af" method="post" style="display:none;">
     @Html.AntiForgeryToken()
 </form>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-    /* =========================
-               Scoped ONLY to this page
-               ========================== */
-    #loanDetailsPage .muted {
-        color: var(--muted);
-        font-size: .92rem;
+    .borrow-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-    #loanDetailsPage .toolbar {
-        margin-bottom: 12px;
-    }
-
-    #loanDetailsPage .loan-section {
-        margin-bottom: 14px;
-    }
-
-    #loanDetailsPage .card-glass.glas-all-style .card-header {
-        padding: 14px 16px;
-        border-bottom: 1px solid rgba(1,0,140,.12);
+    .borrow-page-title {
+        font-size: 1.5rem;
         font-weight: 700;
-        color: var(--brand-700, #00007a);
-        background: linear-gradient(180deg,var(--brand-50, #eef0ff),rgba(255,255,255,.8));
-        border-top-left-radius: 16px;
-        border-top-right-radius: 16px;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    #loanDetailsPage .card-glass.glas-all-style .card-body {
-        padding: 16px;
-    }
-
-    #loanDetailsPage .pill-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(160px,1fr));
-        gap: 10px;
-    }
-
-    #loanDetailsPage .pill .k {
-        font-size: .82rem;
-        color: var(--muted);
-    }
-
-    #loanDetailsPage .pill .v {
-        font-weight: 800;
-        letter-spacing: .3px;
-    }
-
-    #loanDetailsPage .table-wrap {
-        overflow: auto;
-        border-radius: 16px;
-        border: 1px solid rgba(1,0,140,.12);
-        background: linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.85));
-        box-shadow: 0 12px 30px rgba(1,0,140,.12);
-    }
-
-    #loanDetailsPage thead th {
-        position: sticky;
-        top: 0;
-        background: linear-gradient(180deg,var(--brand-50),rgba(255,255,255,.92));
-        color: var(--brand-700);
-        font-weight: 700;
-        border-bottom: 2px solid var(--brand-200);
-    }
-
-    #loanDetailsPage tbody tr {
-        transition: transform .15s, box-shadow .15s, background .15s;
-    }
-
-        #loanDetailsPage tbody tr:hover {
-            transform: translateY(-1px);
-            box-shadow: inset 0 0 0 9999px rgba(1,0,140,.03);
+        .borrow-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
-    #loanDetailsPage .status-chip {
-        display: inline-flex;
+    .borrow-toolbar {
+        display: flex;
         align-items: center;
-        gap: .4rem;
-        padding: 6px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(1,0,140,.25);
-        background: linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.75));
-        box-shadow: 0 4px 10px rgba(1,0,140,.10);
-        font-size: .9rem;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
     }
 
-    /* ============================================================
-           ✅ Make DETAILS Return popup match INDEX popup + 100% responsive
-           - same glass theme classes
-           - max-width uses viewport (mobile = full width)
-           ============================================================ */
+    .borrow-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .borrow-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+    .borrow-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .borrow-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+
+    .borrow-stat-pill {
+        font-size: .78rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 4px 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+    }
+
+        .borrow-stat-pill strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .borrow-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .borrow-section-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .borrow-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .borrow-info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .borrow-info-label {
+        font-size: .75rem;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+    }
+
+    .borrow-info-value {
+        font-size: .95rem;
+        font-weight: 500;
+        color: #111827;
+    }
+
+    .borrow-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: .74rem;
+        font-weight: 500;
+    }
+
+    .status-success {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-warning {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-danger {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .borrow-table-wrap {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .borrow-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .borrow-table thead th {
+            padding: 11px 16px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .borrow-table tbody td {
+            padding: 11px 16px;
+            color: #374151;
+            vertical-align: middle;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .borrow-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    /* SweetAlert2 styles */
     .swal2-container {
         z-index: 10000 !important;
     }
 
-        .swal2-container.swal2-backdrop-show {
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            background: radial-gradient(40rem 25rem at -10% -10%, rgba(1,0,140,.18), transparent 60%), radial-gradient(40rem 25rem at 110% 0%, rgba(1,0,140,.13), transparent 60%), linear-gradient(180deg, rgba(15,23,42,.6), rgba(15,23,42,.85));
-        }
-
-    .swal2-popup.glass-popup {
-        border-radius: 18px;
-        padding: 1.4rem 1.6rem;
-        background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(255,255,255,.86));
-        border: 1px solid rgba(255,255,255,.4);
-        box-shadow: 0 18px 45px rgba(15,23,42,.45);
-        /* ✅ 100% responsive */
-        width: min(520px, calc(100vw - 24px));
-        max-width: calc(100vw - 24px);
-        box-sizing: border-box;
+    .swal2-popup.borrow-popup {
+        border-radius: 14px;
+        padding: 1.4rem;
+        border: 1px solid #e5e7eb;
+        font-family: 'Inter', sans-serif;
     }
 
-        .swal2-popup.glass-popup .swal2-title.glass-title {
-            font-weight: 800;
-            letter-spacing: .02em;
-            color: #020617;
-            margin-bottom: .6rem;
-        }
-
-        .swal2-popup.glass-popup .swal2-html-container {
-            margin: .2rem 0 .4rem;
-        }
-
-        .swal2-popup.glass-popup .swal2-input,
-        .swal2-popup.glass-popup .swal2-textarea {
-            border-radius: 8px;
-            border: 1px solid rgba(148,163,184,.65);
-            background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,250,252,.9));
-            box-shadow: inset 0 1px 2px rgba(15,23,42,.12);
-            font-size: .9rem;
-            padding: .45rem .6rem;
-            margin: .25rem 0 .4rem;
-        }
-
-        .swal2-popup.glass-popup .swal2-textarea {
-            width: 100% !important;
-            box-sizing: border-box;
-            min-height: 80px;
-        }
-
-            .swal2-popup.glass-popup .swal2-input:focus,
-            .swal2-popup.glass-popup .swal2-textarea:focus {
-                outline: none;
-                border-color: var(--brand-400, #6366f1);
-                box-shadow: 0 0 0 2px rgba(99,102,241,.25);
-            }
-
-    .glass-btn-confirm,
-    .glass-btn-cancel {
-        border-radius: 999px;
-        padding: .45rem 1rem;
-        font-weight: 600;
-        font-size: .9rem;
-        border: 1px solid rgba(255,255,255,.5);
-        box-shadow: 0 8px 18px rgba(15,23,42,.25);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: .35rem;
-    }
-
-    .glass-btn-confirm {
-        background: linear-gradient(180deg, #818cf8, #4f46e5);
-        color: #fff;
-        text-shadow: 0 1px 0 rgba(0,0,0,.25);
-    }
-
-    .glass-btn-cancel {
-        background: linear-gradient(180deg, rgba(248,250,252,.95), rgba(226,232,240,.95));
-        color: #0f172a;
-    }
-
-        .glass-btn-confirm:hover,
-        .glass-btn-cancel:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 12px 24px rgba(15,23,42,.3);
-        }
-
-    /* ===== Layout for RETURN dialog (same as Index) ===== */
     .return-dialog {
         text-align: left;
-        font-size: .9rem;
     }
 
     .return-label {
-        display: block;
-        font-weight: 600;
         font-size: .8rem;
-        color: #64748b;
-        margin-bottom: .15rem;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: .25rem;
     }
 
-    .return-row {
-        margin-bottom: .45rem;
+    .return-input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: .85rem;
+        margin-bottom: .75rem;
     }
 
-    .return-row-grid {
+        .return-input:focus {
+            outline: none;
+            border-color: #000080;
+        }
+
+    .return-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: .5rem .75rem;
-        margin-bottom: .35rem;
+        grid-template-columns: repeat(2, 1fr);
+        gap: .75rem;
     }
 
     .return-summary {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: .75rem;
         font-size: .85rem;
-        line-height: 1.6;
-        margin-bottom: .5rem;
-        padding: .45rem .6rem;
-        border-radius: 10px;
-        background: linear-gradient(135deg, rgba(241,245,249,.95), rgba(226,232,240,.9));
-        border: 1px solid rgba(148,163,184,.55);
+        margin-bottom: .75rem;
     }
 
         .return-summary strong {
-            font-weight: 700;
+            color: #000080;
         }
-
-        .return-summary .primary {
-            color: #1d4ed8;
-        }
-
-    @@media (max-width: 600px) {
-        .swal2-popup.glass-popup {
-            padding: 1.1rem 1.2rem;
-            width: calc(100vw - 16px);
-            max-width: calc(100vw - 16px);
-        }
-
-        .return-row-grid {
-            grid-template-columns: 1fr;
-        }
-    }
 </style>
 
-<div id="loanDetailsPage">
+<div class="borrow-page">
     @if (TempData["Msg"] != null)
     {
-        <div class="alert alert-info">@TempData["Msg"]</div>
+        <div class="alert alert-info" style="border-radius:12px;">@TempData["Msg"]</div>
     }
 
-    <h2 class="page-title">
-        <span class="logo-dot"></span>
-        Borrow Book's Details
-    </h2>
+    <div class="borrow-page-title">Borrow Book's Details</div>
 
-    <div class="toolbar d-flex flex-wrap gap-2 align-items-center justify-content-between">
-        <div class="muted">
-            <i class="bi bi-info-circle"></i>
-            Quick overview of the Borrow, items, and returns.
+    <div class="borrow-toolbar">
+        <div class="borrow-stat-pill">
+            <i class="bi bi-info-circle"></i> Quick overview of the Borrow, items, and returns.
         </div>
-        <div class="d-flex flex-wrap gap-2">
+        <div class="ms-auto d-flex gap-2">
             @if (!Model.IsReturned)
             {
-                <button type="button" class="btn-glass btn-brand btn-return"
+                <button type="button" class="borrow-btn borrow-btn-primary btn-return"
                         data-loanid="@Model.LoanId"
                         data-deposit="@(Model.DepositAmount?.ToString("0.00") ?? "0")">
                     <i class="bi bi-arrow-return-left"></i> Return
                 </button>
             }
-            <a asp-action="Edit" asp-route-id="@Model.LoanId" class="btn-glass">
+            <a asp-action="Edit" asp-route-id="@Model.LoanId" class="borrow-btn">
                 <i class="bi bi-pencil-square"></i> Edit
             </a>
-            <a asp-action="Index" class="btn-glass">
-                <i class="bi bi-arrow-left-circle"></i> Back
+            <a asp-action="Index" class="borrow-btn">
+                <i class="bi bi-arrow-left"></i> Back
             </a>
         </div>
     </div>
 
     <!-- HEADER SUMMARY -->
-    <div class="card-glass glas-all-style loan-section">
-        <div class="card-header">
+    <div class="borrow-card">
+        <div class="borrow-section-title">
             <i class="bi bi-clipboard-data"></i> Borrow Summary
         </div>
-        <div class="card-body">
-            <div class="pill-grid">
-                <div class="pill">
-                    <div class="k"><i class="bi bi-person-badge"></i> Member</div>
-                    <div class="v">
-                        @if (Model.LibraryMember != null)
-                        {
-                            <a asp-controller="Members"
-                               asp-action="Details"
-                               asp-route-id="@Model.MemberId"
-                               class="text-decoration-none">
-                                @Model.LibraryMember.FullName
-                            </a>
-                        }
-                    </div>
-                </div>
-
-                <div class="pill">
-                    <div class="k"><i class="bi bi-calendar-date"></i> Borrow Date</div>
-                    <div class="v">@Model.LoanDate.ToString("yyyy-MM-dd")</div>
-                </div>
-
-                <div class="pill">
-                    <div class="k"><i class="bi bi-calendar2-event"></i> Due Date</div>
-                    <div class="v">@Model.DueDate.ToString("yyyy-MM-dd")</div>
-                </div>
-
-                <div class="pill">
-                    <div class="k"><i class="bi bi-flag"></i> Status</div>
-                    <div class="v">
-                        @if (Model.IsReturned)
-                        {
-                            <span class="status-chip" style="border-color:rgba(34,197,94,.35)">
-                                <i class="bi bi-check-circle-fill" style="color:var(--ok)"></i> Returned
-                            </span>
-                        }
-                        else if (Model.DueDate.Date <= today)
-                        {
-                            <span class="status-chip" style="border-color:rgba(239,68,68,.35)">
-                                <i class="bi bi-exclamation-octagon-fill" style="color:var(--danger)"></i> Overdue
-                            </span>
-                        }
-                        else
-                        {
-                            <span class="status-chip" style="border-color:rgba(245,158,11,.35)">
-                                <i class="bi bi-hourglass-split" style="color:var(--warn)"></i> In Progress
-                            </span>
-                        }
-                    </div>
-                </div>
-
-                <div class="pill">
-                    <div class="k"><i class="bi bi-cash-coin"></i> Borrowing Fee</div>
-                    <div class="v">@Model.BorrowingFee.ToString("0.00")</div>
-                </div>
-
-                <div class="pill">
-                    <div class="k"><i class="bi bi-receipt"></i> Paid</div>
-                    <div class="v">@(Model.IsPaid ? "Yes" : "No")</div>
-                </div>
-
-                <div class="pill">
-                    <div class="k"><i class="bi bi-piggy-bank"></i> Deposit</div>
-                    <div class="v">@(Model.DepositAmount?.ToString("0.00") ?? "-")</div>
-                </div>
-
-                <div class="pill">
-                    <div class="k"><i class="bi bi-collection"></i> Items / Returns</div>
-                    <div class="v">@((Model.LoanBookDetails?.Count ?? 0)) / @((Model.BookReturns?.Count ?? 0))</div>
-                </div>
+        <div class="borrow-info-grid">
+            <div class="borrow-info-item">
+                <span class="borrow-info-label">Member</span>
+                <span class="borrow-info-value">
+                    @if (Model.LibraryMember != null)
+                    {
+                        <a asp-controller="Members" asp-action="Details" asp-route-id="@Model.MemberId" style="color:#000080; text-decoration:none;">
+                            @Model.LibraryMember.FullName
+                        </a>
+                    }
+                </span>
+            </div>
+            <div class="borrow-info-item">
+                <span class="borrow-info-label">Borrow Date</span>
+                <span class="borrow-info-value">@Model.LoanDate.ToString("yyyy-MM-dd")</span>
+            </div>
+            <div class="borrow-info-item">
+                <span class="borrow-info-label">Due Date</span>
+                <span class="borrow-info-value">@Model.DueDate.ToString("yyyy-MM-dd")</span>
+            </div>
+            <div class="borrow-info-item">
+                <span class="borrow-info-label">Status</span>
+                <span class="borrow-info-value">
+                    @if (Model.IsReturned)
+                    {
+                        <span class="borrow-status status-success">
+                            <i class="bi bi-check-circle-fill"></i> Returned
+                        </span>
+                    }
+                    else if (Model.DueDate.Date <= today)
+                    {
+                        <span class="borrow-status status-danger">
+                            <i class="bi bi-exclamation-octagon-fill"></i> Overdue
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="borrow-status status-warning">
+                            <i class="bi bi-hourglass-split"></i> In Progress
+                        </span>
+                    }
+                </span>
+            </div>
+            <div class="borrow-info-item">
+                <span class="borrow-info-label">Borrowing Fee</span>
+                <span class="borrow-info-value">@Model.BorrowingFee.ToString("0.00") ៛</span>
+            </div>
+            <div class="borrow-info-item">
+                <span class="borrow-info-label">Paid</span>
+                <span class="borrow-info-value">@(Model.IsPaid ? "Yes" : "No")</span>
+            </div>
+            <div class="borrow-info-item">
+                <span class="borrow-info-label">Deposit</span>
+                <span class="borrow-info-value">@(Model.DepositAmount?.ToString("0.00") ?? "-") ៛</span>
+            </div>
+            <div class="borrow-info-item">
+                <span class="borrow-info-label">Items / Returns</span>
+                <span class="borrow-info-value">@((Model.LoanBookDetails?.Count ?? 0)) / @((Model.BookReturns?.Count ?? 0))</span>
             </div>
         </div>
     </div>
 
     <!-- ITEMS -->
-    <div class="card-glass glas-all-style loan-section">
-        <div class="card-header">
+    <div class="borrow-card">
+        <div class="borrow-section-title">
             <i class="bi bi-journal-bookmark"></i> Borrow Items
         </div>
-        <div class="card-body">
-            <div class="table-wrap">
-                <table class="table table-striped align-middle mb-0">
-                    <thead>
-                        <tr>
-                            <th>Book</th>
-                            <th>Catalog</th>
-                            <th>Condition Out</th>
-                            <th>Condition In</th>
-                            <th>Fine</th>
-                            <th>Reason</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.LoanBookDetails != null && Model.LoanBookDetails.Any())
-                        {
-                            foreach (var d in Model.LoanBookDetails)
-                            {
-                                <tr>
-                                    <td>@(d.Book != null ? d.Book.Barcode : d.BookId)</td>
-                                    <td>@(string.IsNullOrWhiteSpace(d.Book?.Catalog?.Title) ? d.CatalogId.ToString() : d.Book!.Catalog!.Title)</td>
-                                    <td>@d.ConditionOut</td>
-                                    <td>@d.ConditionIn</td>
-                                    <td>@(d.FineDetailAmount?.ToString("0.00") ?? "-")</td>
-                                    <td>@d.FineDetailReason</td>
-                                </tr>
-                            }
-                        }
-                        else
+        <div class="borrow-table-wrap">
+            <table class="borrow-table">
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Catalog</th>
+                        <th>Condition Out</th>
+                        <th>Condition In</th>
+                        <th>Fine</th>
+                        <th>Reason</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.LoanBookDetails != null && Model.LoanBookDetails.Any())
+                    {
+                        foreach (var d in Model.LoanBookDetails)
                         {
                             <tr>
-                                <td colspan="6" class="text-center text-muted">No items.</td>
+                                <td>@(d.Book != null ? d.Book.Barcode : d.BookId.ToString())</td>
+                                <td>@(string.IsNullOrWhiteSpace(d.Book?.Catalog?.Title) ? d.CatalogId.ToString() : d.Book!.Catalog!.Title)</td>
+                                <td>@d.ConditionOut</td>
+                                <td>@d.ConditionIn</td>
+                                <td>@(d.FineDetailAmount?.ToString("0.00") ?? "-")</td>
+                                <td>@d.FineDetailReason</td>
                             </tr>
                         }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" style="text-align:center; color:#9ca3af; padding:2rem;">No items.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 
     <!-- RETURNS -->
-    <div class="card-glass glas-all-style loan-section">
-        <div class="card-header">
+    <div class="borrow-card">
+        <div class="borrow-section-title">
             <i class="bi bi-arrow-return-left"></i> Returns
         </div>
-        <div class="card-body">
-            <div class="table-wrap">
-                <table class="table table-striped align-middle mb-0">
-                    <thead>
-                        <tr>
-                            <th>Return Date</th>
-                            <th>Late Days</th>
-                            <th>Fine</th>
-                            <th>Extra Charge</th>
-                            <th>Amount Paid</th>
-                            <th>Refund</th>
-                            <th>Condition</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.BookReturns != null && Model.BookReturns.Any())
-                        {
-                            foreach (var r in Model.BookReturns.OrderByDescending(x => x.ReturnDate))
-                            {
-                                <tr>
-                                    <td>@r.ReturnDate.ToString("yyyy-MM-dd")</td>
-                                    <td>@r.LateDays</td>
-                                    <td>@r.FineAmount.ToString("0.00")</td>
-                                    <td>@r.ExtraCharge.ToString("0.00")</td>
-                                    <td>@r.AmountPaid.ToString("0.00")</td>
-                                    <td>@(r.RefundAmount?.ToString("0.00") ?? "-")</td>
-                                    <td>@r.ConditionOnReturn</td>
-                                    <td>@r.Notes</td>
-                                </tr>
-                            }
-                        }
-                        else
+        <div class="borrow-table-wrap">
+            <table class="borrow-table">
+                <thead>
+                    <tr>
+                        <th>Return Date</th>
+                        <th>Late Days</th>
+                        <th>Fine</th>
+                        <th>Extra Charge</th>
+                        <th>Amount Paid</th>
+                        <th>Refund</th>
+                        <th>Condition</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.BookReturns != null && Model.BookReturns.Any())
+                    {
+                        foreach (var r in Model.BookReturns.OrderByDescending(x => x.ReturnDate))
                         {
                             <tr>
-                                <td colspan="8" class="text-center text-muted">No returns recorded.</td>
+                                <td>@r.ReturnDate.ToString("yyyy-MM-dd")</td>
+                                <td>@r.LateDays</td>
+                                <td>@r.FineAmount.ToString("0.00") ៛</td>
+                                <td>@r.ExtraCharge.ToString("0.00") ៛</td>
+                                <td>@r.AmountPaid.ToString("0.00") ៛</td>
+                                <td>@(r.RefundAmount?.ToString("0.00") ?? "-") ៛</td>
+                                <td>@r.ConditionOnReturn</td>
+                                <td>@r.Notes</td>
                             </tr>
                         }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" style="text-align:center; color:#9ca3af; padding:2rem;">No returns recorded.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -456,35 +456,25 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        (function () {
+        (function() {
             function getToken() {
                 const el = document.querySelector('#__af input[name="__RequestVerificationToken"]');
                 return el ? el.value : '';
             }
 
-            // ✅ Same theme as Index
-            const theme = {
-                color: '#0f172a',
+            const swalTheme = {
                 buttonsStyling: false,
                 customClass: {
-                    popup: 'glass-popup',
-                    title: 'glass-title',
-                    confirmButton: 'glass-btn-confirm',
-                    cancelButton: 'glass-btn-cancel'
+                    popup: 'swal2-popup borrow-popup',
+                    confirmButton: 'borrow-btn borrow-btn-primary',
+                    cancelButton: 'borrow-btn'
                 }
             };
-
-            function afHeaders() {
-                return {
-                    'Content-Type': 'application/json',
-                    'RequestVerificationToken': getToken()
-                };
-            }
 
             const btn = document.querySelector('.btn-return');
             if (!btn) return;
 
-            btn.addEventListener('click', function () {
+            btn.addEventListener('click', function() {
                 const loanId = this.getAttribute('data-loanid');
                 const depositStr = this.getAttribute('data-deposit') || "0";
                 const deposit = parseFloat(depositStr) || 0;
@@ -492,68 +482,62 @@
                 Swal.fire({
                     title: `Return Loan #${loanId}`,
                     html: `
-                                <div class="return-dialog">
-                                    <div class="return-row">
-                                        <label class="return-label">Return Date</label>
-                                        <input id="r-date" type="date" class="swal2-input"
-                                               value="${new Date().toISOString().slice(0, 10)}" />
-                                    </div>
+                        <div class="return-dialog">
+                            <div>
+                                <label class="return-label">Return Date</label>
+                                <input id="r-date" type="date" class="return-input"
+                                       value="${new Date().toISOString().slice(0, 10)}" />
+                            </div>
 
-                                    <div class="return-row-grid">
-                                        <div class="return-row">
-                                            <label class="return-label">Late Days</label>
-                                            <input id="r-late" type="number" class="swal2-input" value="0" min="0" />
-                                        </div>
-                                        <div class="return-row">
-                                            <label class="return-label">Fine Amount (KHR)</label>
-                                            <input id="r-fine" type="number" class="swal2-input" step="0.01" value="0" min="0" />
-                                        </div>
-                                        <div class="return-row">
-                                            <label class="return-label">Extra Charge (KHR)</label>
-                                            <input id="r-extra" type="number" class="swal2-input" step="0.01" value="0" min="0" />
-                                        </div>
-                                    </div>
-
-                                    <div class="return-row">
-                                        <label class="return-label">Summary (KHR)</label>
-                                        <div id="r-summary" class="return-summary"></div>
-                                    </div>
-
-                                    <div class="return-row">
-                                        <label class="return-label">Condition</label>
-                                        <input id="r-cond" class="swal2-input" placeholder="Condition on return" />
-                                    </div>
-
-                                    <div class="return-row">
-                                        <label class="return-label">Notes</label>
-                                        <textarea id="r-notes" class="swal2-textarea" placeholder="Notes"></textarea>
-                                    </div>
+                            <div class="return-grid">
+                                <div>
+                                    <label class="return-label">Late Days</label>
+                                    <input id="r-late" type="number" class="return-input" value="0" min="0" />
                                 </div>
-                            `,
+                                <div>
+                                    <label class="return-label">Fine Amount ($)</label>
+                                    <input id="r-fine" type="number" class="return-input" step="0.01" value="0" min="0" />
+                                </div>
+                                <div>
+                                    <label class="return-label">Extra Charge ($)</label>
+                                    <input id="r-extra" type="number" class="return-input" step="0.01" value="0" min="0" />
+                                </div>
+                            </div>
+
+                            <div id="r-summary" class="return-summary"></div>
+
+                            <div>
+                                <label class="return-label">Condition</label>
+                                <input id="r-cond" class="return-input" placeholder="Condition on return" />
+                            </div>
+
+                            <div>
+                                <label class="return-label">Notes</label>
+                                <textarea id="r-notes" class="return-input" rows="2" placeholder="Notes"></textarea>
+                            </div>
+                        </div>
+                    `,
                     showCancelButton: true,
                     confirmButtonText: 'Confirm Return',
                     cancelButtonText: 'Cancel',
-                    icon: 'question',
-                    ...theme,
+                    ...swalTheme,
                     didOpen: () => {
                         const fineInput = document.getElementById('r-fine');
                         const extraInput = document.getElementById('r-extra');
                         const summary = document.getElementById('r-summary');
 
-                        const formatMoney = v => (isNaN(v) ? '0.00' : v.toFixed(2)) + ' ៛';
-
                         function updateSummary() {
                             const fine = parseFloat(fineInput.value || '0');
                             const extra = parseFloat(extraInput.value || '0');
                             const paid = fine + extra;
-                            const refund = deposit;
 
                             summary.innerHTML = `
-                                        <div>Deposit on Borrow: <strong>${formatMoney(deposit)}</strong></div>
-                                        <div>Fine + Extra: <strong>${formatMoney(paid)}</strong></div>
-                                        <div class="primary"><strong>Total Paid (Fine + Extra): ${formatMoney(paid)}</strong></div>
-                                        <div class="primary"><strong>Refund Amount (Deposit): ${formatMoney(refund)}</strong></div>
-                                    `;
+                                <div>Deposit: <strong>$${deposit.toFixed(2)}</strong></div>
+                                <div>Fine + Extra: <strong>$${paid.toFixed(2)}</strong></div>
+                                <div style="color:#000080; font-weight:600; margin-top:4px;">
+                                    Refund: $${(deposit - paid).toFixed(2)}
+                                </div>
+                            `;
                         }
 
                         fineInput.addEventListener('input', updateSummary);
@@ -567,19 +551,12 @@
                             return false;
                         }
 
-                        const fine = parseFloat(document.getElementById('r-fine').value || '0');
-                        const extra = parseFloat(document.getElementById('r-extra').value || '0');
-                        const paid = fine + extra;
-                        const refund = deposit;
-
                         return {
                             LoanId: parseInt(loanId),
                             ReturnDate: date,
                             LateDays: parseInt(document.getElementById('r-late').value || '0'),
-                            FineAmount: fine,
-                            ExtraCharge: extra,
-                            AmountPaid: paid,
-                            RefundAmount: refund,
+                            FineAmount: parseFloat(document.getElementById('r-fine').value || '0'),
+                            ExtraCharge: parseFloat(document.getElementById('r-extra').value || '0'),
                             ConditionOnReturn: document.getElementById('r-cond').value || null,
                             Notes: document.getElementById('r-notes').value || null
                         };
@@ -589,23 +566,26 @@
 
                     fetch('/BookBorrows/Return/' + loanId, {
                         method: 'POST',
-                        headers: afHeaders(),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': getToken()
+                        },
                         body: JSON.stringify(res.value)
                     }).then(async rsp => {
                         if (!rsp.ok) {
-                            return Swal.fire({ title: 'Error', text: 'Return failed', icon: 'error', ...theme });
+                            return Swal.fire({ title: 'Error', text: 'Return failed', icon: 'error', ...swalTheme });
                         }
 
                         const data = await rsp.json();
 
                         return Swal.fire({
                             title: 'Returned!',
-                            text: 'Return recorded successfully. Print receipt for member?',
+                            text: 'Return recorded successfully. Print receipt?',
                             icon: 'success',
                             showCancelButton: true,
-                            confirmButtonText: 'Yes, Print Receipt',
+                            confirmButtonText: 'Yes, Print',
                             cancelButtonText: 'No',
-                            ...theme
+                            ...swalTheme
                         }).then(result => {
                             if (result.isConfirmed && data.loanId) {
                                 window.open('/BookBorrows/ReturnReceipt/' + data.loanId, '_blank');

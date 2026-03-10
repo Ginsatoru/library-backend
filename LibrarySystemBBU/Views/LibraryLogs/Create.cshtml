@@ -3,283 +3,420 @@
 @{
     ViewData["Title"] = "Create Library Log";
     var today = DateTime.Today.ToString("yyyy-MM-dd");
-    // ViewBag.BookList: SelectList(BookId, DisplayName)
     var bookList = (SelectList)ViewBag.BookList;
 
-    // Default status display
-    var status = string.IsNullOrWhiteSpace(Model?.Status) ? "Pending" : Model.Status!;
+    string status = string.IsNullOrWhiteSpace(Model?.Status) ? "Pending" : Model!.Status!;
+    string StatusBadge(string s) => s switch
+    {
+        "Approved" => "status-approved",
+        "Returned" => "status-returned",
+        _ => "status-pending"
+    };
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-    /* ==========================
-       Create Library Log – scoped
-       Reuse global glass / brand
-       ========================== */
-    #libraryLogCreatePage #logForm.card-glass.glas-all-style {
-        /* just use global card-glass + glas-all-style look */
-        margin-top: 4px;
+    .logs-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-    #libraryLogCreatePage .status-pill {
-        display: inline-block;
-        padding: .25rem .6rem;
-        border-radius: 999px;
-        border: 1px solid #dfe3ff;
+    .logs-page-title {
+        font-size: 1.5rem;
         font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .logs-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .logs-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
         font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none !important;
+        transition: background .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
     }
 
-    #libraryLogCreatePage .b-pending {
-        background: #fff7e6;
-        color: #8a5a00;
-        border-color: #ffe3ad;
+        .logs-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none !important;
+        }
+
+    .logs-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
     }
 
-    #libraryLogCreatePage .hint {
-        font-size: .9rem;
-        color: var(--muted, #667085);
+        .logs-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+
+    .logs-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        margin-bottom: 1rem;
+        overflow: hidden;
     }
 
-    #libraryLogCreatePage .muted {
-        color: var(--muted, #667085);
-        font-size: .9rem;
+    .logs-card-header {
+        padding: 14px 16px;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        font-weight: 600;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    /* Book picker layout */
-    #libraryLogCreatePage .picker {
+    .logs-card-body {
+        padding: 1.25rem;
+    }
+
+    .logs-form-label {
+        font-size: .8rem;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: .25rem;
+    }
+
+    .logs-form-control {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: .85rem;
+        transition: border-color .15s;
+    }
+
+        .logs-form-control:focus {
+            outline: none;
+            border-color: #000080;
+        }
+
+    .logs-form-select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: .85rem;
+        background-color: #fff;
+    }
+
+        .logs-form-select:focus {
+            outline: none;
+            border-color: #000080;
+        }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: .74rem;
+        font-weight: 500;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-approved {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-returned {
+        background: #e0f2fe;
+        color: #0369a1;
+    }
+
+    .logs-picker-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 12px;
+        gap: 16px;
+        margin-top: 1rem;
     }
 
     @@media (max-width: 768px) {
-        #libraryLogCreatePage .picker {
+        .logs-picker-grid {
             grid-template-columns: 1fr;
         }
     }
 
-    #libraryLogCreatePage .list,
-    #libraryLogCreatePage .chosen {
-        border: 1px solid rgba(1,0,140,.12);
-       
-        min-height: 240px;
-        background: #ffffff;
-        display: flex;
-        flex-direction: column;
+    .logs-picker-col {
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
     }
 
-    #libraryLogCreatePage .list-head {
+    .logs-picker-header {
+        padding: 10px 12px;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        font-size: .8rem;
+        font-weight: 600;
+        color: #374151;
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 10px 12px;
-        border-bottom: 1px solid rgba(1,0,140,.12);
-        background: linear-gradient(180deg, var(--brand-50, #e6e6ff), #ffffff);
-        position: sticky;
-        top: 0;
-        z-index: 1;
     }
 
-    #libraryLogCreatePage .list-head .form-control {
-        font-size: .85rem;
+    .logs-picker-search {
+        padding: 8px;
+        border-bottom: 1px solid #e5e7eb;
     }
 
-    #libraryLogCreatePage .list-body {
-        padding: 8px 12px 10px;
-        max-height: 340px;
-        overflow: auto;
-        flex: 1;
+    .logs-picker-search-input {
+        width: 100%;
+        padding: 6px 10px;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        font-size: .8rem;
     }
 
-    #libraryLogCreatePage .book-item {
+        .logs-picker-search-input:focus {
+            outline: none;
+            border-color: #000080;
+        }
+
+    .logs-picker-body {
+        padding: 12px;
+        max-height: 320px;
+        overflow-y: auto;
+    }
+
+    .logs-book-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 8px 10px;
-        border: 1px solid rgba(1,0,140,.08);
-        border-radius: 10px;
-        margin-bottom: 8px;
-        background: linear-gradient(180deg, #ffffff, #f8f9ff);
-        font-size: .9rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        margin-bottom: 6px;
+        background: #fff;
+        transition: background .15s;
+        gap: 10px;
     }
 
-    #libraryLogCreatePage .book-item .title {
-        font-weight: 600;
-        color: var(--text, #0f0f2e);
-        font-size:16px;
+        .logs-book-item:hover {
+            background: #f9fafb;
+        }
+
+    .logs-book-title {
+        font-size: .85rem;
+        font-weight: 500;
+        color: #111827;
     }
 
-    #libraryLogCreatePage .book-item .pick {
-        border: 1px solid #dfe3ff;
-        background: #eef1ff;
-        border-radius: 999px;
+    .logs-pick-btn {
         padding: 4px 10px;
-        font-weight: 600;
-        font-size: .8rem;
+        font-size: .7rem;
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
         cursor: pointer;
         white-space: nowrap;
     }
 
-    #libraryLogCreatePage .book-item .pick:hover {
-        background: #dde3ff;
-    }
+        .logs-pick-btn:hover {
+            background: #000080;
+            color: #fff;
+            border-color: #000080;
+        }
 
-    /* Selected chips */
-    #libraryLogCreatePage .chip {
+    .logs-chip {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        border: 1px solid rgba(1,0,140,.12);
-        border-radius: 999px;
+        gap: 6px;
         padding: 6px 10px;
-        margin: 6px 6px 0 0;
-        background: linear-gradient(180deg, #ffffff, #f7f8ff);
+        background: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        font-size: .8rem;
+        margin: 0 6px 6px 0;
+    }
+
+    .logs-chip-remove {
+        background: none;
+        border: none;
+        color: #6b7280;
+        cursor: pointer;
+        padding: 2px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        .logs-chip-remove:hover {
+            color: #dc2626;
+        }
+
+    .logs-muted {
+        color: #6b7280;
         font-size: .85rem;
     }
 
-    #libraryLogCreatePage .chip .close {
-        border: 0;
-        background: transparent;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+    .logs-hint {
+        font-size: .8rem;
+        color: #6b7280;
+        margin-top: .5rem;
     }
 
-    #libraryLogCreatePage .chip .close i {
-        font-size: .8rem;
+    a, a:hover {
+        text-decoration: none !important;
     }
 </style>
 
-<div id="libraryLogCreatePage">
-    <h2 class="page-title">
-        <span class="logo-dot"></span>
-        Create Library Log
-    </h2>
+<div class="logs-page">
+    <div class="logs-page-title">Create Library Log</div>
 
-    <form asp-action="Create" method="post" class="card-glass glas-all-style" id="logForm">
+    <form asp-action="Create" method="post" id="logForm">
         @Html.AntiForgeryToken()
 
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <div>
+        <div class="logs-card">
+            <div class="logs-card-header">
                 <i class="bi bi-journal-plus"></i> Log Information
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <span class="status-badge @StatusBadge(status)">
+                        <i class="bi bi-hourglass-split"></i> @status
+                    </span>
+                    <span class="logs-muted">
+                        <i class="bi bi-calendar-date"></i> Visit Date: @today
+                    </span>
+                </div>
             </div>
-            <div>
-                <span class="status-pill b-pending" title="New logs start as Pending">@status</span>
+
+            <div class="logs-card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="logs-form-label">Student Name</div>
+                        <input asp-for="StudentName" class="logs-form-control" placeholder="e.g., Chan Dany" />
+                        <span asp-validation-for="StudentName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="logs-form-label">Phone Number</div>
+                        <input asp-for="PhoneNumber" class="logs-form-control" placeholder="012345678" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="logs-form-label">Gender</div>
+                        <select asp-for="Gender" class="logs-form-select">
+                            <option value="">-- Select Gender --</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="logs-form-label">Visit Date</div>
+                        <input type="text" class="logs-form-control" value="@today" readonly />
+                        <input type="hidden" asp-for="VisitDate" value="@today" />
+                        <span asp-validation-for="VisitDate" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="logs-form-label">Purpose</div>
+                        <input asp-for="Purpose" class="logs-form-control" placeholder="Reading, Research, Computer use..." />
+                        <span asp-validation-for="Purpose" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="logs-form-label">Notes</div>
+                        <textarea asp-for="Notes" class="logs-form-control" rows="3" placeholder="Any additional notes..."></textarea>
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+
+                    <input type="hidden" asp-for="Status" value="Pending" />
+                    <input type="hidden" asp-for="ApprovedUtc" />
+                    <input type="hidden" asp-for="ReturnedUtc" />
+                </div>
             </div>
         </div>
 
-        <div class="card-body">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+        <div class="logs-card">
+            <div class="logs-card-header">
+                <i class="bi bi-bookshelf"></i> Books (Pick multiple)
+            </div>
+            <div class="logs-card-body">
+                <div class="logs-picker-grid">
+                    <!-- Available -->
+                    <div class="logs-picker-col">
+                        <div class="logs-picker-header">
+                            <i class="bi bi-search"></i> Available Books
+                        </div>
+                        <div class="logs-picker-search">
+                            <input id="q" class="logs-picker-search-input" placeholder="Search title or barcode..." />
+                        </div>
+                        <div class="logs-picker-body" id="listBody">
+                            @foreach (var opt in bookList)
+                            {
+                                <div class="logs-book-item" data-id="@opt.Value" data-text="@opt.Text">
+                                    <span class="logs-book-title">@opt.Text</span>
+                                    <button type="button" class="logs-pick-btn" data-id="@opt.Value" data-text="@opt.Text">Pick</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
 
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label asp-for="StudentName" class="form-label"></label>
-                    <input asp-for="StudentName" class="form-control" placeholder="e.g., Chan Dany" />
-                    <span asp-validation-for="StudentName" class="text-danger"></span>
+                    <!-- Selected -->
+                    <div class="logs-picker-col">
+                        <div class="logs-picker-header">
+                            <i class="bi bi-check2-circle"></i> Selected Books
+                        </div>
+                        <div class="logs-picker-body" id="chosenBody">
+                            <div class="logs-muted" id="emptyHint">None selected yet.</div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="col-md-3">
-                    <label asp-for="PhoneNumber" class="form-label"></label>
-                    <input asp-for="PhoneNumber" class="form-control" placeholder="012345678" />
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                </div>
+                <div id="hiddenInputs"></div>
 
-                <div class="col-md-3">
-                    <label asp-for="Gender" class="form-label"></label>
-                    <select asp-for="Gender" class="form-select">
-                        <option value="">-- Select Gender --</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                        <option>Other</option>
-                    </select>
-                    <span asp-validation-for="Gender" class="text-danger"></span>
+                <div class="logs-hint">
+                    <i class="bi bi-info-circle"></i>
+                    Select books from the left to add them. Click × on a chip to remove.
                 </div>
-
-                <div class="col-md-3">
-                    <label asp-for="VisitDate" class="form-label"></label>
-                    <!-- Visit date is shown as today, server still controls real value -->
-                    <input type="text"
-                           class="form-control"
-                           value="@today"
-                           readonly />
-                    <input type="hidden" asp-for="VisitDate" value="@today" />
-                    <span asp-validation-for="VisitDate" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-12">
-                    <label asp-for="Purpose" class="form-label"></label>
-                    <input asp-for="Purpose" class="form-control" placeholder="Reading, Research, Computer use..." />
-                    <span asp-validation-for="Purpose" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-12">
-                    <label asp-for="Notes" class="form-label"></label>
-                    <textarea asp-for="Notes"
-                              class="form-control"
-                              rows="3"
-                              placeholder="Any additional notes..."></textarea>
-                    <span asp-validation-for="Notes" class="text-danger"></span>
-                </div>
-
-                @* Workflow fields with safe defaults *@
-                <input type="hidden" asp-for="Status" value="Pending" />
-                <input type="hidden" asp-for="ApprovedUtc" />
-                <input type="hidden" asp-for="ReturnedUtc" />
             </div>
         </div>
 
-        <div class="card-header">
-            <i class="bi bi-bookshelf"></i> Books (Pick multiple without rows)
-        </div>
-
-        <div class="card-body">
-            <div class="picker">
-                <!-- Available list -->
-                <div class="list">
-                    <div class="list-head">
-                        <i class="bi bi-search"></i>
-                        <input id="q"
-                               class="form-control form-control-sm"
-                               placeholder="Search title or barcode..." />
-                    </div>
-                    <div class="list-body" id="listBody">
-                        @foreach (var opt in bookList)
-                        {
-                            <div class="book-item" data-id="@opt.Value" data-text="@opt.Text">
-                                <div class="title">@opt.Text</div>
-                                <button type="button" class="pick" data-id="@opt.Value">Pick</button>
-                            </div>
-                        }
-                    </div>
-                </div>
-
-                <!-- Chosen chips -->
-                <div class="chosen">
-                    <div class="list-head">
-                        <i class="bi bi-check2-circle"></i> Selected
-                    </div>
-                    <div class="list-body" id="chosenBody">
-                        <div class="muted">None selected yet.</div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="hiddenInputs"></div>
-
-            <div class="hint mt-2">
-                <i class="bi bi-info-circle"></i>
-                ជ្រើសសៀវភៅខាងឆ្វេង ដើម្បីបន្ថែមទៅក្នុង <b>Selected</b>។ ចុច <b>×</b> លើ chip ដើម្បីដកចេញ។
-            </div>
-        </div>
-
-        <div class="card-body d-flex gap-2 justify-content-end">
-            <a asp-action="Index" class="btn-glass btn-outline">
+        <div class="d-flex gap-2 justify-content-end mt-3">
+            <a asp-action="Index" class="logs-btn">
                 <i class="bi bi-arrow-left"></i> Back
             </a>
-            <button type="submit" class="btn-glass btn-brand">
+            <button type="submit" class="logs-btn logs-btn-primary">
                 <i class="bi bi-check2-circle"></i> Create
             </button>
         </div>
@@ -290,87 +427,113 @@
     <partial name="_ValidationScriptsPartial" />
     <script>
         (function () {
-            const q = document.getElementById('q');
-            const listBody = document.getElementById('listBody');
-            const chosenBody = document.getElementById('chosenBody');
-            const hiddenInputs = document.getElementById('hiddenInputs');
+            var SELECTED = {};   // id -> text
 
-            const selected = new Set(); // BookIds
+            var listBody     = document.getElementById('listBody');
+            var chosenBody   = document.getElementById('chosenBody');
+            var hiddenInputs = document.getElementById('hiddenInputs');
+            var emptyHint    = document.getElementById('emptyHint');
+            var searchInput  = document.getElementById('q');
 
-            function renderEmptyChosenHint() {
-                if (chosenBody.querySelectorAll('.chip').length === 0) {
-                    chosenBody.innerHTML = '<div class="muted">None selected yet.</div>';
+            function rebuildHidden() {
+                hiddenInputs.innerHTML = '';
+                var idx = 0;
+                Object.keys(SELECTED).forEach(function (id) {
+                    var inp = document.createElement('input');
+                    inp.type  = 'hidden';
+                    inp.name  = 'BookIds[' + idx + ']';
+                    inp.value = id;
+                    hiddenInputs.appendChild(inp);
+                    idx++;
+                });
+            }
+
+            function updateEmptyHint() {
+                if (Object.keys(SELECTED).length === 0) {
+                    emptyHint.style.display = '';
+                } else {
+                    emptyHint.style.display = 'none';
                 }
             }
 
-            function rebuildHiddenInputs() {
-                hiddenInputs.innerHTML = '';
-                Array.from(selected).forEach((id, idx) => {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = `BookIds[${idx}]`;
-                    input.value = id;
-                    hiddenInputs.appendChild(input);
-                });
+            function removeChip(id) {
+                delete SELECTED[id];
+
+                // Show row again in available list
+                var row = listBody.querySelector('.logs-book-item[data-id="' + id + '"]');
+                if (row) row.style.display = '';
+
+                // Re-apply search filter
+                applySearch();
+
+                rebuildHidden();
+                updateEmptyHint();
             }
 
-            function handlePick(id, text) {
-                if (selected.has(id)) return;
-                selected.add(id);
+            function addChip(id, text) {
+                var chip = document.createElement('span');
+                chip.className   = 'logs-chip';
+                chip.setAttribute('data-id', id);
 
-                // hide from list
-                const row = listBody.querySelector(`.book-item[data-id="${id}"]`);
+                var label = document.createElement('span');
+                label.textContent = text || id;
+
+                var removeBtn = document.createElement('button');
+                removeBtn.type      = 'button';
+                removeBtn.className = 'logs-chip-remove';
+                removeBtn.title     = 'Remove';
+                removeBtn.innerHTML = '<i class="bi bi-x-lg"></i>';
+                removeBtn.addEventListener('click', function () {
+                    chip.remove();
+                    removeChip(id);
+                });
+
+                chip.appendChild(label);
+                chip.appendChild(removeBtn);
+                chosenBody.appendChild(chip);
+            }
+
+            function pickBook(id, text) {
+                if (SELECTED[id]) return;   // already selected
+
+                SELECTED[id] = text;
+
+                // Hide from available list
+                var row = listBody.querySelector('.logs-book-item[data-id="' + id + '"]');
                 if (row) row.style.display = 'none';
 
-                // add chip
-                if (chosenBody.querySelector('.muted')) chosenBody.innerHTML = '';
-                const chip = document.createElement('span');
-                chip.className = 'chip';
-                chip.dataset.id = id;
-                chip.innerHTML =
-                    `<span>${text}</span>
-                     <button type="button" class="close" title="Remove">
-                        <i class="bi bi-x-lg"></i>
-                     </button>`;
-                chosenBody.appendChild(chip);
-
-                chip.querySelector('.close').addEventListener('click', () => {
-                    selected.delete(id);
-                    const row = listBody.querySelector(`.book-item[data-id="${id}"]`);
-                    if (row) row.style.display = '';
-                    chip.remove();
-                    rebuildHiddenInputs();
-                    renderEmptyChosenHint();
-                });
-
-                rebuildHiddenInputs();
+                addChip(id, text);
+                rebuildHidden();
+                updateEmptyHint();
             }
 
-            // initial bind
-            listBody.querySelectorAll('.pick').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = e.currentTarget.getAttribute('data-id');
-                    const row = e.currentTarget.closest('.book-item');
-                    const text = row?.getAttribute('data-text') || e.currentTarget.textContent.trim();
-                    handlePick(id, text);
-                });
-            });
-
-            // search filter
-            q.addEventListener('input', () => {
-                const kw = q.value.toLowerCase().trim();
-                listBody.querySelectorAll('.book-item').forEach(it => {
-                    const id = it.getAttribute('data-id');
-                    if (selected.has(id)) {
-                        it.style.display = 'none';
+            function applySearch() {
+                var kw = searchInput.value.toLowerCase().trim();
+                var items = listBody.querySelectorAll('.logs-book-item');
+                items.forEach(function (item) {
+                    var id = item.getAttribute('data-id');
+                    if (SELECTED[id]) {
+                        item.style.display = 'none';
                         return;
                     }
-                    const txt = (it.getAttribute('data-text') || '').toLowerCase();
-                    it.style.display = txt.includes(kw) ? '' : 'none';
+                    var text = (item.getAttribute('data-text') || '').toLowerCase();
+                    item.style.display = (!kw || text.includes(kw)) ? '' : 'none';
+                });
+            }
+
+            // Wire pick buttons
+            listBody.querySelectorAll('.logs-pick-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var id   = btn.getAttribute('data-id');
+                    var text = btn.getAttribute('data-text');
+                    pickBook(id, text);
                 });
             });
 
-            renderEmptyChosenHint();
+            // Search
+            searchInput.addEventListener('input', applySearch);
+
+            updateEmptyHint();
         })();
     </script>
 }

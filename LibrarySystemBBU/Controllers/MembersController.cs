@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LibrarySystemBBU.Data;
+using LibrarySystemBBU.Hubs;
 using LibrarySystemBBU.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 
 namespace LibrarySystemBBU.Controllers
 {
@@ -18,11 +20,13 @@ namespace LibrarySystemBBU.Controllers
     {
         private readonly DataContext _context;
         private readonly IWebHostEnvironment _env;
+        private readonly IHubContext<NotificationHub> _hub;
 
-        public MembersController(DataContext context, IWebHostEnvironment env)
+        public MembersController(DataContext context, IWebHostEnvironment env, IHubContext<NotificationHub> hub)
         {
             _context = context;
             _env = env;
+            _hub = hub;
         }
 
         private async Task<Users?> GetCurrentUserAsync()
@@ -114,6 +118,15 @@ namespace LibrarySystemBBU.Controllers
 
             _context.Add(member);
             await _context.SaveChangesAsync();
+
+            // ── SignalR ──
+            await _hub.Clients.All.SendAsync("NewMemberRegistered", new
+            {
+                memberId = member.MemberId,
+                fullName = member.FullName,
+                memberType = member.MemberType
+            });
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -449,24 +462,11 @@ namespace LibrarySystemBBU.Controllers
             sb.AppendLine("<html><head><meta charset=\"UTF-8\"></head><body>");
             sb.AppendLine("<table border='1' cellspacing='0' cellpadding='4'>");
             sb.AppendLine("<tr>" +
-                          "<th>MemberId</th>" +
-                          "<th>FullName</th>" +
-                          "<th>UserName</th>" +
-                          "<th>Gender</th>" +
-                          "<th>Email</th>" +
-                          "<th>Phone</th>" +
-                          "<th>MemberType</th>" +
-                          "<th>Faculty</th>" +
-                          "<th>Subject</th>" +
-                          "<th>Status</th>" +
-                          "<th>JoinDate</th>" +
-                          "<th>Modified</th>" +
-                          "<th>DICardNumber</th>" +
-                          "<th>TelegramChatId</th>" +
-                          "<th>TelegramUsername</th>" +
-                          "<th>TotalLoans</th>" +
-                          "<th>ActiveLoans</th>" +
-                          "</tr>");
+                          "<th>MemberId</th><th>FullName</th><th>UserName</th><th>Gender</th>" +
+                          "<th>Email</th><th>Phone</th><th>MemberType</th><th>Faculty</th>" +
+                          "<th>Subject</th><th>Status</th><th>JoinDate</th><th>Modified</th>" +
+                          "<th>DICardNumber</th><th>TelegramChatId</th><th>TelegramUsername</th>" +
+                          "<th>TotalLoans</th><th>ActiveLoans</th></tr>");
 
             foreach (var m in rows)
             {

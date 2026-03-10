@@ -6,12 +6,14 @@ using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using LibrarySystemBBU.Data;
+using LibrarySystemBBU.Hubs;
 using LibrarySystemBBU.Models;
 using LibrarySystemBBU.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -23,16 +25,17 @@ namespace LibrarySystemBBU.Controllers
 
         private readonly DataContext _context;
         private readonly IConfiguration _config;
+        private readonly IHubContext<NotificationHub> _hub;
 
-        public MemberAuthController(DataContext context, IConfiguration config)
+        public MemberAuthController(DataContext context, IConfiguration config, IHubContext<NotificationHub> hub)
         {
             _context = context;
             _config = config;
+            _hub = hub;
         }
 
         // ----------------------------------------
         // GET: /MemberAuth/AdminContact
-        // Public endpoint for React frontend footer
         // ----------------------------------------
         [HttpGet]
         [AllowAnonymous]
@@ -105,7 +108,7 @@ namespace LibrarySystemBBU.Controllers
         }
 
         // ----------------------------------------
-        // POST: /MemberAuth/RegisterJson
+        // POST: /MemberAuth/RegisterJson  ← React frontend hits this
         // ----------------------------------------
         [HttpPost]
         [AllowAnonymous]
@@ -153,6 +156,14 @@ namespace LibrarySystemBBU.Controllers
             await _context.SaveChangesAsync();
 
             await SignInMemberAsync(member, rememberMe: true);
+
+            // ── SignalR: notify admin ──
+            await _hub.Clients.All.SendAsync("NewMemberRegistered", new
+            {
+                memberId = member.MemberId,
+                fullName = member.FullName,
+                memberType = member.MemberType
+            });
 
             return Ok(new
             {
@@ -283,7 +294,7 @@ namespace LibrarySystemBBU.Controllers
         }
 
         // ----------------------------------------
-        // GET: /MemberAuth/Register
+        // GET: /MemberAuth/Register (Razor)
         // ----------------------------------------
         [HttpGet]
         [AllowAnonymous]
@@ -293,7 +304,7 @@ namespace LibrarySystemBBU.Controllers
         }
 
         // ----------------------------------------
-        // POST: /MemberAuth/Register
+        // POST: /MemberAuth/Register (Razor)
         // ----------------------------------------
         [HttpPost]
         [AllowAnonymous]
@@ -340,6 +351,14 @@ namespace LibrarySystemBBU.Controllers
             await _context.SaveChangesAsync();
 
             await SignInMemberAsync(member, rememberMe: true);
+
+            // ── SignalR: notify admin ──
+            await _hub.Clients.All.SendAsync("NewMemberRegistered", new
+            {
+                memberId = member.MemberId,
+                fullName = member.FullName,
+                memberType = member.MemberType
+            });
 
             return RedirectToAction("ConnectTelegram", "MemberAuth");
         }
@@ -586,11 +605,11 @@ namespace LibrarySystemBBU.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, member.MemberId.ToString()),
-                new Claim(ClaimTypes.Name, member.FullName),
-                new Claim("FullName", member.FullName),
-                new Claim(ClaimTypes.Email, member.Email ?? string.Empty),
-                new Claim(ClaimTypes.Role, "Member"),
-                new Claim("AccountType", "Member")
+                new Claim(ClaimTypes.Name,           member.FullName),
+                new Claim("FullName",                member.FullName),
+                new Claim(ClaimTypes.Email,          member.Email ?? string.Empty),
+                new Claim(ClaimTypes.Role,           "Member"),
+                new Claim("AccountType",             "Member")
             };
 
             var identity = new ClaimsIdentity(claims, MemberScheme);

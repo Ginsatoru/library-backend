@@ -2,124 +2,208 @@
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <title>Borrow Receipt - @Model.LoanId</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background: #f3f4f6;
         }
-        .receipt {
-            max-width: 600px;
-            margin: 16px auto;
+
+        body {
+            font-family: 'Inter', sans-serif;
             background: #fff;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 16px 20px;
+            color: #111827;
         }
-        h2 {
-            margin-top: 0;
-            text-align: center;
-        }
-        table.meta {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 12px;
-        }
-        table.meta td {
-            padding: 4px 0;
-            font-size: 14px;
-        }
-        table.meta td:first-child {
-            width: 35%;
-            font-weight: 600;
-        }
-        ul {
-            margin: 0;
-            padding-left: 18px;
-            font-size: 14px;
-        }
-        .note {
-            margin-top: 16px;
-            font-size: 12px;
-            color: #6b7280;
-        }
-        .footer {
-            margin-top: 20px;
-            font-size: 12px;
-            text-align: center;
-            color: #9ca3af;
+
+        /* Hide everything on screen — only show on print */
+        .receipt-wrapper {
+            display: none;
         }
 
         @@media print {
             body {
                 background: #fff;
             }
-            .receipt {
-                margin: 0;
-                border: none;
-                border-radius: 0;
-                box-shadow: none;
+
+            .receipt-wrapper {
+                display: block;
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            .receipt-header {
+                text-align: center;
+                margin-bottom: 24px;
+                padding-bottom: 16px;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .receipt-title {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: #000080;
+                margin-bottom: 4px;
+            }
+
+            .receipt-subtitle {
+                font-size: .8rem;
+                color: #6b7280;
+            }
+
+            .info-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                margin-bottom: 24px;
+            }
+
+            .info-item {
+                font-size: .85rem;
+            }
+
+            .info-label {
+                color: #6b7280;
+                margin-bottom: 2px;
+            }
+
+            .info-value {
+                font-weight: 600;
+                color: #111827;
+            }
+
+            .section-title {
+                font-size: 1rem;
+                font-weight: 600;
+                color: #000080;
+                margin-bottom: 12px;
+            }
+
+            .books-list {
+                list-style: none;
+                padding: 0;
+                margin: 0 0 24px;
+            }
+
+                .books-list li {
+                    padding: 8px 12px;
+                    background: #f9fafb;
+                    border: 1px solid #e5e7eb;
+                    border-radius: 8px;
+                    margin-bottom: 6px;
+                    font-size: .85rem;
+                }
+
+            .finance-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 24px;
+            }
+
+                .finance-table td {
+                    padding: 8px 12px;
+                    font-size: .85rem;
+                    border-bottom: 1px solid #f3f4f6;
+                }
+
+                    .finance-table td:first-child {
+                        font-weight: 500;
+                        color: #6b7280;
+                    }
+
+                    .finance-table td:last-child {
+                        font-weight: 600;
+                        text-align: right;
+                    }
+
+            .note {
+                background: #fffbeb;
+                border: 1px solid #fef3c7;
+                border-radius: 8px;
+                padding: 12px;
+                font-size: .8rem;
+                color: #92400e;
+                margin-bottom: 24px;
+            }
+
+            .footer {
+                text-align: center;
+                font-size: .75rem;
+                color: #9ca3af;
+                padding-top: 16px;
+                border-top: 1px solid #e5e7eb;
             }
         }
     </style>
 </head>
-<body onload="window.print()">
-    <div class="receipt">
-        <h2>Borrow Receipt</h2>
+<body>
+    <div class="receipt-wrapper">
+        <div class="receipt-header">
+            <div class="receipt-title">Borrow Receipt</div>
+            <div class="receipt-subtitle">Loan #@Model.LoanId</div>
+        </div>
 
-        <table class="meta">
-            <tr>
-                <td>Loan #:</td>
-                <td>@Model.LoanId</td>
-            </tr>
-            <tr>
-                <td>Member:</td>
-                <td>@Model.MemberName</td>
-            </tr>
-            <tr>
-                <td>Loan Date:</td>
-                <td>@Model.LoanDate.ToString("yyyy-MM-dd")</td>
-            </tr>
-            <tr>
-                <td>Due Date:</td>
-                <td>@Model.DueDate.ToString("yyyy-MM-dd")</td>
-            </tr>
-            <tr>
-                <td>Borrowing Fee:</td>
-                <td>@Model.BorrowingFee.ToString("0.00") ៛</td>
-            </tr>
-            <tr>
-                <td>Deposit:</td>
-                <td>@(Model.DepositAmount?.ToString("0.00") ?? "0.00") ៛</td>
-            </tr>
-            <tr>
-                <td>Fee Status:</td>
-                <td>@(Model.IsPaid ? "Paid" : "Unpaid")</td>
-            </tr>
-        </table>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Member</div>
+                <div class="info-value">@Model.MemberName</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Loan Date</div>
+                <div class="info-value">@Model.LoanDate.ToString("yyyy-MM-dd")</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Due Date</div>
+                <div class="info-value">@Model.DueDate.ToString("yyyy-MM-dd")</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Fee Status</div>
+                <div class="info-value">@(Model.IsPaid ? "Paid" : "Unpaid")</div>
+            </div>
+        </div>
 
-        <h4>Borrowed Books:</h4>
-        <ul>
+        <div class="section-title">Borrowed Books</div>
+        <ul class="books-list">
             @foreach (var title in Model.BookTitles)
             {
                 <li>@title</li>
             }
         </ul>
 
-        <p class="note">
+        <div class="section-title">Financial Summary</div>
+        <table class="finance-table">
+            <tr>
+                <td>Borrowing Fee</td>
+                <td>@Model.BorrowingFee.ToString("0.00") ៛</td>
+            </tr>
+            <tr>
+                <td>Deposit</td>
+                <td>@(Model.DepositAmount?.ToString("0.00") ?? "0.00") ៛</td>
+            </tr>
+        </table>
+
+        <div class="note">
             This receipt is for the member. You do not need to return this receipt to the library.
-        </p>
+        </div>
 
         <div class="footer">
             Printed on @DateTime.Now.ToString("yyyy-MM-dd HH:mm")
         </div>
     </div>
+
+    <script>
+        window.onload = function () {
+            window.print();
+            window.addEventListener('afterprint', function () {
+                window.close();
+            });
+        };
+    </script>
 </body>
 </html>

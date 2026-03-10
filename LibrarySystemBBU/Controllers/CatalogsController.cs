@@ -63,6 +63,7 @@ namespace LibrarySystemBBU.Controllers
             public string? Title { get; set; }
             public string? Author { get; set; }
             public string? ISBN { get; set; }
+            public string? Faculty { get; set; }
             public string? Category { get; set; }
             public string? Barcode { get; set; }
             public string? Status { get; set; }
@@ -319,6 +320,7 @@ namespace LibrarySystemBBU.Controllers
             int iStatus = Col("copy status", "status");
             int iLoc = Col("location");
             int iAcq = Col("acquisition date", "acquisitiondate");
+            int iFaculty = Col("faculty");
 
             var allCatalogs = await _context.Catalogs
                 .Include(c => c.Books)
@@ -358,6 +360,7 @@ namespace LibrarySystemBBU.Controllers
                 row.Status = Cell(iStatus);
                 row.Location = Cell(iLoc);
                 row.AcquisitionDate = Cell(iAcq);
+                row.Faculty = Cell(iFaculty);
 
                 if (string.IsNullOrWhiteSpace(row.Title))
                     errs.Add("Title is required");
@@ -493,6 +496,7 @@ namespace LibrarySystemBBU.Controllers
                         Title = first.Title!,
                         Author = first.Author ?? "",
                         ISBN = first.ISBN ?? "",
+                        Faculty = first.Faculty ?? "",
                         Category = first.Category ?? "",
                         TotalCopies = 0,
                         AvailableCopies = 0,
@@ -509,6 +513,7 @@ namespace LibrarySystemBBU.Controllers
                     if (upd("title") && !string.IsNullOrWhiteSpace(first.Title)) catalog.Title = first.Title!;
                     if (upd("author") && !string.IsNullOrWhiteSpace(first.Author)) catalog.Author = first.Author!;
                     if (upd("isbn") && !string.IsNullOrWhiteSpace(first.ISBN)) catalog.ISBN = first.ISBN!;
+                    if (upd("faculty") && !string.IsNullOrWhiteSpace(first.Faculty)) catalog.Faculty = first.Faculty!;
                     if (upd("category") && !string.IsNullOrWhiteSpace(first.Category)) catalog.Category = first.Category!;
                     updated++;
                 }
@@ -834,6 +839,19 @@ namespace LibrarySystemBBU.Controllers
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        // ---------- Download Template ----------
+        [HttpGet]
+        public IActionResult DownloadTemplate()
+        {
+            var path = Path.Combine(_env.WebRootPath, "templates", "CatalogImportTemplate.xlsx");
+            if (!System.IO.File.Exists(path))
+                return NotFound("Template file not found.");
+            var bytes = System.IO.File.ReadAllBytes(path);
+            return File(bytes,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "CatalogImportTemplate.xlsx");
         }
     }
 }

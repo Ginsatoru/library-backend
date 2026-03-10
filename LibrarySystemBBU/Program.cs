@@ -1,5 +1,6 @@
 ﻿using System;
 using LibrarySystemBBU.Data;
+using LibrarySystemBBU.Hubs;
 using LibrarySystemBBU.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
     {
-        // Respect [JsonPropertyName] attributes on model classes
         options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     });
 
@@ -20,6 +20,29 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("Smtp"));
 builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
+
+// ── CORS (allow React frontend via Cloudflare tunnel) ────────────────────────
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactFrontend", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:5173",
+                "http://localhost:3000",
+                "https://interval-elevation-rotary-laptops.trycloudflare.com"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
+// ── SignalR ───────────────────────────────────────────────────────────────────
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+});
 
 // ── Session ──────────────────────────────────────────────────────────────────
 builder.Services.AddDistributedMemoryCache();
@@ -105,17 +128,20 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCors("ReactFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
+// ── Hubs ──────────────────────────────────────────────────────────────────────
+app.MapHub<NotificationHub>("/hubs/notifications")
+   .RequireCors("ReactFrontend");
+
 // ── Routes ────────────────────────────────────────────────────────────────────
-// /api prefix route — allows React frontend calls via /api/Controller/Action
 app.MapControllerRoute(
     name: "api",
     pattern: "api/{controller}/{action}/{id?}");
 
-// Default route — admin MVC side
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");

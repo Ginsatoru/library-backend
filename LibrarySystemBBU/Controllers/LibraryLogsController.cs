@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LibrarySystemBBU.Data;
+using LibrarySystemBBU.Hubs;
 using LibrarySystemBBU.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystemBBU.Controllers
@@ -14,10 +16,12 @@ namespace LibrarySystemBBU.Controllers
     public class LibraryLogsController : Controller
     {
         private readonly DataContext _context;
+        private readonly IHubContext<NotificationHub> _hub;
 
-        public LibraryLogsController(DataContext context)
+        public LibraryLogsController(DataContext context, IHubContext<NotificationHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
 
         private const string STATUS_PENDING = "Pending";
@@ -45,7 +49,6 @@ namespace LibrarySystemBBU.Controllers
             return _context.Entry(e).Property<DateTime?>("ReturnedUtc").CurrentValue;
         }
 
-
         private async Task UpsertLogHistoryAsync(
             LibraryLog log,
             string actionType,
@@ -53,7 +56,6 @@ namespace LibrarySystemBBU.Controllers
             int? quantityOverride = null,
             DateTime? returnDate = null)
         {
-            // Make sure Items + Books + Catalogs are loaded
             await _context.Entry(log)
                 .Collection(l => l.Items)
                 .Query()
@@ -156,7 +158,6 @@ namespace LibrarySystemBBU.Controllers
             BookIds = e.Items?.Select(i => i.BookId).ToList() ?? new List<int>()
         };
 
-
         private async Task PopulateBookSelectAsync(IEnumerable<int>? selectedIds = null, bool onlyAvailable = true)
         {
             selectedIds ??= Array.Empty<int>();
@@ -254,7 +255,6 @@ namespace LibrarySystemBBU.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LibraryLogFormVM vm)
         {
-            // Always force today's date for in-library log
             vm.VisitDate = DateTime.Today;
 
             var unavailable = await GetUnavailableBookIdsAsync();
@@ -294,7 +294,6 @@ namespace LibrarySystemBBU.Controllers
             _context.LibraryLogs.Add(log);
             await _context.SaveChangesAsync();
 
-            // HISTORY: create / pending
             await UpsertLogHistoryAsync(
                 log,
                 actionType: "BorrowInLibrary",
@@ -302,11 +301,19 @@ namespace LibrarySystemBBU.Controllers
                 quantityOverride: log.Items?.Count
             );
 
+            // ── SignalR ──
+            await _hub.Clients.All.SendAsync("LibraryLogCreated", new
+            {
+                logId = log.LogId,
+                studentName = log.StudentName,
+                bookCount = log.Items?.Count ?? 0
+            });
+
             TempData["ok"] = "Library log created (Pending).";
             return RedirectToAction(nameof(Index), new { status = STATUS_PENDING });
         }
 
-        // ------------------------- Edit (visit date not editable) -------------------------
+        // ------------------------- Edit -------------------------
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -333,8 +340,6 @@ namespace LibrarySystemBBU.Controllers
                 .FirstOrDefaultAsync(x => x.LogId == id);
             if (e == null) return NotFound();
 
-            // Do NOT allow changing VisitDate; keep e.VisitDate as is.
-
             var unavailable = await GetUnavailableBookIdsAsync();
             var requested = (vm.BookIds ?? new List<int>()).Distinct().ToList();
             var oldSet = e.Items.Select(i => i.BookId).ToHashSet();
@@ -352,12 +357,10 @@ namespace LibrarySystemBBU.Controllers
             e.StudentName = vm.StudentName?.Trim() ?? string.Empty;
             e.PhoneNumber = string.IsNullOrWhiteSpace(vm.PhoneNumber) ? null : vm.PhoneNumber.Trim();
             e.Gender = string.IsNullOrWhiteSpace(vm.Gender) ? null : vm.Gender.Trim();
-            // e.VisitDate remains original
             e.Purpose = string.IsNullOrWhiteSpace(vm.Purpose) ? null : vm.Purpose.Trim();
             e.Notes = string.IsNullOrWhiteSpace(vm.Notes) ? null : vm.Notes.Trim();
 
             var newSet = requested.ToHashSet();
-
             var toRemove = e.Items.Where(i => !newSet.Contains(i.BookId)).ToList();
             if (toRemove.Any()) _context.LibraryLogItems.RemoveRange(toRemove);
 
@@ -407,7 +410,6 @@ namespace LibrarySystemBBU.Controllers
             _context.Entry(e).Property("ApprovedUtc").CurrentValue = now;
             await _context.SaveChangesAsync();
 
-            // increase InLibraryCount per Catalog for this log
             var byCatalog = e.Items
                 .Where(it => it.Book != null)
                 .GroupBy(it => it.Book.CatalogId)
@@ -416,17 +418,11 @@ namespace LibrarySystemBBU.Controllers
             if (byCatalog.Count > 0)
             {
                 var ids = byCatalog.Keys.ToList();
-                var catalogs = await _context.Catalogs
-                    .Where(c => ids.Contains(c.CatalogId))
-                    .ToListAsync();
+                var catalogs = await _context.Catalogs.Where(c => ids.Contains(c.CatalogId)).ToListAsync();
 
                 foreach (var c in catalogs)
-                {
                     if (byCatalog.TryGetValue(c.CatalogId, out var cnt))
-                    {
                         c.InLibraryCount += cnt;
-                    }
-                }
 
                 await _context.SaveChangesAsync();
             }
@@ -437,6 +433,13 @@ namespace LibrarySystemBBU.Controllers
                 notes: "Library log approved.",
                 quantityOverride: e.Items?.Count
             );
+
+            // ── SignalR ──
+            await _hub.Clients.All.SendAsync("LibraryLogApproved", new
+            {
+                logId = e.LogId,
+                studentName = e.StudentName
+            });
 
             if (IsAjax)
                 return Json(new
@@ -503,13 +506,25 @@ namespace LibrarySystemBBU.Controllers
                 e,
                 actionType: "ReturnLibrary",
                 notes: allReturned
-                    ? "All items returned. Log marked as Returned."
-                    : "Some items returned (partial).",
+                                    ? "All items returned. Log marked as Returned."
+                                    : "Some items returned (partial).",
                 quantityOverride: targetItems.Count,
                 returnDate: returnedUtc
             );
 
-            var msgOk = allReturned ? "All items returned. Log is marked as Returned." : "Selected items marked as returned.";
+            // ── SignalR (only on full return) ──
+            if (allReturned)
+            {
+                await _hub.Clients.All.SendAsync("LibraryLogReturned", new
+                {
+                    logId = e.LogId,
+                    studentName = e.StudentName
+                });
+            }
+
+            var msgOk = allReturned
+                ? "All items returned. Log is marked as Returned."
+                : "Selected items marked as returned.";
 
             if (IsAjax)
                 return Json(new
@@ -576,7 +591,9 @@ namespace LibrarySystemBBU.Controllers
                 returnDate: null
             );
 
-            var msgOk = allReturned ? "Items were unchanged (all still returned)." : "Items unreturned. Log moved back to Approved.";
+            var msgOk = allReturned
+                ? "Items were unchanged (all still returned)."
+                : "Items unreturned. Log moved back to Approved.";
 
             if (IsAjax)
                 return Json(new
@@ -639,7 +656,6 @@ namespace LibrarySystemBBU.Controllers
             if (string.Equals(format, "print", StringComparison.OrdinalIgnoreCase))
                 return View("ExportPrint", data);
 
-            // UPDATED: use "xls" as format key
             if (string.Equals(format, "xls", StringComparison.OrdinalIgnoreCase))
             {
                 var html = BuildExcelHtml(data);
@@ -664,7 +680,6 @@ namespace LibrarySystemBBU.Controllers
             if (string.Equals(format, "print", StringComparison.OrdinalIgnoreCase))
                 return View("ExportOnePrint", l);
 
-            // UPDATED: use "xls" as format key
             if (string.Equals(format, "xls", StringComparison.OrdinalIgnoreCase))
             {
                 var html = BuildExcelHtml(new List<LibraryLog> { l });
@@ -677,7 +692,7 @@ namespace LibrarySystemBBU.Controllers
             return File(csvBytes, "text/csv; charset=utf-8", $"LibraryLog_{l.LogId}.csv");
         }
 
-        // ------------------------- DELETE (ONLY Pending) -------------------------
+        // ------------------------- Delete -------------------------
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -724,14 +739,11 @@ namespace LibrarySystemBBU.Controllers
 
             _context.LibraryLogs.Remove(e);
 
-            // delete related History row(s) for this log
             var histories = await _context.Histories
                 .Where(h => h.EntityType == "LibraryLog" && h.LogId == id)
                 .ToListAsync();
             if (histories.Any())
-            {
                 _context.Histories.RemoveRange(histories);
-            }
 
             await _context.SaveChangesAsync();
 
@@ -741,6 +753,113 @@ namespace LibrarySystemBBU.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // ------------------------- JSON API (member portal) -------------------------
+        [HttpGet]
+        public async Task<IActionResult> GetAvailableBooksJson()
+        {
+            var unavailable = await GetUnavailableBookIdsAsync();
+
+            var books = await _context.Books
+                .AsNoTracking()
+                .Include(b => b.Catalog)
+                .Where(b => !unavailable.Contains(b.BookId))
+                .OrderBy(b => b.Catalog.Title)
+                .ThenBy(b => b.Barcode)
+                .Select(b => new
+                {
+                    bookId = b.BookId,
+                    title = b.Catalog != null ? b.Catalog.Title : b.Title,
+                    barcode = b.Barcode,
+                    category = b.Catalog != null ? b.Catalog.Category : null,
+                    imagePath = b.Catalog != null ? b.Catalog.ImagePath : null,
+                })
+                .ToListAsync();
+
+            return Json(books);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateJson([FromBody] LibraryLogJsonRequest model)
+        {
+            if (model == null)
+                return BadRequest(new { success = false, message = "Invalid request." });
+
+            if (string.IsNullOrWhiteSpace(model.StudentName))
+                return Ok(new { success = false, message = "Name is required." });
+
+            if (string.IsNullOrWhiteSpace(model.PhoneNumber))
+                return Ok(new { success = false, message = "Phone is required." });
+
+            if (string.IsNullOrWhiteSpace(model.Gender))
+                return Ok(new { success = false, message = "Gender is required." });
+
+            if (string.IsNullOrWhiteSpace(model.Purpose))
+                return Ok(new { success = false, message = "Purpose is required." });
+
+            if (model.BookIds == null || model.BookIds.Count == 0)
+                return Ok(new { success = false, message = "Please select at least one book." });
+
+            var requested = model.BookIds.Distinct().ToList();
+            var unavailable = await GetUnavailableBookIdsAsync();
+            var blocked = requested.Where(id => unavailable.Contains(id)).ToList();
+            if (blocked.Any())
+                return Ok(new { success = false, message = "One or more selected books are currently unavailable." });
+
+            var log = new LibraryLog
+            {
+                StudentName = model.StudentName.Trim(),
+                PhoneNumber = model.PhoneNumber?.Trim(),
+                Gender = model.Gender?.Trim(),
+                VisitDate = DateTime.Today,
+                Purpose = model.Purpose?.Trim(),
+                Notes = model.Notes?.Trim(),
+                CreatedUtc = DateTime.UtcNow,
+                Items = new List<LibraryLogItem>()
+            };
+
+            _context.Entry(log).Property("Status").CurrentValue = STATUS_PENDING;
+            _context.Entry(log).Property("ApprovedUtc").CurrentValue = null;
+            _context.Entry(log).Property("ReturnedUtc").CurrentValue = null;
+
+            foreach (var bid in requested)
+                log.Items.Add(new LibraryLogItem { BookId = bid });
+
+            _context.LibraryLogs.Add(log);
+            await _context.SaveChangesAsync();
+
+            await UpsertLogHistoryAsync(
+                log,
+                actionType: "BorrowInLibrary",
+                notes: "Library log created via member portal (Pending).",
+                quantityOverride: log.Items?.Count
+            );
+
+            // ── SignalR ──
+            await _hub.Clients.All.SendAsync("LibraryLogCreated", new
+            {
+                logId = log.LogId,
+                studentName = log.StudentName,
+                bookCount = log.Items?.Count ?? 0
+            });
+
+            return Ok(new
+            {
+                success = true,
+                message = "Your request has been submitted. Please wait for staff approval.",
+                logId = log.LogId,
+            });
+        }
+
+        public class LibraryLogJsonRequest
+        {
+            public string StudentName { get; set; } = string.Empty;
+            public string? PhoneNumber { get; set; }
+            public string? Gender { get; set; }
+            public string? Purpose { get; set; }
+            public string? Notes { get; set; }
+            public List<int> BookIds { get; set; } = new();
+        }
+
         // ------------------------- CSV/HTML helpers -------------------------
         private string BuildCsv(IEnumerable<LibraryLog> rows)
         {
@@ -748,9 +867,7 @@ namespace LibrarySystemBBU.Controllers
             sb.AppendLine("LogId,Status,Student,Phone,Gender,VisitDate,Books,CreatedUtc,ApprovedUtc,ReturnedUtc");
             foreach (var l in rows)
             {
-                var titles = string.Join(" | ",
-                    (l.Items ?? new List<LibraryLogItem>()).Select(SafeTitle).Where(s => !string.IsNullOrWhiteSpace(s)));
-
+                var titles = string.Join(" | ", (l.Items ?? new List<LibraryLogItem>()).Select(SafeTitle).Where(s => !string.IsNullOrWhiteSpace(s)));
                 var statusVal = GetStatus(l);
                 DateTime? appr = GetApprovedUtc(l);
                 DateTime? ret = GetReturnedUtc(l);
@@ -765,8 +882,8 @@ namespace LibrarySystemBBU.Controllers
                     CsvDateText(l.VisitDate, "yyyy-MM-dd"),
                     CsvEscape(titles),
                     CsvDateText(l.CreatedUtc, "yyyy-MM-dd HH:mm"),
-                    CsvDateText(appr,        "yyyy-MM-dd HH:mm"),
-                    CsvDateText(ret,         "yyyy-MM-dd HH:mm")
+                    CsvDateText(appr,         "yyyy-MM-dd HH:mm"),
+                    CsvDateText(ret,          "yyyy-MM-dd HH:mm")
                 }));
                 sb.Append("\r\n");
             }
@@ -816,106 +933,6 @@ namespace LibrarySystemBBU.Controllers
         {
             var utf8Bom = new UTF8Encoding(encoderShouldEmitUTF8Identifier: true);
             return utf8Bom.GetBytes(s);
-        }
-
-        // GET /LibraryLogs/GetAvailableBooksJson
-        [HttpGet]
-        public async Task<IActionResult> GetAvailableBooksJson()
-        {
-            var unavailable = await GetUnavailableBookIdsAsync();
-
-            var books = await _context.Books
-                .AsNoTracking()
-                .Include(b => b.Catalog)
-                .Where(b => !unavailable.Contains(b.BookId))
-                .OrderBy(b => b.Catalog.Title)
-                .ThenBy(b => b.Barcode)
-                .Select(b => new
-                {
-                    bookId    = b.BookId,
-                    title     = b.Catalog != null ? b.Catalog.Title : b.Title,
-                    barcode   = b.Barcode,
-                    category  = b.Catalog != null ? b.Catalog.Category : null,
-                    imagePath = b.Catalog != null ? b.Catalog.ImagePath : null,
-                })
-                .ToListAsync();
-
-            return Json(books);
-        }
-
-        // POST /LibraryLogs/CreateJson
-        [HttpPost]
-        public async Task<IActionResult> CreateJson([FromBody] LibraryLogJsonRequest model)
-        {
-            if (model == null)
-                return BadRequest(new { success = false, message = "Invalid request." });
-
-            if (string.IsNullOrWhiteSpace(model.StudentName))
-                return Ok(new { success = false, message = "Name is required." });
-
-            if (string.IsNullOrWhiteSpace(model.PhoneNumber))
-                return Ok(new { success = false, message = "Phone is required." });
-
-            if (string.IsNullOrWhiteSpace(model.Gender))
-                return Ok(new { success = false, message = "Gender is required." });
-
-            if (string.IsNullOrWhiteSpace(model.Purpose))
-                return Ok(new { success = false, message = "Purpose is required." });
-
-            if (model.BookIds == null || model.BookIds.Count == 0)
-                return Ok(new { success = false, message = "Please select at least one book." });
-
-            var requested = model.BookIds.Distinct().ToList();
-            var unavailable = await GetUnavailableBookIdsAsync();
-            var blocked = requested.Where(id => unavailable.Contains(id)).ToList();
-            if (blocked.Any())
-                return Ok(new { success = false, message = "One or more selected books are currently unavailable." });
-
-            var log = new LibraryLog
-            {
-                StudentName = model.StudentName.Trim(),
-                PhoneNumber = model.PhoneNumber?.Trim(),
-                Gender      = model.Gender?.Trim(),
-                VisitDate   = DateTime.Today,
-                Purpose     = model.Purpose?.Trim(),
-                Notes       = model.Notes?.Trim(),
-                CreatedUtc  = DateTime.UtcNow,
-                Items       = new List<LibraryLogItem>()
-            };
-
-            _context.Entry(log).Property("Status").CurrentValue      = STATUS_PENDING;
-            _context.Entry(log).Property("ApprovedUtc").CurrentValue = null;
-            _context.Entry(log).Property("ReturnedUtc").CurrentValue = null;
-
-            foreach (var bid in requested)
-                log.Items.Add(new LibraryLogItem { BookId = bid });
-
-            _context.LibraryLogs.Add(log);
-            await _context.SaveChangesAsync();
-
-            await UpsertLogHistoryAsync(
-                log,
-                actionType: "BorrowInLibrary",
-                notes: "Library log created via member portal (Pending).",
-                quantityOverride: log.Items?.Count
-            );
-
-            return Ok(new
-            {
-                success = true,
-                message = "Your request has been submitted. Please wait for staff approval.",
-                logId   = log.LogId,
-            });
-        }
-
-        public class LibraryLogJsonRequest
-        {
-            public string StudentName { get; set; } = string.Empty;
-            public string? PhoneNumber { get; set; }
-            public string? Gender { get; set; }
-            public string? Purpose { get; set; }
-            public string? Notes { get; set; }
-            public List<int> BookIds { get; set; } = new();
         }
     }
 }

@@ -367,7 +367,12 @@
                                     <span asp-validation-for="Books[i].Barcode" class="text-danger"></span>
                                 </td>
                                 <td>
-                                    <input asp-for="Books[i].Status" class="form-control" />
+                                    <select asp-for="Books[i].Status" class="form-select">
+                                        <option value="Available">Available</option>
+                                        <option value="Borrowed">Borrowed</option>
+                                        <option value="Lost">Lost</option>
+                                        <option value="Damaged">Damaged</option>
+                                    </select>
                                     <span asp-validation-for="Books[i].Status" class="text-danger"></span>
                                 </td>
                                 <td><input asp-for="Books[i].Location" class="form-control" /></td>

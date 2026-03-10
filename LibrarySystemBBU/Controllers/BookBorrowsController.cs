@@ -27,7 +27,6 @@ namespace LibrarySystemBBU.Controllers
             await _context.SaveChangesAsync();
         }
 
-        // Check by BookId (barcode)
         private async Task<(bool ok, string? error)> TryReserveBooksAsync(IEnumerable<int> bookIds)
         {
             var ids = (bookIds ?? Enumerable.Empty<int>())
@@ -48,7 +47,6 @@ namespace LibrarySystemBBU.Controllers
             return (true, null);
         }
 
-        // BOOK STATUS
         private async Task SetBooksStatusAsync(IEnumerable<int> bookIds, string status)
         {
             var ids = (bookIds ?? Enumerable.Empty<int>())
@@ -72,7 +70,6 @@ namespace LibrarySystemBBU.Controllers
         private Task MarkBooksAsBorrowedAsync(IEnumerable<int> bookIds) => SetBooksStatusAsync(bookIds, "Borrowed");
         private Task MarkBooksAsAvailableAsync(IEnumerable<int> bookIds) => SetBooksStatusAsync(bookIds, "Available");
 
-        // LOOKUPS
         private async Task PopulateLookupsAsync()
         {
             ViewBag.MemberId = await _context.Members
@@ -141,7 +138,6 @@ namespace LibrarySystemBBU.Controllers
             ViewBag.BooksByCatalog = booksByCatalog;
         }
 
-        // AVAILABILITY (per Catalog copy)
         private static Dictionary<Guid, int> GetItemCountsByCatalog(IEnumerable<BookBorrowDetail> items)
             => (items ?? Enumerable.Empty<BookBorrowDetail>())
                 .GroupBy(x => x.CatalogId)
@@ -206,8 +202,8 @@ namespace LibrarySystemBBU.Controllers
             {
                 var oldQty = oldMap.TryGetValue(id, out var oq) ? oq : 0;
                 var newQty = newMap.TryGetValue(id, out var nq) ? nq : 0;
-                if (nq > oq) add[id] = nq - oq;
-                if (oq > nq) rel[id] = oq - nq;
+                if (nq > oldQty) add[id] = nq - oldQty;
+                if (oldQty > nq) rel[id] = oldQty - nq;
             }
             return (add, rel);
         }
@@ -215,6 +211,7 @@ namespace LibrarySystemBBU.Controllers
         // =========================
         // Pages
         // =========================
+
         [HttpGet("BookBorrows")]
         [HttpGet("BookBorrows/Index")]
         public async Task<IActionResult> Index()
@@ -231,7 +228,6 @@ namespace LibrarySystemBBU.Controllers
             return View(loans);
         }
 
-        // EXPORT -> Excel (.xls)
         [HttpGet("BookBorrows/Export")]
         public async Task<IActionResult> Export()
         {
@@ -258,7 +254,6 @@ namespace LibrarySystemBBU.Controllers
             foreach (var loan in loans)
             {
                 var member = loan.LibraryMember?.FullName ?? "—";
-
                 string status =
                     loan.IsReturned ? "Returned"
                     : (loan.DueDate.Date <= today ? "Overdue" : "In Progress");
@@ -295,7 +290,6 @@ namespace LibrarySystemBBU.Controllers
             return File(bytes, "application/vnd.ms-excel", fileName);
         }
 
-        // CREATE (GET)
         [HttpGet("BookBorrows/Create")]
         public async Task<IActionResult> Create()
         {
@@ -309,20 +303,14 @@ namespace LibrarySystemBBU.Controllers
             return View(model);
         }
 
-        // CREATE (POST) - UPDATED DATE RULES:
-        // ✅ LoanDate: allow any date (past/future)
-        // ✅ DueDate: must be >= LoanDate
         [HttpPost("BookBorrows/Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MemberId,LoanDate,DueDate,IsReturned,BorrowingFee,IsPaid,DepositAmount,LoanBookDetails")] BookBorrow model)
         {
             model.IsReturned = false;
-
             model.LoanDate = model.LoanDate == default ? DateTime.Today : model.LoanDate.Date;
             model.DueDate = model.DueDate == default ? model.LoanDate.AddDays(7) : model.DueDate.Date;
 
-            // ✅ NEW: allow any LoanDate (remove "cannot be earlier than today")
-            // ✅ Only validate DueDate >= LoanDate
             if (model.DueDate.Date < model.LoanDate.Date)
                 ModelState.AddModelError(nameof(model.DueDate), "Due date cannot be before loan date.");
 
@@ -372,7 +360,6 @@ namespace LibrarySystemBBU.Controllers
                 var needMap = GetItemCountsByCatalog(validItems);
                 var take = needMap.ToDictionary(kv => kv.Key, kv => -kv.Value);
                 await UpdateAvailableCopiesAsync(take);
-
                 await UpdateBorrowCountsAsync(needMap);
                 await MarkBooksAsBorrowedAsync(validItems.Select(i => i.BookId));
 
@@ -396,7 +383,7 @@ namespace LibrarySystemBBU.Controllers
                     .Distinct()
                     .ToList();
 
-                var history = new History
+                await AddHistoryAsync(new History
                 {
                     EntityType = "Loan",
                     ActionType = "BorrowHome",
@@ -410,8 +397,7 @@ namespace LibrarySystemBBU.Controllers
                     BookTitle = titles.Count > 0 ? string.Join(", ", titles) : null,
                     LocationType = "Home",
                     Notes = "Created home loan (MVC form)."
-                };
-                await AddHistoryAsync(history);
+                });
 
                 await tx.CommitAsync();
             }
@@ -425,7 +411,6 @@ namespace LibrarySystemBBU.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // EDIT (GET) - explicit route helps prevent 404 issues
         [HttpGet("BookBorrows/Edit/{id:int}")]
         public async Task<IActionResult> Edit(int id)
         {
@@ -441,9 +426,6 @@ namespace LibrarySystemBBU.Controllers
             return View(loan);
         }
 
-        // EDIT (POST) - UPDATED DATE RULES:
-        // ✅ LoanDate: allow any date (past/future)
-        // ✅ DueDate: must be >= LoanDate
         [HttpPost("BookBorrows/Edit/{id:int}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("LoanId,MemberId,LoanDate,DueDate,IsReturned,BorrowingFee,IsPaid,DepositAmount,LoanBookDetails")] BookBorrow model)
@@ -459,7 +441,6 @@ namespace LibrarySystemBBU.Controllers
             model.LoanDate = model.LoanDate == default ? existing.LoanDate.Date : model.LoanDate.Date;
             model.DueDate = model.DueDate == default ? existing.DueDate.Date : model.DueDate.Date;
 
-            // ✅ Only validate DueDate >= LoanDate
             if (model.DueDate.Date < model.LoanDate.Date)
                 ModelState.AddModelError(nameof(model.DueDate), "Due date cannot be before loan date.");
 
@@ -496,8 +477,7 @@ namespace LibrarySystemBBU.Controllers
 
                 if (wasReturned && !willReturn)
                 {
-                    var allBookIds = validItems.Select(i => i.BookId);
-                    var (ok, error) = await TryReserveBooksAsync(allBookIds);
+                    var (ok, error) = await TryReserveBooksAsync(validItems.Select(i => i.BookId));
                     if (!ok)
                     {
                         await tx.RollbackAsync();
@@ -539,44 +519,41 @@ namespace LibrarySystemBBU.Controllers
                 var (deltaAdd, deltaRelease) = ComputeDeltaByCatalog(existing.LoanBookDetails, validItems);
                 await UpdateBorrowCountsAsync(deltaAdd, deltaRelease);
 
-                // Status logic
                 var oldBookIds = existing.LoanBookDetails.Select(d => d.BookId).ToHashSet();
                 var newBookIds = validItems.Select(d => d.BookId).Where(x => x > 0).ToHashSet();
                 var removedIds = oldBookIds.Except(newBookIds).ToList();
                 var addedIds = newBookIds.Except(oldBookIds).ToList();
 
-if (willReturn)
-{
-    await MarkBooksAsAvailableAsync(oldBookIds.Union(newBookIds));
-    
-    var give = GetItemCountsByCatalog(existing.LoanBookDetails);
-    await UpdateAvailableCopiesAsync(give);
+                if (willReturn)
+                {
+                    await MarkBooksAsAvailableAsync(oldBookIds.Union(newBookIds));
+                    var give = GetItemCountsByCatalog(existing.LoanBookDetails);
+                    await UpdateAvailableCopiesAsync(give);
 
-    var alreadyHasReturn = await _context.BookReturns.AnyAsync(r => r.LoanId == existing.LoanId);
-    if (!alreadyHasReturn)
-    {
-        _context.BookReturns.Add(new BookReturn
-        {
-            LoanId      = existing.LoanId,
-            ReturnDate  = DateTime.Now,
-            LateDays    = 0,
-            FineAmount  = 0,
-            ExtraCharge = 0,
-            AmountPaid  = 0,
-            Notes       = "Returned via admin edit.",
-        });
-    }
-}
+                    var alreadyHasReturn = await _context.BookReturns.AnyAsync(r => r.LoanId == existing.LoanId);
+                    if (!alreadyHasReturn)
+                    {
+                        _context.BookReturns.Add(new BookReturn
+                        {
+                            LoanId = existing.LoanId,
+                            ReturnDate = DateTime.Now,
+                            LateDays = 0,
+                            FineAmount = 0,
+                            ExtraCharge = 0,
+                            AmountPaid = 0,
+                            Notes = "Returned via admin edit.",
+                        });
+                    }
+                }
                 else
                 {
-if (wasReturned && !willReturn)
-{
-    await MarkBooksAsBorrowedAsync(newBookIds);
-
-    var take = GetItemCountsByCatalog(validItems)
-        .ToDictionary(kv => kv.Key, kv => -kv.Value);
-    await UpdateAvailableCopiesAsync(take);
-}
+                    if (wasReturned && !willReturn)
+                    {
+                        await MarkBooksAsBorrowedAsync(newBookIds);
+                        var take = GetItemCountsByCatalog(validItems)
+                            .ToDictionary(kv => kv.Key, kv => -kv.Value);
+                        await UpdateAvailableCopiesAsync(take);
+                    }
                     else
                     {
                         await MarkBooksAsBorrowedAsync(addedIds);
@@ -616,7 +593,6 @@ if (wasReturned && !willReturn)
             }
         }
 
-        // DETAILS (explicit route fixes your "/BookBorrows/Details/6" 404)
         [HttpGet("BookBorrows/Details/{id:int}")]
         public async Task<IActionResult> Details(int id)
         {
@@ -633,7 +609,6 @@ if (wasReturned && !willReturn)
             return View(loan);
         }
 
-        // DELETE (make route match your JS: fetch('/BookBorrows/Delete/{id}'))
         [HttpPost("BookBorrows/Delete/{id:int}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
@@ -661,7 +636,6 @@ if (wasReturned && !willReturn)
                 {
                     var give = GetItemCountsByCatalog(loan.LoanBookDetails);
                     await UpdateAvailableCopiesAsync(give);
-
                     await MarkBooksAsAvailableAsync(loan.LoanBookDetails.Select(d => d.BookId));
                 }
 
@@ -673,8 +647,8 @@ if (wasReturned && !willReturn)
 
                 _context.BookBorrows.Remove(loan);
                 await _context.SaveChangesAsync();
-
                 await tx.CommitAsync();
+
                 return Ok(new { ok = true, message = "Loan deleted." });
             }
             catch
@@ -683,7 +657,6 @@ if (wasReturned && !willReturn)
                 throw;
             }
         }
-
 
         // =========================
         // LOOKUPS (Ajax)
@@ -697,9 +670,9 @@ if (wasReturned && !willReturn)
                 .Where(b => b.CatalogId == catalogId)
                 .Select(b => new
                 {
-                    bookId   = b.BookId,
-                    barcode  = b.Barcode,
-                    status   = b.Status,
+                    bookId = b.BookId,
+                    barcode = b.Barcode,
+                    status = b.Status,
                     location = b.Location
                 })
                 .OrderBy(b => b.barcode)
@@ -724,46 +697,44 @@ if (wasReturned && !willReturn)
 
             return Json(new
             {
-                loanId        = loan.LoanId,
-                memberId      = loan.MemberId,
-                memberName    = loan.LibraryMember?.FullName,
-                loanDate      = loan.LoanDate,
-                dueDate       = loan.DueDate,
-                isReturned    = loan.IsReturned,
-                borrowingFee  = loan.BorrowingFee,
-                isPaid        = loan.IsPaid,
+                loanId = loan.LoanId,
+                memberId = loan.MemberId,
+                memberName = loan.LibraryMember?.FullName,
+                loanDate = loan.LoanDate,
+                dueDate = loan.DueDate,
+                isReturned = loan.IsReturned,
+                borrowingFee = loan.BorrowingFee,
+                isPaid = loan.IsPaid,
                 depositAmount = loan.DepositAmount,
-                items         = loan.LoanBookDetails.Select(d => new
+                items = loan.LoanBookDetails.Select(d => new
                 {
                     loanBookDetailId = d.LoanBookDetailId,
-                    bookId           = d.BookId,
-                    catalogId        = d.CatalogId,
-                    barcode          = d.Book?.Barcode,
-                    catalogTitle     = d.Book?.Catalog?.Title ?? d.Book?.Title,
-                    conditionOut     = d.ConditionOut,
-                    conditionIn      = d.ConditionIn,
+                    bookId = d.BookId,
+                    catalogId = d.CatalogId,
+                    barcode = d.Book?.Barcode,
+                    catalogTitle = d.Book?.Catalog?.Title ?? d.Book?.Title,
+                    conditionOut = d.ConditionOut,
+                    conditionIn = d.ConditionIn,
                     fineDetailAmount = d.FineDetailAmount,
                     fineDetailReason = d.FineDetailReason,
                 }),
                 returns = loan.BookReturns.Select(r => new
                 {
-                    returnId          = r.ReturnId,
-                    returnDate        = r.ReturnDate,
-                    lateDays          = r.LateDays,
-                    fineAmount        = r.FineAmount,
-                    extraCharge       = r.ExtraCharge,
-                    amountPaid        = r.AmountPaid,
-                    refundAmount      = r.RefundAmount,
+                    returnId = r.ReturnId,
+                    returnDate = r.ReturnDate,
+                    lateDays = r.LateDays,
+                    fineAmount = r.FineAmount,
+                    extraCharge = r.ExtraCharge,
+                    amountPaid = r.AmountPaid,
+                    refundAmount = r.RefundAmount,
                     conditionOnReturn = r.ConditionOnReturn,
-                    notes             = r.Notes,
+                    notes = r.Notes,
                 })
             });
         }
 
         // =========================
         // RETURN (POST)
-        // Restores available copies, marks books Available,
-        // records BookReturn with timestamp, logs History.
         // =========================
 
         [HttpPost("BookBorrows/ReturnJson")]
@@ -790,82 +761,74 @@ if (wasReturned && !willReturn)
             using var tx = await _context.Database.BeginTransactionAsync();
             try
             {
-                // 1. Mark loan as returned
                 loan.IsReturned = true;
 
-                // 2. Update condition-in on each detail if provided
                 if (model.ConditionItems != null)
                 {
                     foreach (var ci in model.ConditionItems)
                     {
                         var detail = loan.LoanBookDetails.FirstOrDefault(d => d.LoanBookDetailId == ci.LoanBookDetailId);
                         if (detail == null) continue;
-                        detail.ConditionIn      = ci.ConditionIn?.Trim();
+                        detail.ConditionIn = ci.ConditionIn?.Trim();
                         detail.FineDetailAmount = ci.FineDetailAmount;
                         detail.FineDetailReason = ci.FineDetailReason?.Trim();
-                        detail.Modified         = DateTime.UtcNow;
+                        detail.Modified = DateTime.UtcNow;
                     }
                 }
 
-                // 3. Record the BookReturn with full timestamp (not .Date)
                 var bookReturn = new BookReturn
                 {
-                    LoanId            = loan.LoanId,
-                    ReturnDate        = DateTime.Now,          // ← full timestamp
-                    LateDays          = model.LateDays,
-                    FineAmount        = model.FineAmount,
-                    ExtraCharge       = model.ExtraCharge,
-                    AmountPaid        = model.AmountPaid,
-                    RefundAmount      = model.RefundAmount,
+                    LoanId = loan.LoanId,
+                    ReturnDate = DateTime.Now,
+                    LateDays = model.LateDays,
+                    FineAmount = model.FineAmount,
+                    ExtraCharge = model.ExtraCharge,
+                    AmountPaid = model.AmountPaid,
+                    RefundAmount = model.RefundAmount,
                     ConditionOnReturn = model.ConditionOnReturn?.Trim(),
-                    Notes             = model.Notes?.Trim(),
+                    Notes = model.Notes?.Trim(),
                 };
                 _context.BookReturns.Add(bookReturn);
 
-                // 4. Restore available copies on each catalog
                 var give = GetItemCountsByCatalog(loan.LoanBookDetails);
                 await UpdateAvailableCopiesAsync(give);
-
-                // 5. Mark individual books as Available
                 await MarkBooksAsAvailableAsync(loan.LoanBookDetails.Select(d => d.BookId));
 
                 await _context.SaveChangesAsync();
 
-                // 6. Log history
                 var titles = loan.LoanBookDetails
                     .Select(d => d.Book?.Catalog?.Title ?? d.Book?.Title)
                     .Where(s => !string.IsNullOrWhiteSpace(s))
                     .Distinct()
                     .ToList();
 
-                var history = new History
+                await AddHistoryAsync(new History
                 {
-                    EntityType    = "Loan",
-                    ActionType    = "ReturnHome",
-                    LoanId        = loan.LoanId,
-                    MemberName    = loan.LibraryMember?.FullName,
-                    LoanDate      = loan.LoanDate,
-                    DueDate       = loan.DueDate,
-                    ReturnDate    = bookReturn.ReturnDate,
-                    BorrowingFee  = loan.BorrowingFee,
-                    FineAmount    = model.FineAmount,
-                    AmountPaid    = model.AmountPaid,
+                    EntityType = "Loan",
+                    ActionType = "ReturnHome",
+                    LoanId = loan.LoanId,
+                    MemberName = loan.LibraryMember?.FullName,
+                    LoanDate = loan.LoanDate,
+                    DueDate = loan.DueDate,
+                    ReturnDate = bookReturn.ReturnDate,
+                    BorrowingFee = loan.BorrowingFee,
+                    FineAmount = model.FineAmount,
+                    AmountPaid = model.AmountPaid,
                     DepositAmount = loan.DepositAmount,
-                    Quantity      = loan.LoanBookDetails.Count,
-                    BookTitle     = titles.Count > 0 ? string.Join(", ", titles) : null,
-                    LocationType  = "Home",
-                    Notes         = model.Notes?.Trim() ?? "Returned via portal."
-                };
-                await AddHistoryAsync(history);
+                    Quantity = loan.LoanBookDetails.Count,
+                    BookTitle = titles.Count > 0 ? string.Join(", ", titles) : null,
+                    LocationType = "Home",
+                    Notes = model.Notes?.Trim() ?? "Returned via portal."
+                });
 
                 await tx.CommitAsync();
 
                 return Ok(new
                 {
-                    success    = true,
-                    message    = "Book returned successfully.",
+                    success = true,
+                    message = "Book returned successfully.",
                     returnDate = bookReturn.ReturnDate,
-                    returnId   = bookReturn.ReturnId
+                    returnId = bookReturn.ReturnId
                 });
             }
             catch
@@ -876,9 +839,7 @@ if (wasReturned && !willReturn)
         }
 
         // =========================
-        // UN-RETURN (POST)
-        // Reverses a return: removes BookReturn record,
-        // marks loan active again, decrements available copies.
+        // UN-RETURN JSON (POST)
         // =========================
 
         [HttpPost("BookBorrows/UnReturnJson")]
@@ -903,7 +864,6 @@ if (wasReturned && !willReturn)
             using var tx = await _context.Database.BeginTransactionAsync();
             try
             {
-                // 1. Remove the most recent BookReturn (or specific one if ReturnId provided)
                 BookReturn? ret = model.ReturnId.HasValue
                     ? loan.BookReturns.FirstOrDefault(r => r.ReturnId == model.ReturnId.Value)
                     : loan.BookReturns.OrderByDescending(r => r.ReturnDate).FirstOrDefault();
@@ -911,32 +871,26 @@ if (wasReturned && !willReturn)
                 if (ret != null)
                     _context.BookReturns.Remove(ret);
 
-                // 2. Mark loan as active again
                 loan.IsReturned = false;
 
-                // 3. Decrement available copies (re-borrow)
                 var take = GetItemCountsByCatalog(loan.LoanBookDetails)
                     .ToDictionary(kv => kv.Key, kv => -kv.Value);
                 await UpdateAvailableCopiesAsync(take);
-
-                // 4. Mark books as Borrowed again
                 await MarkBooksAsBorrowedAsync(loan.LoanBookDetails.Select(d => d.BookId));
 
                 await _context.SaveChangesAsync();
 
-                // 5. Log history
-                var history = new History
+                await AddHistoryAsync(new History
                 {
-                    EntityType   = "Loan",
-                    ActionType   = "UnReturn",
-                    LoanId       = loan.LoanId,
-                    MemberName   = loan.LibraryMember?.FullName,
-                    LoanDate     = loan.LoanDate,
-                    DueDate      = loan.DueDate,
+                    EntityType = "Loan",
+                    ActionType = "UnReturn",
+                    LoanId = loan.LoanId,
+                    MemberName = loan.LibraryMember?.FullName,
+                    LoanDate = loan.LoanDate,
+                    DueDate = loan.DueDate,
                     LocationType = "Home",
-                    Notes        = "Return reversed (un-returned)."
-                };
-                await AddHistoryAsync(history);
+                    Notes = "Return reversed (un-returned)."
+                });
 
                 await tx.CommitAsync();
 
@@ -950,7 +904,7 @@ if (wasReturned && !willReturn)
         }
 
         // =========================
-        // RECEIPT (GET)
+        // RECEIPT JSON (GET)
         // =========================
 
         [HttpGet("BookBorrows/ReceiptJson/{id:int}")]
@@ -974,29 +928,247 @@ if (wasReturned && !willReturn)
 
             return Json(new
             {
-                loanId        = loan.LoanId,
-                memberName    = loan.LibraryMember?.FullName,
-                loanDate      = loan.LoanDate,
-                dueDate       = loan.DueDate,
-                isReturned    = loan.IsReturned,
-                borrowingFee  = loan.BorrowingFee,
-                isPaid        = loan.IsPaid,
+                loanId = loan.LoanId,
+                memberName = loan.LibraryMember?.FullName,
+                loanDate = loan.LoanDate,
+                dueDate = loan.DueDate,
+                isReturned = loan.IsReturned,
+                borrowingFee = loan.BorrowingFee,
+                isPaid = loan.IsPaid,
                 depositAmount = loan.DepositAmount,
-                returnDate    = latestReturn?.ReturnDate,
-                fineAmount    = latestReturn?.FineAmount,
-                extraCharge   = latestReturn?.ExtraCharge,
-                amountPaid    = latestReturn?.AmountPaid,
-                refundAmount  = latestReturn?.RefundAmount,
-                books         = loan.LoanBookDetails.Select(d => new
+                returnDate = latestReturn?.ReturnDate,
+                fineAmount = latestReturn?.FineAmount,
+                extraCharge = latestReturn?.ExtraCharge,
+                amountPaid = latestReturn?.AmountPaid,
+                refundAmount = latestReturn?.RefundAmount,
+                books = loan.LoanBookDetails.Select(d => new
                 {
-                    title        = d.Book?.Catalog?.Title ?? d.Book?.Title ?? "Unknown",
-                    barcode      = d.Book?.Barcode,
+                    title = d.Book?.Catalog?.Title ?? d.Book?.Title ?? "Unknown",
+                    barcode = d.Book?.Barcode,
                     conditionOut = d.ConditionOut,
-                    conditionIn  = d.ConditionIn,
-                    fineAmount   = d.FineDetailAmount,
-                    fineReason   = d.FineDetailReason,
+                    conditionIn = d.ConditionIn,
+                    fineAmount = d.FineDetailAmount,
+                    fineReason = d.FineDetailReason,
                 })
             });
+        }
+
+        // =========================
+        // RETURN (POST) - MVC alias
+        // =========================
+
+        [HttpPost("BookBorrows/Return/{id:int}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Return(int id)
+        {
+            var loan = await _context.BookBorrows
+                .Include(b => b.LibraryMember)
+                .Include(b => b.LoanBookDetails)
+                    .ThenInclude(d => d.Book)
+                        .ThenInclude(bk => bk.Catalog)
+                .Include(b => b.BookReturns)
+                .FirstOrDefaultAsync(x => x.LoanId == id);
+
+            if (loan == null) return NotFound(new { success = false, message = "Loan not found." });
+            if (loan.IsReturned) return Ok(new { success = false, message = "Already returned." });
+
+            using var tx = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                loan.IsReturned = true;
+
+                var alreadyHasReturn = await _context.BookReturns.AnyAsync(r => r.LoanId == id);
+                if (!alreadyHasReturn)
+                {
+                    _context.BookReturns.Add(new BookReturn
+                    {
+                        LoanId = loan.LoanId,
+                        ReturnDate = DateTime.Now,
+                        LateDays = 0,
+                        FineAmount = 0,
+                        ExtraCharge = 0,
+                        AmountPaid = 0,
+                        Notes = "Returned via admin panel.",
+                    });
+                }
+
+                var give = GetItemCountsByCatalog(loan.LoanBookDetails);
+                await UpdateAvailableCopiesAsync(give);
+                await MarkBooksAsAvailableAsync(loan.LoanBookDetails.Select(d => d.BookId));
+
+                var titles = loan.LoanBookDetails
+                    .Select(d => d.Book?.Catalog?.Title ?? d.Book?.Title)
+                    .Where(s => !string.IsNullOrWhiteSpace(s))
+                    .Distinct()
+                    .ToList();
+
+                await AddHistoryAsync(new History
+                {
+                    EntityType = "Loan",
+                    ActionType = "ReturnHome",
+                    LoanId = loan.LoanId,
+                    MemberName = loan.LibraryMember?.FullName,
+                    LoanDate = loan.LoanDate,
+                    DueDate = loan.DueDate,
+                    ReturnDate = DateTime.Now,
+                    BorrowingFee = loan.BorrowingFee,
+                    Quantity = loan.LoanBookDetails.Count,
+                    BookTitle = titles.Count > 0 ? string.Join(", ", titles) : null,
+                    LocationType = "Home",
+                    Notes = "Returned via admin panel.",
+                });
+
+                await _context.SaveChangesAsync();
+                await tx.CommitAsync();
+
+                return Ok(new { success = true, message = "Returned successfully.", returnDate = DateTime.Now });
+            }
+            catch
+            {
+                await tx.RollbackAsync();
+                throw;
+            }
+        }
+
+        // =========================
+        // UN-RETURN (POST) - MVC alias
+        // =========================
+
+        [HttpPost("BookBorrows/UnReturn/{id:int}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UnReturn(int id)
+        {
+            var loan = await _context.BookBorrows
+                .Include(b => b.LibraryMember)
+                .Include(b => b.LoanBookDetails)
+                .Include(b => b.BookReturns)
+                .FirstOrDefaultAsync(x => x.LoanId == id);
+
+            if (loan == null) return NotFound(new { success = false, message = "Loan not found." });
+            if (!loan.IsReturned) return Ok(new { success = false, message = "Loan is not returned." });
+
+            using var tx = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var ret = loan.BookReturns.OrderByDescending(r => r.ReturnDate).FirstOrDefault();
+                if (ret != null) _context.BookReturns.Remove(ret);
+
+                loan.IsReturned = false;
+
+                var take = GetItemCountsByCatalog(loan.LoanBookDetails)
+                    .ToDictionary(kv => kv.Key, kv => -kv.Value);
+                await UpdateAvailableCopiesAsync(take);
+                await MarkBooksAsBorrowedAsync(loan.LoanBookDetails.Select(d => d.BookId));
+
+                await AddHistoryAsync(new History
+                {
+                    EntityType = "Loan",
+                    ActionType = "UnReturn",
+                    LoanId = loan.LoanId,
+                    MemberName = loan.LibraryMember?.FullName,
+                    LoanDate = loan.LoanDate,
+                    DueDate = loan.DueDate,
+                    LocationType = "Home",
+                    Notes = "Return reversed via admin panel.",
+                });
+
+                await _context.SaveChangesAsync();
+                await tx.CommitAsync();
+
+                return Ok(new { success = true, message = "Un-returned successfully." });
+            }
+            catch
+            {
+                await tx.RollbackAsync();
+                throw;
+            }
+        }
+
+        // =========================
+        // BORROW RECEIPT (GET)
+        // =========================
+
+        [HttpGet("BookBorrows/BorrowReceipt/{id:int}")]
+        public async Task<IActionResult> BorrowReceipt(int id)
+        {
+            var loan = await _context.BookBorrows
+                .Include(b => b.LibraryMember)
+                .Include(b => b.LoanBookDetails)
+                    .ThenInclude(d => d.Book)
+                        .ThenInclude(bk => bk.Catalog)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.LoanId == id);
+
+            if (loan == null) return NotFound();
+
+            var vm = new BorrowReceiptVm
+            {
+                LoanId = loan.LoanId,
+                MemberName = loan.LibraryMember?.FullName ?? "Unknown",
+                LoanDate = loan.LoanDate,
+                DueDate = loan.DueDate,
+                BorrowingFee = loan.BorrowingFee,
+                DepositAmount = loan.DepositAmount,
+                IsPaid = loan.IsPaid,
+                BookTitles = loan.LoanBookDetails
+                    .Select(d => d.Book?.Catalog?.Title ?? d.Book?.Title ?? "Unknown")
+                    .Where(t => !string.IsNullOrWhiteSpace(t))
+                    .Distinct()
+                    .ToList()
+            };
+
+            return View(vm);
+        }
+
+        // =========================
+        // RETURN RECEIPT (GET)
+        // =========================
+
+        [HttpGet("BookBorrows/ReturnReceipt/{id:int}")]
+        public async Task<IActionResult> ReturnReceipt(int id)
+        {
+            var loan = await _context.BookBorrows
+                .Include(b => b.LibraryMember)
+                .Include(b => b.LoanBookDetails)
+                    .ThenInclude(d => d.Book)
+                        .ThenInclude(bk => bk.Catalog)
+                .Include(b => b.BookReturns)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.LoanId == id);
+
+            if (loan == null) return NotFound();
+
+            var latestReturn = loan.BookReturns
+                .OrderByDescending(r => r.ReturnDate)
+                .FirstOrDefault();
+
+            if (latestReturn == null) return NotFound("No return record found for this loan.");
+
+            var vm = new ReturnReceiptVm
+            {
+                ReturnId = latestReturn.ReturnId,
+                LoanId = loan.LoanId,
+                MemberName = loan.LibraryMember?.FullName ?? "Unknown",
+                LoanDate = loan.LoanDate,
+                DueDate = loan.DueDate,
+                ReturnDate = latestReturn.ReturnDate,
+                BorrowingFee = loan.BorrowingFee,
+                DepositAmount = loan.DepositAmount,
+                LateDays = latestReturn.LateDays,
+                FineAmount = latestReturn.FineAmount,
+                ExtraCharge = latestReturn.ExtraCharge,
+                AmountPaid = latestReturn.AmountPaid,
+                RefundAmount = latestReturn.RefundAmount,
+                ConditionOnReturn = latestReturn.ConditionOnReturn,
+                Notes = latestReturn.Notes,
+                BookTitles = loan.LoanBookDetails
+                    .Select(d => d.Book?.Catalog?.Title ?? d.Book?.Title ?? "Unknown")
+                    .Where(t => !string.IsNullOrWhiteSpace(t))
+                    .Distinct()
+                    .ToList()
+            };
+
+            return View(vm);
         }
 
         // =========================
@@ -1029,128 +1201,5 @@ if (wasReturned && !willReturn)
             public int LoanId { get; set; }
             public int? ReturnId { get; set; }
         }
-
-        // ── Route aliases for MVC admin frontend ──
-[HttpPost("BookBorrows/Return/{id:int}")]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> Return(int id)
-{
-    var loan = await _context.BookBorrows
-        .Include(b => b.LibraryMember)
-        .Include(b => b.LoanBookDetails)
-            .ThenInclude(d => d.Book)
-                .ThenInclude(bk => bk.Catalog)
-        .Include(b => b.BookReturns)
-        .FirstOrDefaultAsync(x => x.LoanId == id);
-
-    if (loan == null) return NotFound(new { success = false, message = "Loan not found." });
-    if (loan.IsReturned) return Ok(new { success = false, message = "Already returned." });
-
-    using var tx = await _context.Database.BeginTransactionAsync();
-    try
-    {
-        loan.IsReturned = true;
-
-        var alreadyHasReturn = await _context.BookReturns.AnyAsync(r => r.LoanId == id);
-        if (!alreadyHasReturn)
-        {
-            _context.BookReturns.Add(new BookReturn
-            {
-                LoanId      = loan.LoanId,
-                ReturnDate  = DateTime.Now,
-                LateDays    = 0,
-                FineAmount  = 0,
-                ExtraCharge = 0,
-                AmountPaid  = 0,
-                Notes       = "Returned via admin panel.",
-            });
-        }
-
-        var give = GetItemCountsByCatalog(loan.LoanBookDetails);
-        await UpdateAvailableCopiesAsync(give);
-        await MarkBooksAsAvailableAsync(loan.LoanBookDetails.Select(d => d.BookId));
-
-        var titles = loan.LoanBookDetails
-            .Select(d => d.Book?.Catalog?.Title ?? d.Book?.Title)
-            .Where(s => !string.IsNullOrWhiteSpace(s))
-            .Distinct().ToList();
-
-        await AddHistoryAsync(new History
-        {
-            EntityType   = "Loan",
-            ActionType   = "ReturnHome",
-            LoanId       = loan.LoanId,
-            MemberName   = loan.LibraryMember?.FullName,
-            LoanDate     = loan.LoanDate,
-            DueDate      = loan.DueDate,
-            ReturnDate   = DateTime.Now,
-            BorrowingFee = loan.BorrowingFee,
-            Quantity     = loan.LoanBookDetails.Count,
-            BookTitle    = titles.Count > 0 ? string.Join(", ", titles) : null,
-            LocationType = "Home",
-            Notes        = "Returned via admin panel.",
-        });
-
-        await _context.SaveChangesAsync();
-        await tx.CommitAsync();
-
-        return Ok(new { success = true, message = "Returned successfully.", returnDate = DateTime.Now });
-    }
-    catch
-    {
-        await tx.RollbackAsync();
-        throw;
-    }
-}
-
-[HttpPost("BookBorrows/UnReturn/{id:int}")]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> UnReturn(int id)
-{
-    var loan = await _context.BookBorrows
-        .Include(b => b.LibraryMember)
-        .Include(b => b.LoanBookDetails)
-        .Include(b => b.BookReturns)
-        .FirstOrDefaultAsync(x => x.LoanId == id);
-
-    if (loan == null) return NotFound(new { success = false, message = "Loan not found." });
-    if (!loan.IsReturned) return Ok(new { success = false, message = "Loan is not returned." });
-
-    using var tx = await _context.Database.BeginTransactionAsync();
-    try
-    {
-        var ret = loan.BookReturns.OrderByDescending(r => r.ReturnDate).FirstOrDefault();
-        if (ret != null) _context.BookReturns.Remove(ret);
-
-        loan.IsReturned = false;
-
-        var take = GetItemCountsByCatalog(loan.LoanBookDetails)
-            .ToDictionary(kv => kv.Key, kv => -kv.Value);
-        await UpdateAvailableCopiesAsync(take);
-        await MarkBooksAsBorrowedAsync(loan.LoanBookDetails.Select(d => d.BookId));
-
-        await AddHistoryAsync(new History
-        {
-            EntityType   = "Loan",
-            ActionType   = "UnReturn",
-            LoanId       = loan.LoanId,
-            MemberName   = loan.LibraryMember?.FullName,
-            LoanDate     = loan.LoanDate,
-            DueDate      = loan.DueDate,
-            LocationType = "Home",
-            Notes        = "Return reversed via admin panel.",
-        });
-
-        await _context.SaveChangesAsync();
-        await tx.CommitAsync();
-
-        return Ok(new { success = true, message = "Un-returned successfully." });
-    }
-    catch
-    {
-        await tx.RollbackAsync();
-        throw;
-    }
-}
     }
 }

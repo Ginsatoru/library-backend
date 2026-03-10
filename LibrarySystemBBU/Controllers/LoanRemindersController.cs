@@ -23,13 +23,27 @@ namespace LibrarySystemBBU.Controllers
         }
 
         // ========================
-        //  GET: LoanReminders (5 per page)
+        //  GET: LoanReminders
         // ========================
         public async Task<IActionResult> Index(int page = 1)
         {
-            const int pageSize = 5;
+            const int pageSize = 10;
             if (page < 1) page = 1;
 
+            var today = DateTime.Today;
+
+            // Load overdue loans (not returned, past due date)
+            var overdueLoans = await _context.BookBorrows
+                .Where(bl => !bl.IsReturned && bl.DueDate < today)
+                .Include(bl => bl.LibraryMember)
+                .Include(bl => bl.LoanBookDetails)
+                    .ThenInclude(d => d.Book)
+                        .ThenInclude(b => b.Catalog)
+                .AsNoTracking()
+                .OrderBy(bl => bl.DueDate)
+                .ToListAsync();
+
+            // Load sent reminders (paginated)
             var baseQuery = _context.LoanReminders
                 .Include(lr => lr.Loan)
                     .ThenInclude(bl => bl.LibraryMember)
@@ -50,27 +64,13 @@ namespace LibrarySystemBBU.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
+            ViewBag.OverdueLoans = overdueLoans;
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
             ViewBag.TotalReminders = totalReminders;
 
+
             return View(reminders);
-        }
-
-        // ========================
-        //  GET: LoanReminders/Send
-        // ========================
-        public async Task<IActionResult> Send(int? loanId)
-        {
-            await BuildDropdownsAsync();
-
-            var model = new LoanReminder();
-            if (loanId.HasValue)
-            {
-                model.LoanId = loanId.Value;
-            }
-
-            return View(model);
         }
 
         // ========================
@@ -82,11 +82,10 @@ namespace LibrarySystemBBU.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await BuildDropdownsAsync();
-                return View(loanReminder);
+                TempData["error"] = "Invalid reminder data.";
+                return RedirectToAction(nameof(Index));
             }
 
-            // Load loan + member + books
             var loan = await _context.BookBorrows
                 .Include(bl => bl.LibraryMember)
                 .Include(bl => bl.LoanBookDetails)
@@ -96,27 +95,23 @@ namespace LibrarySystemBBU.Controllers
 
             if (loan == null)
             {
-                ModelState.AddModelError("LoanId", "Selected loan not found.");
-                await BuildDropdownsAsync();
-                return View(loanReminder);
+                TempData["error"] = "Selected loan not found.";
+                return RedirectToAction(nameof(Index));
             }
 
             var member = loan.LibraryMember;
             if (member == null)
             {
-                ModelState.AddModelError("LoanId", "This loan has no member linked.");
-                await BuildDropdownsAsync();
-                return View(loanReminder);
+                TempData["error"] = "This loan has no member linked.";
+                return RedirectToAction(nameof(Index));
             }
 
             if (string.IsNullOrWhiteSpace(member.TelegramChatId))
             {
-                ModelState.AddModelError("LoanId", "This member has no Telegram Chat ID configured.");
-                await BuildDropdownsAsync();
-                return View(loanReminder);
+                TempData["error"] = $"Member \"{member.FullName}\" has no Telegram Chat ID configured.";
+                return RedirectToAction(nameof(Index));
             }
 
-            // បង្កើតចំណងជើងសៀវភៅសង្ខេប (fallback Book.Title -> Catalog.Title)
             var titles = loan.LoanBookDetails
                 .Where(d => d.Book != null)
                 .Select(d =>
@@ -127,16 +122,11 @@ namespace LibrarySystemBBU.Controllers
                 .Distinct()
                 .ToList();
 
-            var titleText = titles.Any()
-                ? string.Join(", ", titles)
-                : "(No book titles)";
+            var titleText = titles.Any() ? string.Join(", ", titles) : "(No book titles)";
 
-            // គណនា ថ្ងៃហួស DueDate (overdue)
             var today = DateTime.Today;
-            int overdueDays = (today - loan.DueDate.Date).Days;
-            if (overdueDays < 0) overdueDays = 0;
+            int overdueDays = Math.Max(0, (today - loan.DueDate.Date).Days);
 
-            // បង្កើតសារ Telegram (Manual)
             string message =
                 $"សួស្តី <b>{member.FullName}</b> 👋\n\n" +
                 $"សៀវភៅដែលអ្នកបានខ្ចីពីបណ្ណាល័យ BBU មានកាលបរិច្ឆេទសង ចាប់តាំងពី <b>{loan.DueDate:yyyy-MM-dd}</b>" +
@@ -145,77 +135,17 @@ namespace LibrarySystemBBU.Controllers
                 $"សូមយកមកប្រគល់វិញឲ្យបានឆាប់ តាមបណ្ណាល័យ BBU ដើម្បីជៀសវាងការបង់ពិន័យបន្ថែម។\n\n" +
                 $"សូមអរគុណ🙏";
 
-            // ផ្ញើ Telegram
             await _telegram.SendMessageAsync(member.TelegramChatId!, message);
 
-            // កំណត់ SentDate
             loanReminder.SentDate = DateTime.Now;
-
-            // ប្រសិនបើ ReminderType ទទេ => ដាក់ជា ManualTelegram
             if (string.IsNullOrWhiteSpace(loanReminder.ReminderType))
-            {
                 loanReminder.ReminderType = "ManualTelegram";
-            }
 
             _context.LoanReminders.Add(loanReminder);
             await _context.SaveChangesAsync();
 
-            TempData["ok"] = "Reminder has been sent via Telegram.";
+            TempData["ok"] = $"Reminder sent to {member.FullName} via Telegram.";
             return RedirectToAction(nameof(Index));
-        }
-
-        // ========================
-        //  Helper: Build dropdowns
-        // ========================
-        private async Task BuildDropdownsAsync()
-        {
-            var today = DateTime.Today;
-
-            // 👉 Only require: not returned & overdue
-            var overdueLoanEntities = await _context.BookBorrows
-                .Where(bl =>
-                    !bl.IsReturned &&
-                    bl.DueDate < today &&
-                    bl.LibraryMember != null)
-                .Include(bl => bl.LibraryMember)
-                .Include(bl => bl.LoanBookDetails)
-                    .ThenInclude(d => d.Book)
-                        .ThenInclude(b => b.Catalog)
-                .AsNoTracking()
-                .ToListAsync();
-
-            var overdueLoans = overdueLoanEntities
-                .Select(bl => new
-                {
-                    bl.LoanId,
-                    bl.DueDate,
-                    MemberName = bl.LibraryMember != null ? bl.LibraryMember.FullName : "(Unknown)",
-                    Titles = bl.LoanBookDetails
-                        .Where(d => d.Book != null)
-                        .Select(d =>
-                            !string.IsNullOrWhiteSpace(d.Book!.Title)
-                                ? d.Book.Title
-                                : (d.Book.Catalog != null ? d.Book.Catalog.Title : null))
-                        .Where(t => !string.IsNullOrWhiteSpace(t))
-                        .Distinct()
-                        .ToList()
-                })
-                .ToList();
-
-            ViewBag.OverdueLoans = overdueLoans
-                .Select(x => new SelectListItem
-                {
-                    Value = x.LoanId.ToString(),
-                    Text = $"#{x.LoanId} – {string.Join(", ", x.Titles)} (Member: {x.MemberName}, Due: {x.DueDate:yyyy-MM-dd})"
-                })
-                .ToList();
-
-            ViewBag.ReminderTypes = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "ManualTelegram", Text = "Manual via Telegram" },
-                new SelectListItem { Value = "ManualCall",     Text = "Manual Phone Call"  },
-                new SelectListItem { Value = "ManualEmail",    Text = "Manual Email"      }
-            };
         }
     }
 }

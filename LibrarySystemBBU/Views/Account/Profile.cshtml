@@ -5,50 +5,46 @@
     ViewData["Title"] = "My Profile";
 }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
 
 <style>
-    :root {
-        --navy: #000080;
-        --bg: transparent;
-        --card: #ffffff;
-        --border: #e5e7eb;
-        --muted: #6b7280;
-        --text: #111827;
-        --shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+    .prf-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+        padding: 24px 0;
     }
 
-    .profile-wrap {
-        min-height: calc(100vh - 120px);
-        background: var(--bg);
-        padding: 32px 16px;
+    /* ---- page title ---- */
+    .prf-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: .2rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    .profile-container {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    .profile-header {
-        margin-bottom: 20px;
-    }
-
-        .profile-header h1 {
-            font-size: clamp(1.8rem, 3vw, 2.4rem);
-            font-weight: 800;
-            color: var(--text);
-            margin: 0 0 6px 0;
-            letter-spacing: -0.02em;
+        .prf-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
-        .profile-header p {
-            margin: 0;
-            color: var(--muted);
-            font-size: 0.95rem;
-        }
+    .prf-subtitle {
+        font-size: .85rem;
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+    }
 
-    .profile-grid {
+    /* ---- layout grid ---- */
+    .prf-grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: 18px;
@@ -56,651 +52,615 @@
     }
 
     @@media (min-width: 1024px) {
-        .profile-grid {
-            grid-template-columns: 320px 1fr;
+        .prf-grid {
+            grid-template-columns: 300px 1fr;
             gap: 24px;
         }
     }
 
-    .cardx {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 2rem;
-        box-shadow: var(--shadow);
-    }
-
-    .cardx-body {
-        padding: 18px;
-    }
-
-    .cardx-title-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        margin-bottom: 14px;
-    }
-
-    .cardx-title {
-        font-size: 1rem;
-        font-weight: 700;
-        color: var(--text);
-        margin: 0;
-    }
-
-    .divider {
-        border-top: 1px solid #f3f4f6;
-        margin: 16px 0;
-    }
-
-    .btnx {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        border: 0;
-        cursor: pointer;
-        text-decoration: none;
-        user-select: none;
-        transition: transform .12s ease, background .12s ease, box-shadow .12s ease, opacity .12s ease;
-        font-weight: 600;
-        white-space: nowrap;
-    }
-
-        .btnx:disabled {
-            opacity: .6;
-            cursor: not-allowed;
-        }
-
-    .btnx-primary {
-        background: var(--navy);
-        color: #fff;
-        padding: 10px 14px;
-        border-radius: 999px;
-    }
-
-        .btnx-primary:hover {
-            background: rgba(0, 0, 128, 0.92);
-            color: #fff;
-            transform: translateY(-1px);
-            box-shadow: 0 16px 40px rgba(0, 0, 128, 0.20);
-        }
-
-    .btnx-ghost {
-        background: #f3f4f6;
-        color: #374151;
+    /* ---- cards ---- */
+    .prf-card {
+        background: #fff;
         border: 1px solid #e5e7eb;
-        padding: 10px 14px;
-        border-radius: 999px;
-    }
-
-        .btnx-ghost:hover {
-            background: #e5e7eb;
-            color: #111827;
-            transform: translateY(-1px);
-        }
-
-    .btnx-soft {
-        background: rgba(59, 130, 246, 0.12);
-        color: var(--navy);
-        border: 1px solid rgba(59, 130, 246, 0.18);
-        padding: 12px 14px;
         border-radius: 14px;
-        width: 100%;
-        justify-content: flex-start;
-    }
-
-        .btnx-soft:hover {
-            background: rgba(59, 130, 246, 0.18);
-            transform: translateY(-1px);
-        }
-
-    .photo-shell {
-        padding: 6px;
-    }
-
-    .photo-box {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        background: #f3f4f6;
-        border-radius: 1.5rem;
         overflow: hidden;
     }
 
-        .photo-box img {
+    .prf-card-header {
+        padding: 12px 16px;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        font-weight: 600;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .prf-card-header-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: .95rem;
+    }
+
+        .prf-card-header-title::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .prf-card-body {
+        padding: 1.25rem;
+    }
+
+    /* ---- buttons ---- */
+    .prf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none !important;
+        transition: background .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .prf-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none !important;
+        }
+
+    .prf-btn-primary {
+        background: #000080;
+        color: #fff !important;
+        border-color: #000080;
+    }
+
+        .prf-btn-primary:hover {
+            background: #00006a;
+            border-color: #00006a;
+            color: #fff !important;
+        }
+
+    /* ---- photo section ---- */
+    .prf-photo-wrap {
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .prf-photo-box {
+        position: relative;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid #e5e7eb;
+        background: #f3f4f6;
+        flex-shrink: 0;
+    }
+
+        .prf-photo-box img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
 
-    .photo-fallback {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #f1f5f9, #eff6ff);
-        color: #cbd5e1;
-        font-size: 56px;
-    }
-
-    .photo-action {
+    .prf-photo-edit-btn {
         position: absolute;
-        right: 12px;
-        bottom: 12px;
-        width: 44px;
-        height: 44px;
-        border-radius: 999px;
-        background: rgba(255,255,255,0.92);
-        border: 1px solid rgba(229, 231, 235, 0.9);
-        box-shadow: 0 10px 25px rgba(15,23,42,0.12);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-        .photo-action:hover {
-            background: #fff;
-            transform: translateY(-1px);
-        }
-
-    .name-row {
+        right: 4px;
+        bottom: 4px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 2px 8px rgba(0,0,0,.12);
         display: flex;
         align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
+        justify-content: center;
+        cursor: pointer;
+        color: #374151;
+        font-size: .85rem;
+        transition: background .15s;
     }
 
-        .name-row h2 {
-            margin: 0;
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: var(--text);
-            line-height: 1.2;
+        .prf-photo-edit-btn:hover {
+            background: #f3f4f6;
         }
 
-    .status-badge {
-        width: 24px;
-        height: 24px;
+    .prf-name {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #111827;
+        text-align: center;
+        margin: 0;
+    }
+
+    .prf-role {
+        font-size: .82rem;
+        color: #6b7280;
+        text-align: center;
+    }
+
+    .prf-status-badge {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-    }
-
-    .subtext {
-        margin-top: 4px;
-        color: var(--muted);
-        font-size: 0.9rem;
-    }
-
-    .stats-row {
-        display: flex;
-        gap: 14px;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .stat {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        color: #4b5563;
-        font-size: 0.9rem;
+        gap: 5px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: .75rem;
         font-weight: 600;
     }
 
-        .stat i {
+    .prf-status-active {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .prf-status-inactive {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    /* ---- stats row ---- */
+    .prf-stats {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        padding: 12px 16px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .prf-stat {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: .82rem;
+        color: #374151;
+        font-weight: 500;
+    }
+
+        .prf-stat i {
             color: #9ca3af;
         }
 
-    .since {
-        margin-top: 10px;
+    .prf-since {
+        padding: 10px 16px;
+        font-size: .78rem;
         color: #9ca3af;
-        font-size: 0.78rem;
     }
 
-    .field {
+    /* ---- readonly fields ---- */
+    .prf-field {
         margin-bottom: 12px;
     }
 
-        .field label {
-            display: block;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: #6b7280;
-            margin-bottom: 6px;
-            letter-spacing: .02em;
-            text-transform: uppercase;
-        }
+    .prf-field-label {
+        display: block;
+        font-size: .73rem;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        margin-bottom: 5px;
+    }
 
-    .readonly-row {
+    .prf-readonly {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 10px 12px;
+        padding: 9px 12px;
         background: #f9fafb;
         border: 1px solid #f3f4f6;
-        border-radius: 14px;
-        color: var(--text);
-        min-height: 44px;
+        border-radius: 8px;
+        font-size: .85rem;
+        color: #111827;
+        min-height: 40px;
     }
 
-        .readonly-row i {
+        .prf-readonly i {
             color: #9ca3af;
-            width: 18px;
+            width: 16px;
             text-align: center;
+            flex-shrink: 0;
         }
 
-        .readonly-row .muted {
+        .prf-readonly .muted {
             color: #6b7280;
         }
 
-    .readonly-chip {
+    .prf-readonly-chip {
         margin-left: auto;
-        font-size: 0.74rem;
-        padding: 6px 10px;
-        border-radius: 999px;
+        font-size: .72rem;
+        padding: 3px 8px;
+        border-radius: 20px;
         background: #f3f4f6;
         color: #9ca3af;
         border: 1px solid #e5e7eb;
-        font-weight: 700;
+        font-weight: 600;
+        white-space: nowrap;
     }
 
-    .info-grid {
+    /* ---- info boxes ---- */
+    .prf-info-grid {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: 12px;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 4px;
     }
 
-    @@media (min-width: 640px) {
-        .info-grid {
-            grid-template-columns: 1fr 1fr;
-        }
+    .prf-info-box {
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: #f0f4ff;
+        border: 1px solid #dde5ff;
     }
 
-    .info-box {
-        padding: 12px 14px;
-        border-radius: 14px;
-        background: rgba(59, 130, 246, 0.08);
-        border: 1px solid rgba(59, 130, 246, 0.12);
-    }
-
-        .info-box .k {
-            font-size: 0.78rem;
+        .prf-info-box .k {
+            font-size: .73rem;
             color: #6b7280;
             margin-bottom: 2px;
         }
 
-        .info-box .v {
-            font-weight: 800;
+        .prf-info-box .v {
+            font-weight: 700;
             color: #111827;
-            font-size: 0.95rem;
+            font-size: .88rem;
         }
 
-        .info-box.indigo {
-            background: rgba(99, 102, 241, 0.08);
-            border: 1px solid rgba(99, 102, 241, 0.12);
-        }
+            .prf-info-box .v.ok {
+                color: #166534;
+            }
 
-    .ok {
-        color: #16a34a;
-        font-weight: 800;
-    }
+            .prf-info-box .v.bad {
+                color: #991b1b;
+            }
 
-    .bad {
-        color: #ef4444;
-        font-weight: 800;
-    }
-
-    .modal-backdrop.show {
-        opacity: .55;
-    }
-
-    .modal-content {
-        border: 0;
-        border-radius: 2rem;
-        overflow: hidden;
-        box-shadow: 0 30px 80px rgba(15,23,42,0.35);
-    }
-
-    .modal-header {
-        border-bottom: 1px solid #f3f4f6;
-        padding: 16px 18px;
-        background: #fff;
-    }
-
-    .modal-title {
-        font-weight: 900;
-        color: #111827;
-        letter-spacing: -0.01em;
-    }
-
-    .modal-body {
-        padding: 18px;
-        background: #fff;
-    }
-
-    .modal-footer {
+    .prf-divider {
         border-top: 1px solid #f3f4f6;
+        margin: 14px 0;
+    }
+
+    .prf-section-label {
+        font-size: .88rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0 0 12px 0;
+    }
+
+    /* ---- modal ---- */
+    .prf-modal-content {
+        border: 0 !important;
+        border-radius: 14px !important;
+        overflow: hidden;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .prf-modal-header {
         padding: 14px 18px;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb !important;
+    }
+
+    .prf-modal-title {
+        font-weight: 700;
+        color: #111827;
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    .prf-modal-body {
+        padding: 1.25rem;
         background: #fff;
     }
 
-    .modal-close-btn {
-        width: 40px;
-        height: 40px;
-        border-radius: 999px;
-        border: 1px solid #e5e7eb;
-        background: #f9fafb;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: transform .12s ease, background .12s ease;
+    .prf-modal-footer {
+        padding: 12px 18px;
+        background: #fff;
+        border-top: 1px solid #e5e7eb !important;
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
     }
 
-        .modal-close-btn:hover {
-            background: #f3f4f6;
-            transform: translateY(-1px);
-        }
-
-    .inputx,
-    .textareax {
+    /* ---- form inputs ---- */
+    .prf-input,
+    .prf-textarea {
         width: 100%;
         background: #f9fafb;
         border: 1px solid #e5e7eb;
-        border-radius: 14px;
-        padding: 10px 12px;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: .85rem;
         color: #111827;
         outline: none;
-        transition: box-shadow .12s ease, border-color .12s ease, background .12s ease;
+        font-family: 'Inter', sans-serif;
+        transition: border-color .15s;
     }
 
-        .inputx:focus,
-        .textareax:focus {
+        .prf-input:focus,
+        .prf-textarea:focus {
             background: #fff;
-            border-color: rgba(0, 0, 128, 0.35);
-            box-shadow: 0 0 0 3px rgba(0, 0, 128, 0.10);
+            border-color: #000080;
         }
 
-        .inputx[readonly] {
-            opacity: 0.6;
+        .prf-input[readonly] {
+            opacity: .6;
             cursor: not-allowed;
         }
 
-    .form-row {
+    .prf-form-label {
+        display: block;
+        font-size: .73rem;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        margin-bottom: 5px;
+    }
+
+    .prf-form-hint {
+        font-size: .75rem;
+        color: #9ca3af;
+        margin-top: 4px;
+    }
+
+    .prf-form-row {
         display: grid;
         grid-template-columns: 1fr;
         gap: 12px;
+        margin-bottom: 12px;
     }
 
-    @@media (min-width: 768px) {
-        .form-row.two {
+    @@media (min-width: 640px) {
+        .prf-form-row.two {
             grid-template-columns: 1fr 1fr;
         }
 
-        .form-row.three {
+        .prf-form-row.three {
             grid-template-columns: 1fr 1fr 1fr;
         }
     }
 
-    .upload-hint {
-        font-size: 0.78rem;
-        color: #9ca3af;
-        margin-top: 6px;
+    .prf-modal-mini-avatar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid #f3f4f6;
     }
 
+        .prf-modal-mini-avatar img {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e5e7eb;
+        }
+
+        .prf-modal-mini-avatar .name {
+            font-weight: 700;
+            color: #111827;
+            font-size: .95rem;
+        }
+
+        .prf-modal-mini-avatar .user {
+            font-size: .82rem;
+            color: #6b7280;
+        }
+
     .text-danger {
-        font-size: .82rem;
+        font-size: .8rem;
     }
 
     .swal2-popup {
-        border-radius: 1.25rem !important;
+        border-radius: 14px !important;
+        font-family: 'Inter', sans-serif !important;
     }
 </style>
 
-<div class="profile-wrap">
-    <div class="profile-container">
+<div class="prf-page">
 
-        <div class="profile-header">
-            <h1>My Profile</h1>
-            <p>Manage your account information and preferences</p>
-        </div>
+    <div class="prf-page-title">My Profile</div>
+    <div class="prf-subtitle">Manage your account information and preferences</div>
 
-        <div class="profile-grid">
+    <div class="prf-grid">
 
-            <!-- LEFT: Profile card -->
-            <div>
-                <div class="cardx">
-                    <div class="photo-shell">
-                        <div class="photo-box">
-                            @{
-                                var fallbackAvatar = "https://ui-avatars.com/api/?name="
-                                + (Model.FirstName + "+" + Model.LastName)
-                                + "&background=60a5fa&color=fff&size=256";
-
-                                var avatarSrc = string.IsNullOrEmpty(Model.ProfilePicturePath)
-                                ? fallbackAvatar
-                                : Url.Content(Model.ProfilePicturePath);
-                            }
-
-                            @if (!string.IsNullOrEmpty(avatarSrc))
-                            {
-                                <img src="@avatarSrc" alt="Profile" />
-                            }
-                            else
-                            {
-                                <div class="photo-fallback">
-                                    <i class="fa-regular fa-user"></i>
-                                </div>
-                            }
-
-                            <button type="button" class="photo-action" id="btnOpenEditFromPhoto" title="Edit profile">
-                                <i class="fa-solid fa-camera"></i>
-                            </button>
-                        </div>
+        <!-- LEFT: avatar card -->
+        <div>
+            <div class="prf-card">
+                <div class="prf-photo-wrap">
+                    @{
+                        var fallbackAvatar = "https://ui-avatars.com/api/?name="
+                        + (Model.FirstName + "+" + Model.LastName)
+                        + "&background=000080&color=fff&size=256";
+                        var avatarSrc = string.IsNullOrEmpty(Model.ProfilePicturePath)
+                        ? fallbackAvatar
+                        : Url.Content(Model.ProfilePicturePath);
+                    }
+                    <div class="prf-photo-box">
+                        <img src="@avatarSrc" alt="Profile" />
+                        <button type="button" class="prf-photo-edit-btn" id="btnOpenEditFromPhoto" title="Edit profile">
+                            <i class="bi bi-camera"></i>
+                        </button>
                     </div>
 
-                    <div class="cardx-body">
-                        <div class="name-row">
-                            <h2>@Model.FirstName @Model.LastName</h2>
+                    <div>
+                        <div class="prf-name">@Model.FirstName @Model.LastName</div>
+                        <div class="prf-role">@Model.RoleName</div>
+                    </div>
 
-                            <span class="status-badge" title="@(Model.IsActive ? "Active" : "Inactive")">
-                                @if (Model.IsActive)
-                                {
-                                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                        <polygon points="12.0,0.5 15.01,3.73 19.39,3.19 19.62,7.6 23.33,10.0 20.67,13.53 21.96,17.75 17.66,18.74 15.93,22.81 12.0,20.8 8.07,22.81 6.34,18.74 2.04,17.75 3.33,13.53 0.67,10.0 4.38,7.6 4.61,3.19 8.99,3.73" fill="#22c55e"></polygon>
-                                        <path d="M8.5 12.5l2.5 2.5 5-5.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
-                                    </svg>
-                                }
-                                else
-                                {
-                                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                        <polygon points="12.0,0.5 15.01,3.73 19.39,3.19 19.62,7.6 23.33,10.0 20.67,13.53 21.96,17.75 17.66,18.74 15.93,22.81 12.0,20.8 8.07,22.81 6.34,18.74 2.04,17.75 3.33,13.53 0.67,10.0 4.38,7.6 4.61,3.19 8.99,3.73" fill="#f87171"></polygon>
-                                        <path d="M9.5 9.5l5 5M14.5 9.5l-5 5" stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none"></path>
-                                    </svg>
-                                }
-                            </span>
-                        </div>
+                    <span class="prf-status-badge @(Model.IsActive ? "prf-status-active" : "prf-status-inactive")">
+                        <i class="bi @(Model.IsActive ? "bi-check-circle-fill" : "bi-x-circle-fill")"></i>
+                        @(Model.IsActive ? "Active" : "Inactive")
+                    </span>
+                </div>
 
-                        <div class="subtext">@Model.RoleName</div>
-
-                        <div class="divider"></div>
-
-                        <div class="stats-row">
-                            <div class="stat">
-                                <i class="fa-regular fa-id-card"></i>
-                                <span>@(string.IsNullOrWhiteSpace(Model.UserName) ? "—" : Model.UserName)</span>
-                            </div>
-                            <div class="stat">
-                                <i class="fa-solid fa-user-tag"></i>
-                                <span>@(string.IsNullOrWhiteSpace(Model.RoleName) ? "—" : Model.RoleName)</span>
-                            </div>
-                        </div>
-
-                        @if (Model.Created.HasValue)
-                        {
-                            <div class="since">
-                                Member since @Model.Created.Value.ToString("MMMM yyyy")
-                            </div>
-                        }
+                <div class="prf-stats">
+                    <div class="prf-stat">
+                        <i class="bi bi-person-badge"></i>
+                        <span>@(string.IsNullOrWhiteSpace(Model.UserName) ? "-" : Model.UserName)</span>
+                    </div>
+                    <div class="prf-stat">
+                        <i class="bi bi-shield"></i>
+                        <span>@(string.IsNullOrWhiteSpace(Model.RoleName) ? "-" : Model.RoleName)</span>
                     </div>
                 </div>
-            </div>
 
-            <!-- RIGHT: Personal info -->
-            <div>
-                <div class="cardx">
-                    <div class="cardx-body">
-
-                        <div class="cardx-title-row">
-                            <h3 class="cardx-title">Personal Information</h3>
-                            <button type="button" class="btnx btnx-primary" id="btnOpenEdit">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                                <span>Edit</span>
-                            </button>
-                        </div>
-
-                        <div class="field">
-                            <label>Full Name</label>
-                            <div class="readonly-row">
-                                <i class="fa-regular fa-user"></i>
-                                <span>@Model.FirstName @Model.LastName</span>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label>Email Address</label>
-                            @if (User.IsInRole("Admin") || User.IsInRole("Librarian"))
-                            {
-                                <div class="readonly-row">
-                                    <i class="fa-regular fa-envelope"></i>
-                                    <span>@Model.Email</span>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="readonly-row">
-                                    <i class="fa-regular fa-envelope"></i>
-                                    <span class="muted">@Model.Email</span>
-                                    <span class="readonly-chip">Cannot be changed</span>
-                                </div>
-                            }
-                        </div>
-
-                        <div class="field">
-                            <label>Phone</label>
-                            <div class="readonly-row">
-                                <i class="fa-solid fa-phone"></i>
-                                <span>@(string.IsNullOrWhiteSpace(Model.Phone) ? "—" : Model.Phone)</span>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label>Address</label>
-                            <div class="readonly-row">
-                                <i class="fa-solid fa-location-dot"></i>
-                                <span>@(string.IsNullOrWhiteSpace(Model.Address) ? "—" : Model.Address)</span>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label>Gender</label>
-                            <div class="readonly-row">
-                                <i class="fa-solid fa-venus-mars"></i>
-                                <span>@(string.IsNullOrWhiteSpace(Model.Gender) ? "—" : Model.Gender)</span>
-                            </div>
-                        </div>
-
-                        <div class="divider"></div>
-
-                        <h3 class="cardx-title" style="margin:0 0 12px 0;">Account Information</h3>
-
-                        <div class="field">
-                            <label>Role</label>
-                            <div class="readonly-row">
-                                <i class="fa-solid fa-user-tag"></i>
-                                <span class="muted">@Model.RoleName</span>
-                                <span class="readonly-chip">Read only</span>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label>Notes</label>
-                            <div class="readonly-row" style="align-items:flex-start;">
-                                <i class="fa-regular fa-note-sticky" style="margin-top:2px;"></i>
-                                <span class="muted">@(string.IsNullOrWhiteSpace(Model.Notes) ? "—" : Model.Notes)</span>
-                            </div>
-                        </div>
-
-                        <div class="info-grid">
-                            <div class="info-box">
-                                <div class="k">Member Since</div>
-                                <div class="v">
-                                    @(Model.Created.HasValue? Model.Created.Value.ToString("MMMM dd, yyyy") : "—")
-                                </div>
-                            </div>
-                            <div class="info-box indigo">
-                                <div class="k">Account Status</div>
-                                <div class="v @(Model.IsActive ? "ok" : "bad")">
-                                    @(Model.IsActive ? "Active" : "Inactive")
-                                </div>
-                            </div>
-                        </div>
-
+                @if (Model.Created.HasValue)
+                {
+                    <div class="prf-since">
+                        <i class="bi bi-calendar3"></i> Member since @Model.Created.Value.ToString("MMMM yyyy")
                     </div>
+                }
+            </div>
+        </div>
+
+        <!-- RIGHT: info card -->
+        <div>
+            <div class="prf-card">
+                <div class="prf-card-header">
+                    <div class="prf-card-header-title">Personal Information</div>
+                    <button type="button" class="prf-btn prf-btn-primary" id="btnOpenEdit">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </button>
+                </div>
+
+                <div class="prf-card-body">
+
+                    <div class="prf-field">
+                        <label class="prf-field-label">Full Name</label>
+                        <div class="prf-readonly">
+                            <i class="bi bi-person"></i>
+                            <span>@Model.FirstName @Model.LastName</span>
+                        </div>
+                    </div>
+
+                    <div class="prf-field">
+                        <label class="prf-field-label">Email Address</label>
+                        <div class="prf-readonly">
+                            <i class="bi bi-envelope"></i>
+                            <span class="@(User.IsInRole("Admin") || User.IsInRole("Librarian") ? "" : "muted")">@Model.Email</span>
+                            @if (!User.IsInRole("Admin") && !User.IsInRole("Librarian"))
+                            {
+                                <span class="prf-readonly-chip">Cannot be changed</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="prf-field">
+                        <label class="prf-field-label">Phone</label>
+                        <div class="prf-readonly">
+                            <i class="bi bi-telephone"></i>
+                            <span>@(string.IsNullOrWhiteSpace(Model.Phone) ? "-" : Model.Phone)</span>
+                        </div>
+                    </div>
+
+                    <div class="prf-field">
+                        <label class="prf-field-label">Address</label>
+                        <div class="prf-readonly">
+                            <i class="bi bi-geo-alt"></i>
+                            <span>@(string.IsNullOrWhiteSpace(Model.Address) ? "-" : Model.Address)</span>
+                        </div>
+                    </div>
+
+                    <div class="prf-field">
+                        <label class="prf-field-label">Gender</label>
+                        <div class="prf-readonly">
+                            <i class="bi bi-gender-ambiguous"></i>
+                            <span>@(string.IsNullOrWhiteSpace(Model.Gender) ? "-" : Model.Gender)</span>
+                        </div>
+                    </div>
+
+                    <div class="prf-divider"></div>
+
+                    <div class="prf-section-label">Account Information</div>
+
+                    <div class="prf-field">
+                        <label class="prf-field-label">Role</label>
+                        <div class="prf-readonly">
+                            <i class="bi bi-shield"></i>
+                            <span class="muted">@Model.RoleName</span>
+                            <span class="prf-readonly-chip">Read only</span>
+                        </div>
+                    </div>
+
+                    <div class="prf-field">
+                        <label class="prf-field-label">Notes</label>
+                        <div class="prf-readonly" style="align-items:flex-start;">
+                            <i class="bi bi-sticky" style="margin-top:2px;"></i>
+                            <span class="muted">@(string.IsNullOrWhiteSpace(Model.Notes) ? "-" : Model.Notes)</span>
+                        </div>
+                    </div>
+
+                    <div class="prf-info-grid">
+                        <div class="prf-info-box">
+                            <div class="k">Member Since</div>
+                            <div class="v">@(Model.Created.HasValue? Model.Created.Value.ToString("MMMM dd, yyyy") : "-")</div>
+                        </div>
+                        <div class="prf-info-box">
+                            <div class="k">Account Status</div>
+                            <div class="v @(Model.IsActive ? "ok" : "bad")">@(Model.IsActive ? "Active" : "Inactive")</div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-
         </div>
+
     </div>
 </div>
 
-<!-- EDIT PROFILE MODAL -->
-<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true" style="z-index: 10000;">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div>
-                    <div style="font-size:.82rem;color:#6b7280;font-weight:800;letter-spacing:.08em;text-transform:uppercase;">
-                        Edit
-                    </div>
-                    <h5 class="modal-title" id="editProfileModalLabel" style="margin:2px 0 0 0;">
-                        Profile Settings
-                    </h5>
-                </div>
-                <button type="button" class="modal-close-btn" id="btnCloseEdit" aria-label="Close">
-                    <i class="fa-solid fa-xmark"></i>
+<!-- EDIT MODAL -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true" style="z-index:10000;">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content prf-modal-content">
+
+            <div class="prf-modal-header d-flex align-items-center justify-content-between">
+                <h5 class="prf-modal-title" id="editProfileModalLabel">
+                    <i class="bi bi-pencil-square me-2" style="color:#000080;"></i>Edit Profile
+                </h5>
+                <button type="button" class="prf-btn" id="btnCloseEdit" aria-label="Close">
+                    <i class="bi bi-x-lg"></i>
                 </button>
             </div>
 
-            <div class="modal-body">
+            <div class="prf-modal-body">
                 @{
-                    var modalFallbackAvatar = "https://ui-avatars.com/api/?name="
-                    + (Model.FirstName + "+" + Model.LastName)
-                    + "&background=60a5fa&color=fff&size=256";
-
                     var modalAvatarSrc = string.IsNullOrEmpty(Model.ProfilePicturePath)
-                    ? modalFallbackAvatar
+                    ? "https://ui-avatars.com/api/?name=" + (Model.FirstName + "+" + Model.LastName) + "&background=000080&color=fff&size=256"
                     : Url.Content(Model.ProfilePicturePath);
                 }
 
-                <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-                    <img src="@modalAvatarSrc"
-                         alt="Profile picture"
-                         style="width:64px;height:64px;border-radius:999px;object-fit:cover;border:2px solid #e5e7eb;box-shadow:0 12px 28px rgba(15,23,42,.18);" />
+                <div class="prf-modal-mini-avatar">
+                    <img src="@modalAvatarSrc" alt="Profile picture" />
                     <div>
-                        <div style="font-weight:900;color:#111827;line-height:1.1;">@Model.FirstName @Model.LastName</div>
-                        <div style="color:#6b7280;font-size:.86rem;">@Model.UserName</div>
+                        <div class="name">@Model.FirstName @Model.LastName</div>
+                        <div class="user">@Model.UserName</div>
                     </div>
                 </div>
 
-                <form asp-action="UpdateProfile"
-                      method="post"
-                      enctype="multipart/form-data"
-                      id="editProfileForm">
+                <form asp-action="UpdateProfile" method="post" enctype="multipart/form-data" id="editProfileForm">
                     @Html.AntiForgeryToken()
 
                     <div asp-validation-summary="All" class="text-danger mb-2"></div>
@@ -713,115 +673,110 @@
                     <input type="hidden" asp-for="UserName" />
                     <input type="hidden" asp-for="CurrentPassword" id="CurrentPasswordHidden" />
 
-                    <div class="form-row two" style="margin-bottom:12px;">
+                    <div class="prf-form-row two">
                         <div>
-                            <label style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;">
-                                New Profile Picture
-                            </label>
-                            <input asp-for="Picture" class="inputx" type="file" />
+                            <label class="prf-form-label">New Profile Picture</label>
+                            <input asp-for="Picture" class="prf-input" type="file" />
                             <span asp-validation-for="Picture" class="text-danger"></span>
-                            <div class="upload-hint">Leave empty to keep current picture.</div>
+                            <div class="prf-form-hint">Leave empty to keep current picture.</div>
                         </div>
-
                         <div>
-                            <label asp-for="Email" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
+                            <label asp-for="Email" class="prf-form-label"></label>
                             @if (User.IsInRole("Admin") || User.IsInRole("Librarian"))
                             {
-                                <input asp-for="Email" class="inputx" />
-                                <span asp-validation-for="Email" class="text-danger"></span>
-                                <div class="upload-hint">You can update the email address.</div>
+                                <input asp-for="Email" class="prf-input" />
+                                <div class="prf-form-hint">You can update the email address.</div>
                             }
                             else
                             {
-                                <input asp-for="Email" class="inputx" readonly />
-                                <span asp-validation-for="Email" class="text-danger"></span>
-                                <div class="upload-hint">Email cannot be changed.</div>
+                                <input asp-for="Email" class="prf-input" readonly />
+                                <div class="prf-form-hint">Email cannot be changed.</div>
                             }
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                     </div>
 
-                    <div class="form-row two" style="margin-bottom:12px;">
+                    <div class="prf-form-row two">
                         <div>
-                            <label asp-for="FirstName" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
-                            <input asp-for="FirstName" class="inputx" />
+                            <label asp-for="FirstName" class="prf-form-label"></label>
+                            <input asp-for="FirstName" class="prf-input" />
                             <span asp-validation-for="FirstName" class="text-danger"></span>
                         </div>
                         <div>
-                            <label asp-for="LastName" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
-                            <input asp-for="LastName" class="inputx" />
+                            <label asp-for="LastName" class="prf-form-label"></label>
+                            <input asp-for="LastName" class="prf-input" />
                             <span asp-validation-for="LastName" class="text-danger"></span>
                         </div>
                     </div>
 
-                    <div class="form-row two" style="margin-bottom:12px;">
+                    <div class="prf-form-row two">
                         <div>
-                            <label asp-for="Phone" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
-                            <input asp-for="Phone" class="inputx" />
+                            <label asp-for="Phone" class="prf-form-label"></label>
+                            <input asp-for="Phone" class="prf-input" />
                             <span asp-validation-for="Phone" class="text-danger"></span>
                         </div>
                         <div>
-                            <label asp-for="Address" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
-                            <input asp-for="Address" class="inputx" />
+                            <label asp-for="Address" class="prf-form-label"></label>
+                            <input asp-for="Address" class="prf-input" />
                             <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
                     </div>
 
-                    <div class="form-row three" style="margin-bottom:12px;">
+                    <div class="prf-form-row three">
                         <div>
-                            <label asp-for="RoleName" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
-                            <input asp-for="RoleName" class="inputx" readonly />
+                            <label asp-for="RoleName" class="prf-form-label"></label>
+                            <input asp-for="RoleName" class="prf-input" readonly />
                             <span asp-validation-for="RoleName" class="text-danger"></span>
                         </div>
                         <div>
-                            <label asp-for="Gender" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
-                            <input asp-for="Gender" class="inputx" />
+                            <label asp-for="Gender" class="prf-form-label"></label>
+                            <input asp-for="Gender" class="prf-input" />
                             <span asp-validation-for="Gender" class="text-danger"></span>
                         </div>
                         <div>
-                            <label asp-for="DateOfBirth" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
-                            <input asp-for="DateOfBirth" class="inputx" type="date" />
+                            <label asp-for="DateOfBirth" class="prf-form-label"></label>
+                            <input asp-for="DateOfBirth" class="prf-input" type="date" />
                             <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                         </div>
                     </div>
 
-                    <div style="margin-bottom:12px;">
-                        <label asp-for="Notes" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
-                        <textarea asp-for="Notes" class="textareax" rows="2"></textarea>
-                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    <div class="prf-form-row" style="margin-bottom:12px;">
+                        <div>
+                            <label asp-for="Notes" class="prf-form-label"></label>
+                            <textarea asp-for="Notes" class="prf-textarea" rows="2"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
                     </div>
 
-                    <div class="divider"></div>
+                    <div class="prf-divider"></div>
 
-                    <h5 style="font-weight:900;color:#111827;margin:0 0 10px 0;">Change Password</h5>
+                    <div class="prf-section-label">Change Password</div>
 
-                    <div class="form-row two">
+                    <div class="prf-form-row two">
                         <div>
-                            <label asp-for="NewPassword" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;">
-                                New password (optional)
-                            </label>
-                            <input asp-for="NewPassword" class="inputx" type="password" autocomplete="new-password" />
+                            <label class="prf-form-label">New Password (optional)</label>
+                            <input asp-for="NewPassword" class="prf-input" type="password" autocomplete="new-password" />
                             <span asp-validation-for="NewPassword" class="text-danger"></span>
-                            <div class="upload-hint">Leave blank if you don't want to change your password.</div>
+                            <div class="prf-form-hint">Leave blank to keep current password.</div>
                         </div>
                         <div>
-                            <label asp-for="ConfirmNewPassword" style="display:block;margin-bottom:6px;color:#6b7280;font-weight:800;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;"></label>
-                            <input asp-for="ConfirmNewPassword" class="inputx" type="password" autocomplete="new-password" />
+                            <label asp-for="ConfirmNewPassword" class="prf-form-label"></label>
+                            <input asp-for="ConfirmNewPassword" class="prf-input" type="password" autocomplete="new-password" />
                             <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
                         </div>
                     </div>
                 </form>
             </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btnx btnx-ghost" id="btnCancelEdit">
-                    <i class="fa-solid fa-xmark"></i>
-                    Cancel
+            <div class="prf-modal-footer">
+                <button type="button" class="prf-btn" id="btnCancelEdit">
+                    <i class="bi bi-x-lg"></i> Cancel
                 </button>
-                <button type="button" class="btnx btnx-primary" id="btnSaveProfileModal">
-                    <i class="fa-solid fa-floppy-disk"></i>
-                    Save changes
+                <button type="button" class="prf-btn prf-btn-primary" id="btnSaveProfileModal">
+                    <i class="bi bi-floppy"></i> Save changes
                 </button>
             </div>
+
         </div>
     </div>
 </div>
@@ -834,21 +789,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const editBtn = document.getElementById('btnOpenEdit');
-            const editFromPhoto = document.getElementById('btnOpenEditFromPhoto');
-
-            const form = document.getElementById('editProfileForm');
-            const saveBtn = document.getElementById('btnSaveProfileModal');
-            const hiddenPwd = document.getElementById('CurrentPasswordHidden');
-
-            const modalElement = document.getElementById('editProfileModal');
-            const cancelBtn = document.getElementById('btnCancelEdit');
-            const closeBtn = document.getElementById('btnCloseEdit');
+            var editBtn        = document.getElementById('btnOpenEdit');
+            var editFromPhoto  = document.getElementById('btnOpenEditFromPhoto');
+            var form           = document.getElementById('editProfileForm');
+            var saveBtn        = document.getElementById('btnSaveProfileModal');
+            var hiddenPwd      = document.getElementById('CurrentPasswordHidden');
+            var modalElement   = document.getElementById('editProfileModal');
+            var cancelBtn      = document.getElementById('btnCancelEdit');
+            var closeBtn       = document.getElementById('btnCloseEdit');
 
             function showModal() {
                 if (window.bootstrap && bootstrap.Modal) {
-                    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
-                    modal.show();
+                    bootstrap.Modal.getOrCreateInstance(modalElement).show();
                 } else if (window.$ && typeof $(modalElement).modal === 'function') {
                     $(modalElement).modal('show');
                 }
@@ -856,17 +808,17 @@
 
             function hideModal() {
                 if (window.bootstrap && bootstrap.Modal) {
-                    const instance = bootstrap.Modal.getInstance(modalElement);
-                    if (instance) instance.hide();
+                    var inst = bootstrap.Modal.getInstance(modalElement);
+                    if (inst) inst.hide();
                 } else if (window.$ && typeof $(modalElement).modal === 'function') {
                     $(modalElement).modal('hide');
                 }
             }
 
-            if (editBtn) editBtn.addEventListener('click', showModal);
+            if (editBtn)       editBtn.addEventListener('click', showModal);
             if (editFromPhoto) editFromPhoto.addEventListener('click', showModal);
-            if (cancelBtn) cancelBtn.addEventListener('click', hideModal);
-            if (closeBtn) closeBtn.addEventListener('click', hideModal);
+            if (cancelBtn)     cancelBtn.addEventListener('click', hideModal);
+            if (closeBtn)      closeBtn.addEventListener('click', hideModal);
 
             if (form && saveBtn && hiddenPwd) {
                 saveBtn.addEventListener('click', async function (e) {
@@ -878,26 +830,26 @@
 
                     hideModal();
 
-                    const result = await Swal.fire({
+                    var result = await Swal.fire({
                         title: 'Confirm changes',
                         text: 'Enter your current password to save profile changes.',
                         input: 'password',
                         inputLabel: 'Current password',
-                        inputPlaceholder: '••••••••',
-                        inputAttributes: {
-                            autocapitalize: 'off',
-                            autocomplete: 'current-password'
-                        },
+                        inputPlaceholder: 'Enter current password',
+                        inputAttributes: { autocapitalize: 'off', autocomplete: 'current-password' },
                         showCancelButton: true,
                         confirmButtonText: 'Confirm & Save',
                         cancelButtonText: 'Cancel',
                         reverseButtons: true,
                         allowOutsideClick: false,
-                        allowEscapeKey: true,
-                        preConfirm: (value) => {
-                            if (!value) {
-                                Swal.showValidationMessage('Current password is required.');
-                            }
+                        customClass: {
+                            popup: 'swal2-popup',
+                            confirmButton: 'prf-btn prf-btn-primary',
+                            cancelButton: 'prf-btn'
+                        },
+                        buttonsStyling: false,
+                        preConfirm: function (value) {
+                            if (!value) Swal.showValidationMessage('Current password is required.');
                             return value;
                         }
                     });
@@ -912,18 +864,20 @@
                 });
             }
 
-            const successMsg = '@(TempData["ProfileSuccess"] ?? "")';
-            const errorMsg = '@(TempData["ProfileError"] ?? "")';
-            const openEdit = '@(TempData["OpenEditModal"] ?? "")';
+            var successMsg = '@(TempData["ProfileSuccess"] ?? "")';
+            var errorMsg   = '@(TempData["ProfileError"] ?? "")';
+            var openEdit   = '@(TempData["OpenEditModal"] ?? "")';
 
             if (successMsg) {
-                Swal.fire({ icon: 'success', title: 'Profile updated', text: successMsg });
+                Swal.fire({ icon: 'success', title: 'Profile updated', text: successMsg,
+                    customClass: { popup: 'swal2-popup', confirmButton: 'prf-btn prf-btn-primary' },
+                    buttonsStyling: false });
             }
 
             if (errorMsg) {
-                Swal.fire({ icon: 'error', title: 'Update failed', text: errorMsg }).then(() => {
-                    showModal();
-                });
+                Swal.fire({ icon: 'error', title: 'Update failed', text: errorMsg,
+                    customClass: { popup: 'swal2-popup', confirmButton: 'prf-btn prf-btn-primary' },
+                    buttonsStyling: false }).then(function () { showModal(); });
             } else if (openEdit) {
                 showModal();
             }

@@ -4,62 +4,222 @@
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-    /* Just a small helper for the inline search bar */
-    .search-wrap {
-        border-radius: 999px;
-        border: 1px solid rgba(1,0,140,.18);
-        padding: .25rem .75rem;
-        background: rgba(255,255,255,.9);
-        display: flex;
-        align-items: center;
-        gap: .4rem;
-        box-shadow: 0 4px 14px rgba(1,0,140,.10);
-        max-width: 320px;
-        width: 100%;
+    .adj-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-        .search-wrap input {
-            border: 0;
-            background: transparent;
-            box-shadow: none;
-            padding: 0;
-            font-size: .9rem;
+    .adj-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .adj-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
-            .search-wrap input:focus {
-                outline: none;
-                box-shadow: none;
-            }
+    .adj-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .adj-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .adj-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+    .adj-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .adj-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+
+    .adj-stat-pill {
+        font-size: .78rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 4px 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+    }
+
+        .adj-stat-pill strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .adj-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .adj-section-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .adj-info-row {
+        display: flex;
+        margin-bottom: .75rem;
+    }
+
+    .adj-info-label {
+        width: 140px;
+        font-size: .85rem;
+        color: #6b7280;
+        flex-shrink: 0;
+    }
+
+    .adj-info-value {
+        font-size: .9rem;
+        color: #111827;
+        font-weight: 500;
+    }
+
+    .adj-table-wrap {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-top: 1rem;
+    }
+
+    .adj-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .adj-table thead th {
+            padding: 11px 16px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .adj-table tbody td {
+            padding: 11px 16px;
+            color: #374151;
+            vertical-align: middle;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .adj-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    .adj-search-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 6px 12px;
+        background: #fff;
+        min-width: 200px;
+        max-width: 320px;
+    }
+
+        .adj-search-wrap i {
+            color: #9ca3af;
+            font-size: .85rem;
+        }
+
+    .adj-search-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: .83rem;
+        color: #111827;
+        width: 100%;
+    }
 </style>
 
-<div class="container mt-4">
+<div class="adj-page">
+    <div class="adj-page-title">Adjustment Details</div>
 
-    <h2 class="page-title">
-        <span class="logo-dot"></span>
-        Adjustment Details
-    </h2>
-
-    <div class="toolbar">
-        <a asp-action="Index" class="btn-glass btn-outline">
+    <div class="adj-toolbar">
+        <a asp-action="Index" class="adj-btn">
             <i class="bi bi-list"></i> Back to List
         </a>
 
-        <a asp-action="Edit" asp-route-id="@Model.AdjustmentId" class="btn-glass btn-brand">
+        <a asp-action="Edit" asp-route-id="@Model.AdjustmentId" class="adj-btn adj-btn-primary">
             <i class="bi bi-pencil-square"></i> Edit
         </a>
 
-        <div class="ms-auto d-flex align-items-center gap-2 flex-wrap">
-            <span class="pill">
+        <div class="ms-auto d-flex gap-2 flex-wrap">
+            <span class="adj-stat-pill">
                 <i class="bi bi-calendar3"></i>
                 Date: <strong>@Model.AdjustmentDate.ToString("yyyy-MM-dd")</strong>
             </span>
-            <span class="pill">
+            <span class="adj-stat-pill">
                 <i class="bi bi-tag"></i>
                 Type: <strong>@Model.AdjustmentType</strong>
             </span>
-            <span class="pill">
+            <span class="adj-stat-pill">
                 <i class="bi bi-plus-slash-minus"></i>
                 Total Change: <strong>@Model.QuantityChange</strong>
             </span>
@@ -67,110 +227,81 @@
     </div>
 
     <!-- Header info -->
-    <div class="card-glass glas-all-style mt-3">
-        <div class="section-title">
+    <div class="adj-card">
+        <div class="adj-section-title">
             <i class="bi bi-info-circle"></i> Adjustment Info
         </div>
 
-        <div class="row g-3">
+        <div class="row">
             <div class="col-md-6">
-                <label class="form-label">
-                    <i class="bi bi-calendar3 me-1"></i>Date
-                </label>
-                <input class="form-control" value="@Model.AdjustmentDate.ToString("yyyy-MM-dd")" disabled />
-            </div>
-
-            <div class="col-md-6">
-                <label class="form-label">
-                    <i class="bi bi-tag me-1"></i>Type
-                </label>
-                <div>
-                    <span class="pill">@Model.AdjustmentType</span>
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Date:</span>
+                    <span class="adj-info-value">@Model.AdjustmentDate.ToString("yyyy-MM-dd")</span>
+                </div>
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Type:</span>
+                    <span class="adj-info-value">
+                        <span class="adj-stat-pill" style="background:#f3f4f6;">@Model.AdjustmentType</span>
+                    </span>
+                </div>
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Catalog:</span>
+                    <span class="adj-info-value">
+                        @(Model?.Catalog == null ? "(no catalog)" : (string.IsNullOrEmpty(Model.Catalog.ISBN) ? Model.Catalog.Title : $"{Model.Catalog.Title} ({Model.Catalog.ISBN})"))
+                    </span>
+                </div>
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Quantity Change:</span>
+                    <span class="adj-info-value">@Model.QuantityChange</span>
                 </div>
             </div>
-
             <div class="col-md-6">
-                <label class="form-label">
-                    <i class="bi bi-journal-text me-1"></i>Catalog
-                </label>
-                <input class="form-control"
-                       value="@(Model?.Catalog == null
-                                    ? "(no catalog)"
-                                    : (string.IsNullOrEmpty(Model.Catalog.ISBN)
-                                        ? Model.Catalog.Title
-                                        : $"{Model.Catalog.Title} ({Model.Catalog.ISBN})"))"
-                       disabled />
-            </div>
-
-            <div class="col-md-6">
-                <label class="form-label">
-                    <i class="bi bi-plus-slash-minus me-1"></i>Quantity Change
-                </label>
-                <input class="form-control" value="@Model.QuantityChange" disabled />
-            </div>
-
-            <div class="col-12">
-                <label class="form-label">
-                    <i class="bi bi-chat-text me-1"></i>Reason
-                </label>
-                <textarea class="form-control" rows="2" disabled>@Model.Reason</textarea>
-            </div>
-
-            <div class="col-md-6">
-                <label class="form-label">
-                    <i class="bi bi-person-circle me-1"></i>Adjusted By
-                </label>
-                <input class="form-control" value="@Model.AdjustedByUser?.UserName" disabled />
-            </div>
-
-            <div class="col-md-3">
-                <label class="form-label">
-                    <i class="bi bi-clock-history me-1"></i>Created
-                </label>
-                <input class="form-control" value="@Model.Created?.ToString("u")" disabled />
-            </div>
-
-            <div class="col-md-3">
-                <label class="form-label">
-                    <i class="bi bi-clock me-1"></i>Modified
-                </label>
-                <input class="form-control" value="@Model.Modified?.ToString("u")" disabled />
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Reason:</span>
+                    <span class="adj-info-value">@Model.Reason</span>
+                </div>
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Adjusted By:</span>
+                    <span class="adj-info-value">@(Model.AdjustedByUser?.UserName ?? "—")</span>
+                </div>
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Created:</span>
+                    <span class="adj-info-value">@(Model.Created?.ToString("yyyy-MM-dd HH:mm") ?? "—")</span>
+                </div>
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Modified:</span>
+                    <span class="adj-info-value">@(Model.Modified?.ToString("yyyy-MM-dd HH:mm") ?? "—")</span>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Detail rows -->
-    <div class="card-glass glas-all-style mt-3">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
-            <div class="section-title mb-0">
+    <div class="adj-card">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div class="adj-section-title mb-0">
                 <i class="bi bi-list-check"></i> Detail Rows
             </div>
 
-            <div class="d-flex align-items-center gap-2 flex-wrap">
-                <span class="pill">
+            <div class="d-flex align-items-center gap-3">
+                <span class="adj-stat-pill">
                     <i class="bi bi-layers"></i>
-                    Rows: <strong id="rowsCountBadge">
-                        @(Model?.AdjustmentDetails?.Count() ?? 0)
-                    </strong>
+                    Rows: <strong id="rowsCountBadge">@(Model?.AdjustmentDetails?.Count() ?? 0)</strong>
                 </span>
-                <div class="search-wrap">
+                <div class="adj-search-wrap">
                     <i class="bi bi-search"></i>
-                    <input id="detailSearch"
-                           type="search"
-                           class="form-control"
-                           placeholder="Search (Book / Barcode / Qty / Note)..." />
+                    <input id="detailSearch" class="adj-search-input" placeholder="Search..." />
                 </div>
             </div>
         </div>
 
-        <div class="table-wrap mt-2">
-            <table id="detailsTbl"
-                   class="table table-sm table-hover table-striped table-bordered align-middle mb-0">
+        <div class="adj-table-wrap">
+            <table class="adj-table" id="detailsTbl">
                 <thead>
                     <tr>
-                        <th><i class="bi bi-upc-scan me-1"></i>Book / Barcode</th>
-                        <th style="width:120px;"><i class="bi bi-boxes me-1"></i>Qty</th>
-                        <th><i class="bi bi-stickies me-1"></i>Note</th>
+                        <th>Book / Barcode</th>
+                        <th style="width:120px;">Qty</th>
+                        <th>Note</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -180,24 +311,19 @@
                         {
                             <tr>
                                 <td>
-                                    @(
-                                        d?.Book == null
-                                        ? "(no book)"
-                                        : (string.IsNullOrEmpty(d.Book.Barcode)
-                                        ? d.Book.Title
-                                        : $"{d.Book.Title} ({d.Book.Barcode})")
-                                        )
+                                    @(d?.Book == null ? "(no book)" : (string.IsNullOrEmpty(d.Book.Barcode) ? d.Book.Title : $"{d.Book.Title} ({d.Book.Barcode})"))
                                 </td>
                                 <td>@d.QuantityChanged</td>
-                                <td>@d.Note</td>
+                                <td>@(d.Note ?? "—")</td>
                             </tr>
                         }
                     }
                     else
                     {
                         <tr>
-                            <td colspan="3" class="text-center text-muted">
-                                No detail rows.
+                            <td colspan="3" style="text-align:center; color:#9ca3af; padding:2rem;">
+                                <i class="bi bi-inboxes"></i>
+                                <div class="mt-2">No detail rows.</div>
                             </td>
                         </tr>
                     }
@@ -209,36 +335,38 @@
 
 @section Scripts {
     <script>
-        (() => {
+        (function() {
             const input = document.getElementById('detailSearch');
             const rows = Array.from(document.querySelectorAll('#detailsTbl tbody tr'));
             const badge = document.getElementById('rowsCountBadge');
 
-            const norm = s => (s || '').toString().toLowerCase();
-            const matchAll = (txt, q) => {
-                const terms = norm(q).split(/\s+/).filter(Boolean);
-                const t = norm(txt);
-                return terms.every(w => t.includes(w));
-            };
-
-            function recalcVisibleCount() {
-                const visible = rows.filter(tr => tr.style.display !== 'none').length;
-                if (badge) {
-                    badge.textContent = visible.toString();
-                }
+            function normalize(s) {
+                return (s || '').toString().toLowerCase();
             }
 
-            input?.addEventListener('input', e => {
-                const q = e.target.value;
-                rows.forEach(tr => {
-                    const text = tr.innerText || tr.textContent || '';
-                    tr.style.display = matchAll(text, q) ? '' : 'none';
-                });
-                recalcVisibleCount();
-            });
+            function matches(text, query) {
+                const terms = normalize(query).split(/\s+/).filter(Boolean);
+                const normalizedText = normalize(text);
+                return terms.every(term => normalizedText.includes(term));
+            }
 
-            // initial
-            recalcVisibleCount();
+            function updateVisibleCount() {
+                const visible = rows.filter(tr => tr.style.display !== 'none').length;
+                if (badge) badge.textContent = visible;
+            }
+
+            if (input) {
+                input.addEventListener('input', (e) => {
+                    const query = e.target.value;
+                    rows.forEach(tr => {
+                        const text = tr.innerText || tr.textContent || '';
+                        tr.style.display = matches(text, query) ? '' : 'none';
+                    });
+                    updateVisibleCount();
+                });
+            }
+
+            updateVisibleCount();
         })();
     </script>
 }

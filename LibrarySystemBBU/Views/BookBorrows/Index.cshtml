@@ -14,8 +14,315 @@
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
 <style>
-    /* ===== SweetAlert2 glass style ===== */
+    .borrow-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+    }
+
+    .borrow-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .borrow-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .borrow-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .borrow-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .borrow-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+    .borrow-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .borrow-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+
+    .borrow-segmented {
+        display: flex;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .borrow-seg-btn {
+        padding: 6px 14px;
+        font-size: .82rem;
+        font-weight: 500;
+        border: none;
+        background: #fff;
+        color: #6b7280;
+        cursor: pointer;
+        transition: background .15s, color .15s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .borrow-seg-btn:not(:last-child) {
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .borrow-seg-btn.active {
+            background: #f3f4f6;
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .borrow-search-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 6px 12px;
+        background: #fff;
+        flex: 1;
+        min-width: 200px;
+        max-width: 360px;
+        transition: border-color .15s;
+    }
+
+        .borrow-search-wrap:focus-within {
+            border-color: #000080;
+        }
+
+        .borrow-search-wrap i {
+            color: #9ca3af;
+            font-size: .85rem;
+        }
+
+    .borrow-search-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: .83rem;
+        color: #111827;
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .borrow-search-input::placeholder {
+            color: #9ca3af;
+        }
+
+    .borrow-search-clear {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #d1d5db;
+        padding: 0;
+        font-size: .85rem;
+    }
+
+        .borrow-search-clear:hover {
+            color: #6b7280;
+        }
+
+    .borrow-stats {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        flex-wrap: wrap;
+    }
+
+    .borrow-stat-pill {
+        font-size: .78rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 4px 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+    }
+
+        .borrow-stat-pill strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .borrow-table-wrap {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+
+    .borrow-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .borrow-table thead th {
+            padding: 11px 16px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .borrow-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background .1s;
+        }
+
+            .borrow-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .borrow-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+        .borrow-table tbody td {
+            padding: 11px 16px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+            .borrow-table tbody td.muted {
+                color: #6b7280;
+            }
+
+    .borrow-actions {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .borrow-action-btn {
+        padding: 4px 10px;
+        font-size: .74rem;
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: background .15s;
+        white-space: nowrap;
+    }
+
+        .borrow-action-btn:hover {
+            background: #f3f4f6;
+            color: #111827;
+            text-decoration: none;
+        }
+
+    .borrow-action-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .borrow-action-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+        }
+
+    .borrow-action-btn-success {
+        background: #f0fdf4;
+        color: #15803d;
+        border-color: #bbf7d0;
+    }
+
+        .borrow-action-btn-success:hover {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+    .borrow-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: .74rem;
+        font-weight: 500;
+    }
+
+    .status-success {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-warning {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-danger {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    /* SweetAlert2 styles */
     .swal2-container {
         z-index: 10000 !important;
     }
@@ -23,325 +330,256 @@
         .swal2-container.swal2-backdrop-show {
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
-            background: radial-gradient(40rem 25rem at -10% -10%, rgba(1,0,140,.18), transparent 60%), radial-gradient(40rem 25rem at 110% 0%, rgba(1,0,140,.13), transparent 60%), linear-gradient(180deg, rgba(15,23,42,.6), rgba(15,23,42,.85));
+            background: rgba(0,0,0,0.3);
         }
 
-    .swal2-popup.glass-popup {
-        border-radius: 18px;
-        padding: 1.4rem 1.6rem;
-        background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(255,255,255,.86));
-        border: 1px solid rgba(255,255,255,.4);
-        box-shadow: 0 18px 45px rgba(15,23,42,.45);
-        max-width: 520px;
-        width: min(520px, 100vw - 32px);
+    .swal2-popup.borrow-popup {
+        border-radius: 14px;
+        padding: 1.4rem;
+        border: 1px solid #e5e7eb;
+        font-family: 'Inter', sans-serif;
     }
 
-        .swal2-popup.glass-popup .swal2-title.glass-title {
-            font-weight: 800;
-            letter-spacing: .02em;
-            color: #020617;
-            margin-bottom: .6rem;
-        }
-
-        .swal2-popup.glass-popup .swal2-html-container {
-            margin: .2rem 0 .4rem;
-        }
-
-        .swal2-popup.glass-popup .swal2-input,
-        .swal2-popup.glass-popup .swal2-textarea {
-            border-radius: 8px;
-            border: 1px solid rgba(148,163,184,.65);
-            background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,250,252,.9));
-            box-shadow: inset 0 1px 2px rgba(15,23,42,.12);
-            font-size: .9rem;
-            padding: .45rem .6rem;
-            margin: .25rem 0 .4rem;
-        }
-
-        .swal2-popup.glass-popup .swal2-textarea {
-            width: 100% !important;
-            box-sizing: border-box;
-            min-height: 80px;
-        }
-
-            .swal2-popup.glass-popup .swal2-input:focus,
-            .swal2-popup.glass-popup .swal2-textarea:focus {
-                outline: none;
-                border-color: var(--brand-400, #6366f1);
-                box-shadow: 0 0 0 2px rgba(99,102,241,.25);
-            }
-
-    .glass-btn-confirm,
-    .glass-btn-cancel {
-        border-radius: 999px;
-        padding: .45rem 1rem;
-        font-weight: 600;
-        font-size: .9rem;
-        border: 1px solid rgba(255,255,255,.5);
-        box-shadow: 0 8px 18px rgba(15,23,42,.25);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: .35rem;
-    }
-
-    .glass-btn-confirm {
-        background: linear-gradient(180deg, #818cf8, #4f46e5);
-        color: #fff;
-        text-shadow: 0 1px 0 rgba(0,0,0,.25);
-    }
-
-    .glass-btn-cancel {
-        background: linear-gradient(180deg, rgba(248,250,252,.95), rgba(226,232,240,.95));
-        color: #0f172a;
-    }
-
-        .glass-btn-confirm:hover,
-        .glass-btn-cancel:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 12px 24px rgba(15,23,42,.3);
-        }
-
-    /* ===== Layout for RETURN dialog ===== */
-
-    .return-dialog {
+    .borrow-dialog {
         text-align: left;
         font-size: .9rem;
     }
 
-    .return-label {
+    .borrow-dialog-label {
         display: block;
-        font-weight: 600;
         font-size: .8rem;
-        color: #64748b;
-        margin-bottom: .15rem;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: .25rem;
     }
 
-    .return-row {
-        margin-bottom: .45rem;
-    }
-
-    .return-row-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: .5rem .75rem;
-        margin-bottom: .35rem;
-    }
-
-    .return-summary {
+    .borrow-dialog-input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
         font-size: .85rem;
-        line-height: 1.6;
-        margin-bottom: .5rem;
-        padding: .45rem .6rem;
-        border-radius: 10px;
-        background: linear-gradient(135deg, rgba(241,245,249,.95), rgba(226,232,240,.9));
-        border: 1px solid rgba(148,163,184,.55);
+        margin-bottom: .75rem;
     }
 
-        .return-summary strong {
-            font-weight: 700;
+        .borrow-dialog-input:focus {
+            outline: none;
+            border-color: #000080;
         }
 
-        .return-summary .primary {
-            color: #1d4ed8;
+    .borrow-dialog-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: .75rem;
+        margin-bottom: .75rem;
+    }
+
+    .borrow-dialog-summary {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: .75rem;
+        font-size: .85rem;
+        margin-bottom: .75rem;
+    }
+
+        .borrow-dialog-summary div {
+            margin-bottom: .25rem;
         }
 
-    @@media (max-width: 600px) {
-        .swal2-popup.glass-popup {
-            padding: 1.1rem 1.2rem;
-            width: calc(100vw - 24px);
+        .borrow-dialog-summary strong {
+            color: #000080;
         }
 
-        .return-row-grid {
-            grid-template-columns: 1fr;
-        }
+    .btn-confirm {
+        background: #000080;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
+    .btn-cancel {
+        background: #fff;
+        color: #374151;
+        border: 1px solid #e5e7eb;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 500;
     }
 </style>
 
+<div class="borrow-page">
+    <div class="borrow-page-title">Book Borrow</div>
 
-<h2 class="page-title">
-    <span class="logo-dot"></span>
-    Book Borrow
-</h2>
-
-<div class="toolbar">
-    <a asp-action="Create" class="btn-glass btn-brand" id="btn-create-link">
-        <i class="bi bi-plus-circle"></i> Create Borrow
-    </a>
-
-    <div class="segmented" role="group" aria-label="Filters">
-        <button type="button" class="btn-toggle active" data-filter="all">
-            <i class="bi bi-grid"></i> All
-        </button>
-        <button type="button" class="btn-toggle" data-filter="returned">
-            <i class="bi bi-check2-circle"></i> Returned
-            <span class="badge text-bg-success ms-1">@returnedCount</span>
-        </button>
-        <button type="button" class="btn-toggle" data-filter="notreturned">
-            <i class="bi bi-arrow-counterclockwise"></i> Not Returned
-            <span class="badge text-bg-warning ms-1">@notReturnedCount</span>
-        </button>
-        <button type="button" class="btn-toggle" data-filter="due">
-            <i class="bi bi-exclamation-triangle"></i> Due/Overdue
-            <span class="badge text-bg-danger ms-1">@dueTodayCount</span>
-        </button>
-    </div>
-
-    <div class="search-wrap">
-        <i class="bi bi-search search-icon"></i>
-        <input id="globalSearch" class="search-input"
-               placeholder="Search anything… (Loan, Member, dates, fee, status, …)" />
-        <button class="search-clear" type="button" id="clearSearch" title="Clear">
-            <i class="bi bi-x-circle"></i>
-        </button>
-    </div>
-
-    <div class="ms-auto d-flex align-items-center gap-2">
-        <span class="pill">
-            <i class="bi bi-layers"></i>
-            Total: <strong id="statTotal">@Model.Count()</strong>
-        </span>
-        <span class="pill">
-            <i class="bi bi-check2-circle" style="color:#22c55e"></i>
-            Returned: <strong id="statReturned">@returnedCount</strong>
-        </span>
-        <span class="pill">
-            <i class="bi bi-arrow-counterclockwise" style="color:#f59e0b"></i>
-            Not Returned: <strong id="statNotReturned">@notReturnedCount</strong>
-        </span>
-        <span class="pill">
-            <i class="bi bi-exclamation-octagon" style="color:#ef4444"></i>
-            Due: <strong id="statDue">@dueTodayCount</strong>
-        </span>
-
-        <!-- UPDATED: server-side Excel export -->
-        <a asp-action="Export" class="btn-glass btn-outline">
-            <i class="bi bi-file-earmark-excel"></i> Export
+    <div class="borrow-toolbar">
+        <a asp-action="Create" class="borrow-btn borrow-btn-primary" id="btn-create-link">
+            <i class="bi bi-plus-circle"></i> Create Borrow
         </a>
+
+        <div class="borrow-segmented">
+            <button type="button" class="borrow-seg-btn active" data-filter="all">
+                <i class="bi bi-grid"></i> All
+            </button>
+            <button type="button" class="borrow-seg-btn" data-filter="returned">
+                <i class="bi bi-check2-circle"></i> Returned
+                <span class="badge text-bg-success ms-1">@returnedCount</span>
+            </button>
+            <button type="button" class="borrow-seg-btn" data-filter="notreturned">
+                <i class="bi bi-arrow-counterclockwise"></i> Not Returned
+                <span class="badge text-bg-warning ms-1">@notReturnedCount</span>
+            </button>
+            <button type="button" class="borrow-seg-btn" data-filter="due">
+                <i class="bi bi-exclamation-triangle"></i> Due/Overdue
+                <span class="badge text-bg-danger ms-1">@dueTodayCount</span>
+            </button>
+        </div>
+
+        <div class="borrow-search-wrap">
+            <i class="bi bi-search"></i>
+            <input id="globalSearch" class="borrow-search-input" placeholder="Search member, date, status…" />
+            <button class="borrow-search-clear" type="button" id="clearSearch"><i class="bi bi-x-circle"></i></button>
+        </div>
+
+        <a asp-action="Export" class="borrow-btn">
+            <i class="bi bi-download"></i> Export
+        </a>
+
+        <div class="borrow-stats">
+            <span class="borrow-stat-pill">
+                <i class="bi bi-layers"></i> Total: <strong id="statTotal">@Model.Count()</strong>
+            </span>
+            <span class="borrow-stat-pill">
+                <i class="bi bi-check2-circle" style="color:#22c55e"></i>
+                Returned: <strong id="statReturned">@returnedCount</strong>
+            </span>
+            <span class="borrow-stat-pill">
+                <i class="bi bi-arrow-counterclockwise" style="color:#f59e0b"></i>
+                Not Returned: <strong id="statNotReturned">@notReturnedCount</strong>
+            </span>
+            <span class="borrow-stat-pill">
+                <i class="bi bi-exclamation-octagon" style="color:#ef4444"></i>
+                Due: <strong id="statDue">@dueTodayCount</strong>
+            </span>
+        </div>
     </div>
-</div>
 
-<form id="__af" method="post" style="display:none;">
-    @Html.AntiForgeryToken()
-</form>
+    <form id="__af" method="post" style="display:none;">
+        @Html.AntiForgeryToken()
+    </form>
 
-<div class="table-wrap mt-2">
-    <table class="table table-striped align-middle" id="loansTable">
-        <thead>
-            <tr>
-                <th>BorrowId</th>
-                <th>Member</th>
-                <th>BorrowDate</th>
-                <th>DueDate</th>
-                <th>Status</th>
-                @*  <th class="text-end">BorrowingFee</th> *@
-                <th>IsPaid</th>
-                <th class="text-end">Deposit</th>
-                <th class="text-end">Items</th>
-                <th class="text-end">Returns</th>
-                <th style="min-width:340px;"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                var rowClass = item.IsReturned
-                ? "table-success"
-                : (!item.IsReturned && item.DueDate.Date <= today ? "table-danger" : "");
-                var memberName = item.LibraryMember?.FullName ?? "—";
-
-                <tr class="@rowClass"
-                    data-loanid="@item.LoanId"
-                    data-member="@System.Net.WebUtility.HtmlEncode(memberName)"
-                    data-loandate="@item.LoanDate.ToString("yyyy-MM-dd")"
-                    data-duedate="@item.DueDate.ToString("yyyy-MM-dd")"
-                    data-status="@(item.IsReturned ? "returned" : "not returned")"
-                    data-returned="@(item.IsReturned.ToString().ToLower())"
-                    data-borrowingfee="@item.BorrowingFee.ToString("0.00")"
-                    data-paid="@(item.IsPaid ? "paid" : "unpaid")"
-                    data-deposit="@(item.DepositAmount?.ToString("0.00") ?? "-")"
-                    data-items="@((item.LoanBookDetails?.Count ?? 0).ToString())"
-                    data-returns="@((item.BookReturns?.Count ?? 0).ToString())">
-                    <td>@item.LoanId</td>
-                    <td>@memberName</td>
-                    <td>@item.LoanDate.ToString("yyyy-MM-dd")</td>
-                    <td>@item.DueDate.ToString("yyyy-MM-dd")</td>
-                    <td>
-                        @if (item.IsReturned)
-                        {
-                            <span class="btn btn-sm btn-light border-0">
-                                <i class="bi bi-check-circle-fill text-success"></i> Returned
-                            </span>
-                        }
-                        else if (item.DueDate.Date <= today)
-                        {
-                            <span class="btn btn-sm btn-light border-0">
-                                <i class="bi bi-exclamation-octagon-fill text-danger"></i> Overdue
-                            </span>
-                        }
-                        else
-                        {
-                            <span class="btn btn-sm btn-light border-0">
-                                <i class="bi bi-hourglass-split text-warning"></i> In Progress
-                            </span>
-                        }
-                    </td>
-                    @* <td class="text-end">@item.BorrowingFee.ToString("0.00")</td> *@
-                    <td>@(item.IsPaid ? "Paid" : "Unpaid")</td>
-                    <td class="text-end">@((item.DepositAmount ?? 0m).ToString("0.00"))</td>
-                    <td class="text-end">@((item.LoanBookDetails?.Count ?? 0).ToString())</td>
-                    <td class="text-end">@((item.BookReturns?.Count ?? 0).ToString())</td>
-                    <td class="text-nowrap">
-                        <a class="btn-glass btn-outline btn-sm" asp-action="Details" asp-route-id="@item.LoanId">
-                            <i class="bi bi-eye"></i> Details
-                        </a>
-                        <a class="btn-glass btn-outline btn-sm" asp-action="Edit" asp-route-id="@item.LoanId">
-                            <i class="bi bi-pencil-square"></i> Edit
-                        </a>
-                        <button type="button" class="btn-glass btn-outline btn-sm btn-delete">
-                            <i class="bi bi-trash3"></i> Delete
-                        </button>
-
-                        @if (!item.IsReturned)
-                        {
-                            <button type="button" class="btn-glass btn-brand btn-sm btn-return">
-                                <i class="bi bi-arrow-return-left"></i> Return
-                            </button>
-                        }
-                        else
-                        {
-                            <button type="button" class="btn-glass btn-outline btn-sm btn-unreturn">
-                                <i class="bi bi-arrow-counterclockwise"></i> UnReturn
-                            </button>
-                        }
-
-                        <a class="btn-glass btn-outline btn-sm"
-                           asp-action="BorrowReceipt"
-                           asp-route-id="@item.LoanId"
-                           target="_blank">
-                            <i class="bi bi-printer"></i> Borrow Receipt
-                        </a>
-
-                        @if (item.IsReturned && item.BookReturns?.Any() == true)
-                        {
-                            <a class="btn-glass btn-outline btn-sm"
-                               asp-action="ReturnReceipt"
-                               asp-route-id="@item.LoanId"
-                               target="_blank">
-                                <i class="bi bi-receipt"></i> Return Receipt
-                            </a>
-                        }
-                    </td>
+    <div class="borrow-table-wrap">
+        <table class="borrow-table" id="loansTable">
+            <thead>
+                <tr>
+                    <th>Borrow ID</th>
+                    <th>Member</th>
+                    <th>Borrow Date</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Is Paid</th>
+                    <th class="text-end">Deposit</th>
+                    <th class="text-end">Items</th>
+                    <th class="text-end">Returns</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var memberName = item.LibraryMember?.FullName ?? "—";
+
+                    <tr data-loanid="@item.LoanId"
+                        data-member="@System.Net.WebUtility.HtmlEncode(memberName)"
+                        data-loandate="@item.LoanDate.ToString("yyyy-MM-dd")"
+                        data-duedate="@item.DueDate.ToString("yyyy-MM-dd")"
+                        data-returned="@(item.IsReturned.ToString().ToLower())"
+                        data-borrowingfee="@item.BorrowingFee.ToString("0.00")"
+                        data-paid="@(item.IsPaid ? "paid" : "unpaid")"
+                        data-deposit="@(item.DepositAmount?.ToString("0.00") ?? "-")"
+                        data-items="@((item.LoanBookDetails?.Count ?? 0).ToString())"
+                        data-returns="@((item.BookReturns?.Count ?? 0).ToString())">
+                        <td>@item.LoanId</td>
+                        <td class="muted">@memberName</td>
+                        <td class="muted">@item.LoanDate.ToString("yyyy-MM-dd")</td>
+                        <td class="muted">@item.DueDate.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            @if (item.IsReturned)
+                            {
+                                <span class="borrow-status status-success">
+                                    <i class="bi bi-check-circle-fill"></i> Returned
+                                </span>
+                            }
+                            else if (item.DueDate.Date <= today)
+                            {
+                                <span class="borrow-status status-danger">
+                                    <i class="bi bi-exclamation-octagon-fill"></i> Overdue
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="borrow-status status-warning">
+                                    <i class="bi bi-hourglass-split"></i> In Progress
+                                </span>
+                            }
+                        </td>
+                        <td>@(item.IsPaid ? "Paid" : "Unpaid")</td>
+                        <td class="text-end">@((item.DepositAmount ?? 0m).ToString("0.00"))</td>
+                        <td class="text-end">@((item.LoanBookDetails?.Count ?? 0).ToString())</td>
+                        <td class="text-end">@((item.BookReturns?.Count ?? 0).ToString())</td>
+                        <td>
+                            <div class="borrow-actions">
+                                <a class="borrow-action-btn" asp-action="Details" asp-route-id="@item.LoanId">
+                                    <i class="bi bi-eye"></i> Details
+                                </a>
+                                <a class="borrow-action-btn" asp-action="Edit" asp-route-id="@item.LoanId">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                                <button type="button" class="borrow-action-btn btn-delete">
+                                    <i class="bi bi-trash3"></i> Delete
+                                </button>
+
+                                @if (!item.IsReturned)
+                                {
+                                    <button type="button" class="borrow-action-btn borrow-action-btn-primary btn-return">
+                                        <i class="bi bi-arrow-return-left"></i> Return
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="borrow-action-btn borrow-action-btn-success btn-unreturn">
+                                        <i class="bi bi-arrow-counterclockwise"></i> UnReturn
+                                    </button>
+                                }
+
+                                <a class="borrow-action-btn" asp-action="BorrowReceipt" asp-route-id="@item.LoanId" target="_blank">
+                                    <i class="bi bi-printer"></i> Borrow Receipt
+                                </a>
+
+                                @if (item.IsReturned && item.BookReturns?.Any() == true)
+                                {
+                                    <a class="borrow-action-btn" asp-action="ReturnReceipt" asp-route-id="@item.LoanId" target="_blank">
+                                        <i class="bi bi-receipt"></i> Return Receipt
+                                    </a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div id="noMatches" class="alert alert-warning d-none" style="border-radius:12px; background:#fffbeb; border:1px solid #fef3c7; color:#92400e;">
+        <i class="bi bi-question-circle"></i> No matching results for your filters.
+    </div>
 </div>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        (function () {
+        (function() {
             function getToken() {
                 const el = document.querySelector('#__af input[name="__RequestVerificationToken"]');
                 return el ? el.value : '';
@@ -358,17 +596,12 @@
             const statReturned = document.getElementById('statReturned');
             const statNotReturned = document.getElementById('statNotReturned');
             const statDue = document.getElementById('statDue');
+            const noMatches = document.getElementById('noMatches');
 
             function applyFilter(type) {
-                document.querySelectorAll('.segmented .btn-toggle').forEach(b => b.classList.remove('active'));
-                const activeBtn = document.querySelector(`.segmented .btn-toggle[data-filter="${type}"]`);
+                document.querySelectorAll('.borrow-seg-btn').forEach(b => b.classList.remove('active'));
+                const activeBtn = document.querySelector(`.borrow-seg-btn[data-filter="${type}"]`);
                 if (activeBtn) activeBtn.classList.add('active');
-
-                if (type === 'all') {
-                    history.replaceState(null, '', window.location.pathname + window.location.search);
-                } else {
-                    history.replaceState(null, '', window.location.pathname + window.location.search + '#' + type);
-                }
 
                 const q = document.getElementById('globalSearch').value.trim().toLowerCase();
 
@@ -376,7 +609,8 @@
 
                 document.querySelectorAll('#loansTable tbody tr').forEach(r => {
                     const isReturned = r.getAttribute('data-returned') === 'true';
-                    const isDue = parseYMD(r.getAttribute('data-duedate')) <= TODAY && !isReturned;
+                    const dueDate = parseYMD(r.getAttribute('data-duedate'));
+                    const isDue = dueDate <= TODAY && !isReturned;
 
                     let show = true;
                     if (type === 'returned') show = isReturned;
@@ -397,45 +631,48 @@
                     }
                 });
 
-                statTotal.textContent = vis.toString();
-                statReturned.textContent = rtd.toString();
-                statNotReturned.textContent = nr.toString();
-                statDue.textContent = due.toString();
+                statTotal.textContent = vis;
+                statReturned.textContent = rtd;
+                statNotReturned.textContent = nr;
+                statDue.textContent = due;
+
+                noMatches.classList.toggle('d-none', vis > 0);
             }
 
-            document.querySelectorAll('.segmented .btn-toggle').forEach(b =>
+            // Filter buttons
+            document.querySelectorAll('.borrow-seg-btn').forEach(b =>
                 b.addEventListener('click', () => applyFilter(b.getAttribute('data-filter')))
             );
 
+            // Search with debounce
+            let searchTimeout;
             document.getElementById('globalSearch').addEventListener('input', () => {
-                const a = document.querySelector('.segmented .btn-toggle.active')?.getAttribute('data-filter') || 'all';
-                applyFilter(a);
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    const active = document.querySelector('.borrow-seg-btn.active')?.getAttribute('data-filter') || 'all';
+                    applyFilter(active);
+                }, 200);
             });
 
+            // Clear search
             document.getElementById('clearSearch').addEventListener('click', () => {
-                const i = document.getElementById('globalSearch');
-                i.value = '';
-                i.focus();
-                const a = document.querySelector('.segmented .btn-toggle.active')?.getAttribute('data-filter') || 'all';
-                applyFilter(a);
+                const input = document.getElementById('globalSearch');
+                input.value = '';
+                input.focus();
+                const active = document.querySelector('.borrow-seg-btn.active')?.getAttribute('data-filter') || 'all';
+                applyFilter(active);
             });
 
-            (function initFilterFromHash() {
-                const hash = (window.location.hash || '').replace('#', '').toLowerCase();
-                const allowed = ['all', 'returned', 'notreturned', 'due'];
-                const initial = allowed.includes(hash) ? hash : 'all';
-                applyFilter(initial);
-            })();
+            // Initial filter
+            applyFilter('all');
 
-            // ===== SweetAlert glass theme =====
-            const theme = {
-                color: '#0f172a',
+            // SweetAlert2 theme
+            const swalTheme = {
                 buttonsStyling: false,
                 customClass: {
-                    popup: 'glass-popup',
-                    title: 'glass-title',
-                    confirmButton: 'glass-btn-confirm',
-                    cancelButton: 'glass-btn-cancel'
+                    popup: 'swal2-popup borrow-popup',
+                    confirmButton: 'borrow-action-btn borrow-action-btn-primary',
+                    cancelButton: 'borrow-action-btn'
                 }
             };
 
@@ -448,16 +685,16 @@
 
             // DELETE
             document.querySelectorAll('.btn-delete').forEach(btn => {
-                btn.addEventListener('click', function () {
+                btn.addEventListener('click', function() {
                     const r = this.closest('tr');
                     Swal.fire({
                         title: `Delete Loan #${r.dataset.loanid}?`,
-                        html: `This will permanently remove the borrow and related details/returns.`,
+                        text: 'This will permanently remove the borrow and related details.',
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Delete',
                         cancelButtonText: 'Cancel',
-                        ...theme
+                        ...swalTheme
                     }).then(res => {
                         if (!res.isConfirmed) return;
                         fetch('/BookBorrows/Delete/' + r.dataset.loanid, {
@@ -466,8 +703,17 @@
                             body: '{}'
                         }).then(rsp =>
                             rsp.ok
-                                ? Swal.fire({ title: 'Deleted!', icon: 'success', ...theme }).then(() => location.reload())
-                                : Swal.fire({ title: 'Error', text: 'Delete failed', icon: 'error', ...theme })
+                                ? Swal.fire({
+                                    title: 'Deleted!',
+                                    icon: 'success',
+                                    ...swalTheme
+                                }).then(() => location.reload())
+                                : Swal.fire({
+                                    title: 'Error',
+                                    text: 'Delete failed',
+                                    icon: 'error',
+                                    ...swalTheme
+                                })
                         );
                     });
                 });
@@ -475,7 +721,7 @@
 
             // RETURN
             document.querySelectorAll('.btn-return').forEach(btn => {
-                btn.addEventListener('click', function () {
+                btn.addEventListener('click', function() {
                     const r = this.closest('tr');
                     const depositStr = r.getAttribute('data-deposit') || "0";
                     const deposit = parseFloat(depositStr === "-" ? "0" : depositStr) || 0;
@@ -483,78 +729,62 @@
                     Swal.fire({
                         title: `Return Loan #${r.dataset.loanid}`,
                         html: `
-                                            <div class="return-dialog">
-                                                <div class="return-row">
-                                                    <label class="return-label">Return Date</label>
-                                                    <input id="r-date" type="date"
-                                                           class="swal2-input"
-                                                           value="${new Date().toISOString().slice(0, 10)}" />
-                                                </div>
+                            <div class="borrow-dialog">
+                                <div>
+                                    <label class="borrow-dialog-label">Return Date</label>
+                                    <input id="r-date" type="date" class="borrow-dialog-input"
+                                           value="${new Date().toISOString().slice(0, 10)}" />
+                                </div>
 
-                                                <div class="return-row-grid">
-                                                    <div class="return-row">
-                                                        <label class="return-label">Late Days</label>
-                                                        <input id="r-late" type="number"
-                                                               class="swal2-input"
-                                                               value="0" min="0" />
-                                                    </div>
-                                                    <div class="return-row">
-                                                        <label class="return-label">Fine Amount (KHR)</label>
-                                                        <input id="r-fine" type="number"
-                                                               class="swal2-input"
-                                                               step="0.01" value="0" min="0" />
-                                                    </div>
-                                                    <div class="return-row">
-                                                        <label class="return-label">Extra Charge (KHR)</label>
-                                                        <input id="r-extra" type="number"
-                                                               class="swal2-input"
-                                                               step="0.01" value="0" min="0" />
-                                                    </div>
-                                                </div>
+                                <div class="borrow-dialog-grid">
+                                    <div>
+                                        <label class="borrow-dialog-label">Late Days</label>
+                                        <input id="r-late" type="number" class="borrow-dialog-input" value="0" min="0" />
+                                    </div>
+                                    <div>
+                                        <label class="borrow-dialog-label">Fine Amount ($)</label>
+                                        <input id="r-fine" type="number" class="borrow-dialog-input" step="0.01" value="0" min="0" />
+                                    </div>
+                                    <div>
+                                        <label class="borrow-dialog-label">Extra Charge ($)</label>
+                                        <input id="r-extra" type="number" class="borrow-dialog-input" step="0.01" value="0" min="0" />
+                                    </div>
+                                </div>
 
-                                                <div class="return-row">
-                                                    <label class="return-label">Summary (KHR)</label>
-                                                    <div id="r-summary" class="return-summary"></div>
-                                                </div>
+                                <div id="r-summary" class="borrow-dialog-summary"></div>
 
-                                                <div class="return-row">
-                                                    <label class="return-label">Condition</label>
-                                                    <input id="r-cond" class="swal2-input"
-                                                           placeholder="Condition on return" />
-                                                </div>
+                                <div>
+                                    <label class="borrow-dialog-label">Condition</label>
+                                    <input id="r-cond" class="borrow-dialog-input" placeholder="Condition on return" />
+                                </div>
 
-                                                <div class="return-row">
-                                                    <label class="return-label">Notes</label>
-                                                    <textarea id="r-notes"
-                                                              class="swal2-textarea"
-                                                              placeholder="Notes"></textarea>
-                                                </div>
-                                            </div>
-                                        `,
+                                <div>
+                                    <label class="borrow-dialog-label">Notes</label>
+                                    <textarea id="r-notes" class="borrow-dialog-input" rows="2" placeholder="Notes"></textarea>
+                                </div>
+                            </div>
+                        `,
                         showCancelButton: true,
                         confirmButtonText: 'Confirm Return',
                         cancelButtonText: 'Cancel',
-                        icon: 'question',
-                        ...theme,
+                        ...swalTheme,
                         didOpen: () => {
                             const fineInput = document.getElementById('r-fine');
                             const extraInput = document.getElementById('r-extra');
                             const summary = document.getElementById('r-summary');
 
-                            const formatMoney = v => (isNaN(v) ? '0.00' : v.toFixed(2)) + ' ៛';
-
                             function updateSummary() {
                                 const fine = parseFloat(fineInput.value || '0');
                                 const extra = parseFloat(extraInput.value || '0');
                                 const paid = fine + extra;
-                                const refund = deposit;
 
                                 summary.innerHTML = `
-                                                    <div>Deposit on Borrow: <strong>${formatMoney(deposit)}</strong></div>
-                                                    <div>Fine + Extra: <strong>${formatMoney(paid)}</strong></div>
-                                                    <div class="primary"><strong>Total Paid (Fine + Extra): ${formatMoney(paid)}</strong></div>
-                                                    <div class="primary"><strong>Refund Amount (Deposit): ${formatMoney(refund)}</strong></div>
-                                                `;
+                                    <div>Deposit: <strong>$${deposit.toFixed(2)}</strong></div>
+                                    <div>Fine + Extra: <strong>$${paid.toFixed(2)}</strong></div>
+                                    <div style="color:#000080; font-weight:600; margin-top:4px;">
+                                        Refund: $${(deposit - paid).toFixed(2)}
+                                    </div>
+                                `;
                             }
 
                             fineInput.addEventListener('input', updateSummary);
@@ -568,19 +798,12 @@
                                 return false;
                             }
 
-                            const fine = parseFloat(document.getElementById('r-fine').value || '0');
-                            const extra = parseFloat(document.getElementById('r-extra').value || '0');
-                            const paid = fine + extra;
-                            const refund = deposit;
-
                             return {
                                 LoanId: parseInt(r.dataset.loanid),
                                 ReturnDate: date,
                                 LateDays: parseInt(document.getElementById('r-late').value || '0'),
-                                FineAmount: fine,
-                                ExtraCharge: extra,
-                                AmountPaid: paid,
-                                RefundAmount: refund,
+                                FineAmount: parseFloat(document.getElementById('r-fine').value || '0'),
+                                ExtraCharge: parseFloat(document.getElementById('r-extra').value || '0'),
                                 ConditionOnReturn: document.getElementById('r-cond').value || null,
                                 Notes: document.getElementById('r-notes').value || null
                             };
@@ -597,7 +820,7 @@
                                     title: 'Error',
                                     text: 'Return failed',
                                     icon: 'error',
-                                    ...theme
+                                    ...swalTheme
                                 });
                             }
 
@@ -605,12 +828,12 @@
 
                             return Swal.fire({
                                 title: 'Returned!',
-                                text: 'Return recorded successfully. Print receipt for member?',
+                                text: 'Return recorded successfully. Print receipt?',
                                 icon: 'success',
                                 showCancelButton: true,
-                                confirmButtonText: 'Yes, Print Receipt',
+                                confirmButtonText: 'Yes, Print',
                                 cancelButtonText: 'No',
-                                ...theme
+                                ...swalTheme
                             }).then(result => {
                                 if (result.isConfirmed && data.loanId) {
                                     window.open('/BookBorrows/ReturnReceipt/' + data.loanId, '_blank');
@@ -624,16 +847,16 @@
 
             // UNRETURN
             document.querySelectorAll('.btn-unreturn').forEach(btn => {
-                btn.addEventListener('click', function () {
+                btn.addEventListener('click', function() {
                     const r = this.closest('tr');
                     Swal.fire({
                         title: `UnReturn Loan #${r.dataset.loanid}?`,
-                        html: `This will mark the borrow as <b>Not Returned</b> and remove return records.`,
+                        text: 'This will mark the borrow as Not Returned and remove return records.',
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Yes, UnReturn',
                         cancelButtonText: 'Cancel',
-                        ...theme
+                        ...swalTheme
                     }).then(res => {
                         if (!res.isConfirmed) return;
                         fetch('/BookBorrows/UnReturn/' + r.dataset.loanid, {
@@ -646,13 +869,13 @@
                                     title: 'Done',
                                     text: 'Loan is now Not Returned.',
                                     icon: 'success',
-                                    ...theme
+                                    ...swalTheme
                                 }).then(() => location.reload())
                                 : Swal.fire({
                                     title: 'Error',
                                     text: 'UnReturn failed',
                                     icon: 'error',
-                                    ...theme
+                                    ...swalTheme
                                 })
                         );
                     });

@@ -3,8 +3,7 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
+@* Bootstrap and Font Awesome are already loaded in _Layout.cshtml — do NOT re-add them here *@
 
 <style>
     /* Remove all box shadows from every element and hover states */
@@ -141,37 +140,35 @@
         border: 1px solid #e9ecef;
     }
 
-    /* Search container styling - UPDATED with downward position */
+    /* Search container styling */
     .search {
         position: relative;
-        width: 300px; /* Fixed width instead of flexible */
-        margin-top: 4px; /* Push search bar down */
-        margin-bottom: 4px; /* Maintain spacing */
+        width: 300px;
+        margin-top: 4px;
+        margin-bottom: 4px;
     }
 
-        /* Search icon styling */
         .search .search-icon {
             position: absolute;
             left: 12px;
             top: 50%;
             transform: translateY(-50%);
             color: #6c757d;
-            z-index: 10; 
+            z-index: 10;
             pointer-events: none;
             font-size: 0.9rem;
         }
 
-        /* Search input styling with padding for icon */
         .search input {
             background-color: #ffffff !important;
             width: 100%;
-            padding: 0.5rem 1rem 0.5rem 2.2rem !important; /* Smaller padding */
+            padding: 0.5rem 1rem 0.5rem 2.2rem !important;
             border-radius: 32px;
-            font-size: 0.9rem; /* Slightly smaller font */
-            height: 38px; /* Fixed height to match buttons */
+            font-size: 0.9rem;
+            height: 38px;
         }
 
-    /* Head section - UPDATED for flex layout */
+    /* Head section */
     .head {
         background-color: transparent !important;
         display: flex;
@@ -187,7 +184,7 @@
             align-items: center;
             font-size: 1.5rem;
             font-weight: 500;
-            line-height: 1.2; /* Better line height control */
+            line-height: 1.2;
         }
 
             .head .title .dot {
@@ -199,7 +196,6 @@
                 margin-right: 12px;
             }
 
-        /* Quick actions container */
         .head .quick {
             display: flex;
             align-items: center;
@@ -207,7 +203,6 @@
             flex-wrap: wrap;
         }
 
-    /* Quick action chips - match search height */
     .quick .chip {
         display: inline-flex;
         align-items: center;
@@ -216,24 +211,20 @@
         height: 38px;
     }
 
-    /* Right section with search and actions - align items to center */
     .head-right {
         display: flex;
         align-items: center;
         gap: 1rem;
     }
 
-    /* Chart container adjustments */
     canvas {
         background-color: transparent !important;
     }
 
-    /* Override any Bootstrap gradient backgrounds */
     .bg-primary, .bg-secondary, .bg-success, .bg-info, .bg-warning, .bg-danger {
         background-image: none !important;
     }
 
-    /* Ensure text colors remain */
     body {
         background-color: #ffffff;
     }
@@ -272,7 +263,6 @@
         outline: none !important;
     }
 
-        /* KPI view links - keep arrow visible */
         .kpi a i {
             display: inline-block;
             transition: transform 0.2s ease;
@@ -282,19 +272,16 @@
             transform: translateX(4px);
         }
 
-    /* Remove any Bootstrap link underlines */
     .text-decoration-none {
         text-decoration: none !important;
     }
 
-    /* Ensure no underlines in search results */
     #search-results .result span,
     #search-results .result b {
         text-decoration: none !important;
         border-bottom: none !important;
     }
 
-    /* Responsive adjustments */
     @@media (max-width: 768px) {
         .head {
             flex-direction: column;
@@ -308,12 +295,11 @@
         }
 
         .search {
-            width: 100%; /* Full width on mobile */
-            margin-top: 0; /* Reset margin on mobile */
+            width: 100%;
+            margin-top: 0;
         }
     }
 
-    /* Search results dropdown positioning */
     #search-results {
         position: absolute;
         top: 100%;
@@ -330,12 +316,11 @@
 
 <div class="wrap">
 
-    <!-- HEADER with Search and Actions in same row -->
+    <!-- HEADER -->
     <div class="head">
         <div class="title">Dashboard</div>
 
         <div class="head-right">
-            <!-- SEARCH - Fixed width, properly aligned with downward offset -->
             <div class="search" role="search">
                 <i class="fas fa-search search-icon" aria-hidden="true"></i>
                 <label class="sr-only" for="q">Search</label>
@@ -344,7 +329,6 @@
                 <div id="search-results" role="listbox" tabindex="-1"></div>
             </div>
 
-            <!-- ACTION BUTTONS -->
             <div class="quick">
                 <a class="chip" href="@Url.Action("Create", "Catalogs")"><i class="fas fa-plus"></i> Add Catalog</a>
                 <a class="chip" href="@Url.Action("Create", "Members")"><i class="fas fa-user-plus"></i> Add Member</a>
@@ -353,7 +337,7 @@
         </div>
     </div>
 
-    <!-- KPI GRID ------------------------------------------------>
+    <!-- KPI GRID -->
     <div class="row g-3 g-md-4 mb-1">
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="kpi">
@@ -364,16 +348,6 @@
             </div>
         </div>
 
-        @* Total Books disabled in your code *@
-        @* <div class="col-12 col-sm-6 col-lg-3">
-        <div class="kpi">
-        <span class="ico"><i class="fas fa-book"></i></span>
-        <div class="label">Total Books</div>
-        <div class="val">@Model.TotalBooks</div>
-        <a href="@Url.Action("Index", "Books")">View <i class="fas fa-arrow-right"></i></a>
-        </div>
-        </div> *@
-
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="kpi">
                 <span class="ico"><i class="fas fa-users"></i></span>
@@ -383,7 +357,6 @@
             </div>
         </div>
 
-        <!-- ALL BORROWS (no filter) -->
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="kpi">
                 <span class="ico"><i class="fas fa-file-signature"></i></span>
@@ -393,7 +366,6 @@
             </div>
         </div>
 
-        <!-- RETURNED = link to #returned -->
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="kpi">
                 <span class="ico"><i class="fas fa-undo"></i></span>
@@ -403,7 +375,6 @@
             </div>
         </div>
 
-        <!-- NOT RETURN = link to #notreturned -->
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="kpi">
                 <span class="ico"><i class="fas fa-times-circle"></i></span>
@@ -413,7 +384,6 @@
             </div>
         </div>
 
-        <!-- OVERDUE = link to #due -->
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="kpi">
                 <span class="ico"><i class="fas fa-exclamation-triangle"></i></span>
@@ -422,16 +392,6 @@
                 <a href="@Url.Action("Index", "BookBorrows")#due">View <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
-
-        @* Pending returns hidden *@
-        @* <div class="col-12 col-sm-6 col-lg-3">
-        <div class="kpi">
-        <span class="ico"><i class="fas fa-hourglass-half"></i></span>
-        <div class="label">Pending Returns</div>
-        <div class="val">@Model.PendingReturns</div>
-        <a href="@Url.Action("Index", "BookBorrows")">View <i class="fas fa-arrow-right"></i></a>
-        </div>
-        </div> *@
 
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="kpi">
@@ -442,7 +402,6 @@
             </div>
         </div>
 
-        <!-- NEW: ADJUSTMENTS KPI -->
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="kpi">
                 <span class="ico"><i class="fas fa-sliders-h"></i></span>
@@ -453,7 +412,7 @@
         </div>
     </div>
 
-    <!-- CHART + EXPORT ----------------------------------------->
+    <!-- CHART -->
     <div class="card mt-3" style="border-radius: var(--radius-lg);">
         <div class="card-head">
             <div class="card-title">
@@ -489,7 +448,7 @@
 
 </div>
 
-<script src="~/jquery/jquery.min.js"></script>
+@* jQuery is already loaded in _Layout.cshtml — do NOT re-add it here *@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
@@ -498,7 +457,6 @@
     const labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthlyLabels));
     const series = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthlyBorrowStats));
 
-    // Solid color for chart background (no gradient)
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -507,7 +465,7 @@
                 label: 'Book Borrows',
                 data: series,
                 fill: true,
-                backgroundColor: 'rgba(0, 179, 255, 0.1)', // Solid light blue fill
+                backgroundColor: 'rgba(0, 179, 255, 0.1)',
                 borderColor: '#00b3ff',
                 borderWidth: 2,
                 tension: 0.35,
@@ -528,21 +486,12 @@
             scales: {
                 y: {
                     beginAtZero: true,
-                    ticks: {
-                        precision: 0,
-                        color: '#6c757d'
-                    },
-                    grid: {
-                        color: 'rgba(108, 117, 125, 0.2)'
-                    }
+                    ticks: { precision: 0, color: '#6c757d' },
+                    grid: { color: 'rgba(108, 117, 125, 0.2)' }
                 },
                 x: {
-                    ticks: {
-                        color: '#6c757d'
-                    },
-                    grid: {
-                        display: false
-                    }
+                    ticks: { color: '#6c757d' },
+                    grid: { display: false }
                 }
             }
         }
@@ -576,10 +525,10 @@
 
                 $res.append(
                     `<div class="result" role="option" id="r-${i}" tabindex="-1" aria-selected="false"
-                                   data-type="${r.type}" data-id="${r.loanId || r.bookId || r.memberId}">
-                                <i class="fas ${icon}"></i>
-                                <span>${label}</span>
-                             </div>`
+                           data-type="${r.type}" data-id="${r.loanId || r.bookId || r.memberId}">
+                        <i class="fas ${icon}"></i>
+                        <span>${label}</span>
+                     </div>`
                 );
             });
             $res.show();
@@ -612,7 +561,7 @@
         $box.on('keydown', function (e) {
             if (!$res.is(':visible')) return;
             if (e.key === 'ArrowDown') { e.preventDefault(); move(activeIndex + 1); }
-            if (e.key === 'ArrowUp') { e.preventDefault(); move(activeIndex - 1); }
+            if (e.key === 'ArrowUp')   { e.preventDefault(); move(activeIndex - 1); }
             if (e.key === 'Enter' && activeIndex >= 0) {
                 e.preventDefault();
                 $('#r-' + activeIndex).trigger('mousedown');
@@ -625,8 +574,8 @@
 
         $res.on('mousedown', '.result', function () {
             const type = $(this).data('type');
-            if (type === 'Book') { window.location = '@Url.Action("Index", "Books")'; }
-            if (type === 'Member') { window.location = '@Url.Action("Index", "Members")'; }
+            if (type === 'Book')       { window.location = '@Url.Action("Index", "Books")'; }
+            if (type === 'Member')     { window.location = '@Url.Action("Index", "Members")'; }
             if (type === 'BookBorrow') { window.location = '@Url.Action("Index", "BookBorrows")'; }
             $res.hide();
             $box.attr('aria-expanded', 'false');

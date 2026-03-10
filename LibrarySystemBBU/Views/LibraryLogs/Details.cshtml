@@ -5,155 +5,262 @@
     string status = Model?.Status ?? "Pending";
     string statusClass = status switch
     {
-        "Approved" => "b-approved",
-        "Returned" => "b-returned",
-        _ => "b-pending"
+        "Approved" => "status-approved",
+        "Returned" => "status-returned",
+        _ => "status-pending"
     };
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-    /* ==========================
-           Library Log Details – scoped
-           Reuse global glass / brand
-           ========================== */
-
-    #libraryLogDetailsPage .muted {
-        color: var(--muted, #667085);
-        font-size: .9rem;
+    .logs-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-    #libraryLogDetailsPage .card-glass.glas-all-style {
-        margin-top: 4px;
-    }
-
-    #libraryLogDetailsPage dl.row dt {
-        font-weight: 600;
-        color: var(--text, #0f0f2e);
-    }
-
-    #libraryLogDetailsPage dl.row dd {
-        margin-bottom: .35rem;
-    }
-
-    /* Status pills */
-    #libraryLogDetailsPage .status-pill {
-        display: inline-block;
-        padding: .25rem .6rem;
-        border-radius: 999px;
-        border: 1px solid #dfe3ff;
+    .logs-page-title {
+        font-size: 1.5rem;
         font-weight: 700;
-        font-size: .82rem;
-    }
-
-    #libraryLogDetailsPage .b-pending {
-        background: #fff7e6;
-        color: #8a5a00;
-        border-color: #ffe3ad;
-    }
-
-    #libraryLogDetailsPage .b-approved {
-        background: #e7fff0;
-        color: #066e3c;
-        border-color: #b8f5d2;
-    }
-
-    #libraryLogDetailsPage .b-returned {
-        background: #eef1ff;
-        color: #2b2f7f;
-        border-color: #dfe3ff;
-    }
-
-    /* Book chips */
-    #libraryLogDetailsPage .chip {
-        display: inline-flex;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
         align-items: center;
         gap: 8px;
-        border: 1px solid rgba(1,0,140,.12);
-        border-radius: 999px;
+    }
+
+        .logs-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .logs-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .logs-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none !important;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .logs-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none !important;
+        }
+
+    .logs-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .logs-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+
+    .logs-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+
+    .logs-card-header {
+        padding: 14px 16px;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        font-weight: 600;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .logs-card-body {
+        padding: 1.25rem;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: .74rem;
+        font-weight: 500;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-approved {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-returned {
+        background: #e0f2fe;
+        color: #0369a1;
+    }
+
+    .logs-info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .logs-info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .logs-info-label {
+        font-size: .75rem;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+    }
+
+    .logs-info-value {
+        font-size: .95rem;
+        color: #111827;
+    }
+
+    .logs-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
         padding: 6px 10px;
-        margin: 6px 6px 0 0;
-        background: linear-gradient(180deg,#fff,#f7f8ff);
+        background: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        font-size: .8rem;
+        margin: 0 6px 6px 0;
+    }
+
+    .logs-muted {
+        color: #6b7280;
         font-size: .85rem;
     }
 
-        #libraryLogDetailsPage .chip i {
-            font-size: .9rem;
-        }
+    a, a:hover {
+        text-decoration: none !important;
+    }
 
-    /* Footer actions */
-    #libraryLogDetailsPage .actions-bar {
-        border-top: 1px solid rgba(15,23,42,.06);
-        padding: 12px 16px 14px;
+    .btn, .btn:hover {
+        text-decoration: none !important;
     }
 </style>
 
-<div id="libraryLogDetailsPage">
-    <h2 class="page-title">
-        <span class="logo-dot"></span>
-        Log Details
-    </h2>
+<div class="logs-page">
+    <div class="logs-page-title">Log Details</div>
 
-    <div class="card-glass glas-all-style">
-        <!-- HEADER -->
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <div>
-                <i class="bi bi-journal-text"></i> Header
-            </div>
-            <div>
-                <span class="status-pill @statusClass">@status</span>
+    <div class="logs-toolbar">
+        <div class="logs-muted">
+            <i class="bi bi-info-circle"></i> Detailed view of the library log
+        </div>
+        <div class="ms-auto d-flex gap-2">
+            <a asp-action="Index" class="logs-btn">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model.LogId" class="logs-btn logs-btn-primary">
+                <i class="bi bi-pencil-square"></i> Edit
+            </a>
+        </div>
+    </div>
+
+    <div class="logs-card">
+        <div class="logs-card-header">
+            <i class="bi bi-journal-text"></i> Header
+            <span class="status-badge @statusClass ms-auto">
+                <i class="bi @(status == "Approved" ? "bi-check-circle-fill" : status == "Returned" ? "bi-arrow-return-left" : "bi-hourglass-split")"></i>
+                @status
+            </span>
+        </div>
+        <div class="logs-card-body">
+            <div class="logs-info-grid">
+                <div class="logs-info-item">
+                    <span class="logs-info-label">Student</span>
+                    <span class="logs-info-value">@Model.StudentName</span>
+                </div>
+                <div class="logs-info-item">
+                    <span class="logs-info-label">Phone</span>
+                    <span class="logs-info-value">@Model.PhoneNumber</span>
+                </div>
+                <div class="logs-info-item">
+                    <span class="logs-info-label">Gender</span>
+                    <span class="logs-info-value">@Model.Gender</span>
+                </div>
+                <div class="logs-info-item">
+                    <span class="logs-info-label">Visit Date</span>
+                    <span class="logs-info-value">@Model.VisitDate.ToString("yyyy-MM-dd")</span>
+                </div>
+                <div class="logs-info-item">
+                    <span class="logs-info-label">Purpose</span>
+                    <span class="logs-info-value">@Model.Purpose</span>
+                </div>
+                <div class="logs-info-item">
+                    <span class="logs-info-label">Notes</span>
+                    <span class="logs-info-value">@Model.Notes</span>
+                </div>
+                <div class="logs-info-item">
+                    <span class="logs-info-label">Created (UTC)</span>
+                    <span class="logs-info-value">@Model.CreatedUtc.ToString("yyyy-MM-dd HH:mm")</span>
+                </div>
+                <div class="logs-info-item">
+                    <span class="logs-info-label">Approved On (UTC)</span>
+                    <span class="logs-info-value">@(Model.ApprovedUtc?.ToString("yyyy-MM-dd HH:mm") ?? "—")</span>
+                </div>
+                <div class="logs-info-item">
+                    <span class="logs-info-label">Returned On (UTC)</span>
+                    <span class="logs-info-value">@(Model.ReturnedUtc?.ToString("yyyy-MM-dd HH:mm") ?? "—")</span>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- MAIN INFO -->
-        <div class="card-body">
-            <dl class="row mb-0">
-                <dt class="col-sm-3">Student</dt>
-                <dd class="col-sm-9">@Model.StudentName</dd>
-
-                <dt class="col-sm-3">Phone</dt>
-                <dd class="col-sm-9">@Model.PhoneNumber</dd>
-
-                <dt class="col-sm-3">Gender</dt>
-                <dd class="col-sm-9">@Model.Gender</dd>
-
-                <dt class="col-sm-3">Visit Date</dt>
-                <dd class="col-sm-9">@Model.VisitDate.ToString("yyyy-MM-dd")</dd>
-
-                <dt class="col-sm-3">Purpose</dt>
-                <dd class="col-sm-9">@Model.Purpose</dd>
-
-                <dt class="col-sm-3">Notes</dt>
-                <dd class="col-sm-9">@Model.Notes</dd>
-
-                <dt class="col-sm-3">Created (UTC)</dt>
-                <dd class="col-sm-9">@Model.CreatedUtc.ToString("yyyy-MM-dd HH:mm")</dd>
-
-                <dt class="col-sm-3">Approved On (UTC)</dt>
-                <dd class="col-sm-9">
-                    @(Model.ApprovedUtc.HasValue
-                        ? Model.ApprovedUtc.Value.ToString("yyyy-MM-dd HH:mm")
-                        : "—")
-                </dd>
-
-                <dt class="col-sm-3">Returned On (UTC)</dt>
-                <dd class="col-sm-9">
-                    @(Model.ReturnedUtc.HasValue
-                        ? Model.ReturnedUtc.Value.ToString("yyyy-MM-dd HH:mm")
-                        : "—")
-                </dd>
-            </dl>
-        </div>
-
-        <!-- BOOKS -->
-        <div class="card-header">
+    <div class="logs-card">
+        <div class="logs-card-header">
             <i class="bi bi-bookshelf"></i> Books
         </div>
-        <div class="card-body">
+        <div class="logs-card-body">
             @if (Model.Items == null || !Model.Items.Any())
             {
-                <div class="muted">No books recorded for this log.</div>
+                <div class="logs-muted">No books recorded for this log.</div>
             }
             else
             {
@@ -161,24 +268,12 @@
                 {
                     var title = it.Book?.Catalog?.Title ?? it.Book?.Title ?? "(Unknown)";
                     var barcode = it.Book?.Barcode ?? "—";
-                    <span class="chip">
+                    <span class="logs-chip">
                         <i class="bi bi-journal-bookmark"></i>
                         @($"{title} ({barcode})")
                     </span>
                 }
             }
-        </div>
-
-        <!-- ACTIONS -->
-        <div class="card-body actions-bar d-flex gap-2 justify-content-end">
-            <a asp-action="Index" class="btn-glass btn-outline">
-                <i class="bi bi-arrow-left"></i> Back
-            </a>
-            <a asp-action="Edit"
-               asp-route-id="@Model.LogId"
-               class="btn-glass btn-brand">
-                <i class="bi bi-pencil-square"></i> Edit
-            </a>
         </div>
     </div>
 </div>

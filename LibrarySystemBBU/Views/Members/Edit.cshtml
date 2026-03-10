@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit Member";
+    var tgConnected = !string.IsNullOrWhiteSpace(Model.TelegramChatId);
 }
 
 <link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
@@ -59,15 +60,31 @@
         margin-top: 0.15rem;
     }
 
-    .help-hint {
-        font-size: .86rem;
-        color: var(--muted);
-    }
-
     .pwd-hint {
         font-size: .85rem;
         color: var(--muted);
         margin-top: .35rem;
+    }
+
+    .tg-status-box {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: .85rem;
+    }
+
+    .tg-connected {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        color: #166534;
+    }
+
+    .tg-disconnected {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        color: #6b7280;
     }
 </style>
 
@@ -100,8 +117,8 @@
                 <div class="text-center mb-3">
                     <img id="profilePreview"
                          src="@(string.IsNullOrWhiteSpace(Model.ProfilePicturePath)
-                                                                                      ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
-                                                                                      : Model.ProfilePicturePath)"
+                                                      ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
+                                                      : Model.ProfilePicturePath)"
                          class="avatar-3d" alt="Profile Preview" />
                     <div class="mb-1">
                         <label class="btn btn-glass btn-sm ms-1" style="font-size:0.92em;">
@@ -110,136 +127,103 @@
                         </label>
                         <div id="filenameLabel" class="filename-label"></div>
                     </div>
-                    <span asp-validation-for="ProfilePicturePath" class="text-danger small"></span>
                 </div>
 
                 <!-- Row 1: FullName + Gender -->
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="FullName" class="form-label"><i class="fa-solid fa-user"></i> Full Name</label>
-                            <input asp-for="FullName" class="form-control" />
-                            <span asp-validation-for="FullName" class="text-danger small"></span>
-                        </div>
+                        <label asp-for="FullName" class="form-label"><i class="fa-solid fa-user"></i> Full Name</label>
+                        <input asp-for="FullName" class="form-control" />
+                        <span asp-validation-for="FullName" class="text-danger small"></span>
                     </div>
                     <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="Gender" class="form-label"><i class="fa-solid fa-venus-mars"></i> Gender</label>
-                            <select asp-for="Gender" class="form-select">
-                                <option value="">-- Select Gender --</option>
-                                <option>Male</option>
-                                <option>Female</option>
-                                <option>Other</option>
-                            </select>
-                            <span asp-validation-for="Gender" class="text-danger small"></span>
-                        </div>
+                        <label asp-for="Gender" class="form-label"><i class="fa-solid fa-venus-mars"></i> Gender</label>
+                        <select asp-for="Gender" class="form-select">
+                            <option value="">-- Select Gender --</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger small"></span>
                     </div>
                 </div>
 
                 <!-- Row 2: Email + Phone -->
                 <div class="row g-3 mt-1">
                     <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="Email" class="form-label"><i class="fa-solid fa-envelope"></i> Email</label>
-                            <input asp-for="Email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger small"></span>
-                        </div>
+                        <label asp-for="Email" class="form-label"><i class="fa-solid fa-envelope"></i> Email</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
                     </div>
                     <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="Phone" class="form-label"><i class="fa-solid fa-phone"></i> Phone</label>
-                            <input asp-for="Phone" class="form-control" />
-                            <span asp-validation-for="Phone" class="text-danger small"></span>
-                        </div>
+                        <label asp-for="Phone" class="form-label"><i class="fa-solid fa-phone"></i> Phone</label>
+                        <input asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger small"></span>
                     </div>
                 </div>
 
                 <!-- Row 3: Address + MemberType -->
                 <div class="row g-3 mt-1">
                     <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="Address" class="form-label"><i class="fa-solid fa-location-dot"></i> Address</label>
-                            <input asp-for="Address" class="form-control" />
-                            <span asp-validation-for="Address" class="text-danger small"></span>
-                        </div>
+                        <label asp-for="Address" class="form-label"><i class="fa-solid fa-location-dot"></i> Address</label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger small"></span>
                     </div>
                     <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="MemberType" class="form-label"><i class="fa-solid fa-id-card-clip"></i> Member Type</label>
-                            <select asp-for="MemberType" class="form-select">
-                                <option value="">-- Select Type --</option>
-                                <option>Student</option>
-                                <option>Teacher</option>
-                                <option>Guest</option>
-                                <option>Other</option>
-                            </select>
-                            <span asp-validation-for="MemberType" class="text-danger small"></span>
-                        </div>
+                        <label asp-for="MemberType" class="form-label"><i class="fa-solid fa-id-card-clip"></i> Member Type</label>
+                        <select asp-for="MemberType" class="form-select">
+                            <option value="">-- Select Type --</option>
+                            <option>Student</option>
+                            <option>Teacher</option>
+                            <option>Guest</option>
+                            <option>Other</option>
+                        </select>
+                        <span asp-validation-for="MemberType" class="text-danger small"></span>
                     </div>
                 </div>
 
-                <!-- Row 4: Faculty (full width) -->
+                <!-- Row 4: Faculty + Subject -->
                 <div class="row g-3 mt-1">
-                    <div class="col-12">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="Faculty" class="form-label"><i class="fa-solid fa-building-columns"></i> Faculty</label>
-                            <select asp-for="Faculty" class="form-select" id="editFacultySelect">
-                                <option value="">-- Select Faculty --</option>
-                                <option>Business Administration</option>
-                                <option>Science and Technology</option>
-                                <option>Engineering and Architecture</option>
-                                <option>Law and Social Sciences</option>
-                                <option>Tourism and Hospitality</option>
-                                <option>Economics and Agricultural Sciences</option>
-                                <option>Arts, Humanities, and Languages</option>
-                                <option>School of Doctoral Studies</option>
-                            </select>
-                            <span asp-validation-for="Faculty" class="text-danger small"></span>
-                        </div>
+                    <div class="col-md-6">
+                        <label asp-for="Faculty" class="form-label"><i class="fa-solid fa-building-columns"></i> Faculty</label>
+                        <select asp-for="Faculty" class="form-select">
+                            <option value="">-- Select Faculty --</option>
+                            <option>Business Administration</option>
+                            <option>Science and Technology</option>
+                            <option>Engineering and Architecture</option>
+                            <option>Law and Social Sciences</option>
+                            <option>Tourism and Hospitality</option>
+                            <option>Economics and Agricultural Sciences</option>
+                            <option>Arts, Humanities, and Languages</option>
+                            <option>School of Doctoral Studies</option>
+                        </select>
+                        <span asp-validation-for="Faculty" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Subject" class="form-label"><i class="fa-solid fa-book"></i> Subject</label>
+                        <input asp-for="Subject" class="form-control" placeholder="Optional" />
+                        <span asp-validation-for="Subject" class="text-danger small"></span>
                     </div>
                 </div>
 
-                <!-- Row 5: Library ID + Telegram Chat ID -->
+                <!-- Row 5: Library ID + Join Date -->
                 <div class="row g-3 mt-1">
                     <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="DICardNumber" class="form-label"><i class="fa-solid fa-id-card"></i> Library Card / Member ID</label>
-                            <input asp-for="DICardNumber" class="form-control" />
-                            <span asp-validation-for="DICardNumber" class="text-danger small"></span>
-                        </div>
+                        <label asp-for="DICardNumber" class="form-label"><i class="fa-solid fa-id-card"></i> Library Card / Member ID</label>
+                        <input asp-for="DICardNumber" class="form-control" />
+                        <span asp-validation-for="DICardNumber" class="text-danger small"></span>
                     </div>
                     <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="TelegramChatId" class="form-label"><i class="fa-brands fa-telegram"></i> Telegram Chat ID</label>
-                            <input asp-for="TelegramChatId" class="form-control" />
-                            <div class="help-hint">Chat ID used for sending Telegram reminders (numeric ID from your bot).</div>
-                            <span asp-validation-for="TelegramChatId" class="text-danger small"></span>
-                        </div>
+                        <label class="form-label"><i class="fa-solid fa-calendar-plus"></i> Join Date</label>
+                        <input type="date" class="form-control" value="@Model.JoinDate.ToString("yyyy-MM-dd")" readonly />
+                        <div class="form-text">Join Date is not editable.</div>
                     </div>
                 </div>
 
-                <!-- Row 6: Telegram Username + Join Date -->
+                <!-- Row 6: Active + Notes -->
                 <div class="row g-3 mt-1">
-                    <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="TelegramUsername" class="form-label"><i class="fa-brands fa-telegram"></i> Telegram Username</label>
-                            <input asp-for="TelegramUsername" class="form-control" placeholder="username" />
-                            <span asp-validation-for="TelegramUsername" class="text-danger small"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label class="form-label"><i class="fa-solid fa-calendar-plus"></i> Join Date</label>
-                            <input type="date" class="form-control" value="@Model.JoinDate.ToString("yyyy-MM-dd")" readonly />
-                            <div class="form-text">Join Date is not editable.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Row 7: Active switch + Notes -->
-                <div class="row g-3 mt-1">
-                    <div class="col-md-6">
-                        <div class="form-check form-switch mb-3 mb-md-0 mt-2">
+                    <div class="col-md-6 d-flex align-items-center">
+                        <div class="form-check form-switch mt-2">
                             <input class="form-check-input" asp-for="IsActive" id="IsActiveSwitch" />
                             <label class="form-check-label" for="IsActiveSwitch">
                                 <i class="fa-solid fa-circle-check"></i> Active
@@ -247,29 +231,51 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="Notes" class="form-label"><i class="fa-solid fa-note-sticky"></i> Notes</label>
-                            <input asp-for="Notes" class="form-control" />
-                            <span asp-validation-for="Notes" class="text-danger small"></span>
-                        </div>
+                        <label asp-for="Notes" class="form-label"><i class="fa-solid fa-note-sticky"></i> Notes</label>
+                        <input asp-for="Notes" class="form-control" />
+                        <span asp-validation-for="Notes" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <!-- Telegram Status (read-only) -->
+                <div class="row g-3 mt-1">
+                    <div class="col-12">
+                        <label class="form-label"><i class="fa-brands fa-telegram"></i> Telegram</label>
+                        @if (tgConnected)
+                        {
+                            <div class="tg-status-box tg-connected">
+                                <i class="fa-brands fa-telegram"></i>
+                                <div>
+                                    <strong>Connected</strong>
+                                    @if (!string.IsNullOrWhiteSpace(Model.TelegramUsername))
+                                    {
+                                        <span class="ms-2">@@@Model.TelegramUsername</span>
+                                    }
+                                    <span class="ms-2 text-muted" style="font-size:.78rem;">ID: @Model.TelegramChatId</span>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="tg-status-box tg-disconnected">
+                                <i class="fa-brands fa-telegram"></i>
+                                <span>Not connected — member can link Telegram from their profile.</span>
+                            </div>
+                        }
                     </div>
                 </div>
 
                 <!-- Row 8: Linked User + Created By -->
                 <div class="row g-3 mt-1">
                     <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="UserId" class="form-label"><i class="fa-solid fa-user-tie"></i> Linked User</label>
-                            <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
-                            <span asp-validation-for="UserId" class="text-danger small"></span>
-                        </div>
+                        <label asp-for="UserId" class="form-label"><i class="fa-solid fa-user-tie"></i> Linked User</label>
+                        <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
+                        <span asp-validation-for="UserId" class="text-danger small"></span>
                     </div>
                     <div class="col-md-6">
-                        <div class="mb-3 mb-md-0">
-                            <label asp-for="CreatedBy" class="form-label"><i class="fa-solid fa-user"></i> Created By</label>
-                            <select asp-for="CreatedBy" class="form-select" asp-items="ViewBag.CreatedByList"></select>
-                            <span asp-validation-for="CreatedBy" class="text-danger small"></span>
-                        </div>
+                        <label asp-for="CreatedBy" class="form-label"><i class="fa-solid fa-user"></i> Created By</label>
+                        <select asp-for="CreatedBy" class="form-select" asp-items="ViewBag.CreatedByList"></select>
+                        <span asp-validation-for="CreatedBy" class="text-danger small"></span>
                     </div>
                 </div>
 
@@ -284,28 +290,24 @@
                     </div>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <div class="mb-3 mb-md-0">
-                                <label class="form-label">New Password</label>
-                                <div class="input-group">
-                                    <input name="NewPassword" id="NewPassword" type="password" class="form-control" placeholder="5 - 20 characters" autocomplete="new-password" />
-                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePw('NewPassword', this)">
-                                        <i class="fa-regular fa-eye"></i>
-                                    </button>
-                                </div>
-                                <div class="pwd-hint">No current password required.</div>
+                            <label class="form-label">New Password</label>
+                            <div class="input-group">
+                                <input name="NewPassword" id="NewPassword" type="password" class="form-control" placeholder="5 - 20 characters" autocomplete="new-password" />
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePw('NewPassword', this)">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
                             </div>
+                            <div class="pwd-hint">No current password required.</div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-0">
-                                <label class="form-label">Confirm New Password</label>
-                                <div class="input-group">
-                                    <input name="ConfirmPassword" id="ConfirmPassword" type="password" class="form-control" autocomplete="new-password" />
-                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePw('ConfirmPassword', this)">
-                                        <i class="fa-regular fa-eye"></i>
-                                    </button>
-                                </div>
-                                <span id="pwMatchError" class="text-danger small"></span>
+                            <label class="form-label">Confirm New Password</label>
+                            <div class="input-group">
+                                <input name="ConfirmPassword" id="ConfirmPassword" type="password" class="form-control" autocomplete="new-password" />
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePw('ConfirmPassword', this)">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
                             </div>
+                            <span id="pwMatchError" class="text-danger small"></span>
                         </div>
                     </div>
                 </div>

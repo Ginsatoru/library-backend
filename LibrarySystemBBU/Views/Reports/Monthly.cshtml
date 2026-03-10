@@ -3,46 +3,365 @@
 @model LibrarySystemBBU.ViewModels.MonthlyReportViewModel
 
 @{
-    ViewData["Title"] = $"Monthly Report - {Model.MonthName} {Model.Year}";
+    ViewData["Title"] = "Monthly Report - " + Model.MonthName + " " + Model.Year;
 }
 
-<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-<div class="wrap">
-    <!-- HEADER + ACTIONS -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+<style>
+    .rpt-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+    }
+
+    /* ---- page title ---- */
+    .rpt-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: .25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .rpt-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .rpt-subtitle {
+        font-size: .85rem;
+        color: #6b7280;
+        margin-bottom: 1.25rem;
+    }
+
+    /* ---- buttons ---- */
+    .rpt-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none !important;
+        transition: background .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .rpt-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none !important;
+        }
+
+    .rpt-btn-primary {
+        background: #000080;
+        color: #fff !important;
+        border-color: #000080;
+    }
+
+        .rpt-btn-primary:hover {
+            background: #00006a;
+            border-color: #00006a;
+        }
+
+    /* ---- filter card ---- */
+    .rpt-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .rpt-card-header {
+        padding: 12px 16px;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        font-weight: 600;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        border-radius: 14px 14px 0 0;
+    }
+
+    .rpt-card-header-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: .95rem;
+    }
+
+        .rpt-card-header-left::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .rpt-card-body {
+        padding: 1.25rem;
+    }
+
+    .rpt-card-noborder {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+
+    /* ---- filter row ---- */
+    .rpt-filter-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .rpt-filter-group {
+        min-width: 150px;
+    }
+
+    .rpt-filter-label {
+        font-size: .75rem;
+        font-weight: 500;
+        color: #6b7280;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        display: block;
+    }
+
+    .rpt-filter-input,
+    .rpt-filter-select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: .85rem;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+    }
+
+        .rpt-filter-input:focus,
+        .rpt-filter-select:focus {
+            outline: none;
+            border-color: #000080;
+        }
+
+    /* ---- KPI grid ---- */
+    .rpt-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-bottom: 1.5rem;
+    }
+
+    @@media (max-width: 992px) {
+        .rpt-kpi-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .rpt-kpi-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .rpt-kpi-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 16px;
+        text-decoration: none !important;
+        display: block;
+        transition: box-shadow .15s, transform .15s, border-color .15s;
+    }
+
+        .rpt-kpi-card:hover {
+            border-color: #000080;
+            text-decoration: none !important;
+        }
+
+    .rpt-kpi-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: #eef0ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000080;
+        font-size: 1.1rem;
+        margin-bottom: .6rem;
+    }
+
+    .rpt-kpi-label {
+        font-size: .75rem;
+        text-transform: uppercase;
+        letter-spacing: .07em;
+        color: #6b7280;
+        margin-bottom: .2rem;
+    }
+
+    .rpt-kpi-val {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #000080;
+        margin-bottom: .15rem;
+    }
+
+    .rpt-kpi-sub {
+        font-size: .78rem;
+        color: #9ca3af;
+    }
+
+    /* ---- pill badge ---- */
+    .rpt-pill {
+        font-size: .75rem;
+        color: #374151;
+        background: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 3px 10px;
+        white-space: nowrap;
+        font-weight: 500;
+    }
+
+    /* ---- section description ---- */
+    .rpt-section-desc {
+        font-size: .82rem;
+        color: #6b7280;
+        padding: 0 1.25rem .75rem;
+    }
+
+    /* ---- tables ---- */
+    .rpt-table-wrap {
+        overflow-x: auto;
+        padding: 0 1.25rem 1.25rem;
+    }
+
+    .rpt-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .82rem;
+    }
+
+        .rpt-table thead th {
+            padding: 9px 12px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .73rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .rpt-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background .1s;
+        }
+
+            .rpt-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .rpt-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+        .rpt-table tbody td {
+            padding: 9px 12px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+        .rpt-table tfoot tr {
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .rpt-table tfoot th {
+            padding: 9px 12px;
+            color: #000080;
+            font-weight: 700;
+            font-size: .83rem;
+        }
+
+        .rpt-table .text-end {
+            text-align: right;
+        }
+
+    /* ---- empty state ---- */
+    .rpt-empty {
+        padding: 2rem;
+        text-align: center;
+        color: #9ca3af;
+        font-size: .85rem;
+    }
+
+    @@media print {
+        body {
+            background: #fff !important;
+        }
+
+        .rpt-card, .rpt-card-noborder {
+            box-shadow: none !important;
+            border: 1px solid #000 !important;
+            page-break-inside: avoid;
+        }
+    }
+</style>
+
+<div class="rpt-page">
+
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
         <div>
-            <h2 class="page-title mb-1">
-                <span class="logo-dot"></span>
-                @ViewData["Title"]
-            </h2>
-            <p class="text-muted mb-0">
-                Monthly overview of borrowing, returns, in-library reading, purchases, adjustments, and finance.
-            </p>
+            <div class="rpt-page-title">@ViewData["Title"]</div>
+            <div class="rpt-subtitle">Monthly overview of borrowing, returns, in-library reading, purchases, adjustments, and finance.</div>
         </div>
-
-        <div class="d-flex flex-wrap gap-2">
+        <div class="d-flex gap-2 flex-wrap">
             <a asp-action="MonthlyExcel"
                asp-route-year="@Model.Year"
                asp-route-month="@Model.Month"
-               class="btn btn-glass btn-brand">
-                <i class="fas fa-file-excel me-1"></i> Export Excel (.xls)
+               class="rpt-btn rpt-btn-primary">
+                <i class="bi bi-file-earmark-excel"></i> Export Excel
             </a>
-
-            <button type="button"
-                    class="btn btn-glass glass-surface-pill"
-                    onclick="window.print()">
-                <i class="fas fa-print me-1"></i> Print
+            <button type="button" class="rpt-btn" onclick="window.print()">
+                <i class="bi bi-printer"></i> Print
             </button>
         </div>
     </div>
 
-    <!-- FILTER CARD (glass) -->
-    <div class="card-glass glas-all-style mb-3">
-        <form method="get" class="row g-2 align-items-end">
-            <div class="col-sm-3">
-                <label class="form-label mb-1">Month</label>
-                <select name="month" class="form-select form-select-sm">
+    <!-- Filter -->
+    <div class="rpt-card">
+        <form method="get" class="rpt-filter-row">
+            <div class="rpt-filter-group">
+                <label class="rpt-filter-label">Month</label>
+                <select name="month" class="rpt-filter-select">
                     @for (int i = 1; i <= 12; i++)
                     {
                         <option value="@i" selected="@(i == Model.Month ? "selected" : null)">
@@ -51,640 +370,393 @@
                     }
                 </select>
             </div>
-            <div class="col-sm-3">
-                <label class="form-label mb-1">Year</label>
-                <input type="number"
-                       name="year"
-                       class="form-control form-control-sm"
-                       value="@Model.Year" />
+            <div class="rpt-filter-group">
+                <label class="rpt-filter-label">Year</label>
+                <input type="number" name="year" class="rpt-filter-input" value="@Model.Year" />
             </div>
-            <div class="col-sm-3 mt-2 mt-sm-0">
-                <button type="submit" class="btn btn-glass btn-brand btn-sm w-100">
-                    <i class="fas fa-search me-1"></i> View Report
+            <div class="rpt-filter-group">
+                <label class="rpt-filter-label">&nbsp;</label>
+                <button type="submit" class="rpt-btn rpt-btn-primary" style="width:100%;">
+                    <i class="bi bi-search"></i> View Report
                 </button>
             </div>
         </form>
     </div>
 
-    <!-- TOP KPI CARDS (glass, clickable) -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-3 col-sm-6">
-            <a href="#borrow-report" class="text-decoration-none text-reset">
-                <div class="kpi-card-glass">
-                    <div class="ico">
-                        <i class="fa-solid fa-book-open-reader"></i>
-                    </div>
-                    <div class="label">Borrowed Books (Take Home)</div>
-                    <div class="val">Borrowed: @Model.StudentTakeHomeItemsBorrowed</div>
-                    <div class="sub">
-                        Report of Borrowed
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- ✅ NEW KPI FOR RETURNS -->
-        <div class="col-md-3 col-sm-6">
-            <a href="#return-report" class="text-decoration-none text-reset">
-                <div class="kpi-card-glass">
-                    <div class="ico">
-                        <i class="fa-solid fa-rotate-left"></i>
-                    </div>
-                    <div class="label">Returned Books (Take Hom)</div>
-                    <div class="val">Reterned: @Model.StudentTakeHomeReturns</div>
-                    <div class="sub">
-                        Report of Returned
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-md-3 col-sm-6">
-            <a href="#inlibrary-report" class="text-decoration-none text-reset">
-                <div class="kpi-card-glass">
-                    <div class="ico">
-                        <i class="fa-solid fa-book-reader"></i>
-                    </div>
-                    <div class="label">In Library Reading</div>
-                    <div class="val">Borrowed Item: @Model.InLibraryItemsRead</div>
-                    <div class="sub">
-                        Logs: @Model.InLibraryBorrowCount · Returned: @Model.InLibraryReturnCount
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-md-3 col-sm-6">
-            <a href="#financial-report" class="text-decoration-none text-reset">
-                <div class="kpi-card-glass">
-                    <div class="ico">
-                        <i class="fa-solid fa-sack-dollar"></i>
-                    </div>
-                    <div class="label">Net Cash Flow</div>
-                    <div class="val">Total: @($"{Model.NetCashFlow:N0} ៛")</div>
-                    <div class="sub">
-                        @{
-                            var totalIncome = Model.IncomeBorrowingFees + Model.IncomeFines + Model.IncomeExtraCharges;
-                        }
-                        Income: @($"{totalIncome:N0} ៛")
-                    </div>
-                </div>
-            </a>
-        </div>
+    <!-- KPI Cards -->
+    <div class="rpt-kpi-grid">
+        <a href="#borrow-report" class="rpt-kpi-card">
+            <div class="rpt-kpi-icon"><i class="bi bi-book"></i></div>
+            <div class="rpt-kpi-label">Borrowed (Take Home)</div>
+            <div class="rpt-kpi-val">@Model.StudentTakeHomeItemsBorrowed</div>
+            <div class="rpt-kpi-sub">items borrowed this month</div>
+        </a>
+        <a href="#return-report" class="rpt-kpi-card">
+            <div class="rpt-kpi-icon"><i class="bi bi-arrow-return-left"></i></div>
+            <div class="rpt-kpi-label">Returned (Take Home)</div>
+            <div class="rpt-kpi-val">@Model.StudentTakeHomeReturns</div>
+            <div class="rpt-kpi-sub">items returned this month</div>
+        </a>
+        <a href="#inlibrary-report" class="rpt-kpi-card">
+            <div class="rpt-kpi-icon"><i class="bi bi-building"></i></div>
+            <div class="rpt-kpi-label">In-Library Reading</div>
+            <div class="rpt-kpi-val">@Model.InLibraryItemsRead</div>
+            <div class="rpt-kpi-sub">Logs: @Model.InLibraryBorrowCount &middot; Returned: @Model.InLibraryReturnCount</div>
+        </a>
+        <a href="#financial-report" class="rpt-kpi-card">
+            @{
+                var totalIncome = Model.IncomeBorrowingFees + Model.IncomeFines + Model.IncomeExtraCharges;
+            }
+            <div class="rpt-kpi-icon"><i class="bi bi-cash-stack"></i></div>
+            <div class="rpt-kpi-label">Net Cash Flow</div>
+            <div class="rpt-kpi-val">@Model.NetCashFlow.ToString("N0") &#x17D9;</div>
+            <div class="rpt-kpi-sub">Income: @totalIncome.ToString("N0") &#x17D9;</div>
+        </a>
     </div>
 
-    <!-- ===================================================== -->
-    <!-- 1. BORROW BOOK REPORT                                 -->
-    <!-- ===================================================== -->
+    <!-- 1. Borrow Report -->
     <a id="borrow-report"></a>
-    <section class="report-section mb-4 card-glass glas-all-style">
-        <div class="section-header d-flex justify-content-between align-items-center mb-2">
-            <h4 class="mb-0 section-title-glass">
-                <span class="logo-dot"></span>
-                1. Borrow Book Report (Student Take-Home - Borrowed This Month)
-            </h4>
-            <span class="pill glass-surface-pill">
-                @Model.StudentTakeHomeItemsBorrowed items · @Model.StudentTakeHomeLoans loans
-            </span>
+    <div class="rpt-card-noborder mb-3">
+        <div class="rpt-card-header">
+            <div class="rpt-card-header-left">1. Borrow Book Report (Student Take-Home)</div>
+            <span class="rpt-pill">@Model.StudentTakeHomeItemsBorrowed items &middot; @Model.StudentTakeHomeLoans loans</span>
         </div>
-        <p class="text-muted small mb-3">
-            Shows students who borrowed books to take home (LoanDate in this month), including deposit, fines and extra charges.
-        </p>
+        @if (Model.StudentBorrowDetails.Any())
+        {
+            var totalRows = Model.StudentBorrowDetails.Count;
+            var totalStudents = Model.StudentBorrowDetails.Select(b => b.MemberId).Distinct().Count();
+            var totalDeposit = Model.StudentBorrowDetails.Sum(x => x.DepositAmount);
+            var totalFine = Model.StudentBorrowDetails.Sum(x => x.FineAmount);
+            var totalExtra = Model.StudentBorrowDetails.Sum(x => x.ExtraCharge);
 
-        <div class="card glass-surface">
-            <div class="card-body">
-                @if (Model.StudentBorrowDetails.Any())
-                {
-                    var totalRows = Model.StudentBorrowDetails.Count;
-                    var totalStudents = Model.StudentBorrowDetails
-                    .Select(b => b.MemberId)
-                    .Distinct()
-                    .Count();
-
-                    var totalDeposit = Model.StudentBorrowDetails.Sum(x => x.DepositAmount);
-                    var totalFine = Model.StudentBorrowDetails.Sum(x => x.FineAmount);
-                    var totalExtra = Model.StudentBorrowDetails.Sum(x => x.ExtraCharge);
-
-                    <div class="table-responsive">
-                        <table class="table table-sm table-striped table-hover align-middle mb-0 glass-table">
-                            <thead>
-                                <tr>
-                                    <th>Loan Date</th>
-                                    <th>Due</th>
-                                    <th>Return</th>
-                                    <th>Member</th>
-                                    <th>Type</th>
-                                    <th>Catalog Title</th>
-                                    <th>Barcode</th>
-                                    <th class="text-end">Deposit</th>
-                                    <th class="text-end">Fine Amount</th>
-                                    <th class="text-end">Extra Charge</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var b in Model.StudentBorrowDetails)
-                                {
-                                    <tr>
-                                        <td>@b.LoanDate.ToString("yyyy-MM-dd")</td>
-                                        <td>@(b.DueDate?.ToString("yyyy-MM-dd") ?? "-")</td>
-                                        <td>@(b.ReturnDate?.ToString("yyyy-MM-dd") ?? "-")</td>
-                                        <td>@b.MemberName</td>
-                                        <td>@b.MemberType</td>
-                                        <td>@b.CatalogTitle</td>
-                                        <td>@b.Barcode</td>
-                                        <td class="text-end">@($"{b.DepositAmount:N0} ៛")</td>
-                                        <td class="text-end">@($"{b.FineAmount:N0} ៛")</td>
-                                        <td class="text-end">@($"{b.ExtraCharge:N0} ៛")</td>
-                                    </tr>
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr class="totaltext">
-                                    <th colspan="3" >Totals</th>
-                                    <th>@totalStudents student(s)</th>
-                                    <th></th>
-                                    <th>@totalRows item(s)</th>
-                                    <th></th>
-                                    <th class="text-end">@($"{totalDeposit:N0} ៛")</th>
-                                    <th class="text-end">@($"{totalFine:N0} ៛")</th>
-                                    <th class="text-end">@($"{totalExtra:N0} ៛")</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                }
-                else
-                {
-                    <p class="text-muted mb-0">No borrowing records for this month.</p>
-                }
+            <div class="rpt-table-wrap">
+                <table class="rpt-table">
+                    <thead>
+                        <tr>
+                            <th>Loan Date</th>
+                            <th>Due</th>
+                            <th>Return</th>
+                            <th>Member</th>
+                            <th>Type</th>
+                            <th>Catalog Title</th>
+                            <th>Barcode</th>
+                            <th class="text-end">Deposit</th>
+                            <th class="text-end">Fine</th>
+                            <th class="text-end">Extra</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var b in Model.StudentBorrowDetails)
+                        {
+                            <tr>
+                                <td>@b.LoanDate.ToString("yyyy-MM-dd")</td>
+                                <td>@(b.DueDate.HasValue? b.DueDate.Value.ToString("yyyy-MM-dd") : "-")</td>
+                                <td>@(b.ReturnDate.HasValue? b.ReturnDate.Value.ToString("yyyy-MM-dd") : "-")</td>
+                                <td>@b.MemberName</td>
+                                <td>@b.MemberType</td>
+                                <td>@b.CatalogTitle</td>
+                                <td>@b.Barcode</td>
+                                <td class="text-end">@b.DepositAmount.ToString("N0") &#x17D9;</td>
+                                <td class="text-end">@b.FineAmount.ToString("N0") &#x17D9;</td>
+                                <td class="text-end">@b.ExtraCharge.ToString("N0") &#x17D9;</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3">Totals</th>
+                            <th>@totalStudents student(s)</th>
+                            <th></th>
+                            <th>@totalRows item(s)</th>
+                            <th></th>
+                            <th class="text-end">@totalDeposit.ToString("N0") &#x17D9;</th>
+                            <th class="text-end">@totalFine.ToString("N0") &#x17D9;</th>
+                            <th class="text-end">@totalExtra.ToString("N0") &#x17D9;</th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
-        </div>
-    </section>
-
-    <!-- ===================================================== -->
-    <!-- ✅ 1b. RETURN UPDATE REPORT                            -->
-    <!-- ===================================================== -->
-    <a id="return-report"></a>
-    <section class="report-section mb-4 card-glass glas-all-style">
-        <div class="section-header d-flex justify-content-between align-items-center mb-2">
-            <h4 class="mb-0 section-title-glass">
-                <span class="logo-dot"></span>
-                1b. Return Update Report (Student Take-Home - Returned This Month)
-            </h4>
-            <span class="pill glass-surface-pill">
-                @Model.StudentTakeHomeReturns returned items
-            </span>
-        </div>
-        <p class="text-muted small mb-3">
-            Shows loans that were returned in this month.
-        </p>
-
-        <div class="card glass-surface">
-            <div class="card-body">
-                @if (Model.StudentReturnDetails != null && Model.StudentReturnDetails.Any())
-                {
-                    var totalRows = Model.StudentReturnDetails.Count;
-                    var totalStudents = Model.StudentReturnDetails
-                    .Select(b => b.MemberId)
-                    .Distinct()
-                    .Count();
-
-                    var totalFine = Model.StudentReturnDetails.Sum(x => x.FineAmount);
-                    var totalExtra = Model.StudentReturnDetails.Sum(x => x.ExtraCharge);
-
-                    <div class="table-responsive">
-                        <table class="table table-sm table-striped table-hover align-middle mb-0 glass-table">
-                            <thead>
-                                <tr>
-                                    <th>Return Date</th>
-                                    <th>Loan Date</th>
-                                    <th>Due</th>
-                                    <th>Member</th>
-                                    <th>Type</th>
-                                    <th>Catalog Title</th>
-                                    <th>Barcode</th>
-                                    <th class="text-end">Fine Amount</th>
-                                    <th class="text-end">Extra Charge</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var r in Model.StudentReturnDetails)
-                                {
-                                    <tr>
-                                        <td>@(r.ReturnDate?.ToString("yyyy-MM-dd") ?? "-")</td>
-                                        <td>@r.LoanDate.ToString("yyyy-MM-dd")</td>
-                                        <td>@(r.DueDate?.ToString("yyyy-MM-dd") ?? "-")</td>
-                                        <td>@r.MemberName</td>
-                                        <td>@r.MemberType</td>
-                                        <td>@r.CatalogTitle</td>
-                                        <td>@r.Barcode</td>
-                                        <td class="text-end">@($"{r.FineAmount:N0} ៛")</td>
-                                        <td class="text-end">@($"{r.ExtraCharge:N0} ៛")</td>
-                                    </tr>
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr class="totaltext">
-                                    <th colspan="3">Totals</th>
-                                    <th>@totalStudents students</th>
-                                    <th></th>
-                                    <th>@totalRows items</th>
-                                    <th></th>
-                                    <th class="text-end">@($"{totalFine:N0} ៛")</th>
-                                    <th class="text-end">@($"{totalExtra:N0} ៛")</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                }
-                else
-                {
-                    <p class="text-muted mb-0">No return records for this month.</p>
-                }
-            </div>
-        </div>
-    </section>
-
-    <!-- ===================================================== -->
-    <!-- 2. IN-LIBRARY READING REPORT                          -->
-    <!-- ===================================================== -->
-    <a id="inlibrary-report"></a>
-    <section class="report-section mb-4 card-glass glas-all-style">
-        <div class="section-header d-flex justify-content-between align-items-center mb-2">
-            <h4 class="mb-0 section-title-glass">
-                <span class="logo-dot"></span>
-                2. In-Library Reading (Library Log)
-            </h4>
-            <span class="pill glass-surface-pill">
-                @Model.InLibraryItemsRead items · @Model.InLibraryBorrowCount logs
-            </span>
-        </div>
-        <p class="text-muted small mb-3">
-            Shows who came to the library, what they read inside, and the status of each log.
-        </p>
-
-        <div class="card glass-surface">
-            <div class="card-body">
-                @if (Model.InLibraryDetails.Any())
-                {
-                    var totalRows = Model.InLibraryDetails.Count;
-                    var totalStudents = Model.InLibraryDetails
-                    .Select(x => x.StudentName)
-                    .Distinct()
-                    .Count();
-
-                    <div class="table-responsive">
-                        <table class="table table-sm table-striped table-hover align-middle mb-0 glass-table">
-                            <thead>
-                                <tr>
-                                    <th>Visit Date</th>
-                                    <th>Student</th>
-                                    <th>Gender</th>
-                                    <th>Purpose</th>
-                                    <th>Book Title</th>
-                                    <th>Catalog Title</th>
-                                    <th>Barcode</th>
-                                    <th>Status</th>
-                                    <th>Returned Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var r in Model.InLibraryDetails)
-                                {
-                                    <tr>
-                                        <td>@r.VisitDate.ToString("yyyy-MM-dd")</td>
-                                        <td>@r.StudentName</td>
-                                        <td>@r.Gender</td>
-                                        <td>@r.Purpose</td>
-                                        <td>@r.BookTitle</td>
-                                        <td>@r.CatalogTitle</td>
-                                        <td>@r.Barcode</td>
-                                        <td>@r.Status</td>
-                                        <td>@(r.ReturnedDate?.ToString("yyyy-MM-dd") ?? "-")</td>
-                                    </tr>
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr class="totaltext">
-                                    <th colspan="2">@totalStudents students</th>
-                                    <th colspan="7">@totalRows items read in library</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                }
-                else
-                {
-                    <p class="text-muted mb-0">No in-library reading records for this month.</p>
-                }
-            </div>
-        </div>
-    </section>
-
-    <!-- ===================================================== -->
-    <!-- 3. PURCHASES REPORT                                   -->
-    <!-- ===================================================== -->
-    <a id="purchases-report"></a>
-    <section class="report-section mb-4 card-glass glas-all-style">
-        <div class="section-header d-flex justify-content-between align-items-center mb-2">
-            <h4 class="mb-0 section-title-glass">
-                <span class="logo-dot"></span>
-                3. Purchases Report
-            </h4>
-            <span class="pill glass-surface-pill">
-                @Model.PurchaseTotalQuantity copies · @Model.PurchaseTransactions transactions
-            </span>
-        </div>
-        <p class="text-muted small mb-3">
-            Shows all books purchased this month, with supplier, quantity, and cost.
-        </p>
-
-        <div class="card glass-surface">
-            <div class="card-body">
-                @if (Model.PurchaseItems.Any())
-                {
-                    var totalRows = Model.PurchaseItems.Count;
-                    var totalQty = Model.PurchaseItems.Sum(x => x.Quantity);
-                    var totalCost = Model.PurchaseItems.Sum(x => x.Cost);
-
-                    <div class="table-responsive">
-                        <table class="table table-sm table-striped table-hover align-middle mb-0 glass-table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Supplier</th>
-                                    <th>Book Title</th>
-                                    <th class="text-end">Quantity</th>
-                                    <th class="text-end">Cost</th>
-                                    <th>Notes</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var p in Model.PurchaseItems)
-                                {
-                                    <tr>
-                                        <td>@p.PurchaseDate.ToString("yyyy-MM-dd")</td>
-                                        <td>@p.Supplier</td>
-                                        <td>@p.BookTitle</td>
-                                        <td class="text-end">@p.Quantity</td>
-                                        <td class="text-end">@($"{p.Cost:N0} ៛")</td>
-                                        <td>@p.Notes</td>
-                                    </tr>
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr class="totaltext">
-                                    <th colspan="3">@totalRows Purchases</th>
-                                    <th class="text-end">@totalQty</th>
-                                    <th class="text-end">@($"{totalCost:N0} ៛")</th>
-                                    <th></th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                }
-                else
-                {
-                    <p class="text-muted mb-0">No purchases recorded for this month.</p>
-                }
-            </div>
-        </div>
-    </section>
-
-    <!-- ===================================================== -->
-    <!-- 4. ADJUSTMENTS REPORT                                 -->
-    <!-- ===================================================== -->
-    <a id="adjustments-report"></a>
-    <div class="card-glass glas-all-style pb-4">
-        <section class="report-section mb-4">
-            <div class="section-header d-flex justify-content-between align-items-center mb-2">
-                <h4 class="mb-0 section-title-glass">
-                    <span class="logo-dot"></span>
-                    4. Adjustments Report
-                </h4>
-                <span class="pill glass-surface-pill">
-                    @Model.TotalAdjustments adjustments · Net @Model.TotalAdjustmentQtyChange copies
-                </span>
-            </div>
-            <p class="text-muted small mb-0">
-                Shows stock changes (lost, damaged, corrections) summarized by type and detailed by book.
-            </p>
-
-            <div class="row g-3">
-                <!-- Details per book -->
-                <div class="col-lg">
-                    <div class="card glass-surface h-100">
-                        <div class="card-body">
-                            <h6 class="mb-3 fw-bold">
-                                <i class="fa-solid fa-sliders me-1"></i> Adjustment Details (per book)
-                            </h6>
-                            @if (Model.AdjustmentItems.Any())
-                            {
-                                var totalRows = Model.AdjustmentItems.Count;
-                                var totalQty = Model.AdjustmentItems.Sum(x => x.QuantityChanged);
-
-                                <div class="table-responsive">
-                                    <table class="table table-sm table-striped table-hover align-middle mb-0 glass-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Type</th>
-                                                <th>Catalog Title</th>
-                                                <th class="text-end">Qty Change</th>
-                                                <th>Reason</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var d in Model.AdjustmentItems)
-                                            {
-                                                <tr>
-                                                    <td>@d.AdjustmentDate.ToString("yyyy-MM-dd")</td>
-                                                    <td>@d.AdjustmentType</td>
-                                                    <td>@d.CatalogTitle</td>
-                                                    <td class="text-end">@d.QuantityChanged</td>
-                                                    <td>@d.Reason</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                        <tfoot>
-                                            <tr class="totaltext">
-                                                <th colspan="3">@totalRows Adjustments</th>
-                                                <th class="text-end">@totalQty</th>
-                                                <th></th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            }
-                            else
-                            {
-                                <p class="text-muted mb-0">No adjustment details for this month.</p>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        }
+        else
+        {
+            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No borrowing records for this month.</div></div>
+        }
     </div>
 
-    <!-- ===================================================== -->
-    <!-- 5. FINANCIAL REPORT (TABLE)                           -->
-    <!-- ===================================================== -->
-    <a id="financial-report"></a>
-    <section class="report-section mb-5 card-glass glas-all-style mt-4">
-        <div class="section-header d-flex justify-content-between align-items-center mb-2">
-            <h4 class="mb-0 section-title-glass">
-                <span class="logo-dot"></span>
-                5. Financial Summary
-            </h4>
+    <!-- 1b. Return Report -->
+    <a id="return-report"></a>
+    <div class="rpt-card-noborder mb-3">
+        <div class="rpt-card-header">
+            <div class="rpt-card-header-left">1b. Return Update Report (Student Take-Home)</div>
+            <span class="rpt-pill">@Model.StudentTakeHomeReturns returned items</span>
         </div>
-        <p class="text-muted small mb-3">
-            Summary of income from borrowing and fines versus expenses for book purchases.
-        </p>
+        @if (Model.StudentReturnDetails != null && Model.StudentReturnDetails.Any())
+        {
+            var totalRows = Model.StudentReturnDetails.Count;
+            var totalStudents = Model.StudentReturnDetails.Select(b => b.MemberId).Distinct().Count();
+            var totalFine = Model.StudentReturnDetails.Sum(x => x.FineAmount);
+            var totalExtra = Model.StudentReturnDetails.Sum(x => x.ExtraCharge);
 
-        <div class="card glass-surface">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-sm table-striped align-middle mb-0 glass-table">
-                        <thead>
+            <div class="rpt-table-wrap">
+                <table class="rpt-table">
+                    <thead>
+                        <tr>
+                            <th>Return Date</th>
+                            <th>Loan Date</th>
+                            <th>Due</th>
+                            <th>Member</th>
+                            <th>Type</th>
+                            <th>Catalog Title</th>
+                            <th>Barcode</th>
+                            <th class="text-end">Fine</th>
+                            <th class="text-end">Extra</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.StudentReturnDetails)
+                        {
                             <tr>
-                                <th>Category</th>
-                                <th>Type</th>
-                                <th class="text-end">Amount</th>
+                                <td>@(r.ReturnDate.HasValue? r.ReturnDate.Value.ToString("yyyy-MM-dd") : "-")</td>
+                                <td>@r.LoanDate.ToString("yyyy-MM-dd")</td>
+                                <td>@(r.DueDate.HasValue? r.DueDate.Value.ToString("yyyy-MM-dd") : "-")</td>
+                                <td>@r.MemberName</td>
+                                <td>@r.MemberType</td>
+                                <td>@r.CatalogTitle</td>
+                                <td>@r.Barcode</td>
+                                <td class="text-end">@r.FineAmount.ToString("N0") &#x17D9;</td>
+                                <td class="text-end">@r.ExtraCharge.ToString("N0") &#x17D9;</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Borrowing fees</td>
-                                <td>Income</td>
-                                <td class="text-end">@($"{Model.IncomeBorrowingFees:N0} ៛")</td>
-                            </tr>
-                            <tr>
-                                <td>Late fines</td>
-                                <td>Income</td>
-                                <td class="text-end">@($"{Model.IncomeFines:N0} ៛")</td>
-                            </tr>
-                            <tr>
-                                <td>Extra charges (damage, etc.)</td>
-                                <td>Income</td>
-                                <td class="text-end">@($"{Model.IncomeExtraCharges:N0} ៛")</td>
-                            </tr>
-                            <tr>
-                                <td>Book purchases</td>
-                                <td>Expense</td>
-                                <td class="text-end">@($"{Model.ExpensePurchases:N0} ៛")</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr class="totaltext">
-                                <th colspan="2">Net Cash Flow (Income - Expense)</th>
-                                <th class="text-end">@($"{Model.NetCashFlow:N0} ៛")</th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3">Totals</th>
+                            <th>@totalStudents student(s)</th>
+                            <th></th>
+                            <th>@totalRows item(s)</th>
+                            <th></th>
+                            <th class="text-end">@totalFine.ToString("N0") &#x17D9;</th>
+                            <th class="text-end">@totalExtra.ToString("N0") &#x17D9;</th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
+        }
+        else
+        {
+            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No return records for this month.</div></div>
+        }
+    </div>
+
+    <!-- 2. In-Library Reading -->
+    <a id="inlibrary-report"></a>
+    <div class="rpt-card-noborder mb-3">
+        <div class="rpt-card-header">
+            <div class="rpt-card-header-left">2. In-Library Reading (Library Log)</div>
+            <span class="rpt-pill">@Model.InLibraryItemsRead items &middot; @Model.InLibraryBorrowCount logs</span>
         </div>
-    </section>
+        @if (Model.InLibraryDetails.Any())
+        {
+            var totalRows = Model.InLibraryDetails.Count;
+            var totalStudents = Model.InLibraryDetails.Select(x => x.StudentName).Distinct().Count();
+
+            <div class="rpt-table-wrap">
+                <table class="rpt-table">
+                    <thead>
+                        <tr>
+                            <th>Visit Date</th>
+                            <th>Student</th>
+                            <th>Gender</th>
+                            <th>Purpose</th>
+                            <th>Book Title</th>
+                            <th>Catalog Title</th>
+                            <th>Barcode</th>
+                            <th>Status</th>
+                            <th>Returned Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.InLibraryDetails)
+                        {
+                            <tr>
+                                <td>@r.VisitDate.ToString("yyyy-MM-dd")</td>
+                                <td>@r.StudentName</td>
+                                <td>@r.Gender</td>
+                                <td>@r.Purpose</td>
+                                <td>@r.BookTitle</td>
+                                <td>@r.CatalogTitle</td>
+                                <td>@r.Barcode</td>
+                                <td>@r.Status</td>
+                                <td>@(r.ReturnedDate.HasValue? r.ReturnedDate.Value.ToString("yyyy-MM-dd") : "-")</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">@totalStudents student(s)</th>
+                            <th colspan="7">@totalRows items read in library</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No in-library reading records for this month.</div></div>
+        }
+    </div>
+
+    <!-- 3. Purchases -->
+    <a id="purchases-report"></a>
+    <div class="rpt-card-noborder mb-3">
+        <div class="rpt-card-header">
+            <div class="rpt-card-header-left">3. Purchases Report</div>
+            <span class="rpt-pill">@Model.PurchaseTotalQuantity copies &middot; @Model.PurchaseTransactions transactions</span>
+        </div>
+        @if (Model.PurchaseItems.Any())
+        {
+            var totalRows = Model.PurchaseItems.Count;
+            var totalQty = Model.PurchaseItems.Sum(x => x.Quantity);
+            var totalCost = Model.PurchaseItems.Sum(x => x.Cost);
+
+            <div class="rpt-table-wrap">
+                <table class="rpt-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Supplier</th>
+                            <th>Book Title</th>
+                            <th class="text-end">Quantity</th>
+                            <th class="text-end">Cost</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model.PurchaseItems)
+                        {
+                            <tr>
+                                <td>@p.PurchaseDate.ToString("yyyy-MM-dd")</td>
+                                <td>@p.Supplier</td>
+                                <td>@p.BookTitle</td>
+                                <td class="text-end">@p.Quantity</td>
+                                <td class="text-end">@p.Cost.ToString("N0") &#x17D9;</td>
+                                <td>@p.Notes</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3">@totalRows Purchases</th>
+                            <th class="text-end">@totalQty</th>
+                            <th class="text-end">@totalCost.ToString("N0") &#x17D9;</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No purchases recorded for this month.</div></div>
+        }
+    </div>
+
+    <!-- 4. Adjustments -->
+    <a id="adjustments-report"></a>
+    <div class="rpt-card-noborder mb-3">
+        <div class="rpt-card-header">
+            <div class="rpt-card-header-left">4. Adjustments Report</div>
+            <span class="rpt-pill">@Model.TotalAdjustments adjustments &middot; Net @Model.TotalAdjustmentQtyChange copies</span>
+        </div>
+        @if (Model.AdjustmentItems.Any())
+        {
+            var totalRows = Model.AdjustmentItems.Count;
+            var totalQty = Model.AdjustmentItems.Sum(x => x.QuantityChanged);
+
+            <div class="rpt-table-wrap">
+                <table class="rpt-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Catalog Title</th>
+                            <th class="text-end">Qty Change</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var d in Model.AdjustmentItems)
+                        {
+                            <tr>
+                                <td>@d.AdjustmentDate.ToString("yyyy-MM-dd")</td>
+                                <td>@d.AdjustmentType</td>
+                                <td>@d.CatalogTitle</td>
+                                <td class="text-end">@d.QuantityChanged</td>
+                                <td>@d.Reason</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3">@totalRows Adjustments</th>
+                            <th class="text-end">@totalQty</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No adjustment details for this month.</div></div>
+        }
+    </div>
+
+    <!-- 5. Financial Summary -->
+    <a id="financial-report"></a>
+    <div class="rpt-card-noborder mb-5">
+        <div class="rpt-card-header">
+            <div class="rpt-card-header-left">5. Financial Summary</div>
+        </div>
+        <div class="rpt-table-wrap">
+            <table class="rpt-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Type</th>
+                        <th class="text-end">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Borrowing fees</td>
+                        <td>Income</td>
+                        <td class="text-end">@Model.IncomeBorrowingFees.ToString("N0") &#x17D9;</td>
+                    </tr>
+                    <tr>
+                        <td>Late fines</td>
+                        <td>Income</td>
+                        <td class="text-end">@Model.IncomeFines.ToString("N0") &#x17D9;</td>
+                    </tr>
+                    <tr>
+                        <td>Extra charges (damage, etc.)</td>
+                        <td>Income</td>
+                        <td class="text-end">@Model.IncomeExtraCharges.ToString("N0") &#x17D9;</td>
+                    </tr>
+                    <tr>
+                        <td>Book purchases</td>
+                        <td>Expense</td>
+                        <td class="text-end">@Model.ExpensePurchases.ToString("N0") &#x17D9;</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">Net Cash Flow (Income - Expense)</th>
+                        <th class="text-end">@Model.NetCashFlow.ToString("N0") &#x17D9;</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
 </div>
-
-<style>
-    /* KPI cards styled to match global glass theme */
-    .kpi-card-glass {
-        position: relative;
-        overflow: hidden;
-        background: radial-gradient(circle at 0 0, rgba(219, 234, 254, 0.7), transparent 60%), radial-gradient(circle at 110% 0, rgba(191, 219, 254, 0.6), transparent 65%), var(--glass-bg);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--glass-border);
-        padding: 16px 16px 14px;
-        box-shadow: var(--glass-shadow);
-        backdrop-filter: blur(30px) brightness(1.3);
-        -webkit-backdrop-filter: blur(30px) brightness(1.3);
-        transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
-        color: var(--ink-main);
-    }
-
-        .kpi-card-glass:hover {
-            transform: translateY(-3px);
-            border-color: rgba(0, 0, 122, 0.5);
-            box-shadow: 0 22px 48px rgba(148, 163, 184, 0.6);
-            text-decoration: none;
-        }
-
-        .kpi-card-glass .ico {
-            width: 38px;
-            height: 38px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, rgba(224, 242, 254, 0.9), rgba(191, 219, 254, 0.9));
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--brand);
-            box-shadow: 0 8px 20px rgba(148, 163, 184, 0.75);
-            margin-bottom: .35rem;
-        }
-
-        .kpi-card-glass .label {
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: .08em;
-            color: var(--ink-muted);
-        }
-
-        .kpi-card-glass .val {
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin-top: .1rem;
-            letter-spacing: .03em;
-            color: #2828b3;
-        }
-
-        .kpi-card-glass .sub {
-            font-size: .8rem;
-            margin-top: .1rem;
-            color: var(--ink-muted);
-        }
-
-    .section-title-glass {
-        display: inline-flex;
-        align-items: center;
-        gap: .45rem;
-        font-weight: 800;
-        font-size: 1.02rem;
-        letter-spacing: .03em;
-    }
-
-    .report-section h4 {
-        font-size: 1.05rem;
-    }
-
-    .section-header .pill {
-        font-size: 0.8rem;
-        padding: 0.3rem 0.7rem;
-    }
-    .totaltext th{
-        color: #2828b3 !important;
-        font-size: 17px !important;
-        font-weight: 700 !important;
-    }
-
-    @@media print {
-        body {
-            background: #fff !important;
-        }
-
-        .card,
-        .glass-surface {
-            box-shadow: none !important;
-            border: 1px solid #000 !important;
-            page-break-inside: avoid;
-        }
-
-        a[id]::before {
-            content: "";
-            display: block;
-            height: 0;
-            margin-top: 0;
-        }
-    }
-</style>

@@ -14,334 +14,442 @@
     int total = (int)(ViewData["totalCount"] ?? 0);
     int homeCount = (int)(ViewData["homeCount"] ?? 0);
     int libraryCount = (int)(ViewData["libraryCount"] ?? 0);
-    int loanCount = (int)(ViewData["loanCount"] ?? 0);
-    int logCount = (int)(ViewData["logCount"] ?? 0);
-    int returnCount = (int)(ViewData["returnCount"] ?? 0);
 
     string Active(string current, string value)
         => string.Equals(current, value, StringComparison.OrdinalIgnoreCase) ? "active" : "";
 
-    // ---- Cambodia/Bangkok time helper ----
     TimeZoneInfo khTz;
-    try
-    {
-        khTz = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"); // Windows
-    }
-    catch
-    {
-        khTz = TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok"); // Linux
-    }
+    try { khTz = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"); }
+    catch { khTz = TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok"); }
 
     Func<DateTime, DateTime> ToKhTime = dt =>
-    {
-        var utc = DateTime.SpecifyKind(dt, DateTimeKind.Utc);
-        return TimeZoneInfo.ConvertTimeFromUtc(utc, khTz);
-    };
+        TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(dt, DateTimeKind.Utc), khTz);
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-    /* ==========================
-               History Page – scoped UI
-               ========================== */
-    #historyPage .toolbar {
+    .hist-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+    }
+
+    .hist-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
         display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
         align-items: center;
-        padding: 12px 14px;
-        border-radius: 16px;
-        border: 1px solid rgba(255,255,255,.22);
-        background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.80));
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        box-shadow: 0 16px 45px rgba(1,0,140,.18);
-        margin-bottom: 10px;
+        gap: 8px;
     }
 
-    #historyPage .btn-pill-sm {
-        border-radius: 999px;
-        padding: .32rem .7rem;
-        font-weight: 600;
-        font-size: .85rem;
-        border: 1px solid #dfe3ff;
-        background: #f6f7ff;
-        color: #2b2f7f;
-        display: inline-flex;
-        align-items: center;
-        gap: .3rem;
-        text-decoration: none;
-        white-space: nowrap;
-    }
-
-        #historyPage .btn-pill-sm.active {
-            background: #2b2f7f;
-            color: #fff;
-            border-color: #2b2f7f;
+        .hist-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
-    #historyPage .btn-glass.btn-outline {
-        background: linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,.35));
-        color: var(--brand-800, #05057a);
-    }
-
-    #historyPage .pill {
-        border: 1px solid rgba(1,0,140,.18);
-        border-radius: 999px;
-        padding: .35rem .6rem;
-        font-size: .82rem;
-        background: #ffffff;
-        display: inline-flex;
+    /* ---- toolbar ---- */
+    .hist-toolbar {
+        display: flex;
         align-items: center;
-        gap: .4rem;
-        box-shadow: 0 4px 10px rgba(1,0,140,.08);
-        white-space: nowrap;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1rem;
     }
 
-    #historyPage .card-glass {
-        border-radius: 16px;
-        border: 1px solid rgba(255,255,255,.22);
-        background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.80));
-        box-shadow: 0 16px 45px rgba(1,0,140,.20);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+    /* ---- segmented tabs ---- */
+    .hist-segmented {
+        display: flex;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
         overflow: hidden;
     }
 
-        #historyPage .card-glass .card-header {
-            padding: 12px 16px;
-            font-weight: 700;
-            background: linear-gradient(180deg, var(--brand-50,#eef0ff), rgba(255,255,255,.94));
-            border-bottom: 1px solid rgba(1,0,140,.15);
-            color: var(--brand-800,#05057a);
-        }
-
-    #historyPage .filters {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        align-items: end;
-        margin-bottom: 0.25rem;
-    }
-
-        #historyPage .filters .form-control,
-        #historyPage .filters .form-select {
-            min-width: 150px;
-        }
-
-    #historyPage .search-wrap {
-        position: relative;
-        flex: 1 1 260px;
-        min-width: 220px;
-        max-width: 420px;
-    }
-
-    #historyPage .search-input {
-        width: 100%;
-        padding: 8px 72px 8px 32px;
-        border-radius: 999px;
-        border: 1px solid rgba(1,0,140,.24);
-        font-size: .9rem;
-    }
-
-    #historyPage .search-icon {
-        position: absolute;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: .8;
-        font-size: .9rem;
-    }
-
-    #historyPage .search-clear {
-        position: absolute;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: transparent;
+    .hist-seg-btn {
+        padding: 6px 14px;
+        font-size: .82rem;
+        font-weight: 500;
         border: none;
+        background: #fff;
+        color: #6b7280;
         cursor: pointer;
-        opacity: .75;
-        padding: 0;
-        display: inline-flex;
+        transition: background .15s, color .15s;
+        display: flex;
         align-items: center;
-        justify-content: center;
-    }
-
-    #historyPage .note-muted {
-        font-size: .78rem;
-        color: var(--muted,#6b7280);
-    }
-
-    #historyPage thead th {
-        background: linear-gradient(180deg, var(--brand-50,#eef0ff), #ffffff);
-        color: var(--brand-800,#05057a);
-        vertical-align: middle;
-        z-index: 1;
-        font-size: .85rem;
-        position: static !important;
-    }
-
-    #historyPage tbody tr {
-        transition: background .15s, transform .15s, box-shadow .15s;
-    }
-
-        #historyPage tbody tr:hover {
-            background: rgba(15,23,42,.02);
-            transform: translateY(-1px);
-            box-shadow: 0 1px 4px rgba(15,23,42,.12);
-        }
-
-    #historyPage .badge-soft {
-        display: inline-block;
-        padding: .2rem .5rem;
-        border-radius: 999px;
-        font-size: .78rem;
-        border: 1px solid transparent;
+        gap: 5px;
+        font-family: 'Inter', sans-serif;
+        text-decoration: none !important;
         white-space: nowrap;
     }
 
-    #historyPage .b-home {
+        .hist-seg-btn:not(:last-child) {
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .hist-seg-btn:hover {
+            background: #f3f4f6;
+            color: #111827;
+            text-decoration: none !important;
+        }
+
+        .hist-seg-btn.active {
+            background: #f3f4f6;
+            color: #111827;
+            font-weight: 600;
+        }
+
+    /* ---- search ---- */
+    .hist-search-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 6px 12px;
+        background: #fff;
+        flex: 1;
+        min-width: 200px;
+        max-width: 360px;
+        transition: border-color .15s;
+    }
+
+        .hist-search-wrap:focus-within {
+            border-color: #000080;
+        }
+
+        .hist-search-wrap i {
+            color: #9ca3af;
+            font-size: .85rem;
+        }
+
+    .hist-search-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: .83rem;
+        color: #111827;
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .hist-search-input::placeholder {
+            color: #9ca3af;
+        }
+
+    .hist-search-clear {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #d1d5db;
+        padding: 0;
+        font-size: .85rem;
+    }
+
+        .hist-search-clear:hover {
+            color: #6b7280;
+        }
+
+    /* ---- stats / buttons ---- */
+    .hist-stats {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        flex-wrap: wrap;
+    }
+
+    .hist-stat-pill {
+        font-size: .78rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 4px 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+    }
+
+        .hist-stat-pill strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .hist-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none !important;
+        transition: background .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .hist-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none !important;
+        }
+
+    .hist-btn-primary {
+        background: #000080;
+        color: #fff !important;
+        border-color: #000080;
+    }
+
+        .hist-btn-primary:hover {
+            background: #00006a;
+            border-color: #00006a;
+        }
+
+    /* ---- filter card ---- */
+    .hist-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .hist-card-header {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .hist-filter-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .hist-filter-group {
+        min-width: 150px;
+    }
+
+    .hist-filter-label {
+        font-size: .75rem;
+        font-weight: 500;
+        color: #6b7280;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        display: block;
+    }
+
+    .hist-filter-input,
+    .hist-filter-select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: .85rem;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+    }
+
+        .hist-filter-input:focus,
+        .hist-filter-select:focus {
+            outline: none;
+            border-color: #000080;
+        }
+
+    .hist-hint {
+        font-size: .78rem;
+        color: #6b7280;
+        margin-top: .5rem;
+    }
+
+    /* ---- table ---- */
+    .hist-table-wrap {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .hist-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .hist-table thead th {
+            padding: 11px 16px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .hist-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background .1s;
+        }
+
+            .hist-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .hist-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+        .hist-table tbody td {
+            padding: 11px 16px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+    /* ---- badges ---- */
+    .hist-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: .74rem;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .hist-badge-home {
         background: #e0f2fe;
         color: #075985;
-        border-color: #bae6fd;
     }
 
-    #historyPage .b-library {
+    .hist-badge-library {
         background: #f3e8ff;
         color: #6b21a8;
-        border-color: #e9d5ff;
     }
 
-    #historyPage .b-loan {
-        background: #e9f2ff;
-        color: #084c9c;
-        border-color: #c4ddff;
+    .hist-badge-action {
+        background: #f3f4f6;
+        color: #374151;
     }
 
-    #historyPage .b-log {
-        background: #fff5f0;
-        color: #9a3412;
-        border-color: #fed7aa;
-    }
-
-    #historyPage .b-return {
-        background: #ecfdf3;
-        color: #166534;
-        border-color: #bbf7d0;
-    }
-
-    #historyPage .table-wrapper {
-        max-height: 70vh;
-        overflow: auto;
+    /* ---- no results ---- */
+    #histNoMatches {
+        border-radius: 12px;
+        background: #fffbeb;
+        border: 1px solid #fef3c7;
+        color: #92400e;
+        padding: 12px 16px;
+        margin-top: 1rem;
+        font-size: .85rem;
     }
 
     @@media (max-width: 768px) {
-        #historyPage .toolbar {
+        .hist-toolbar {
             flex-direction: column;
             align-items: stretch;
         }
 
-            #historyPage .toolbar > .d-flex.flex-wrap.gap-2 {
-                width: 100%;
-            }
-
-        #historyPage .pill {
-            width: 100%;
-            justify-content: space-between;
+        .hist-stats {
+            margin-left: 0;
         }
-
-        #historyPage .filters {
-            align-items: stretch;
-        }
-
-            #historyPage .filters > div {
-                flex: 1 1 45%;
-            }
     }
 </style>
 
-<div id="historyPage">
-    <h2 class="page-title">
-        <span class="logo-dot"></span>
-        History
-    </h2>
+<div class="hist-page">
+    <div class="hist-page-title">History</div>
 
-    <!-- form is just a container; we prevent submit in JS -->
-    <form id="historyFilterForm" class="mb-3" onsubmit="return false;">
-        <input type="hidden" id="entityTypeField" value="@entityType" />
-
-        <div class="toolbar">
-            <!-- Entity filter chips -->
-            <div class="d-flex flex-wrap gap-2">
-                <button type="button" class="btn-pill-sm js-entity @Active(entityType,"All")" data-value="All">
-                    <i class="bi bi-collection"></i> All
-                </button>
-                <button type="button" class="btn-pill-sm js-entity @Active(entityType,"Loan")" data-value="Loan">
-                    <i class="bi bi-journal-arrow-down"></i> Home
-                </button>
-                <button type="button" class="btn-pill-sm js-entity @Active(entityType,"LibraryLog")" data-value="LibraryLog">
-                    <i class="bi bi-journal-bookmark"></i> Library Logs
-                </button>
-                <button type="button" class="btn-pill-sm js-entity @Active(entityType,"Return")" data-value="Return">
-                    <i class="bi bi-arrow-return-left"></i> Returns
-                </button>
-            </div>
-
-            <!-- LIVE SEARCH -->
-            <div class="search-wrap ms-sm-3">
-                <i class="bi bi-search search-icon"></i>
-                <input id="qInput"
-                       class="search-input"
-                       placeholder="Search member, title, notes..."
-                       value="@q" />
-                <button class="search-clear" type="button" id="clearSearch" title="Clear">
-                    <i class="bi bi-x-circle"></i>
-                </button>
-            </div>
-
-            <!-- Summary pills + export -->
-            <div class="ms-auto d-flex align-items-center flex-wrap gap-2">
-                <span class="pill">
-                    <i class="bi bi-layers"></i> Total: <strong id="totalSpan">@total</strong>
-                </span>
-                <span class="pill">
-                    <i class="bi bi-house"></i> Home: <strong id="homeSpan">@homeCount</strong>
-                </span>
-                <span class="pill">
-                    <i class="bi bi-building"></i> Library: <strong id="librarySpan">@libraryCount</strong>
-                </span>
-
-                <!-- Server-side Excel export with same server filters -->
-                <a asp-action="Export"
-                   asp-route-entityType="@entityType"
-                   asp-route-actionType="@actionType"
-                   asp-route-location="@location"
-                   asp-route-q="@q"
-                   asp-route-from="@from"
-                   asp-route-to="@to"
-                   asp-route-format="xls"
-                   class="btn-glass btn-outline">
-                    <i class="bi bi-file-earmark-excel"></i> Export
-                </a>
-            </div>
+    <!-- Toolbar -->
+    <div class="hist-toolbar">
+        <!-- Entity tabs -->
+        <div class="hist-segmented">
+            <button type="button" class="hist-seg-btn js-entity @Active(entityType, "All")" data-value="All">
+                <i class="bi bi-collection"></i> All
+            </button>
+            <button type="button" class="hist-seg-btn js-entity @Active(entityType, "Loan")" data-value="Loan">
+                <i class="bi bi-journal-arrow-down"></i> Home
+            </button>
+            <button type="button" class="hist-seg-btn js-entity @Active(entityType, "LibraryLog")" data-value="LibraryLog">
+                <i class="bi bi-journal-bookmark"></i> Library
+            </button>
+            <button type="button" class="hist-seg-btn js-entity @Active(entityType, "Return")" data-value="Return">
+                <i class="bi bi-arrow-return-left"></i> Returns
+            </button>
         </div>
 
-        <!-- Simple filters -->
-        <div class="filters">
-            <div>
-                <label class="form-label">From</label>
-                <input id="fromInput" value="@from" type="date" class="form-control" />
-            </div>
-            <div>
-                <label class="form-label">To</label>
-                <input id="toInput" value="@to" type="date" class="form-control" />
-            </div>
+        <!-- Search -->
+        <div class="hist-search-wrap">
+            <i class="bi bi-search"></i>
+            <input id="qInput" class="hist-search-input" placeholder="Search member, title, notes…" value="@q" />
+            <button class="hist-search-clear" type="button" id="clearSearch">
+                <i class="bi bi-x-circle"></i>
+            </button>
+        </div>
 
-            <div>
-                <label class="form-label">Action</label>
-                <select id="actionTypeSelect" class="form-select">
+        <!-- Stats + export -->
+        <div class="hist-stats">
+            <span class="hist-stat-pill">
+                <i class="bi bi-layers"></i> Total: <strong id="totalSpan">@total</strong>
+            </span>
+            <span class="hist-stat-pill">
+                <i class="bi bi-house"></i> Home: <strong id="homeSpan">@homeCount</strong>
+            </span>
+            <span class="hist-stat-pill">
+                <i class="bi bi-building"></i> Library: <strong id="librarySpan">@libraryCount</strong>
+            </span>
+            <a asp-action="Export"
+               asp-route-entityType="@entityType"
+               asp-route-actionType="@actionType"
+               asp-route-location="@location"
+               asp-route-q="@q"
+               asp-route-from="@from"
+               asp-route-to="@to"
+               asp-route-format="xls"
+               class="hist-btn hist-btn-primary">
+                <i class="bi bi-file-earmark-excel"></i> Export
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="hist-card">
+        <div class="hist-filter-row">
+            <div class="hist-filter-group">
+                <label class="hist-filter-label">From</label>
+                <input id="fromInput" value="@from" type="date" class="hist-filter-input" />
+            </div>
+            <div class="hist-filter-group">
+                <label class="hist-filter-label">To</label>
+                <input id="toInput" value="@to" type="date" class="hist-filter-input" />
+            </div>
+            <div class="hist-filter-group">
+                <label class="hist-filter-label">Action</label>
+                <select id="actionTypeSelect" class="hist-filter-select">
                     <option value="All" selected="@("All".Equals(actionType, StringComparison.OrdinalIgnoreCase))">All</option>
                     <option value="BorrowHome" selected="@("BorrowHome".Equals(actionType, StringComparison.OrdinalIgnoreCase))">Borrow Home</option>
                     <option value="BorrowInLibrary" selected="@("BorrowInLibrary".Equals(actionType, StringComparison.OrdinalIgnoreCase))">Borrow In Library</option>
@@ -352,43 +460,34 @@
                     <option value="ToPending" selected="@("ToPending".Equals(actionType, StringComparison.OrdinalIgnoreCase))">To Pending</option>
                 </select>
             </div>
-
-            <div>
-                <label class="form-label">Location</label>
-                <select id="locationSelect" class="form-select">
+            <div class="hist-filter-group">
+                <label class="hist-filter-label">Location</label>
+                <select id="locationSelect" class="hist-filter-select">
                     <option value="All" selected="@("All".Equals(location, StringComparison.OrdinalIgnoreCase))">All</option>
                     <option value="Home" selected="@("Home".Equals(location, StringComparison.OrdinalIgnoreCase))">Home</option>
                     <option value="Library" selected="@("Library".Equals(location, StringComparison.OrdinalIgnoreCase))">Library</option>
                 </select>
             </div>
-
-            <div>
-                <label class="form-label d-block">&nbsp;</label>
-                <button type="button" id="btnApplyFilters" class="btn-glass btn-outline">
-                    <i class="bi bi-funnel"></i> Apply
-                </button>
-            </div>
         </div>
+    </div>
 
-        <div class="note-muted mt-1">
-            Filters &amp; search are applied instantly on this page (no reload).
-        </div>
-    </form>
-
-    <div class="card-glass">
-        <div class="card-header">
+    <!-- Table -->
+    <div class="hist-card" style="padding:0;">
+        <div style="padding:14px 16px; background:#f9fafb; border-bottom:1px solid #e5e7eb; font-weight:600; color:#111827; display:flex; align-items:center; gap:8px; border-radius:14px 14px 0 0;">
             <i class="bi bi-activity"></i> Timeline
         </div>
-        <div class="p-2 table-wrapper table-responsive">
+
+        <div style="overflow:auto; max-height:70vh;">
             @if (Model == null || !Model.Any())
             {
-                <div class="p-3 text-muted">
-                    <i class="bi bi-inboxes"></i> No history records found.
+                <div style="text-align:center; padding:3rem; color:#9ca3af;">
+                    <i class="bi bi-inboxes" style="font-size:2rem;"></i>
+                    <div class="mt-2">No history records found.</div>
                 </div>
             }
             else
             {
-                <table class="table table-hover align-middle mb-0" id="historyTable">
+                <table class="hist-table" id="historyTable">
                     <thead>
                         <tr>
                             <th>Time (KH)</th>
@@ -397,50 +496,41 @@
                             <th>Member</th>
                             <th>Book / Catalog</th>
                             <th>Qty</th>
-                            <th class="text-end">Fees / Fines</th>
+                            <th style="text-align:right;">Fees / Fines</th>
                             <th>Notes</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var h in Model)
                         {
-                            var locBadgeClass = h.LocationType switch
-                            {
-                                "Home" => "b-home",
-                                "Library" => "b-library",
-                                _ => ""
-                            };
-
                             string mainTitle = !string.IsNullOrWhiteSpace(h.BookTitle)
                             ? h.BookTitle!
-                            : (!string.IsNullOrWhiteSpace(h.CatalogTitle) ? h.CatalogTitle! : "—");
+                            : (!string.IsNullOrWhiteSpace(h.CatalogTitle) ? h.CatalogTitle! : "-");
 
                             string feeText = "";
-                            if (h.BorrowingFee.HasValue && h.BorrowingFee.Value != 0)
-                                feeText += $"B: {h.BorrowingFee.Value:0.00} ";
-                            if (h.FineAmount.HasValue && h.FineAmount.Value != 0)
-                                feeText += $"F: {h.FineAmount.Value:0.00} ";
-                            if (h.AmountPaid.HasValue && h.AmountPaid.Value != 0)
-                                feeText += $"P: {h.AmountPaid.Value:0.00} ";
-                            if (h.DepositAmount.HasValue && h.DepositAmount.Value != 0)
-                                feeText += $"D: {h.DepositAmount.Value:0.00} ";
-                            if (string.IsNullOrWhiteSpace(feeText)) feeText = "—";
+                            if (h.BorrowingFee.HasValue && h.BorrowingFee.Value != 0) feeText += "B: " + h.BorrowingFee.Value.ToString("0.00") + "  ";
+                            if (h.FineAmount.HasValue && h.FineAmount.Value != 0) feeText += "F: " + h.FineAmount.Value.ToString("0.00") + "  ";
+                            if (h.AmountPaid.HasValue && h.AmountPaid.Value != 0) feeText += "P: " + h.AmountPaid.Value.ToString("0.00") + "  ";
+                            if (h.DepositAmount.HasValue && h.DepositAmount.Value != 0) feeText += "D: " + h.DepositAmount.Value.ToString("0.00") + "  ";
+                            if (string.IsNullOrWhiteSpace(feeText)) feeText = "-";
 
-                            string actionLabel = h.ActionType switch
-                            {
-                                "BorrowHome" => "Borrow (Home)",
-                                "BorrowInLibrary" => "Borrow (Library)",
-                                "ReturnHome" => "Return (Home)",
-                                "ReturnLibrary" => "Return (Library)",
-                                "Approve" => "Approve",
-                                "Unreturn" => "Unreturn",
-                                "ToPending" => "To Pending",
-                                _ => h.ActionType ?? "—"
-                            };
+                            string actionLabel;
+                            if (h.ActionType == "BorrowHome") actionLabel = "Borrow (Home)";
+                            else if (h.ActionType == "BorrowInLibrary") actionLabel = "Borrow (Library)";
+                            else if (h.ActionType == "ReturnHome") actionLabel = "Return (Home)";
+                            else if (h.ActionType == "ReturnLibrary") actionLabel = "Return (Library)";
+                            else if (h.ActionType == "Approve") actionLabel = "Approve";
+                            else if (h.ActionType == "Unreturn") actionLabel = "Unreturn";
+                            else if (h.ActionType == "ToPending") actionLabel = "To Pending";
+                            else actionLabel = h.ActionType ?? "-";
 
-                            // ---- convert UTC → KH/Bangkok time for display & filtering ----
                             var localTime = ToKhTime(h.OccurredUtc);
                             var localDateString = localTime.ToString("yyyy-MM-dd");
+
+                            string locBadgeClass;
+                            if (h.LocationType == "Home") locBadgeClass = "hist-badge-home";
+                            else if (h.LocationType == "Library") locBadgeClass = "hist-badge-library";
+                            else locBadgeClass = "";
 
                             <tr data-entity="@h.EntityType"
                                 data-action="@h.ActionType"
@@ -450,23 +540,27 @@
                                 data-catalog="@h.CatalogTitle"
                                 data-notes="@h.Notes"
                                 data-date="@localDateString">
-                                <td>@localTime.ToString("yyyy-MM-dd HH:mm")</td>
-                                <td>@actionLabel</td>
+                                <td style="white-space:nowrap;">@localTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>
+                                    <span class="hist-badge hist-badge-action">@actionLabel</span>
+                                </td>
                                 <td>
                                     @if (!string.IsNullOrWhiteSpace(h.LocationType))
                                     {
-                                        <span class="badge-soft @locBadgeClass">@h.LocationType</span>
+                                        <span class="hist-badge @locBadgeClass">@h.LocationType</span>
                                     }
                                     else
                                     {
-                                        @:—
+                                        <text>-</text>
                                     }
                                 </td>
-                                <td>@(string.IsNullOrWhiteSpace(h.MemberName) ? "—" : h.MemberName)</td>
-                                <td>@mainTitle</td>
-                                <td>@(h.Quantity?.ToString() ?? "—")</td>
-                                <td class="text-end">@feeText</td>
-                                <td>@(string.IsNullOrWhiteSpace(h.Notes) ? "—" : h.Notes)</td>
+                                <td>@(string.IsNullOrWhiteSpace(h.MemberName) ? "-" : h.MemberName)</td>
+                                <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">@mainTitle</td>
+                                <td>@(h.Quantity?.ToString() ?? "-")</td>
+                                <td style="text-align:right; white-space:nowrap;">@feeText</td>
+                                <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                    @(string.IsNullOrWhiteSpace(h.Notes) ? "-" : h.Notes)
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -474,155 +568,108 @@
             }
         </div>
     </div>
+
+    <div id="histNoMatches" style="display:none;">
+        <i class="bi bi-question-circle"></i> No matching results for your search.
+    </div>
 </div>
 
 @section Scripts {
     <script>
         (function () {
-            const entityField = document.getElementById('entityTypeField');
-            const qInput = document.getElementById('qInput');
-            const clearSearch = document.getElementById('clearSearch');
-            const fromInput = document.getElementById('fromInput');
-            const toInput = document.getElementById('toInput');
-            const actionSelect = document.getElementById('actionTypeSelect');
-            const locationSelect = document.getElementById('locationSelect');
-            const btnApply = document.getElementById('btnApplyFilters');
+            var entityField    = document.getElementById('entityTypeField');
+            var qInput         = document.getElementById('qInput');
+            var clearSearch    = document.getElementById('clearSearch');
+            var fromInput      = document.getElementById('fromInput');
+            var toInput        = document.getElementById('toInput');
+            var actionSelect   = document.getElementById('actionTypeSelect');
+            var locationSelect = document.getElementById('locationSelect');
+            var btnApply       = document.getElementById('btnApplyFilters');
+            var totalSpan      = document.getElementById('totalSpan');
+            var homeSpan       = document.getElementById('homeSpan');
+            var librarySpan    = document.getElementById('librarySpan');
+            var noMatches      = document.getElementById('histNoMatches');
 
-            const totalSpan = document.getElementById('totalSpan');
-            const homeSpan = document.getElementById('homeSpan');
-            const librarySpan = document.getElementById('librarySpan');
+            // hidden field to track active entity tab
+            var entityVal = '@entityType';
 
             function applyFilters() {
-                const q = (qInput.value || '').trim().toLowerCase();
-                const fromVal = fromInput.value;
-                const toVal = toInput.value;
-                const actionVal = actionSelect.value || 'All';
-                const locVal = locationSelect.value || 'All';
-                const entityVal = entityField.value || 'All';
+                var q       = (qInput.value || '').trim().toLowerCase();
+                var fromVal = fromInput.value;
+                var toVal   = toInput.value;
+                var actVal  = actionSelect.value  || 'All';
+                var locVal  = locationSelect.value || 'All';
 
-                const fromDate = fromVal ? new Date(fromVal) : null;
-                const toDate = toVal ? new Date(toVal) : null;
+                var fromDate = fromVal ? new Date(fromVal) : null;
+                var toDate   = toVal   ? new Date(toVal)   : null;
 
-                const rows = document.querySelectorAll('#historyTable tbody tr');
+                var rows = document.querySelectorAll('#historyTable tbody tr');
+                var total = 0, home = 0, library = 0;
 
-                let total = 0;
-                let home = 0;
-                let library = 0;
+                rows.forEach(function (row) {
+                    var rowEntity  = (row.dataset.entity   || '').trim();
+                    var rowAction  = (row.dataset.action   || '').trim();
+                    var rowLoc     = (row.dataset.location || '').trim();
+                    var rowMember  = (row.dataset.member   || '').toLowerCase();
+                    var rowBook    = (row.dataset.book     || '').toLowerCase();
+                    var rowCatalog = (row.dataset.catalog  || '').toLowerCase();
+                    var rowNotes   = (row.dataset.notes    || '').toLowerCase();
+                    var rowDate    = row.dataset.date ? new Date(row.dataset.date) : null;
 
-                rows.forEach(row => {
-                    const rowEntity = (row.dataset.entity || '').trim();
-                    const rowAction = (row.dataset.action || '').trim();
-                    const rowLoc = (row.dataset.location || '').trim();
-                    const rowMember = (row.dataset.member || '').toLowerCase();
-                    const rowBook = (row.dataset.book || '').toLowerCase();
-                    const rowCatalog = (row.dataset.catalog || '').toLowerCase();
-                    const rowNotes = (row.dataset.notes || '').toLowerCase();
-                    const rowDateStr = row.dataset.date || '';
-                    const rowDate = rowDateStr ? new Date(rowDateStr) : null;
+                    var visible = true;
 
-                    let visible = true;
-
-                    if (entityVal && entityVal !== 'All' && rowEntity !== entityVal) {
-                        visible = false;
-                    }
-
-                    if (visible && actionVal && actionVal !== 'All' && rowAction !== actionVal) {
-                        visible = false;
-                    }
-
-                    if (visible && locVal && locVal !== 'All' && rowLoc !== locVal) {
-                        visible = false;
-                    }
-
-                    if (visible && fromDate && rowDate && rowDate < fromDate) {
-                        visible = false;
-                    }
-                    if (visible && toDate && rowDate && rowDate > toDate) {
-                        visible = false;
-                    }
-
+                    if (entityVal !== 'All' && rowEntity !== entityVal)         visible = false;
+                    if (visible && actVal !== 'All' && rowAction !== actVal)    visible = false;
+                    if (visible && locVal !== 'All' && rowLoc !== locVal)       visible = false;
+                    if (visible && fromDate && rowDate && rowDate < fromDate)   visible = false;
+                    if (visible && toDate   && rowDate && rowDate > toDate)     visible = false;
                     if (visible && q) {
-                        const text = (rowMember + ' ' + rowBook + ' ' + rowCatalog + ' ' + rowNotes).toLowerCase();
-                        if (!text.includes(q)) {
-                            visible = false;
-                        }
+                        var text = rowMember + ' ' + rowBook + ' ' + rowCatalog + ' ' + rowNotes;
+                        if (!text.includes(q)) visible = false;
                     }
 
                     row.style.display = visible ? '' : 'none';
 
                     if (visible) {
                         total++;
-                        if (rowLoc === 'Home') home++;
+                        if (rowLoc === 'Home')    home++;
                         if (rowLoc === 'Library') library++;
                     }
                 });
 
-                totalSpan.textContent = total.toString();
-                homeSpan.textContent = home.toString();
+                totalSpan.textContent   = total.toString();
+                homeSpan.textContent    = home.toString();
                 librarySpan.textContent = library.toString();
+
+                noMatches.style.display = (total === 0) ? '' : 'none';
             }
 
-            // entity chips
-            document.querySelectorAll('.js-entity').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const val = btn.getAttribute('data-value') || 'All';
-                    entityField.value = val;
-
-                    document.querySelectorAll('.js-entity').forEach(b => b.classList.remove('active'));
+            // Entity tab clicks
+            document.querySelectorAll('.js-entity').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    entityVal = btn.getAttribute('data-value') || 'All';
+                    document.querySelectorAll('.js-entity').forEach(function (b) {
+                        b.classList.remove('active');
+                    });
                     btn.classList.add('active');
-
                     applyFilters();
                 });
             });
 
-            // search as you type
-            if (qInput) {
-                qInput.addEventListener('input', applyFilters);
-            }
+            qInput.addEventListener('input', applyFilters);
 
-            // clear search
-            if (clearSearch && qInput) {
-                clearSearch.addEventListener('click', () => {
-                    qInput.value = '';
-                    qInput.focus();
-                    applyFilters();
-                });
-            }
+            clearSearch.addEventListener('click', function () {
+                qInput.value = '';
+                qInput.focus();
+                applyFilters();
+            });
 
-            // filters change
-            fromInput.addEventListener('change', applyFilters);
-            toInput.addEventListener('change', applyFilters);
-            actionSelect.addEventListener('change', applyFilters);
+            fromInput.addEventListener('change',      applyFilters);
+            toInput.addEventListener('change',        applyFilters);
+            actionSelect.addEventListener('change',   applyFilters);
             locationSelect.addEventListener('change', applyFilters);
+            btnApply.addEventListener('click',        applyFilters);
 
-            // Apply button
-            btnApply.addEventListener('click', applyFilters);
-
-            // Export visible table rows to CSV (client side)
-            document.getElementById('exportCsv')?.addEventListener('click', () => {
-                const table = document.getElementById('historyTable');
-                if (!table) return;
-
-                const rows = table.querySelectorAll('tr');
-                const lines = [];
-                rows.forEach(tr => {
-                    if (tr.style.display === 'none') return;
-                    const cells = Array.from(tr.children).map(td => td.innerText.trim());
-                    if (!cells.length) return;
-                    const line = cells.map(v => `"${v.replace(/"/g, '""')}"`).join(',');
-                    lines.push(line);
-                });
-
-                const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = 'history_' + new Date().toISOString().slice(0, 10) + '.csv';
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-            });
-
-            // initial
             applyFilters();
         })();
     </script>

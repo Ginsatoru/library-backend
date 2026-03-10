@@ -11,120 +11,561 @@
     string? email = isAuth ? User.FindFirst(ClaimTypes.Email)?.Value : null;
     string? role = isAuth ? User.FindFirst(ClaimTypes.Role)?.Value : null;
 
-    var avatarPath = isAuth
-        ? (User.FindFirst("ProfilePicturePath")?.Value ?? "/admin-lte/img/avatar2.png")
-        : "/admin-lte/img/avatar2.png";
-
+    var avatarPath = isAuth ? (User.FindFirst("ProfilePicturePath")?.Value ?? "/admin-lte/img/avatar2.png") : "/admin-lte/img/avatar2.png";
     var avatar = Url.Content(avatarPath);
     var avatarFallback = Url.Content("/admin-lte/img/avatar2.png");
 }
-<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
 
-<nav class="main-header navbar navbar-expand navbar-white navbar-surface shadow-sm px-3">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+    .bbu-navbar {
+        background: #fff;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 0 20px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        font-family: 'Inter', sans-serif;
+        position: sticky;
+        top: 0;
+        z-index: 1030;
+    }
+
+        .bbu-navbar .nav-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: .9rem;
+            text-decoration: none;
+            transition: background .15s, border-color .15s;
+            cursor: pointer;
+            position: relative;
+        }
+
+            .bbu-navbar .nav-icon:hover {
+                background: #f9fafb;
+                border-color: #d1d5db;
+                color: #111827;
+                text-decoration: none;
+            }
+
+        .bbu-navbar .profile-trigger {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 10px 5px 5px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            cursor: pointer;
+            transition: background .15s, border-color .15s;
+            text-decoration: none;
+        }
+
+            .bbu-navbar .profile-trigger:hover {
+                background: #f9fafb;
+                border-color: #d1d5db;
+                text-decoration: none;
+            }
+
+        .bbu-navbar .profile-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .bbu-navbar .profile-name {
+            font-size: .82rem;
+            font-weight: 600;
+            color: #111827;
+            white-space: nowrap;
+        }
+
+        .bbu-navbar .profile-role {
+            font-size: .72rem;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+
+    .bbu-dropdown {
+        min-width: 240px;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0,0,0,.10);
+        padding: 8px;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+    }
+
+    .bbu-dropdown-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 8px;
+        margin-bottom: 4px;
+    }
+
+        .bbu-dropdown-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #e5e7eb;
+        }
+
+        .bbu-dropdown-header .dh-name {
+            font-size: .85rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .bbu-dropdown-header .dh-email {
+            font-size: .75rem;
+            color: #6b7280;
+        }
+
+        .bbu-dropdown-header .dh-role {
+            font-size: .7rem;
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 1px 8px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+    .bbu-dropdown .dropdown-divider {
+        border-color: #f3f4f6;
+        margin: 4px 0;
+    }
+
+    .bbu-dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: .82rem;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s;
+        cursor: pointer;
+    }
+
+        .bbu-dropdown-item:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+        .bbu-dropdown-item i {
+            width: 16px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+    .bbu-logout-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: .82rem;
+        color: #dc2626;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        transition: background .15s;
+        text-align: left;
+    }
+
+        .bbu-logout-btn:hover {
+            background: #fef2f2;
+        }
+
+        .bbu-logout-btn i {
+            width: 16px;
+            text-align: center;
+        }
+
+    /* ── Notification Bell ── */
+    .notif-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #ef4444;
+        color: #fff;
+        font-size: .6rem;
+        font-weight: 700;
+        min-width: 16px;
+        height: 16px;
+        border-radius: 99px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 0 3px;
+        line-height: 1;
+        font-family: 'Inter', sans-serif;
+        border: 2px solid #fff;
+    }
+
+    .notif-dropdown {
+        min-width: 320px;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0,0,0,.12);
+        padding: 0;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+        overflow: hidden;
+    }
+
+    .notif-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px 10px;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+        .notif-header span {
+            font-size: .85rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .notif-header button {
+            font-size: .72rem;
+            color: #6b7280;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+            .notif-header button:hover {
+                color: #111827;
+            }
+
+    .notif-list {
+        max-height: 320px;
+        overflow-y: auto;
+    }
+
+    .notif-empty {
+        padding: 28px 14px;
+        text-align: center;
+        color: #9ca3af;
+        font-size: .82rem;
+    }
+
+    .notif-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px 14px;
+        border-bottom: 1px solid #f9fafb;
+        transition: background .15s;
+    }
+
+        .notif-item:last-child {
+            border-bottom: none;
+        }
+
+        .notif-item:hover {
+            background: #f9fafb;
+        }
+
+        .notif-item .notif-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+
+        .notif-item .notif-text {
+            font-size: .8rem;
+            color: #374151;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .notif-item .notif-time {
+            font-size: .7rem;
+            color: #9ca3af;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+
+    .notif-dot-info {
+        background: #0ea5e9;
+    }
+
+    .notif-dot-success {
+        background: #22c55e;
+    }
+
+    .notif-dot-warning {
+        background: #f59e0b;
+    }
+</style>
+
+<nav class="main-header bbu-navbar">
     @if (isAuth)
     {
-        <!-- Right: Icons + Profile -->
-        <ul class="navbar-nav ms-auto align-items-center gap-2">
-            <li class="nav-item"><a class="nav-link text-dark" href="#"><i class="far fa-bell fs-5"></i></a></li>
-            <li class="nav-item"><a class="nav-link text-dark" href="#"><i class="far fa-question-circle fs-5"></i></a></li>
-            <li class="nav-item"><a class="nav-link text-dark" href="#"><i class="fas fa-cog fs-5"></i></a></li>
+        <div class="ms-auto d-flex align-items-center gap-2">
 
-            <li class="nav-item dropdown">
-                <a class="nav-link d-flex align-items-center gap-2" href="#" data-bs-toggle="dropdown">
-                    <span class="fw-semibold text-dark d-none d-md-inline">@fullName</span>
-                    <img src="@avatar" onerror="this.onerror=null;this.src='@avatarFallback';"
-                         class="avatar-xs shadow-sm" alt="Profile">
+            <!-- Notification Bell -->
+            <div class="dropdown">
+                <a class="nav-icon" id="notifBell" href="#" data-bs-toggle="dropdown"
+                   aria-expanded="false" title="Notifications">
+                    <i class="bi bi-bell"></i>
+                    <span class="notif-badge" id="notifBadge"></span>
                 </a>
 
-                <div class="dropdown-menu dropdown-menu-end mt-2 shadow-sm" style="min-width:260px;">
-                    <div class="px-3 pt-3 pb-2">
-                        <div class="d-flex align-items-center gap-2">
-                            <img src="@avatar" onerror="this.onerror=null;this.src='@avatarFallback';"
-                                 class="avatar-lg shadow-sm" alt="Avatar">
-                            <div>
-                                <div class="fw-semibold">@fullName</div>
-                                @if (!string.IsNullOrWhiteSpace(email))
-                                {
-                                    <small class="text-muted">@email</small>
-                                }
-                                @if (!string.IsNullOrWhiteSpace(role))
-                                {
-                                    <div><span class="pill bg-white">@role</span></div>
-                                }
-                            </div>
+                <div class="dropdown-menu dropdown-menu-end notif-dropdown mt-2" id="notifDropdown">
+                    <div class="notif-header">
+                        <span>Notifications</span>
+                        <button type="button" id="notifClearAll">Clear all</button>
+                    </div>
+                    <div class="notif-list" id="notifList">
+                        <div class="notif-empty" id="notifEmpty">No new notifications</div>
+                    </div>
+                </div>
+            </div>
+
+            <a class="nav-icon" href="#" title="Help"><i class="bi bi-question-circle"></i></a>
+            <a class="nav-icon" href="#" title="Settings"><i class="bi bi-gear"></i></a>
+
+            <div class="dropdown">
+                <a class="profile-trigger" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="@avatar" onerror="this.onerror=null;this.src='@avatarFallback';"
+                         class="profile-avatar" alt="Profile" />
+                    <div class="d-none d-md-block">
+                        <div class="profile-name">@fullName</div>
+                        @if (!string.IsNullOrWhiteSpace(role))
+                        {
+                            <div class="profile-role">@role</div>
+                        }
+                    </div>
+                    <i class="bi bi-chevron-down" style="font-size:.7rem;color:#9ca3af;margin-left:2px;"></i>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-end bbu-dropdown mt-2">
+                    <div class="bbu-dropdown-header">
+                        <img src="@avatar" onerror="this.onerror=null;this.src='@avatarFallback';" alt="Avatar" />
+                        <div>
+                            <div class="dh-name">@fullName</div>
+                            @if (!string.IsNullOrWhiteSpace(email))
+                            {
+                                <div class="dh-email">@email</div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(role))
+                            {
+                                <span class="dh-role">@role</span>
+                            }
                         </div>
                     </div>
                     <div class="dropdown-divider"></div>
-                    <a href="/Account/Profile" class="dropdown-item">
-                        <i class="fas fa-user me-2 text-info"></i> Profile
+                    <a href="/Account/Profile" class="bbu-dropdown-item">
+                        <i class="bi bi-person"></i> Profile
                     </a>
                     <div class="dropdown-divider"></div>
-                    <form asp-controller="Account" asp-action="Logout" method="post" class="px-3">
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="px-1">
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-outline-danger w-100">
-                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                        <button type="submit" class="bbu-logout-btn">
+                            <i class="bi bi-box-arrow-right"></i> Logout
                         </button>
                     </form>
                 </div>
-            </li>
-        </ul>
+            </div>
+        </div>
     }
     else
     {
         <div class="ms-auto d-flex gap-2">
-            <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Login</a>
-            <a class="btn btn-outline-primary" asp-controller="Account" asp-action="Register">Register</a>
+            <a class="bbu-dropdown-item" asp-controller="Account" asp-action="Login">Login</a>
+            <a class="bbu-dropdown-item" asp-controller="Account" asp-action="Register">Register</a>
         </div>
     }
 </nav>
 
-@section Scripts {
-    <script>
-        (function () {
-            const box = document.getElementById('globalSearch');
-            const dd = document.getElementById('searchDropdown');
-            if (!box || !dd) return;
+<script>
+    // Define notification UI logic immediately (no SignalR dependency yet)
+    (function () {
+        var STORAGE_KEY = 'adminNotifications';
+        var badge    = document.getElementById('notifBadge');
+        var list     = document.getElementById('notifList');
+        var empty    = document.getElementById('notifEmpty');
+        var clearBtn = document.getElementById('notifClearAll');
 
-            function hide() { dd.style.display = 'none'; dd.innerHTML = ''; }
-            function show() { dd.style.display = 'block'; }
+        function loadStored() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+            catch { return []; }
+        }
 
-            let t = null;
+        function saveStored(items) {
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch {}
+        }
 
-            box.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    const q = box.value.trim();
-                    if (q.length) window.location = '/Search/All?q=' + encodeURIComponent(q);
-                }
+        function updateBadge(count) {
+            if (count > 0) {
+                badge.textContent = count > 99 ? '99+' : count;
+                badge.style.display = 'inline-flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function renderItem(n) {
+            var dotClass = {
+                info:    'notif-dot-info',
+                success: 'notif-dot-success',
+                warning: 'notif-dot-warning'
+            }[n.type] || 'notif-dot-info';
+
+            var item = document.createElement('div');
+            item.className = 'notif-item';
+            item.innerHTML =
+                '<span class="notif-dot ' + dotClass + '"></span>' +
+                '<div style="flex:1">' +
+                    '<div class="notif-text">' + n.message + '</div>' +
+                    '<div class="notif-time">' + n.time + '</div>' +
+                '</div>';
+            return item;
+        }
+
+        // Restore on page load
+        var stored = loadStored();
+        if (stored.length > 0) {
+            if (empty) empty.style.display = 'none';
+            stored.forEach(function (n) {
+                list.appendChild(renderItem(n));
+            });
+            updateBadge(stored.length);
+        } else {
+            updateBadge(0);
+        }
+
+        window.addNotification = function (message, type) {
+            type = type || 'info';
+            var n = {
+                message: message,
+                type:    type,
+                time:    new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+
+            var stored = loadStored();
+            stored.unshift(n);
+            saveStored(stored);
+
+            if (empty) empty.style.display = 'none';
+            list.insertBefore(renderItem(n), list.firstChild);
+            updateBadge(stored.length);
+        };
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                localStorage.removeItem(STORAGE_KEY);
+                list.innerHTML = '';
+                list.appendChild(empty);
+                empty.style.display = 'block';
+                updateBadge(0);
+            });
+        }
+
+        // Called by _Layout after SignalR script is loaded
+        window._initAdminHub = function () {
+            if (typeof signalR === 'undefined') {
+                console.warn('[SignalR] signalR is not defined. Hub not initialized.');
+                return;
+            }
+
+            window._adminHub = new signalR.HubConnectionBuilder()
+                .withUrl('/hubs/notifications', {
+                    transport: signalR.HttpTransportType.WebSockets |
+                               signalR.HttpTransportType.ServerSentEvents |
+                               signalR.HttpTransportType.LongPolling
+                })
+                .withAutomaticReconnect()
+                .build();
+
+            window._adminHub.on('NewUserCreated', function (d) {
+                console.log('[SignalR] NewUserCreated', d);
+                window.addNotification(
+                    '<i class="bi bi-person-plus-fill" style="color:#0ea5e9"></i> New user created: <strong>' + d.fullName + '</strong>' +
+                    (d.role ? ' (' + d.role + ')' : ''),
+                    'info'
+                );
             });
 
-            box.addEventListener('input', () => {
-                const q = box.value.trim();
-                if (!q) { hide(); return; }
-                clearTimeout(t);
-                t = setTimeout(async () => {
-                    try {
-                        const r = await fetch('/Search/Typeahead?term=' + encodeURIComponent(q));
-                        if (!r.ok) { hide(); return; }
-                        const data = await r.json();
-                        if (!Array.isArray(data) || data.length === 0) { hide(); return; }
-                        dd.innerHTML = data.map(x => `
-                                    <div class="search-item" onclick="window.location='${x.url}'">
-                                        <i class="${x.icon}"></i>
-                                        <div class="flex-grow-1">
-                                            <div class="fw-semibold">${x.title}</div>
-                                            <div class="text-muted small">${x.meta ?? ''}</div>
-                                        </div>
-                                        <span class="pill">${x.group}</span>
-                                    </div>`).join('');
-                        show();
-                    } catch { hide(); }
-                }, 200);
+            window._adminHub.on('NewMemberRegistered', function (d) {
+                console.log('[SignalR] NewMemberRegistered', d);
+                window.addNotification(
+                    '<i class="bi bi-person-check-fill" style="color:#0ea5e9"></i> New member: <strong>' + d.fullName + '</strong>' +
+                    (d.memberType ? ' (' + d.memberType + ')' : ''),
+                    'info'
+                );
             });
 
-            document.addEventListener('click', (e) => {
-                if (!dd.contains(e.target) && e.target !== box) hide();
+            window._adminHub.on('OverdueLoanAlert', function (d) {
+                console.log('[SignalR] OverdueLoanAlert', d);
+                var label = d.reminderType === 'DueToday' ? 'due today' : '1 day overdue';
+                window.addNotification(
+                    '<i class="bi bi-exclamation-triangle-fill" style="color:#f59e0b"></i> <strong>' + d.memberName + '</strong> — ' + label +
+                    ' (due ' + d.dueDate + ')',
+                    'warning'
+                );
             });
-        })();
-    </script>
-}
+
+            window._adminHub.on('LibraryLogCreated', function (d) {
+                console.log('[SignalR] LibraryLogCreated', d);
+                window.addNotification(
+                    '<i class="bi bi-journal-text" style="color:#0ea5e9"></i> New library log: <strong>' + d.studentName + '</strong> (' +
+                    d.bookCount + ' book' + (d.bookCount !== 1 ? 's' : '') + ')',
+                    'info'
+                );
+            });
+
+            window._adminHub.on('LibraryLogApproved', function (d) {
+                console.log('[SignalR] LibraryLogApproved', d);
+                window.addNotification(
+                    '<i class="bi bi-check-circle-fill" style="color:#22c55e"></i> Log #' + d.logId + ' approved — <strong>' + d.studentName + '</strong>',
+                    'success'
+                );
+            });
+
+            window._adminHub.on('LibraryLogReturned', function (d) {
+                console.log('[SignalR] LibraryLogReturned', d);
+                window.addNotification(
+                    '<i class="bi bi-arrow-return-left" style="color:#22c55e"></i> Log #' + d.logId + ' returned — <strong>' + d.studentName + '</strong>',
+                    'success'
+                );
+            });
+
+            window._adminHub.start()
+                .then(function () {
+                    console.log('[SignalR] Connected, ID:', window._adminHub.connectionId);
+                })
+                .catch(function (err) {
+                    console.warn('[SignalR] Connection failed:', err);
+                });
+        };
+    })();
+</script>

@@ -5,7 +5,6 @@
     ViewData["Title"] = "Library Logs";
     var selStatus = (string?)ViewData["status"] ?? "All";
     string Active(string s) => string.Equals(selStatus, s, StringComparison.OrdinalIgnoreCase) ? "active" : "";
-    string fmt(DateTime? dt) => dt.HasValue ? dt.Value.ToString("yyyy-MM-dd HH:mm") : "—";
     var from = (string?)ViewData["from"] ?? "";
     var to = (string?)ViewData["to"] ?? "";
 
@@ -19,342 +18,484 @@
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
-    /* ============================
-               Library Logs – page scoped
-               Reuse global glass + brand
-               ============================ */
-
-    #libraryLogsPage .top-bar {
-        margin-bottom: 10px;
+    .logs-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-    /* Small pill filter buttons */
-    #libraryLogsPage .btn-pill-sm {
-        border-radius: 999px;
-        padding: .35rem .7rem;
+    .logs-page-title {
+        font-size: 1.5rem;
         font-weight: 700;
-        font-size: .88rem;
-        border: 1px solid #dfe3ff;
-        background: #f6f7ff;
-        color: #2b2f7f;
-        text-decoration: none;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .logs-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .logs-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .logs-btn {
         display: inline-flex;
         align-items: center;
-        gap: .35rem;
-        transition: .18s ease;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none !important;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
     }
 
-        #libraryLogsPage .btn-pill-sm i {
-            font-size: .9rem;
+        .logs-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none !important;
         }
 
-        #libraryLogsPage .btn-pill-sm:hover {
-            background: #e3e5ff;
-            border-color: #c7ccff;
-        }
+    .logs-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
 
-        #libraryLogsPage .btn-pill-sm.active {
-            background: #2b2f7f;
+        .logs-btn-primary:hover {
+            background: #00006a;
             color: #fff;
-            border-color: #2b2f7f;
+            border-color: #00006a;
         }
 
-    /* Filter row (From / To) */
-    #libraryLogsPage .filters {
+    .logs-segmented {
         display: flex;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .logs-seg-btn {
+        padding: 6px 14px;
+        font-size: .82rem;
+        font-weight: 500;
+        border: none;
+        background: #fff;
+        color: #6b7280;
+        cursor: pointer;
+        transition: background .15s, color .15s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-family: 'Inter', sans-serif;
+        text-decoration: none !important;
+    }
+
+        .logs-seg-btn:hover {
+            text-decoration: none !important;
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .logs-seg-btn:not(:last-child) {
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .logs-seg-btn.active {
+            background: #f3f4f6;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .logs-seg-btn.active {
+            background: #f3f4f6;
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .logs-search-wrap {
+        display: flex;
+        align-items: center;
         gap: 8px;
-        align-items: flex-end;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 6px 12px;
+        background: #fff;
+        flex: 1;
+        min-width: 200px;
+        max-width: 360px;
+        transition: border-color .15s;
+    }
+
+        .logs-search-wrap:focus-within {
+            border-color: #000080;
+        }
+
+        .logs-search-wrap i {
+            color: #9ca3af;
+            font-size: .85rem;
+        }
+
+    .logs-search-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: .83rem;
+        color: #111827;
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .logs-search-input::placeholder {
+            color: #9ca3af;
+        }
+
+    .logs-search-clear {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #d1d5db;
+        padding: 0;
+        font-size: .85rem;
+    }
+
+        .logs-search-clear:hover {
+            color: #6b7280;
+        }
+
+    .logs-stats {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
         flex-wrap: wrap;
     }
 
-        #libraryLogsPage .filters .form-control,
-        #libraryLogsPage .filters .form-select {
-            min-width: 160px;
-        }
-
-    /* Search input on the right */
-    #libraryLogsPage .search-wrap {
-        position: relative;
+    .logs-stat-pill {
+        font-size: .78rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 4px 12px;
         display: flex;
         align-items: center;
-        gap: .4rem;
-        padding: 3px 8px;
-        border-radius: 999px;
-        border: 1px solid rgba(1,0,140,.12);
-        background: #ffffff;
-        box-shadow: 0 6px 14px rgba(1,0,140,.06);
-    }
-
-    #libraryLogsPage .search-input {
-        border: 0;
-        outline: 0;
-        min-width: 220px;
-        font-size: .9rem;
-        background: transparent;
-    }
-
-    #libraryLogsPage .search-icon {
-        font-size: .9rem;
-        color: var(--muted, #667085);
-    }
-
-    #libraryLogsPage .search-clear {
-        border: 0;
-        background: transparent;
-        color: var(--muted, #667085);
-        padding: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-    }
-
-    /* Table header style, reusing global brand */
-    #libraryLogsPage thead th {
-        background: linear-gradient(180deg, var(--brand-50, #e6e6ff), #ffffff);
-        color: var(--brand-800, #05057a);
-        vertical-align: middle;
-        font-weight: 600;
-        border-bottom-width: 2px;
-    }
-
-    /* Status badge chips */
-    #libraryLogsPage .badge-soft {
-        display: inline-block;
-        padding: .25rem .5rem;
-        border-radius: 999px;
-        font-size: .78rem;
-        font-weight: 600;
-    }
-
-    #libraryLogsPage .b-pending {
-        background: #fff7e6;
-        color: #8a5a00;
-        border: 1px solid #ffe3ad;
-    }
-
-    #libraryLogsPage .b-approved {
-        background: #e9fff0;
-        color: #0c5d35;
-        border: 1px solid #c8f0d7;
-    }
-
-    #libraryLogsPage .b-returned {
-        background: #eef1ff;
-        color: #2b2f7f;
-        border: 1px solid #dfe3ff;
-    }
-
-    /* Icon-only actions */
-    #libraryLogsPage .btn-icon {
-        border: 0;
-        background: transparent;
-        padding: 0 .15rem;
-        color: inherit;
-        cursor: pointer;
-    }
-
-        #libraryLogsPage .btn-icon + .btn-icon {
-            margin-left: .35rem;
-        }
-
-        #libraryLogsPage .btn-icon i {
-            font-size: 1rem;
-        }
-
-    /* Actions column: avoid wrapping awkwardly */
-    #libraryLogsPage .col-actions {
+        gap: 5px;
         white-space: nowrap;
     }
 
-    /* Card glass: just reuse global .card-glass.glas-all-style */
-    #libraryLogsPage .card-glass.glas-all-style {
-        margin-top: 4px;
+        .logs-stat-pill strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .logs-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
     }
 
-    /* ======================
-               SweetAlert glass theme
-               ====================== */
-
-    .swal2-container {
-        z-index: 10000 !important;
+    .logs-card-header {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    .swal2-popup.glass-popup {
-        backdrop-filter: blur(7px);
-        -webkit-backdrop-filter: blur(12px);
-        background: radial-gradient(circle at top left, rgba(1,0,140,.08), transparent 55%), radial-gradient(circle at bottom right, rgba(1,0,140,.06), transparent 55%), linear-gradient(145deg, rgba(255,255,255,.98), rgba(245,247,255,.96));
-        border-radius: 18px;
-        border: 1px solid rgba(255,255,255,.7);
-        box-shadow: 0 18px 45px rgba(15,23,42,.35);
-        padding: 18px 20px 16px;
+    .logs-table-wrap {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
     }
 
-        .swal2-popup.glass-popup .swal2-title {
-            font-weight: 800;
-            font-size: 1.05rem;
-            color: var(--brand-800, #05057a);
+    .logs-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .logs-table thead th {
+            padding: 11px 16px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
         }
 
-        .swal2-popup.glass-popup .swal2-html-container {
-            font-size: .9rem;
-            color: var(--muted,#ffffff);
+        .logs-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background .1s;
         }
 
-        .swal2-popup.glass-popup .swal2-actions {
-            gap: 8px;
+            .logs-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .logs-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+        .logs-table tbody td {
+            padding: 11px 16px;
+            color: #374151;
+            vertical-align: middle;
         }
 
-        .swal2-popup.glass-popup .swal2-textarea,
-        .swal2-popup.glass-popup .swal2-input {
-            width: 100% !important;
-            box-sizing: border-box;
+    .logs-filter-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+    }
+
+    .logs-filter-group {
+        min-width: 160px;
+    }
+
+    .logs-filter-label {
+        font-size: .75rem;
+        font-weight: 500;
+        color: #6b7280;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+    }
+
+    .logs-filter-input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: .85rem;
+    }
+
+        .logs-filter-input:focus {
+            outline: none;
+            border-color: #000080;
         }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: .74rem;
+        font-weight: 500;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-approved {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-returned {
+        background: #e0f2fe;
+        color: #0369a1;
+    }
+
+    .logs-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .logs-action-btn {
+        padding: 4px 8px;
+        font-size: .74rem;
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none !important;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: background .15s;
+        cursor: pointer;
+    }
+
+        .logs-action-btn:hover {
+            background: #f3f4f6;
+            text-decoration: none !important;
+        }
+
+    .logs-dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .logs-dropdown-menu {
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        min-width: 160px;
+        z-index: 1000;
+        display: none;
+    }
+
+        .logs-dropdown-menu.show {
+            display: block;
+        }
+
+    .logs-dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        color: #374151;
+        text-decoration: none !important;
+        font-size: .8rem;
+    }
+
+        .logs-dropdown-item:hover {
+            background: #f9fafb;
+            text-decoration: none !important;
+        }
+
+    .swal2-popup.logs-popup {
+        border-radius: 14px;
+        padding: 1.4rem;
+        border: 1px solid #e5e7eb;
+        font-family: 'Inter', sans-serif;
+    }
 </style>
 
-<div id="libraryLogsPage">
-    <h2 class="page-title">
-        <span class="logo-dot"></span>
-        Library Logs
-    </h2>
+<div class="logs-page">
+    <div class="logs-page-title">Library Logs</div>
 
-    <!-- Hidden AntiForgery token for AJAX -->
     <form id="__tokenForm">@Html.AntiForgeryToken()</form>
 
-    <!-- Top bar: status filters + search + export/create -->
-    <div class="top-bar d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2 card-glass glas-all-style ">
-        <div class="d-flex gap-2 flex-wrap">
-            <a class="btn-pill-sm @Active("All")"
-               asp-action="Index"
-               asp-route-status="All"
-               asp-route-from="@from"
-               asp-route-to="@to">
-                <i class="bi bi-collection"></i> All
+    <div class="logs-toolbar">
+        <div class="logs-segmented">
+            <a class="logs-seg-btn @Active("All")"
+               asp-action="Index" asp-route-status="All" asp-route-from="@from" asp-route-to="@to">
+                <i class="bi bi-grid"></i> All
             </a>
-            <a class="btn-pill-sm @Active("Pending")"
-               asp-action="Index"
-               asp-route-status="Pending"
-               asp-route-from="@from"
-               asp-route-to="@to">
+            <a class="logs-seg-btn @Active("Pending")"
+               asp-action="Index" asp-route-status="Pending" asp-route-from="@from" asp-route-to="@to">
                 <i class="bi bi-hourglass-split"></i> Pending
             </a>
-            <a class="btn-pill-sm @Active("Approved")"
-               asp-action="Index"
-               asp-route-status="Approved"
-               asp-route-from="@from"
-               asp-route-to="@to">
+            <a class="logs-seg-btn @Active("Approved")"
+               asp-action="Index" asp-route-status="Approved" asp-route-from="@from" asp-route-to="@to">
                 <i class="bi bi-check2-circle"></i> Approved
             </a>
-            <a class="btn-pill-sm @Active("Returned")"
-               asp-action="Index"
-               asp-route-status="Returned"
-               asp-route-from="@from"
-               asp-route-to="@to">
-                <i class="bi bi-arrow-90deg-left"></i> Returned
+            <a class="logs-seg-btn @Active("Returned")"
+               asp-action="Index" asp-route-status="Returned" asp-route-from="@from" asp-route-to="@to">
+                <i class="bi bi-arrow-return-left"></i> Returned
             </a>
         </div>
 
-        <div class="d-flex gap-2 flex-wrap align-items-center">
-            <!-- LIVE SEARCH -->
-            <div class="search-wrap">
-                <i class="bi bi-search search-icon"></i>
-                <input id="globalSearch"
-                       class="search-input"
-                       placeholder="Search student, phone, title, barcode…" />
-                <button class="search-clear" type="button" id="clearSearch" title="Clear">
-                    <i class="bi bi-x-circle"></i>
+        <div class="logs-search-wrap">
+            <i class="bi bi-search"></i>
+            <input id="globalSearch" class="logs-search-input" placeholder="Search student, phone, title, barcode…" />
+            <button class="logs-search-clear" type="button" id="clearSearch"><i class="bi bi-x-circle"></i></button>
+        </div>
+
+        <div class="logs-stats">
+            <div class="logs-dropdown">
+                <button class="logs-btn" id="exportDropdownBtn">
+                    <i class="bi bi-download"></i> Export <i class="bi bi-chevron-down"></i>
                 </button>
-            </div>
-
-            <!-- Export + Create -->
-            <div class="d-flex gap-2 flex-wrap">
-                <div class="btn-group">
-                    <button type="button"
-                            class="btn-glass btn-outline dropdown-toggle"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                        <i class="bi bi-download"></i> Export
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                        <li>
-                            <a class="dropdown-item"
-                               asp-action="Export"
-                               asp-route-status="@selStatus"
-                               asp-route-from="@from"
-                               asp-route-to="@to"
-                               asp-route-format="csv">
-                                <i class="bi bi-filetype-csv"></i> Export CSV
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item"
-                               asp-action="Export"
-                               asp-route-status="@selStatus"
-                               asp-route-from="@from"
-                               asp-route-to="@to"
-                               asp-route-format="xls">
-                                <i class="bi bi-file-earmark-excel"></i> Export Excel (.xls)
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item"
-                               asp-action="Export"
-                               asp-route-status="@selStatus"
-                               asp-route-from="@from"
-                               asp-route-to="@to"
-                               asp-route-format="print"
-                               target="_blank">
-                                <i class="bi bi-printer"></i> Print View
-                            </a>
-                        </li>
-                    </ul>
+                <div class="logs-dropdown-menu" id="exportDropdown">
+                    <a class="logs-dropdown-item" asp-action="Export" asp-route-status="@selStatus" asp-route-from="@from" asp-route-to="@to" asp-route-format="csv">
+                        <i class="bi bi-filetype-csv"></i> Export CSV
+                    </a>
+                    <a class="logs-dropdown-item" asp-action="Export" asp-route-status="@selStatus" asp-route-from="@from" asp-route-to="@to" asp-route-format="xls">
+                        <i class="bi bi-file-earmark-excel"></i> Export Excel
+                    </a>
+                    <a class="logs-dropdown-item" asp-action="Export" asp-route-status="@selStatus" asp-route-from="@from" asp-route-to="@to" asp-route-format="print" target="_blank">
+                        <i class="bi bi-printer"></i> Print View
+                    </a>
                 </div>
-
-                <a asp-action="Create" class="btn-glass btn-brand">
-                    <i class="bi bi-plus-circle"></i> Create New
-                </a>
             </div>
+            <a asp-action="Create" class="logs-btn logs-btn-primary">
+                <i class="bi bi-plus-circle"></i> Create New
+            </a>
         </div>
     </div>
 
-    <!-- FILTER: ONLY From + To -->
-    <form method="get" class="mt-3 card-glass glas-all-style ">
-        <div class="filters">
+    <!-- Date filter -->
+    <div class="logs-card">
+        <form method="get" class="logs-filter-row">
             <input type="hidden" name="status" value="@selStatus" />
-            <div>
-                <label class="form-label">From</label>
-                <input name="from" value="@from" type="date" class="form-control" />
+            <div class="logs-filter-group">
+                <div class="logs-filter-label">From</div>
+                <input name="from" value="@from" type="date" class="logs-filter-input" />
             </div>
-            <div>
-                <label class="form-label">To</label>
-                <input name="to" value="@to" type="date" class="form-control" />
+            <div class="logs-filter-group">
+                <div class="logs-filter-label">To</div>
+                <input name="to" value="@to" type="date" class="logs-filter-input" />
             </div>
-            <div>
-                <button class="btn-glass btn-outline" type="submit">
-                    <i class="bi bi-funnel"></i> Filter
-                </button>
-            </div>
-        </div>
-    </form>
+        </form>
+    </div>
 
-    <div class="card-glass glas-all-style mt-2">
-        <div class="card-header">
+    <!-- Logs table -->
+    <div class="logs-card">
+        <div class="logs-card-header">
             <i class="bi bi-journal-text"></i> Recent Logs
         </div>
-        <div class="p-3 table-responsive">
+
+        <div class="logs-table-wrap">
             @if (Model == null || !Model.Any())
             {
-                <div class="text-muted p-3">
-                    <i class="bi bi-inboxes"></i> No logs yet.
+                <div style="text-align:center; padding:3rem; color:#9ca3af;">
+                    <i class="bi bi-inboxes" style="font-size:2rem;"></i>
+                    <div class="mt-2">No logs yet.</div>
                 </div>
             }
             else
             {
-                <table class="table table-hover align-middle mb-0 " id="logsTable">
+                <table class="logs-table" id="logsTable">
                     <thead>
                         <tr>
                             <th>Status</th>
@@ -363,8 +504,8 @@
                             <th>Gender</th>
                             <th>Books</th>
                             <th>Visit Date</th>
-                            <th>Created (UTC)</th>
-                            <th style="width:320px;">Actions</th>
+                            <th>Created</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -377,13 +518,11 @@
                             .ToList();
 
                             var st = x.Status ?? "Pending";
-                            string badgeClass = st == "Approved"
-                            ? "b-approved"
-                            : st == "Returned"
-                            ? "b-returned"
-                            : "b-pending";
+                            string statusClass = st == "Approved" ? "status-approved"
+                            : st == "Returned" ? "status-returned"
+                            : "status-pending";
 
-                            var booksText = titles.Count == 0 ? "" : string.Join(", ", titles);
+                            var booksText = titles.Count == 0 ? "—" : string.Join(", ", titles);
 
                             <tr data-id="@x.LogId"
                                 data-status="@st"
@@ -393,80 +532,64 @@
                                 data-books="@booksText"
                                 data-visit="@x.VisitDate.ToString("yyyy-MM-dd")"
                                 data-created="@x.CreatedUtc.ToString("yyyy-MM-dd HH:mm")">
-                                <td class="col-status">
-                                    <span class="badge-soft @badgeClass">@st</span>
+                                <td>
+                                    <span class="status-badge @statusClass">
+                                        <i class="bi @(st == "Approved" ? "bi-check-circle-fill" : st == "Returned" ? "bi-arrow-return-left" : "bi-hourglass-split")"></i>
+                                        @st
+                                    </span>
                                 </td>
                                 <td>@x.StudentName</td>
-                                <td>@x.PhoneNumber</td>
-                                <td>@x.Gender</td>
-                                <td>@(string.IsNullOrWhiteSpace(booksText) ? "—" : booksText)</td>
-                                <td>@x.VisitDate.ToString("yyyy-MM-dd")</td>
-                                <td>@x.CreatedUtc.ToString("yyyy-MM-dd HH:mm")</td>
-                                <td class="col-actions">
-                                    <a asp-action="Details"
-                                       asp-route-id="@x.LogId"
-                                       class="btn-icon"
-                                       title="Details">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
+                                <td class="muted">@x.PhoneNumber</td>
+                                <td class="muted">@x.Gender</td>
+                                <td class="muted" style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">@booksText</td>
+                                <td class="muted">@x.VisitDate.ToString("yyyy-MM-dd")</td>
+                                <td class="muted">@x.CreatedUtc.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>
+                                    <div class="logs-actions">
+                                        <a asp-action="Details" asp-route-id="@x.LogId" class="logs-action-btn" title="Details">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@x.LogId" class="logs-action-btn" title="Edit">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <button type="button" class="logs-action-btn btn-delete" data-id="@x.LogId" title="Delete">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
 
-                                    <a asp-action="Edit"
-                                       asp-route-id="@x.LogId"
-                                       class="btn-icon"
-                                       title="Edit">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-
-                                    <button type="button"
-                                            class="btn-icon btn-delete"
-                                            data-id="@x.LogId"
-                                            title="Delete">
-                                        <i class="bi bi-trash3"></i>
-                                    </button>
-
-                                    @* Workflow buttons *@
-                                    @if (st == "Pending")
-                                    {
-                                        <form asp-action="Approve"
-                                              asp-route-id="@x.LogId"
-                                              method="post"
-                                              class="d-inline js-action"
-                                              data-action="approve">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-sm btn-success">Approve</button>
-                                        </form>
-                                    }
-                                    @if (st == "Approved")
-                                    {
-                                        <form asp-action="Return"
-                                              asp-route-id="@x.LogId"
-                                              method="post"
-                                              class="d-inline js-action"
-                                              data-action="return">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-sm btn-primary">Return</button>
-                                        </form>
-
-                                        <form asp-action="ToPending"
-                                              asp-route-id="@x.LogId"
-                                              method="post"
-                                              class="d-inline js-action"
-                                              data-action="topending">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-sm btn-secondary">To Pending</button>
-                                        </form>
-                                    }
-                                    @if (st == "Returned")
-                                    {
-                                        <form asp-action="Unreturn"
-                                              asp-route-id="@x.LogId"
-                                              method="post"
-                                              class="d-inline js-action"
-                                              data-action="unreturn">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-sm btn-warning">Unreturn</button>
-                                        </form>
-                                    }
+                                        @if (st == "Pending")
+                                        {
+                                            <form asp-action="Approve" asp-route-id="@x.LogId" method="post" class="d-inline js-action" data-action="approve">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="logs-action-btn status-approved">
+                                                    <i class="bi bi-check-lg"></i> Approve
+                                                </button>
+                                            </form>
+                                        }
+                                        @if (st == "Approved")
+                                        {
+                                            <form asp-action="Return" asp-route-id="@x.LogId" method="post" class="d-inline js-action" data-action="return">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="logs-action-btn status-returned">
+                                                    <i class="bi bi-arrow-return-left"></i> Return
+                                                </button>
+                                            </form>
+                                            <form asp-action="ToPending" asp-route-id="@x.LogId" method="post" class="d-inline js-action" data-action="topending">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="logs-action-btn status-pending">
+                                                    <i class="bi bi-arrow-counterclockwise"></i> To Pending
+                                                </button>
+                                            </form>
+                                        }
+                                        @if (st == "Returned")
+                                        {
+                                            <form asp-action="Unreturn" asp-route-id="@x.LogId" method="post" class="d-inline js-action" data-action="unreturn">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="logs-action-btn">
+                                                    <i class="bi bi-arrow-counterclockwise"></i> Unreturn
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -475,226 +598,180 @@
             }
         </div>
     </div>
+
+    <div id="noMatches" class="alert alert-warning d-none" style="border-radius:12px; background:#fffbeb; border:1px solid #fef3c7; color:#92400e; margin-top:1rem;">
+        <i class="bi bi-question-circle"></i> No matching results for your search.
+    </div>
 </div>
 
 @section Scripts {
     <script>
         (function () {
-
             const swalTheme = {
-                background: 'transparent',
-                color: getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#0f172a',
-                confirmButtonColor: getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#01008C',
-                cancelButtonColor: '#94a3b8',
+                buttonsStyling: false,
                 customClass: {
-                    popup: 'glass-popup'
+                    popup: 'swal2-popup logs-popup',
+                    confirmButton: 'logs-btn logs-btn-primary',
+                    cancelButton: 'logs-btn'
                 }
             };
 
-            // =============== LIVE SEARCH =================
-            const globalSearch = document.getElementById('globalSearch');
-            const clearSearch = document.getElementById('clearSearch');
+            // Export dropdown
+            const exportBtn      = document.getElementById('exportDropdownBtn');
+            const exportDropdown = document.getElementById('exportDropdown');
+            if (exportBtn && exportDropdown) {
+                exportBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    exportDropdown.classList.toggle('show');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!exportBtn.contains(e.target) && !exportDropdown.contains(e.target))
+                        exportDropdown.classList.remove('show');
+                });
+            }
+
+            // Live search
+            const searchInput = document.getElementById('globalSearch');
+            const clearBtn    = document.getElementById('clearSearch');
+            const noMatches   = document.getElementById('noMatches');
 
             function applySearch() {
-                const kw = (globalSearch.value || '').trim().toLowerCase();
+                const kw = (searchInput.value || '').trim().toLowerCase();
+                let visibleCount = 0;
 
                 document.querySelectorAll('#logsTable tbody tr').forEach(tr => {
                     const text = [
-                        tr.dataset.status || '',
-                        tr.dataset.student || '',
-                        tr.dataset.phone || '',
-                        tr.dataset.gender || '',
-                        tr.dataset.books || '',
-                        tr.dataset.visit || '',
-                        tr.dataset.created || ''
+                        tr.dataset.status, tr.dataset.student, tr.dataset.phone,
+                        tr.dataset.gender, tr.dataset.books, tr.dataset.visit, tr.dataset.created
                     ].join(' ').toLowerCase();
 
                     const show = !kw || text.includes(kw);
                     tr.style.display = show ? '' : 'none';
+                    if (show) visibleCount++;
                 });
+
+                noMatches.classList.toggle('d-none', visibleCount > 0 || !kw);
             }
 
-            if (globalSearch) {
-                globalSearch.addEventListener('input', applySearch);
-
-                globalSearch.addEventListener('keydown', function (e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        applySearch();
-                    }
-                });
-            }
-
-            if (clearSearch) {
-                clearSearch.addEventListener('click', () => {
-                    globalSearch.value = '';
-                    globalSearch.focus();
-                    applySearch();
-                });
-            }
-
+            searchInput?.addEventListener('input', applySearch);
+            clearBtn?.addEventListener('click', () => {
+                searchInput.value = '';
+                searchInput.focus();
+                applySearch();
+            });
             applySearch();
 
-            // =============== DELETE =================
             function getAntiForgeryValue() {
-                const input =
-                    document.querySelector('#__tokenForm input[name="__RequestVerificationToken"]')
-                    || document.querySelector('input[name="__RequestVerificationToken"]');
+                const input = document.querySelector('#__tokenForm input[name="__RequestVerificationToken"]');
                 return input ? input.value : '';
             }
 
+            // Delete
             async function deleteLog(id, btn) {
-                const res = await Swal.fire({
+                const result = await Swal.fire({
                     title: 'Delete this log?',
                     text: 'Only Pending logs can be deleted. This cannot be undone.',
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it',
+                    confirmButtonText: 'Yes, delete',
                     cancelButtonText: 'Cancel',
-                    reverseButtons: true,
                     ...swalTheme
                 });
-                if (!res.isConfirmed) return;
 
+                if (!result.isConfirmed) return;
                 btn.disabled = true;
 
-                const fd = new FormData();
-                fd.append('__RequestVerificationToken', getAntiForgeryValue());
-                const url = '@Url.Action("Delete", "LibraryLogs")/' + id;
-
-                let payload = null;
-                let isJson = false;
-                let r;
+                const formData = new FormData();
+                formData.append('__RequestVerificationToken', getAntiForgeryValue());
 
                 try {
-                    r = await fetch(url, {
+                    const response = await fetch('@Url.Action("Delete", "LibraryLogs")/' + id, {
                         method: 'POST',
                         headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                        body: fd
+                        body: formData
                     });
 
-                    const ct = r.headers.get('content-type') || '';
-                    isJson = ct.includes('application/json');
+                    const contentType = response.headers.get('content-type') || '';
+                    const data = contentType.includes('application/json') ? await response.json() : null;
 
-                    if (isJson) {
-                        payload = await r.json();
-                    }
-                } catch (err) {
+                    if (!response.ok || (data && data.ok === false))
+                        throw new Error(data?.message || 'Delete failed');
+
+                    await Swal.fire({
+                        icon: 'success', title: 'Deleted',
+                        text: data?.message || 'Library log deleted.',
+                        timer: 1000, showConfirmButton: false, ...swalTheme
+                    });
+
+                    document.querySelector('#logsTable tbody tr[data-id="' + id + '"]')?.remove();
+                    applySearch();
+                } catch (error) {
+                    await Swal.fire({ icon: 'error', title: 'Error', text: error.message, ...swalTheme });
+                } finally {
                     btn.disabled = false;
-                    await Swal.fire({ icon: 'error', title: 'Error', text: 'Delete failed.', ...swalTheme });
-                    return;
                 }
-
-                btn.disabled = false;
-
-                if (!r.ok) {
-                    await Swal.fire({ icon: 'error', title: 'Error', text: 'Delete failed.', ...swalTheme });
-                    return;
-                }
-
-                if (isJson && payload && payload.ok === false) {
-                    await Swal.fire({ icon: 'info', title: 'Info', text: payload.message || 'Cannot delete.', ...swalTheme });
-                    return;
-                }
-
-                await Swal.fire({
-                    icon: 'success',
-                    title: 'Deleted',
-                    text: (isJson && payload && payload.message) ? payload.message : 'Library log deleted.',
-                    timer: 900,
-                    showConfirmButton: false,
-                    ...swalTheme
-                });
-
-                const row = document.querySelector(`#logsTable tbody tr[data-id="${id}"]`);
-                if (row) row.remove();
-                applySearch();
             }
 
             document.querySelectorAll('.btn-delete').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const id = btn.dataset.id;
-                    deleteLog(id, btn);
-                });
+                btn.addEventListener('click', () => deleteLog(btn.dataset.id, btn));
             });
 
-            // =============== WORKFLOW (Approve / Return / Unreturn / ToPending) =================
-            async function toastAndReload(text) {
-                await Swal.fire({
-                    icon: 'success',
-                    title: 'Done',
-                    text: text || '',
-                    timer: 800,
-                    showConfirmButton: false,
-                    ...swalTheme
-                });
-                window.location.reload();
-            }
+            // Workflow
+            async function handleWorkflowSubmit(form, action) {
+                const labels = {
+                    approve: 'Approve this log?',
+                    return: 'Mark this log as Returned?',
+                    unreturn: 'Unreturn this log?',
+                    topending: 'Move this log to Pending?'
+                };
 
-            function confirmText(action) {
-                switch (action) {
-                    case 'approve': return 'Approve this log?';
-                    case 'return': return 'Mark this log as Returned?';
-                    case 'unreturn': return 'Unreturn selected items?';
-                    case 'topending': return 'Move this log to Pending?';
-                    default: return 'Proceed?';
-                }
-            }
-
-            document.addEventListener('submit', async e => {
-                const form = e.target.closest('form.js-action');
-                if (!form) return;
-                e.preventDefault();
-
-                const action = form.dataset.action;
-                const ok = await Swal.fire({
-                    title: confirmText(action),
-                    text: 'Please confirm.',
+                const result = await Swal.fire({
+                    title: labels[action] || 'Proceed?',
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonText: 'Yes',
                     cancelButtonText: 'No',
-                    reverseButtons: true,
                     ...swalTheme
                 });
-                if (!ok.isConfirmed) return;
 
-                form.querySelectorAll('button').forEach(b => b.disabled = true);
-                const fd = new FormData(form);
+                if (!result.isConfirmed) return;
 
-                let payload = null;
-                let r;
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.disabled = true;
 
                 try {
-                    r = await fetch(form.action, {
+                    const response = await fetch(form.action, {
                         method: 'POST',
                         headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                        body: fd
+                        body: new FormData(form)
                     });
 
-                    const ct = r.headers.get('content-type') || '';
-                    if (ct.includes('application/json')) {
-                        payload = await r.json();
-                    }
-                } catch {
-                    form.querySelectorAll('button').forEach(b => b.disabled = false);
-                    await Swal.fire({ icon: 'error', title: 'Error', text: 'Operation failed.', ...swalTheme });
-                    return;
+                    const contentType = response.headers.get('content-type') || '';
+                    const data = contentType.includes('application/json') ? await response.json() : null;
+
+                    if (!response.ok || (data && data.ok === false))
+                        throw new Error(data?.message || 'Operation failed');
+
+                    await Swal.fire({
+                        icon: 'success', title: 'Done',
+                        text: data?.message || 'Updated successfully.',
+                        timer: 1000, showConfirmButton: false, ...swalTheme
+                    });
+
+                    window.location.reload();
+                } catch (error) {
+                    await Swal.fire({ icon: 'error', title: 'Error', text: error.message, ...swalTheme });
+                } finally {
+                    if (submitBtn) submitBtn.disabled = false;
                 }
+            }
 
-                form.querySelectorAll('button').forEach(b => b.disabled = false);
-
-                if (!r.ok) {
-                    await Swal.fire({ icon: 'error', title: 'Error', text: 'Operation failed.', ...swalTheme });
-                    return;
-                }
-
-                if (payload && payload.ok === false) {
-                    await Swal.fire({ icon: 'info', title: 'Info', text: payload.message || 'No change.', ...swalTheme });
-                    return;
-                }
-
-                await toastAndReload((payload && payload.message) || 'Updated.');
+            document.querySelectorAll('form.js-action').forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    handleWorkflowSubmit(form, form.dataset.action);
+                });
             });
         })();
     </script>

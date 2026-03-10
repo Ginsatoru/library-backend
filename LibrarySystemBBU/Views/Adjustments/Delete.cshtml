@@ -4,129 +4,280 @@
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-    /* key/value layout inside info cards */
-    .kv .key {
-        min-width: 11rem;
+    .adj-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+    }
+
+    .adj-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .adj-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .adj-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .adj-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .adj-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+    .adj-btn-danger {
+        background: #fee2e2;
+        color: #991b1b;
+        border-color: #fecaca;
+    }
+
+        .adj-btn-danger:hover {
+            background: #fecaca;
+            color: #7f1d1d;
+        }
+
+    .adj-stat-pill {
+        font-size: .78rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 4px 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+    }
+
+        .adj-stat-pill strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+    .adj-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .adj-section-title {
+        font-size: 1rem;
         font-weight: 600;
-        color: var(--brand-700);
+        color: #111827;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    .kv .val {
-        word-break: break-word;
+    .adj-info-row {
+        display: flex;
+        margin-bottom: .75rem;
     }
 
-    .danger-alert {
-        border-radius: 16px;
-        border: 1px solid rgba(248, 113, 113, .35);
-        background: linear-gradient(135deg, #fef2f2, #fee2e2);
-        box-shadow: 0 10px 26px rgba(248, 113, 113, .35);
+    .adj-info-label {
+        width: 140px;
+        font-size: .85rem;
+        color: #6b7280;
+        flex-shrink: 0;
     }
+
+    .adj-info-value {
+        font-size: .9rem;
+        color: #111827;
+        font-weight: 500;
+    }
+
+    .adj-table-wrap {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-top: 1rem;
+    }
+
+    .adj-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .adj-table thead th {
+            padding: 11px 16px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .adj-table tbody td {
+            padding: 11px 16px;
+            color: #374151;
+            vertical-align: middle;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .adj-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    .adj-alert-danger {
+        background: #fee2e2;
+        border: 1px solid #fecaca;
+        border-radius: 12px;
+        padding: 1rem;
+        color: #991b1b;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .adj-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+    }
+
+        .adj-checkbox input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
 </style>
 
-<div class="container mt-4">
-    <h2 class="page-title">
-        <span class="logo-dot"></span>
-        @ViewData["Title"]
-    </h2>
+<div class="adj-page">
+    <div class="adj-page-title">Delete Adjustment</div>
 
-    <div class="toolbar">
-        <a asp-action="Index" class="btn-glass btn-outline">
+    <div class="adj-toolbar">
+        <a asp-action="Index" class="adj-btn">
             <i class="bi bi-list"></i> Back to List
         </a>
 
-        <div class="ms-auto d-flex align-items-center gap-2 flex-wrap">
-            <span class="pill">
+        <div class="ms-auto d-flex gap-2 flex-wrap">
+            <span class="adj-stat-pill">
                 <i class="bi bi-calendar3"></i>
                 Date: <strong>@Model.AdjustmentDate.ToString("yyyy-MM-dd")</strong>
             </span>
-            <span class="pill">
+            <span class="adj-stat-pill">
                 <i class="bi bi-tag"></i>
                 Type: <strong>@Model.AdjustmentType</strong>
             </span>
-            <span class="pill">
+            <span class="adj-stat-pill">
                 <i class="bi bi-plus-slash-minus"></i>
-                Header Qty: <strong>@Model.QuantityChange</strong>
+                Qty: <strong>@Model.QuantityChange</strong>
             </span>
         </div>
     </div>
 
-    <div class="alert danger-alert mt-3 d-flex align-items-center" role="alert">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-        <div>
-            <strong>Are you sure?</strong> This action is permanent and cannot be undone.
-        </div>
+    <div class="adj-alert-danger">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <strong>Are you sure?</strong> This action is permanent and cannot be undone.
     </div>
 
-    <div class="card-glass glas-all-style mt-3">
-        <div class="section-title">
+    <div class="adj-card">
+        <div class="adj-section-title">
             <i class="bi bi-info-circle"></i> Adjustment Info
         </div>
 
-        <div class="row gy-3 kv">
-            <div class="col-12 col-md-6 d-flex">
-                <div class="key me-2">
-                    <i class="bi bi-journal-text me-1"></i>Catalog
+        <div class="row">
+            <div class="col-md-6">
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Catalog:</span>
+                    <span class="adj-info-value">
+                        @(Model?.Catalog == null ? "(no catalog)" : (string.IsNullOrEmpty(Model.Catalog.ISBN) ? Model.Catalog.Title : $"{Model.Catalog.Title} ({Model.Catalog.ISBN})"))
+                    </span>
                 </div>
-                <div class="val">
-                    @(
-                        Model?.Catalog == null
-                        ? "(no catalog)"
-                        : (string.IsNullOrEmpty(Model.Catalog.ISBN)
-                        ? Model.Catalog.Title
-                        : $"{Model.Catalog.Title} ({Model.Catalog.ISBN})")
-                        )
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Type:</span>
+                    <span class="adj-info-value">@Model.AdjustmentType</span>
                 </div>
-            </div>
-
-            <div class="col-12 col-md-6 d-flex">
-                <div class="key me-2">
-                    <i class="bi bi-tag me-1"></i>Type
-                </div>
-                <div class="val">
-                    <span class="pill">@Model.AdjustmentType</span>
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Date:</span>
+                    <span class="adj-info-value">@Model.AdjustmentDate.ToString("yyyy-MM-dd")</span>
                 </div>
             </div>
-
-            <div class="col-12 col-md-6 d-flex">
-                <div class="key me-2">
-                    <i class="bi bi-calendar3 me-1"></i>Date
+            <div class="col-md-6">
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Quantity:</span>
+                    <span class="adj-info-value">@Model.QuantityChange</span>
                 </div>
-                <div class="val">@Model.AdjustmentDate.ToString("yyyy-MM-dd")</div>
-            </div>
-
-            <div class="col-12 col-md-6 d-flex">
-                <div class="key me-2">
-                    <i class="bi bi-plus-slash-minus me-1"></i>Header Quantity
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Reason:</span>
+                    <span class="adj-info-value">@Model.Reason</span>
                 </div>
-                <div class="val">@Model.QuantityChange</div>
-            </div>
-
-            <div class="col-12 d-flex">
-                <div class="key me-2">
-                    <i class="bi bi-chat-text me-1"></i>Reason
+                <div class="adj-info-row">
+                    <span class="adj-info-label">Adjusted By:</span>
+                    <span class="adj-info-value">@(Model.AdjustedByUser?.UserName ?? "—")</span>
                 </div>
-                <div class="val">@Model.Reason</div>
             </div>
         </div>
     </div>
 
-    @* Detail rows (Book / Barcode instead of Catalog) *@
     @if (Model?.AdjustmentDetails != null && Model.AdjustmentDetails.Any())
     {
-        <div class="card-glass glas-all-style mt-3">
-            <div class="section-title">
+        <div class="adj-card">
+            <div class="adj-section-title">
                 <i class="bi bi-list-check"></i> Detail Rows
             </div>
 
-            <div class="table-wrap mt-1">
-                <table class="table table-sm table-hover table-striped table-bordered align-middle mb-0">
+            <div class="adj-table-wrap">
+                <table class="adj-table">
                     <thead>
                         <tr>
-                            <th><i class="bi bi-upc-scan me-1"></i>Book / Barcode</th>
-                            <th style="width:120px;"><i class="bi bi-boxes me-1"></i>Qty</th>
-                            <th><i class="bi bi-stickies me-1"></i>Note</th>
+                            <th>Book / Barcode</th>
+                            <th style="width:120px;">Qty</th>
+                            <th>Note</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -134,16 +285,10 @@
                         {
                             <tr>
                                 <td>
-                                    @(
-                                        d?.Book == null
-                                        ? "(no book)"
-                                        : (string.IsNullOrEmpty(d.Book.Barcode)
-                                        ? d.Book.Title
-                                        : $"{d.Book.Title} ({d.Book.Barcode})")
-                                        )
+                                    @(d?.Book == null ? "(no book)" : (string.IsNullOrEmpty(d.Book.Barcode) ? d.Book.Title : $"{d.Book.Title} ({d.Book.Barcode})"))
                                 </td>
                                 <td>@d.QuantityChanged</td>
-                                <td>@d.Note</td>
+                                <td>@(d.Note ?? "—")</td>
                             </tr>
                         }
                     </tbody>
@@ -152,49 +297,46 @@
         </div>
     }
 
-    <form asp-action="Delete" method="post" id="deleteForm" class="card-glass glas-all-style mt-3">
+    <form asp-action="Delete" method="post" id="deleteForm" class="adj-card">
         @Html.AntiForgeryToken()
-        <div class="row g-3 align-items-center">
-            <div class="col-md-8">
-                <input type="hidden" asp-for="AdjustmentId" />
-                <input type="hidden" asp-for="RowVersion" />
+        <input type="hidden" asp-for="AdjustmentId" />
+        <input type="hidden" asp-for="RowVersion" />
 
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="confirmChk">
-                    <label class="form-check-label" for="confirmChk">
-                        I understand this will permanently delete the adjustment.
-                    </label>
-                </div>
-            </div>
-            <div class="col-md-4 d-flex flex-wrap gap-2 justify-content-md-end">
-                <button type="button" class="btn btn-danger" id="openConfirm" disabled>
-                    <i class="bi bi-trash3 me-1"></i> Delete
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <label class="adj-checkbox">
+                <input type="checkbox" id="confirmChk">
+                <span>I understand this will permanently delete this adjustment.</span>
+            </label>
+
+            <div class="d-flex gap-2">
+                <button type="button" class="adj-btn adj-btn-danger" id="openConfirm" disabled>
+                    <i class="bi bi-trash3"></i> Delete
                 </button>
-                <a asp-action="Index" class="btn-glass btn-outline">
-                    <i class="bi bi-x-circle me-1"></i> Cancel
+                <a asp-action="Index" class="adj-btn">
+                    <i class="bi bi-x-circle"></i> Cancel
                 </a>
             </div>
         </div>
     </form>
 </div>
 
-@* Confirm modal *@
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+<!-- Confirm Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title d-flex align-items-center gap-2" id="confirmModalLabel">
+        <div class="modal-content" style="border-radius:14px;">
+            <div class="modal-header" style="background:#fee2e2; border-bottom:1px solid #fecaca;">
+                <h5 class="modal-title d-flex align-items-center gap-2" style="color:#991b1b;">
                     <i class="bi bi-trash3"></i> Confirm Deletion
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="padding:1.5rem;">
                 You are about to permanently delete this adjustment. This cannot be undone.
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-light text-danger fw-semibold" form="deleteForm">
-                    <i class="bi bi-trash3 me-1"></i> Yes, delete it
+            <div class="modal-footer" style="border-top:1px solid #e5e7eb;">
+                <button type="button" class="adj-btn" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="adj-btn adj-btn-danger" form="deleteForm">
+                    <i class="bi bi-trash3"></i> Yes, delete it
                 </button>
             </div>
         </div>
@@ -203,19 +345,23 @@
 
 @section Scripts {
     <script>
-        (() => {
+        (function() {
             const chk = document.getElementById('confirmChk');
             const btn = document.getElementById('openConfirm');
             const modalEl = document.getElementById('confirmModal');
 
-            chk?.addEventListener('change', () => {
-                btn.disabled = !chk.checked;
-            });
+            if (chk && btn) {
+                chk.addEventListener('change', () => {
+                    btn.disabled = !chk.checked;
+                });
+            }
 
-            btn?.addEventListener('click', () => {
-                const modal = new bootstrap.Modal(modalEl);
-                modal.show();
-            });
+            if (btn && modalEl) {
+                btn.addEventListener('click', () => {
+                    const modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                });
+            }
         })();
     </script>
 }

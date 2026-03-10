@@ -1,366 +1,744 @@
 ﻿@model IEnumerable<LibrarySystemBBU.Models.LoanReminder>
+@using System.Linq
 
 @{
     ViewData["Title"] = "Loan Reminders";
-
     var currentPage = ViewBag.CurrentPage as int? ?? 1;
     var totalPages = ViewBag.TotalPages as int? ?? 1;
-    var totalReminders = ViewBag.TotalReminders as int? ?? (Model?.Count() ?? 0);
+    var totalReminders = ViewBag.TotalReminders as int? ?? 0;
+    var overdueLoans = ViewBag.OverdueLoans as IEnumerable<LibrarySystemBBU.Models.BookBorrow>
+                         ?? Enumerable.Empty<LibrarySystemBBU.Models.BookBorrow>();
+    var today = DateTime.Today;
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-    /* =======================
-           Loan Reminders (scoped)
-           ======================= */
-
-    #loanRemindersPage .muted {
-        color: var(--muted, #6b7280);
-        font-size: .9rem;
+    .lr-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-    #loanRemindersPage .toolbar {
-        margin-bottom: 10px;
-    }
-
-    #loanRemindersPage .stats-pill {
-        display: inline-flex;
+    .lr-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
         align-items: center;
-        gap: .35rem;
-        padding: 5px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(148,163,184,.45);
-        background: linear-gradient(180deg,#ffffff,rgba(248,250,252,.9));
-        font-size: .8rem;
-        color: var(--text, #0f172a);
+        gap: 8px;
     }
 
-        #loanRemindersPage .stats-pill strong {
-            font-weight: 700;
+        .lr-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
-    #loanRemindersPage .card-glass.glas-all-style {
-        margin-top: 6px;
+    .lr-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
     }
 
-    #loanRemindersPage .table-wrap {
-        overflow: auto;
-        border-radius: 16px;
-        border: 1px solid rgba(1,0,140,.10);
-        background: linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.88));
+    .lr-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
     }
 
-    #loanRemindersPage table thead th {
-        position: sticky;
-        top: 0;
-        background: linear-gradient(180deg,var(--brand-50,#eef0ff),rgba(255,255,255,.96));
-        border-bottom: 2px solid var(--brand-200, #b6b6ff);
-        font-weight: 700;
+        .lr-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+        .lr-btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+    .lr-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .lr-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+        }
+
+    .lr-btn-send {
+        background: #eff6ff;
+        color: #1d4ed8;
+        border-color: #bfdbfe;
+        padding: 4px 10px;
+        font-size: .74rem;
+    }
+
+        .lr-btn-send:hover {
+            background: #dbeafe;
+            color: #1e40af;
+            border-color: #93c5fd;
+            text-decoration: none;
+        }
+
+    .lr-search-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 6px 12px;
+        background: #fff;
+        flex: 1;
+        min-width: 200px;
+        max-width: 360px;
+        transition: border-color .15s;
+    }
+
+        .lr-search-wrap:focus-within {
+            border-color: #000080;
+        }
+
+        .lr-search-wrap i {
+            color: #9ca3af;
+            font-size: .85rem;
+        }
+
+    .lr-search-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: .83rem;
+        color: #111827;
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .lr-search-input::placeholder {
+            color: #9ca3af;
+        }
+
+    .lr-search-clear {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #d1d5db;
+        padding: 0;
+        font-size: .85rem;
+    }
+
+        .lr-search-clear:hover {
+            color: #6b7280;
+        }
+
+    .lr-stat-pill {
+        font-size: .78rem;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 4px 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
         white-space: nowrap;
     }
 
-    #loanRemindersPage tbody tr {
-        transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
-    }
-
-        #loanRemindersPage tbody tr:hover {
-            background: rgba(15,23,42,.02);
-            transform: translateY(-1px);
-            box-shadow: inset 0 0 0 999px rgba(15,23,42,.02);
+        .lr-stat-pill strong {
+            color: #111827;
+            font-weight: 600;
         }
 
-    #loanRemindersPage .member-avatar {
-        width: 32px;
-        height: 32px;
-        border-radius: 999px;
-        background: linear-gradient(180deg,#e5e7eb,#ffffff);
+    .lr-section-label {
+        font-size: .75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: #6b7280;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .lr-table-wrap {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .lr-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .83rem;
+    }
+
+        .lr-table thead th {
+            padding: 11px 16px;
+            text-align: left;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .lr-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background .1s;
+        }
+
+            .lr-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .lr-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+        .lr-table tbody td {
+            padding: 11px 16px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+            .lr-table tbody td.muted {
+                color: #6b7280;
+            }
+
+    .lr-member-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #e5e7eb;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: .8rem;
+        font-size: .78rem;
         font-weight: 600;
         color: #4b5563;
-        box-shadow: 0 1px 3px rgba(15,23,42,.2);
+        flex-shrink: 0;
     }
 
-    #loanRemindersPage .text-truncate {
-        max-width: 260px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    /* Type badge */
-    #loanRemindersPage .badge-soft {
+    .lr-badge {
+        font-size: .72rem;
+        font-weight: 500;
+        border-radius: 20px;
+        padding: 3px 10px;
         display: inline-flex;
         align-items: center;
-        padding: 4px 10px;
-        border-radius: 999px;
-        font-size: .78rem;
-        border: 1px solid transparent;
-        font-weight: 600;
-    }
-
-    #loanRemindersPage .badge-default {
-        background: #f3f4f6;
+        gap: 4px;
+        border: 1px solid #e5e7eb;
+        background: #f9fafb;
         color: #374151;
-        border-color: #e5e7eb;
     }
 
-    #loanRemindersPage .badge-telegram {
+    .lr-badge-overdue {
+        background: #fef2f2;
+        border-color: #fecaca;
+        color: #dc2626;
+    }
+
+    .lr-badge-telegram {
         background: #e0e7ff;
-        color: #1d4ed8;
         border-color: #c7d2fe;
+        color: #1d4ed8;
     }
 
-    #loanRemindersPage .badge-call {
+    .lr-badge-call {
         background: #fef3c7;
-        color: #92400e;
         border-color: #fde68a;
+        color: #92400e;
     }
 
-    #loanRemindersPage .badge-email {
+    .lr-badge-email {
         background: #d1fae5;
-        color: #047857;
         border-color: #a7f3d0;
+        color: #047857;
     }
 
-    /* Empty state */
-    #loanRemindersPage .empty-state {
-        border-radius: 16px;
-        border: 1px dashed rgba(148,163,184,.6);
-        background: linear-gradient(180deg,rgba(255,255,255,.96),rgba(248,250,252,.95));
-        box-shadow: 0 10px 28px rgba(15,23,42,.12);
+    .lr-pager {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 0;
     }
 
-    /* Pagination */
-    #loanRemindersPage .pager {
-        border-top: 1px solid rgba(15,23,42,.08);
-        padding: 10px 14px;
-        background: linear-gradient(180deg,rgba(248,250,252,.96),rgba(255,255,255,.98));
-        border-bottom-left-radius: 16px;
-        border-bottom-right-radius: 16px;
+    .lr-empty {
+        text-align: center;
+        padding: 2.5rem 1rem;
+        color: #9ca3af;
+        font-size: .88rem;
     }
 
-    #loanRemindersPage .pager-btn {
-        border-radius: 999px;
-        padding: 6px 14px;
-        font-size: .82rem;
+    /* Modal */
+    .lr-modal-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.35);
+        z-index: 1050;
+        align-items: center;
+        justify-content: center;
     }
 
-        #loanRemindersPage .pager-btn.disabled {
-            opacity: .6;
-            cursor: not-allowed;
-            box-shadow: none;
+        .lr-modal-backdrop.open {
+            display: flex;
         }
+
+    .lr-modal {
+        background: #fff;
+        border-radius: 16px;
+        border: 1px solid #e5e7eb;
+        width: 100%;
+        max-width: 440px;
+        padding: 24px;
+        font-family: 'Inter', sans-serif;
+        box-shadow: 0 20px 60px rgba(0,0,0,.15);
+    }
+
+    .lr-modal-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .lr-modal-sub {
+        font-size: .8rem;
+        color: #6b7280;
+        margin-bottom: 18px;
+    }
+
+    .lr-modal label {
+        font-size: .82rem;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .lr-modal select {
+        font-size: .83rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 7px 11px;
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+        width: 100%;
+        background: #fff;
+        margin-bottom: 16px;
+        outline: none;
+        transition: border-color .15s;
+    }
+
+        .lr-modal select:focus {
+            border-color: #000080;
+            box-shadow: 0 0 0 3px rgba(0,0,128,.07);
+        }
+
+    .lr-modal-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        margin-top: 4px;
+    }
+
+    .lr-modal-info {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: .78rem;
+        color: #1d4ed8;
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        margin-bottom: 16px;
+    }
+
+    /* Toast */
+    .lr-toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 2000;
+        background: #111827;
+        color: #fff;
+        border-radius: 10px;
+        padding: 12px 18px;
+        font-size: .83rem;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,.2);
+        animation: slideUp .25s ease;
+    }
+
+        .lr-toast.success {
+            background: #166534;
+        }
+
+        .lr-toast.error {
+            background: #dc2626;
+        }
+
+    @@keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>
 
-<div id="loanRemindersPage">
-    <h2 class="page-title">
-        <span class="logo-dot"></span>
-        Reminders
-    </h2>
+<div class="lr-page">
+
+    <div class="lr-page-title">Loan Reminders</div>
+
+    @if (TempData["ok"] != null)
+    {
+        <div id="toastOk" class="lr-toast success"><i class="bi bi-check-circle-fill"></i> @TempData["ok"]</div>
+    }
+    @if (TempData["error"] != null)
+    {
+        <div id="toastErr" class="lr-toast error"><i class="bi bi-exclamation-circle-fill"></i> @TempData["error"]</div>
+    }
 
     <!-- Toolbar -->
-    <div class="toolbar d-flex flex-wrap gap-2 align-items-center justify-content-between">
-        <div class="muted d-flex align-items-center gap-2">
-            <i class="bi bi-info-circle"></i>
-            Overview of reminders sent to members.
+    <div class="lr-toolbar">
+        <div class="lr-search-wrap">
+            <i class="bi bi-search"></i>
+            <input id="lrSearch" class="lr-search-input" placeholder="Search member, book, loan ID…" />
+            <button class="lr-search-clear" type="button" id="lrClearSearch"><i class="bi bi-x-circle"></i></button>
         </div>
-
-        <div class="d-flex flex-wrap gap-2 align-items-center">
-            <span class="stats-pill">
-                <i class="bi bi-bell"></i>
-                Total reminders:
-                <strong>@totalReminders</strong>
-            </span>
-
-            <a asp-action="Send"
-               class="btn-glass btn-brand">
-                <i class="bi bi-plus-circle"></i> Send Reminder
-            </a>
-
-            <a asp-controller="Dashboard"
-               asp-action="Index"
-               class="btn-glass btn-outline">
-                <i class="bi bi-arrow-left-circle"></i> Dashboard
-            </a>
+        <div class="lr-stat-pill" style="margin-left:auto;">
+            <i class="bi bi-exclamation-triangle"></i> Overdue: <strong>@overdueLoans.Count()</strong>
+        </div>
+        <div class="lr-stat-pill">
+            <i class="bi bi-bell"></i> Reminders Sent: <strong>@totalReminders</strong>
+        </div>
+        <div class="lr-stat-pill">
+            <i class="bi bi-funnel"></i> Filtered: <strong id="lrStatFiltered">—</strong>
         </div>
     </div>
 
-    @if (Model == null || !Model.Any())
-    {
-        <div class="empty-state text-center py-5 px-3 mt-2">
-            <div class="display-6 mb-2">📭</div>
-            <h5 class="mb-1">No reminders yet</h5>
-            <div class="muted mb-3">
-                Send your first reminder to see it listed here.
-            </div>
+    <!-- OVERDUE LOANS -->
+    <div class="lr-section-label"><i class="bi bi-exclamation-triangle-fill" style="color:#dc2626;"></i> Overdue Loans</div>
+    <div class="lr-table-wrap">
+        <table class="lr-table">
+            <thead>
+                <tr>
+                    <th>Loan</th>
+                    <th>Member</th>
+                    <th>Telegram</th>
+                    <th>Books</th>
+                    <th>Due Date</th>
+                    <th>Days Overdue</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="overdueTableBody">
+                @if (!overdueLoans.Any())
+                {
+                    <tr>
+                        <td colspan="7">
+                            <div class="lr-empty">
+                                <i class="bi bi-check-circle" style="font-size:1.5rem;color:#16a34a;display:block;margin-bottom:.5rem;"></i>
+                                No overdue loans. All good!
+                            </div>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var loan in overdueLoans)
+                    {
+                        var member = loan.LibraryMember;
+                        var tg = string.IsNullOrWhiteSpace(member?.TelegramUsername)
+                        ? (member?.TelegramChatId ?? "—")
+                        : "@" + member.TelegramUsername;
+                        var hasTelegram = !string.IsNullOrWhiteSpace(member?.TelegramChatId);
 
-            <a asp-action="Send" class="btn-glass btn-brand">
-                <i class="bi bi-plus-circle"></i> Send First Reminder
-            </a>
-        </div>
-    }
-    else
-    {
-        <div class="card-glass glas-all-style mt-2">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <div>
-                    <i class="bi bi-send-check"></i> Sent Loan Reminders
-                </div>
-                <div class="muted">
-                    Page <strong>@currentPage</strong> of <strong>@totalPages</strong>
-                </div>
-            </div>
+                        var titles = loan.LoanBookDetails?
+                        .Where(x => x.Book != null)
+                        .Select(x => !string.IsNullOrWhiteSpace(x.Book!.Title)
+                        ? x.Book.Title
+                        : x.Book.Catalog?.Title)
+                        .Where(t => !string.IsNullOrWhiteSpace(t))
+                        .Distinct()
+                        .ToList() ?? new List<string>();
+                        var titlesText = titles.Any() ? string.Join(", ", titles) : "(No book titles)";
 
-            <div class="card-body pb-0">
-                <div class="table-wrap">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead>
-                            <tr>
-                                <th>Reminder ID</th>
-                                <th>Loan</th>
-                                <th>Member</th>
-                                <th>Telegram</th>
-                                <th>Books</th>
-                                <th>Sent Date</th>
-                                <th class="text-end">Type</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                var member = item.Loan?.LibraryMember;
+                        var overdueDays = (today - loan.DueDate.Date).Days;
+                        var initial = string.IsNullOrWhiteSpace(member?.FullName) ? "?" : member!.FullName![0].ToString().ToUpper();
+                        var memberName = System.Web.HttpUtility.JavaScriptStringEncode(member?.FullName ?? "");
 
-                                var tg = string.IsNullOrWhiteSpace(member?.TelegramUsername)
-                                ? (member?.TelegramChatId ?? "—")
-                                : "@" + member.TelegramUsername;
-
-                                // Titles
-                                var titles = item.Loan?.LoanBookDetails?
-                                .Where(x => x.Book != null)
-                                .Select(x =>
-                                !string.IsNullOrWhiteSpace(x.Book!.Title)
-                                ? x.Book.Title
-                                : (x.Book.Catalog != null ? x.Book.Catalog.Title : null))
-                                .Where(t => !string.IsNullOrWhiteSpace(t))
-                                .Distinct()
-                                .ToList()
-                                ?? new List<string>();
-
-                                var titlesText = titles.Any()
-                                ? string.Join(", ", titles)
-                                : "(No book titles)";
-
-                                string typeClass = "badge-soft badge-default";
-                                if (!string.IsNullOrWhiteSpace(item.ReminderType))
+                        <tr data-search="@($"{member?.FullName} {titlesText} {loan.LoanId}".ToLower())">
+                            <td>
+                                <span class="lr-badge"><i class="bi bi-journal-bookmark"></i> #@loan.LoanId</span>
+                            </td>
+                            <td>
+                                <div style="display:flex;align-items:center;gap:8px;">
+                                    @if (!string.IsNullOrWhiteSpace(member?.ProfilePicturePath))
+                                    {
+                                        <img src="@member.ProfilePicturePath" style="width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+                                    }
+                                    else
+                                    {
+                                        <div class="lr-member-avatar">@initial</div>
+                                    }
+                                    <span style="font-weight:500;">@member?.FullName</span>
+                                </div>
+                            </td>
+                            <td>
+                                @if (hasTelegram)
                                 {
-                                    var t = item.ReminderType.ToLowerInvariant();
-                                    if (t.Contains("telegram"))
-                                    {
-                                        typeClass = "badge-soft badge-telegram";
-                                    }
-                                    else if (t.Contains("call"))
-                                    {
-                                        typeClass = "badge-soft badge-call";
-                                    }
-                                    else if (t.Contains("email"))
-                                    {
-                                        typeClass = "badge-soft badge-email";
-                                    }
+                                    <span class="lr-badge lr-badge-telegram"><i class="bi bi-telegram"></i> @tg</span>
                                 }
+                                else
+                                {
+                                    <span class="lr-badge" style="color:#9ca3af;">Not linked</span>
+                                }
+                            </td>
+                            <td class="muted" style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="@titlesText">
+                                @titlesText
+                            </td>
+                            <td>
+                                <span class="lr-badge lr-badge-overdue"><i class="bi bi-calendar-x"></i> @loan.DueDate.ToString("yyyy-MM-dd")</span>
+                            </td>
+                            <td>
+                                <span class="lr-badge lr-badge-overdue"><i class="bi bi-clock-history"></i> @overdueDays days</span>
+                            </td>
+                            <td>
+                                @if (hasTelegram)
+                                {
+                                    <button type="button" class="lr-btn lr-btn-send"
+                                            onclick="openSendModal(@loan.LoanId, '@memberName')">
+                                        <i class="bi bi-send-fill"></i> Send Reminder
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="lr-btn lr-btn-send" disabled title="No Telegram linked">
+                                        <i class="bi bi-send"></i> Send Reminder
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 
-                                <tr>
-                                    <!-- Reminder ID -->
-                                    <td>@item.ReminderId</td>
+    <!-- REMINDERS HISTORY -->
+    <div class="lr-section-label"><i class="bi bi-clock-history"></i> Sent Reminders History</div>
+    <div class="lr-table-wrap">
+        <table class="lr-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Loan</th>
+                    <th>Member</th>
+                    <th>Books</th>
+                    <th>Sent Date</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody id="historyTableBody">
+                @if (Model == null || !Model.Any())
+                {
+                    <tr>
+                        <td colspan="6">
+                            <div class="lr-empty">No reminders sent yet.</div>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model)
+                    {
+                        var member = item.Loan?.LibraryMember;
+                        var titles = item.Loan?.LoanBookDetails?
+                        .Where(x => x.Book != null)
+                        .Select(x => !string.IsNullOrWhiteSpace(x.Book!.Title)
+                        ? x.Book.Title
+                        : x.Book.Catalog?.Title)
+                        .Where(t => !string.IsNullOrWhiteSpace(t))
+                        .Distinct()
+                        .ToList() ?? new List<string>();
+                        var titlesText = titles.Any() ? string.Join(", ", titles) : "(No book titles)";
+                        var initial = string.IsNullOrWhiteSpace(member?.FullName) ? "?" : member!.FullName![0].ToString().ToUpper();
 
-                                    <!-- Loan ID -->
-                                    <td>
-                                        <span class="badge-soft badge-default">
-                                            <i class="bi bi-journal-bookmark"></i> #@item.LoanId
-                                        </span>
-                                    </td>
+                        string typeClass = "lr-badge";
+                        if (!string.IsNullOrWhiteSpace(item.ReminderType))
+                        {
+                            var t = item.ReminderType.ToLowerInvariant();
+                            if (t.Contains("telegram")) typeClass += " lr-badge-telegram";
+                            else if (t.Contains("call")) typeClass += " lr-badge-call";
+                            else if (t.Contains("email")) typeClass += " lr-badge-email";
+                        }
 
-                                    <!-- Member -->
-                                    <td>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="member-avatar">
-                                                @(string.IsNullOrWhiteSpace(member?.FullName)
-                                                    ? "S"
-                                                    : member!.FullName![0])
-                                            </div>
-                                            <div>
-                                                <div>@member?.FullName</div>
-                                            </div>
-                                        </div>
-                                    </td>
+                        <tr data-search="@($"{member?.FullName} {titlesText} {item.LoanId}".ToLower())">
+                            <td class="muted">@item.ReminderId</td>
+                            <td><span class="lr-badge"><i class="bi bi-journal-bookmark"></i> #@item.LoanId</span></td>
+                            <td>
+                                <div style="display:flex;align-items:center;gap:8px;">
+                                    @if (!string.IsNullOrWhiteSpace(member?.ProfilePicturePath))
+                                    {
+                                        <img src="@member.ProfilePicturePath" style="width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+                                    }
+                                    else
+                                    {
+                                        <div class="lr-member-avatar">@initial</div>
+                                    }
+                                    <span style="font-weight:500;">@member?.FullName</span>
+                                </div>
+                            </td>
+                            <td class="muted" style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="@titlesText">
+                                @titlesText
+                            </td>
+                            <td class="muted">@item.SentDate.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td><span class="@typeClass">@item.ReminderType</span></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 
-                                    <!-- Telegram -->
-                                    <td>
-                                        <span class="badge-soft badge-default">
-                                            <i class="bi bi-telegram"></i> @tg
-                                        </span>
-                                    </td>
-
-                                    <!-- Books -->
-                                    <td>
-                                        <span class="text-truncate d-inline-block" title="@titlesText">
-                                            @titlesText
-                                        </span>
-                                    </td>
-
-                                    <!-- Sent Date -->
-                                    <td>@item.SentDate.ToString("yyyy-MM-dd HH:mm")</td>
-
-                                    <!-- Type -->
-                                    <td class="text-end">
-                                        <span class="@typeClass">
-                                            @item.ReminderType
-                                        </span>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            @if (totalPages > 1)
+    @if (totalPages > 1)
+    {
+        <div class="lr-pager">
+            @if (currentPage > 1)
             {
-                <div class="pager d-flex justify-content-end gap-2">
-                    @if (currentPage > 1)
-                    {
-                        <a asp-action="Index"
-                           asp-route-page="@(currentPage - 1)"
-                           class="btn-glass btn-outline pager-btn">
-                            <i class="bi bi-arrow-left"></i> Previous
-                        </a>
-                    }
-                    else
-                    {
-                        <span class="btn-glass btn-outline pager-btn disabled">
-                            <i class="bi bi-arrow-left"></i> Previous
-                        </span>
-                    }
-
-                    @if (currentPage < totalPages)
-                    {
-                        <a asp-action="Index"
-                           asp-route-page="@(currentPage + 1)"
-                           class="btn-glass btn-outline pager-btn">
-                            Next <i class="bi bi-arrow-right"></i>
-                        </a>
-                    }
-                    else
-                    {
-                        <span class="btn-glass btn-outline pager-btn disabled">
-                            Next <i class="bi bi-arrow-right"></i>
-                        </span>
-                    }
-                </div>
+                <a asp-action="Index" asp-route-page="@(currentPage - 1)" class="lr-btn"><i class="bi bi-chevron-left"></i> Prev</a>
+            }
+            else
+            {
+                <button class="lr-btn" disabled><i class="bi bi-chevron-left"></i> Prev</button>
+            }
+            <span style="font-size:.82rem;color:#6b7280;">Page @currentPage / @totalPages</span>
+            @if (currentPage < totalPages)
+            {
+                <a asp-action="Index" asp-route-page="@(currentPage + 1)" class="lr-btn">Next <i class="bi bi-chevron-right"></i></a>
+            }
+            else
+            {
+                <button class="lr-btn" disabled>Next <i class="bi bi-chevron-right"></i></button>
             }
         </div>
     }
 </div>
+
+<!-- Send Reminder Modal -->
+<div class="lr-modal-backdrop" id="sendModal">
+    <div class="lr-modal">
+        <div class="lr-modal-title"><i class="bi bi-send-fill" style="color:#000080;"></i> Send Loan Reminder</div>
+        <div class="lr-modal-sub">Sending reminder for: <strong id="modalMemberName"></strong></div>
+
+        <div class="lr-modal-info">
+            <i class="bi bi-telegram" style="flex-shrink:0;margin-top:1px;"></i>
+            Reminder will be sent to the member's linked Telegram Chat ID.
+        </div>
+
+        <form asp-action="Send" method="post" id="sendReminderForm">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="LoanId" id="modalLoanId" />
+
+            <input type="hidden" name="ReminderType" value="ManualTelegram" />
+
+            <div class="lr-modal-actions">
+                <button type="button" class="lr-btn" onclick="closeModal()"><i class="bi bi-x-circle"></i> Cancel</button>
+                <button type="submit" class="lr-btn lr-btn-primary"><i class="bi bi-send-fill"></i> Send</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Search — filters both tables
+        const searchInput = document.getElementById('lrSearch');
+        const clearBtn    = document.getElementById('lrClearSearch');
+        const statEl      = document.getElementById('lrStatFiltered');
+        const allRows     = Array.from(document.querySelectorAll('#overdueTableBody tr[data-search], #historyTableBody tr[data-search]'));
+
+        function applySearch() {
+            const q = searchInput.value.trim().toLowerCase();
+            let count = 0;
+            allRows.forEach(r => {
+                const match = !q || r.dataset.search.includes(q);
+                r.style.display = match ? '' : 'none';
+                if (match) count++;
+            });
+            statEl.textContent = count;
+        }
+
+        searchInput.addEventListener('input', applySearch);
+        clearBtn.addEventListener('click', () => { searchInput.value = ''; applySearch(); });
+        applySearch();
+
+        // Auto-dismiss toasts
+        ['toastOk','toastErr'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) setTimeout(() => el.remove(), 4000);
+        });
+
+        // Modal
+        function openSendModal(loanId, memberName) {
+            document.getElementById('modalLoanId').value          = loanId;
+            document.getElementById('modalMemberName').textContent = memberName;
+            document.getElementById('sendModal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('sendModal').classList.remove('open');
+        }
+
+        document.getElementById('sendModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+}

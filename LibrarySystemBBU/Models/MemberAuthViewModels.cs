@@ -31,9 +31,6 @@ namespace LibrarySystemBBU.Models
         [Required, StringLength(150)]
         [Display(Name = "Faculty")]
         public string Faculty { get; set; } = string.Empty;
-
-        [Required, StringLength(150)]
-        [Display(Name = "Subject")]
         public string Subject { get; set; } = string.Empty;
 
         [Required, StringLength(20, MinimumLength = 5)]

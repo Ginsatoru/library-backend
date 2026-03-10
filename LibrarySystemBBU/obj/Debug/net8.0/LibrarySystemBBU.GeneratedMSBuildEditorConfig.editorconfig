@@ -164,10 +164,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9hblJlbWluZGVyc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/LoanReminders/Send.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9hblJlbWluZGVyc1xTZW5kLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/MemberAuth/ForgotPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyQXV0aFxGb3Jnb3RQYXNzd29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -278,10 +274,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/TelegramDebug/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVsZWdyYW1EZWJ1Z1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/NETTECH-STORE/OneDrive - AAAPOS/Web Projects/School/Backend/LibrarySystem/LibrarySystem/LibrarySystemBBU/Views/Users/Create.cshtml]

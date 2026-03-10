@@ -11,318 +11,447 @@
 
     string StatusBadge(string s) => s switch
     {
-        "Approved" => "b-approved",
-        "Returned" => "b-returned",
-        _ => "b-pending"
+        "Approved" => "status-approved",
+        "Returned" => "status-returned",
+        _ => "status-pending"
     };
     string fmt(DateTime? dt) => dt.HasValue ? dt.Value.ToString("yyyy-MM-dd HH:mm") : "—";
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-    #libraryLogEditPage #logForm.card-glass.glas-all-style {
-        margin-top: 4px;
+    .logs-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-    #libraryLogEditPage .muted {
-        color: var(--muted, #667085);
-        font-size: .9rem;
-    }
-
-    #libraryLogEditPage .status-pill {
-        display: inline-block;
-        padding: .25rem .6rem;
-        border-radius: 999px;
-        border: 1px solid #dfe3ff;
+    .logs-page-title {
+        font-size: 1.5rem;
         font-weight: 700;
-        font-size: .82rem;
-    }
-
-    #libraryLogEditPage .b-pending {
-        background: #fff7e6;
-        color: #8a5a00;
-        border-color: #ffe3ad;
-    }
-
-    #libraryLogEditPage .b-approved {
-        background: #e9fff0;
-        color: #0c5d35;
-        border-color: #c8f0d7;
-    }
-
-    #libraryLogEditPage .b-returned {
-        background: #eef1ff;
-        color: #2b2f7f;
-        border-color: #dfe3ff;
-    }
-
-    #libraryLogEditPage .wf {
+        color: #111827;
+        margin-bottom: 1.25rem;
         display: flex;
-        gap: 10px;
         align-items: center;
-        flex-wrap: wrap;
+        gap: 8px;
     }
 
-        #libraryLogEditPage .wf small {
-            color: var(--muted, #667085);
-            font-size: .8rem;
+        .logs-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
-    /* Book picker layout */
-    #libraryLogEditPage .picker {
+    .logs-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .logs-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none !important;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .logs-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none !important;
+        }
+
+    .logs-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .logs-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+
+    .logs-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+
+    .logs-card-header {
+        padding: 14px 16px;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        font-weight: 600;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .logs-card-body {
+        padding: 1.25rem;
+    }
+
+    .logs-form-label {
+        font-size: .8rem;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: .25rem;
+    }
+
+    .logs-form-control {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: .85rem;
+        transition: border-color .15s;
+    }
+
+        .logs-form-control:focus {
+            outline: none;
+            border-color: #000080;
+        }
+
+    .logs-form-select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: .85rem;
+        background-color: #fff;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: .74rem;
+        font-weight: 500;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-approved {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-returned {
+        background: #e0f2fe;
+        color: #0369a1;
+    }
+
+    .logs-picker-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 12px;
+        gap: 16px;
+        margin-top: 1rem;
     }
 
     @@media (max-width: 768px) {
-        #libraryLogEditPage .picker {
+        .logs-picker-grid {
             grid-template-columns: 1fr;
         }
     }
 
-    #libraryLogEditPage .list,
-    #libraryLogEditPage .chosen {
-        border: 1px solid rgba(1,0,140,.12);
+    .logs-picker-col {
+        border: 1px solid #e5e7eb;
         border-radius: 12px;
-        min-height: 240px;
-        background: #ffffff;
-        display: flex;
-        flex-direction: column;
+        overflow: hidden;
+        background: #fff;
     }
 
-    #libraryLogEditPage .list-head {
+    .logs-picker-header {
+        padding: 10px 12px;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        font-size: .8rem;
+        font-weight: 600;
+        color: #374151;
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 10px 12px;
-        border-bottom: 1px solid rgba(1,0,140,.12);
-        background: linear-gradient(180deg, var(--brand-50, #e6e6ff), #ffffff);
-        position: sticky;
-        top: 0;
-        z-index: 2;
     }
 
-        #libraryLogEditPage .list-head .form-control {
-            font-size: .85rem;
-        }
-
-    #libraryLogEditPage .list-body {
-        padding: 8px 12px 10px;
-        max-height: 340px;
-        overflow: auto;
-        flex: 1;
+    .logs-picker-search {
+        padding: 8px;
+        border-bottom: 1px solid #e5e7eb;
     }
 
-    #libraryLogEditPage .book-item {
+    .logs-picker-search-input {
+        width: 100%;
+        padding: 6px 10px;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        font-size: .8rem;
+    }
+
+    .logs-picker-body {
+        padding: 12px;
+        max-height: 320px;
+        overflow-y: auto;
+    }
+
+    .logs-book-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 8px 10px;
-        border: 1px solid rgba(1,0,140,.08);
-        border-radius: 10px;
-        margin-bottom: 8px;
-        background: linear-gradient(180deg, #ffffff, #f8f9ff);
-        font-size: .9rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        margin-bottom: 6px;
+        background: #fff;
+        transition: background .15s;
     }
 
-        #libraryLogEditPage .book-item .title {
-            font-weight: 600;
-            color: var(--text, #0f0f2e);
-            font-size: 16px;
+        .logs-book-item:hover {
+            background: #f9fafb;
         }
 
-        #libraryLogEditPage .book-item .pick {
-            border: 1px solid #dfe3ff;
-            background: #eef1ff;
-            border-radius: 999px;
-            padding: 4px 10px;
-            font-weight: 600;
-            font-size: .8rem;
-            cursor: pointer;
-            white-space: nowrap;
+    .logs-book-title {
+        font-size: .85rem;
+        font-weight: 500;
+        color: #111827;
+    }
+
+    .logs-pick-btn {
+        padding: 4px 10px;
+        font-size: .7rem;
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        cursor: pointer;
+    }
+
+        .logs-pick-btn:hover {
+            background: #000080;
+            color: #fff;
+            border-color: #000080;
         }
 
-            #libraryLogEditPage .book-item .pick:hover {
-                background: #dde3ff;
-            }
-
-    #libraryLogEditPage .chip {
+    .logs-chip {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        border: 1px solid rgba(1,0,140,.12);
-        border-radius: 999px;
+        gap: 6px;
         padding: 6px 10px;
-        margin: 6px 6px 0 0;
-        background: linear-gradient(180deg, #ffffff, #f7f8ff);
+        background: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        font-size: .8rem;
+        margin: 0 6px 6px 0;
+    }
+
+    .logs-chip-remove {
+        background: none;
+        border: none;
+        color: #6b7280;
+        cursor: pointer;
+        padding: 2px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        .logs-chip-remove:hover {
+            color: #dc2626;
+        }
+
+    .logs-muted {
+        color: #6b7280;
         font-size: .85rem;
     }
 
-        #libraryLogEditPage .chip .close {
-            border: 0;
-            background: transparent;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .logs-hint {
+        font-size: .8rem;
+        color: #6b7280;
+        margin-top: .5rem;
+    }
 
-            #libraryLogEditPage .chip .close i {
-                font-size: .8rem;
-            }
+    a, a:hover {
+        text-decoration: none !important;
+    }
+
+    .btn, .btn:hover {
+        text-decoration: none !important;
+    }
 </style>
 
-<div id="libraryLogEditPage">
-    <h2 class="page-title">
-        <span class="logo-dot"></span>
-        Edit Library Log
-    </h2>
+<div class="logs-page">
+    <div class="logs-page-title">Edit Library Log</div>
 
-    <form asp-action="Edit"
-          asp-route-id="@Model.LogId"
-          method="post"
-          class="card-glass glas-all-style"
-          id="logForm">
+    <form asp-action="Edit" asp-route-id="@Model.LogId" method="post" id="logForm">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="LogId" />
 
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <div>
+        <div class="logs-card">
+            <div class="logs-card-header">
                 <i class="bi bi-pencil-square"></i> Log Information
-            </div>
-            <div class="wf">
-                <span class="status-pill @StatusBadge(Model.Status ?? "Pending")">
-                    @Model.Status
-                </span>
-                <small>
-                    <i class="bi bi-check2"></i>
-                    Approved: @fmt(Model.ApprovedUtc)
-                </small>
-                <small>
-                    <i class="bi bi-arrow-90deg-left"></i>
-                    Returned: @fmt(Model.ReturnedUtc)
-                </small>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <span class="status-badge @StatusBadge(Model.Status ?? "Pending")">
+                        <i class="bi @(Model.Status == "Approved" ? "bi-check-circle-fill" : Model.Status == "Returned" ? "bi-arrow-return-left" : "bi-hourglass-split")"></i>
+                        @Model.Status
+                    </span>
+                    <span class="logs-muted">
+                        <i class="bi bi-check2"></i> Approved: @fmt(Model.ApprovedUtc)
+                    </span>
+                    <span class="logs-muted">
+                        <i class="bi bi-arrow-return-left"></i> Returned: @fmt(Model.ReturnedUtc)
+                    </span>
 
-                @if ((Model.Status ?? "Pending") == "Pending")
-                {
-                    <button type="submit"
-                            class="btn btn-sm btn-success"
-                            formnovalidate
-                            formaction="@Url.Action("Approve", "LibraryLogs", new { id = Model.LogId })">
-                        <i class="bi bi-check2-circle"></i> Approve
-                    </button>
-                }
-            </div>
-        </div>
-
-        <div class="card-body">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
-
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label asp-for="StudentName" class="form-label"></label>
-                    <input asp-for="StudentName" class="form-control" />
-                    <span asp-validation-for="StudentName" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-3">
-                    <label asp-for="PhoneNumber" class="form-label"></label>
-                    <input asp-for="PhoneNumber" class="form-control" />
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-3">
-                    <label asp-for="Gender" class="form-label"></label>
-                    <select asp-for="Gender" class="form-select">
-                        <option value="">-- Select Gender --</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                        <option>Other</option>
-                    </select>
-                    <span asp-validation-for="Gender" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-3">
-                    <label asp-for="VisitDate" class="form-label"></label>
-                    <input type="text"
-                           class="form-control"
-                           value="@Model.VisitDate.ToString("yyyy-MM-dd")"
-                           readonly />
-                    <input type="hidden" asp-for="VisitDate" />
-                    <span asp-validation-for="VisitDate" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-12">
-                    <label asp-for="Purpose" class="form-label"></label>
-                    <input asp-for="Purpose" class="form-control" />
-                    <span asp-validation-for="Purpose" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-12">
-                    <label asp-for="Notes" class="form-label"></label>
-                    <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
-                    <span asp-validation-for="Notes" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Created On (UTC)</label>
-                    <input class="form-control"
-                           value="@Model.CreatedUtc.ToString("yyyy-MM-dd HH:mm")"
-                           readonly
-                           disabled />
-                    <input type="hidden" asp-for="CreatedUtc" />
-                </div>
-
-                <input type="hidden" asp-for="Status" />
-                <input type="hidden" asp-for="ApprovedUtc" />
-                <input type="hidden" asp-for="ReturnedUtc" />
-            </div>
-        </div>
-
-        <div class="card-header">
-            <i class="bi bi-bookshelf"></i> Books (Pick multiple without rows)
-        </div>
-
-        <div class="card-body">
-            <div class="picker">
-                <div class="list">
-                    <div class="list-head">
-                        <i class="bi bi-search"></i>
-                        <input id="q"
-                               class="form-control form-control-sm"
-                               placeholder="Search title or barcode..." />
-                    </div>
-                    <div class="list-body" id="listBody">
-                        @foreach (var opt in bookList)
-                        {
-                            <div class="book-item" data-id="@opt.Value" data-text="@opt.Text">
-                                <div class="title">@opt.Text</div>
-                                <button type="button" class="pick" data-id="@opt.Value">Pick</button>
-                            </div>
-                        }
-                    </div>
-                </div>
-
-                <div class="chosen">
-                    <div class="list-head">
-                        <i class="bi bi-check2-circle"></i> Selected
-                    </div>
-                    <div class="list-body" id="chosenBody">
-                        <!-- built by JS -->
-                    </div>
+                    @if ((Model.Status ?? "Pending") == "Pending")
+                    {
+                        <button type="submit"
+                                class="logs-btn status-approved"
+                                formnovalidate
+                                formaction="@Url.Action("Approve", "LibraryLogs", new { id = Model.LogId })">
+                            <i class="bi bi-check2-circle"></i> Approve
+                        </button>
+                    }
                 </div>
             </div>
 
-            <div id="hiddenInputs"></div>
+            <div class="logs-card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="logs-form-label">Student Name</div>
+                        <input asp-for="StudentName" class="logs-form-control" />
+                        <span asp-validation-for="StudentName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="logs-form-label">Phone Number</div>
+                        <input asp-for="PhoneNumber" class="logs-form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="logs-form-label">Gender</div>
+                        <select asp-for="Gender" class="logs-form-select">
+                            <option value="">-- Select Gender --</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="logs-form-label">Visit Date</div>
+                        <input type="text" class="logs-form-control" value="@Model.VisitDate.ToString("yyyy-MM-dd")" readonly />
+                        <input type="hidden" asp-for="VisitDate" />
+                        <span asp-validation-for="VisitDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="logs-form-label">Purpose</div>
+                        <input asp-for="Purpose" class="logs-form-control" />
+                        <span asp-validation-for="Purpose" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="logs-form-label">Notes</div>
+                        <textarea asp-for="Notes" class="logs-form-control" rows="3"></textarea>
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="logs-form-label">Created On (UTC)</div>
+                        <input class="logs-form-control" value="@Model.CreatedUtc.ToString("yyyy-MM-dd HH:mm")" readonly disabled />
+                        <input type="hidden" asp-for="CreatedUtc" />
+                    </div>
+
+                    <input type="hidden" asp-for="Status" />
+                    <input type="hidden" asp-for="ApprovedUtc" />
+                    <input type="hidden" asp-for="ReturnedUtc" />
+                </div>
+            </div>
         </div>
 
-        <div class="card-body d-flex gap-2 justify-content-end">
-            <a asp-action="Index" class="btn-glass btn-outline">
+        <div class="logs-card">
+            <div class="logs-card-header">
+                <i class="bi bi-bookshelf"></i> Books (Pick multiple without rows)
+            </div>
+
+            <div class="logs-card-body">
+                <div class="logs-picker-grid">
+                    <!-- Available books -->
+                    <div class="logs-picker-col">
+                        <div class="logs-picker-header">
+                            <i class="bi bi-search"></i> Available Books
+                        </div>
+                        <div class="logs-picker-search">
+                            <input id="q" class="logs-picker-search-input" placeholder="Search title or barcode..." />
+                        </div>
+                        <div class="logs-picker-body" id="listBody">
+                            @foreach (var opt in bookList)
+                            {
+                                <div class="logs-book-item" data-id="@opt.Value" data-text="@opt.Text">
+                                    <span class="logs-book-title">@opt.Text</span>
+                                    <button type="button" class="logs-pick-btn" data-id="@opt.Value">Pick</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Selected books -->
+                    <div class="logs-picker-col">
+                        <div class="logs-picker-header">
+                            <i class="bi bi-check2-circle"></i> Selected Books
+                        </div>
+                        <div class="logs-picker-body" id="chosenBody">
+                            <!-- populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="hiddenInputs"></div>
+
+                <div class="logs-hint">
+                    <i class="bi bi-info-circle"></i>
+                    Select books from the left to add them to Selected. Click × on a chip to remove.
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 justify-content-end mt-3">
+            <a asp-action="Index" class="logs-btn">
                 <i class="bi bi-arrow-left"></i> Back
             </a>
-            <button type="submit" class="btn-glass btn-brand">
+            <button type="submit" class="logs-btn logs-btn-primary">
                 <i class="bi bi-check2-circle"></i> Save
             </button>
         </div>
@@ -332,30 +461,30 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var listBody = document.getElementById('listBody');
-            var chosenBody = document.getElementById('chosenBody');
-            var hiddenInputs = document.getElementById('hiddenInputs');
-            var q = document.getElementById('q');
+        document.addEventListener('DOMContentLoaded', function() {
+            const listBody = document.getElementById('listBody');
+            const chosenBody = document.getElementById('chosenBody');
+            const hiddenInputs = document.getElementById('hiddenInputs');
+            const searchInput = document.getElementById('q');
 
-            // Selected IDs (from model)
-            var SELECTED = new Set(
+            // Selected IDs from model
+            const SELECTED = new Set(
                 (@Html.Raw(JsonSerializer.Serialize(Model.BookIds ?? new List<int>())))
-                    .map(function (id) { return String(id); })
+                    .map(id => String(id))
             );
 
-            var BOOK_MAP = @Html.Raw(JsonSerializer.Serialize(bookMap));
+            const BOOK_MAP = @Html.Raw(JsonSerializer.Serialize(bookMap));
 
-            function emptyHint() {
-                if (chosenBody.querySelectorAll('.chip').length === 0) {
-                    chosenBody.innerHTML = '<div class="muted">None selected.</div>';
+            function renderEmptyHint() {
+                if (chosenBody.querySelectorAll('.logs-chip').length === 0) {
+                    chosenBody.innerHTML = '<div class="logs-muted">None selected.</div>';
                 }
             }
 
             function rebuildHidden() {
                 hiddenInputs.innerHTML = '';
-                Array.from(SELECTED).forEach(function (id, idx) {
-                    var input = document.createElement('input');
+                Array.from(SELECTED).forEach((id, idx) => {
+                    const input = document.createElement('input');
                     input.type = 'hidden';
                     input.name = 'BookIds[' + idx + ']';
                     input.value = id;
@@ -364,42 +493,42 @@
             }
 
             function renderChip(id, text) {
-                var chip = document.createElement('span');
-                chip.className = 'chip';
+                const chip = document.createElement('span');
+                chip.className = 'logs-chip';
                 chip.dataset.id = id;
-                chip.innerHTML =
-                    '<span>' + (text || BOOK_MAP[id] || id) + '</span>' +
-                    '<button type="button" class="close" title="Remove">' +
-                    '  <i class="bi bi-x-lg"></i>' +
-                    '</button>';
+                chip.innerHTML = `
+                    <span>${text || BOOK_MAP[id] || id}</span>
+                    <button type="button" class="logs-chip-remove" title="Remove">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                `;
 
-                chip.querySelector('.close').addEventListener('click', function (ev) {
-                    ev.preventDefault();
+                chip.querySelector('.logs-chip-remove').addEventListener('click', () => {
                     SELECTED.delete(id);
-                    var row = listBody.querySelector('.book-item[data-id="' + id + '"]');
+                    const row = listBody.querySelector(`.logs-book-item[data-id="${id}"]`);
                     if (row) row.style.display = '';
                     chip.remove();
                     rebuildHidden();
-                    emptyHint();
+                    renderEmptyHint();
                 });
 
                 chosenBody.appendChild(chip);
             }
 
             function bindPickButtons() {
-                listBody.querySelectorAll('.pick').forEach(function (btn) {
-                    btn.addEventListener('click', function (e) {
+                listBody.querySelectorAll('.logs-pick-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
                         e.preventDefault();
-                        var id = String(e.currentTarget.getAttribute('data-id'));
+                        const id = String(e.currentTarget.getAttribute('data-id'));
                         if (SELECTED.has(id)) return;
 
-                        var row = e.currentTarget.closest('.book-item');
-                        var text = (row && row.getAttribute('data-text')) || BOOK_MAP[id] || id;
+                        const row = e.currentTarget.closest('.logs-book-item');
+                        const text = row?.getAttribute('data-text') || BOOK_MAP[id] || id;
 
                         SELECTED.add(id);
                         if (row) row.style.display = 'none';
 
-                        if (chosenBody.querySelector('.muted')) {
+                        if (chosenBody.querySelector('.logs-muted')) {
                             chosenBody.innerHTML = '';
                         }
 
@@ -409,37 +538,37 @@
                 });
             }
 
-            q.addEventListener('input', function () {
-                var kw = q.value.toLowerCase().trim();
-                listBody.querySelectorAll('.book-item').forEach(function (it) {
-                    var id = String(it.getAttribute('data-id'));
+            // Search filter
+            searchInput.addEventListener('input', function() {
+                const kw = this.value.toLowerCase().trim();
+                listBody.querySelectorAll('.logs-book-item').forEach(item => {
+                    const id = String(item.getAttribute('data-id'));
                     if (SELECTED.has(id)) {
-                        it.style.display = 'none';
+                        item.style.display = 'none';
                         return;
                     }
-                    var txt = (it.getAttribute('data-text') || '').toLowerCase();
-                    it.style.display = txt.indexOf(kw) !== -1 ? '' : 'none';
+                    const text = (item.getAttribute('data-text') || '').toLowerCase();
+                    item.style.display = text.includes(kw) ? '' : 'none';
                 });
             });
 
-            // init
+            // Initialize
             bindPickButtons();
 
-            (function preload() {
-                if (SELECTED.size === 0) {
-                    emptyHint();
-                    rebuildHidden();
-                    return;
-                }
+            // Preload selected
+            if (SELECTED.size === 0) {
+                renderEmptyHint();
+                rebuildHidden();
+            } else {
                 chosenBody.innerHTML = '';
-                SELECTED.forEach(function (id) {
-                    var row = listBody.querySelector('.book-item[data-id="' + id + '"]');
+                SELECTED.forEach(id => {
+                    const row = listBody.querySelector(`.logs-book-item[data-id="${id}"]`);
                     if (row) row.style.display = 'none';
-                    var text = (row && row.getAttribute('data-text')) || BOOK_MAP[id] || id;
+                    const text = row?.getAttribute('data-text') || BOOK_MAP[id] || id;
                     renderChip(id, text);
                 });
                 rebuildHidden();
-            })();
+            }
         });
     </script>
 }

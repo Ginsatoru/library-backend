@@ -5,13 +5,12 @@
     var totalLoans = Model.BookLoans?.Count ?? 0;
     var activeLoans = Model.BookLoans?.Count(b => b != null && !b.IsReturned) ?? 0;
     var hasActive = activeLoans > 0;
+    var tgConnected = !string.IsNullOrWhiteSpace(Model.TelegramChatId);
 }
 
 <link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
 
 <style>
-    /* ===== Delete member page – glass + blur using global theme ===== */
-
     .delete-page-header {
         display: flex;
         justify-content: space-between;
@@ -38,7 +37,7 @@
             position: absolute;
             inset: 0;
             pointer-events: none;
-            background: radial-gradient(circle at 0 0, rgba(254, 242, 242, 0.85), transparent 55%), radial-gradient(circle at 110% 0, rgba(254, 226, 226, 0.75), transparent 60%);
+            background: radial-gradient(circle at 0 0, rgba(254,242,242,0.85), transparent 55%), radial-gradient(circle at 110% 0, rgba(254,226,226,0.75), transparent 60%);
             opacity: .9;
         }
 
@@ -53,7 +52,7 @@
         object-fit: cover;
         border-radius: 50%;
         border: 3px solid var(--brand-secondary);
-        box-shadow: 0 10px 26px rgba(37, 99, 235, 0.55);
+        box-shadow: 0 10px 26px rgba(37,99,235,0.55);
         margin-bottom: 1.2rem;
         background: #e0f2fe;
     }
@@ -66,33 +65,51 @@
         border-radius: 999px;
         font-weight: 600;
         font-size: .9rem;
-        background: rgba(219, 234, 254, 0.95);
+        background: rgba(219,234,254,0.95);
         color: #1e3a8a;
-        border: 1px solid rgba(191, 219, 254, 0.9);
-        box-shadow: 0 6px 14px rgba(148, 163, 184, 0.35);
+        border: 1px solid rgba(191,219,254,0.9);
+        box-shadow: 0 6px 14px rgba(148,163,184,0.35);
     }
 
         .stat-pill.danger {
-            background: rgba(254, 242, 242, 0.95);
+            background: rgba(254,242,242,0.95);
             color: #b91c1c;
             border-color: #fecaca;
         }
 
-    .delete-warning-icon {
-        font-size: 1.1rem;
-        margin-right: .4rem;
+    .tg-badge-connected {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        color: #166534;
+        font-size: .82rem;
+        font-weight: 500;
+    }
+
+    .tg-badge-disconnected {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        color: #6b7280;
+        font-size: .82rem;
     }
 </style>
 
 <div class="dashboard-shell">
     <div class="wrap">
-        <!-- Header -->
         <div class="delete-page-header">
             <h2 class="page-title mb-0">
                 <span class="logo-dot"></span>
                 Delete Member
             </h2>
-
             <div class="d-flex gap-2 flex-wrap">
                 <a asp-action="Index" class="btn btn-glass glass-surface-pill">
                     <i class="fa-solid fa-arrow-left"></i> Back to List
@@ -100,7 +117,6 @@
             </div>
         </div>
 
-        <!-- Glass delete card -->
         <div class="card delete-member-card">
             <div class="card-body p-4">
                 <h3 class="fw-bold text-center mb-2" style="color:#b91c1c;">
@@ -110,7 +126,7 @@
                 @if (hasActive)
                 {
                     <div class="alert alert-danger d-flex align-items-start glass-surface mt-3" role="alert" style="color:black;">
-                        <i class="fa-solid fa-circle-exclamation delete-warning-icon mt-1"></i>
+                        <i class="fa-solid fa-circle-exclamation mt-1 me-2"></i>
                         <div>
                             <strong>Cannot delete while there are active (unreturned) loans.</strong><br />
                             Please mark all borrowed books as returned before deleting this member.
@@ -124,17 +140,13 @@
                     </p>
                 }
 
-                <!-- Member summary -->
                 <div class="text-center mb-3">
                     <img src="@(string.IsNullOrWhiteSpace(Model.ProfilePicturePath)
-                                             ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
-                                             : Model.ProfilePicturePath)"
-                         class="avatar-3d"
-                         alt="Profile" />
+                                                 ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
+                                                 : Model.ProfilePicturePath)"
+                         class="avatar-3d" alt="Profile" />
 
-                    <h5 class="mt-2 fw-bold" style="color:#0f172a;">
-                        @Model.FullName
-                    </h5>
+                    <h5 class="mt-2 fw-bold" style="color:#0f172a;">@Model.FullName</h5>
 
                     <span class="badge bg-info text-dark">
                         <i class="fa-solid fa-id-card-clip"></i> @Model.MemberType
@@ -152,94 +164,84 @@
 
                 <hr class="my-3" />
 
-                <!-- Details -->
                 <dl class="row small mb-2">
-                    <dt class="col-5">
-                        <i class="fa-solid fa-envelope"></i> Email
-                    </dt>
+                    <dt class="col-5"><i class="fa-solid fa-envelope"></i> Email</dt>
                     <dd class="col-7">@Model.Email</dd>
 
-                    <dt class="col-5">
-                        <i class="fa-solid fa-phone"></i> Phone
-                    </dt>
+                    <dt class="col-5"><i class="fa-solid fa-phone"></i> Phone</dt>
                     <dd class="col-7">@Model.Phone</dd>
 
-                    <dt class="col-5">
-                        <i class="fa-solid fa-venus-mars"></i> Gender
-                    </dt>
+                    <dt class="col-5"><i class="fa-solid fa-venus-mars"></i> Gender</dt>
                     <dd class="col-7">@Model.Gender</dd>
 
-                    <dt class="col-5">
-                        <i class="fa-solid fa-location-dot"></i> Address
-                    </dt>
+                    <dt class="col-5"><i class="fa-solid fa-location-dot"></i> Address</dt>
                     <dd class="col-7">@Model.Address</dd>
 
-                    <dt class="col-5">
-                        <i class="fa-solid fa-id-card"></i> Library ID
-                    </dt>
+                    <dt class="col-5"><i class="fa-solid fa-building-columns"></i> Faculty</dt>
+                    <dd class="col-7">@(Model.Faculty ?? "—")</dd>
+
+                    <dt class="col-5"><i class="fa-solid fa-book"></i> Subject</dt>
+                    <dd class="col-7">@(Model.Subject ?? "—")</dd>
+
+                    <dt class="col-5"><i class="fa-solid fa-id-card"></i> Library ID</dt>
                     <dd class="col-7">@Model.DICardNumber</dd>
 
-                    <dt class="col-5">
-                        <i class="fa-brands fa-telegram"></i> Telegram Chat ID
-                    </dt>
-                    <dd class="col-7">@Model.TelegramChatId</dd>
-
-                    <dt class="col-5">
-                        <i class="fa-brands fa-telegram"></i> Telegram Username
-                    </dt>
-                    <dd class="col-7">@Model.TelegramUsername</dd>
-
-                    <dt class="col-5">
-                        <i class="fa-solid fa-calendar-plus"></i> Join Date
-                    </dt>
-                    <dd class="col-7">@Model.JoinDate.ToString("yyyy-MM-dd")</dd>
-
-                    <dt class="col-5">
-                        <i class="fa-solid fa-clock"></i> Modified
-                    </dt>
-                    <dd class="col-7">@Model.Modified.ToString("yyyy-MM-dd HH:mm")</dd>
-
-                    <dt class="col-5">
-                        <i class="fa-solid fa-user-check"></i> Active
-                    </dt>
+                    <dt class="col-5"><i class="fa-brands fa-telegram"></i> Telegram</dt>
                     <dd class="col-7">
-                        @if (Model.IsActive)
+                        @if (tgConnected)
                         {
-                            <span class="badge bg-success">
-                                <i class="fa-solid fa-circle-check"></i> Active
+                            <span class="tg-badge-connected">
+                                <i class="fa-brands fa-telegram"></i>
+                                Connected
+                                @if (!string.IsNullOrWhiteSpace(Model.TelegramUsername))
+                                {
+                                    <span>— @@@Model.TelegramUsername</span>
+                                }
                             </span>
                         }
                         else
                         {
-                            <span class="badge bg-secondary">
-                                <i class="fa-solid fa-circle-xmark"></i> Inactive
+                            <span class="tg-badge-disconnected">
+                                <i class="fa-brands fa-telegram"></i>
+                                Not connected
                             </span>
+                        }
+                    </dd>
+
+                    <dt class="col-5"><i class="fa-solid fa-calendar-plus"></i> Join Date</dt>
+                    <dd class="col-7">@Model.JoinDate.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-5"><i class="fa-solid fa-clock"></i> Modified</dt>
+                    <dd class="col-7">@Model.Modified.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                    <dt class="col-5"><i class="fa-solid fa-user-check"></i> Active</dt>
+                    <dd class="col-7">
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success"><i class="fa-solid fa-circle-check"></i> Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary"><i class="fa-solid fa-circle-xmark"></i> Inactive</span>
                         }
                     </dd>
 
                     @if (!string.IsNullOrWhiteSpace(Model.Notes))
                     {
-                        <dt class="col-5">
-                            <i class="fa-solid fa-note-sticky"></i> Notes
-                        </dt>
+                        <dt class="col-5"><i class="fa-solid fa-note-sticky"></i> Notes</dt>
                         <dd class="col-7">@Model.Notes</dd>
                     }
 
                     @if (Model.Users != null)
                     {
-                        <dt class="col-5">
-                            <i class="fa-solid fa-user-tie"></i> Linked User
-                        </dt>
+                        <dt class="col-5"><i class="fa-solid fa-user-tie"></i> Linked User</dt>
                         <dd class="col-7">@Model.Users.UserName</dd>
                     }
 
-                    <dt class="col-5">
-                        <i class="fa-solid fa-user"></i> Created By
-                    </dt>
+                    <dt class="col-5"><i class="fa-solid fa-user"></i> Created By</dt>
                     <dd class="col-7">@Model.CreatedBy</dd>
                 </dl>
 
-                <!-- Delete form -->
                 <form asp-action="Delete" method="post">
                     @Html.AntiForgeryToken()
                     <input type="hidden" asp-for="MemberId" />
@@ -247,18 +249,16 @@
                     <div class="text-center mt-3">
                         <button type="submit"
                                 class="btn btn-danger px-4 me-2 rounded-pill fw-bold"
-                        @(hasActive ? "disabled" : "")
+                                @(hasActive ? "disabled" : "")
                                 title="@(hasActive ? "Cannot delete: active loans exist" : "Delete member")">
                             <i class="fa-solid fa-trash"></i> Delete
                         </button>
-
                         <a asp-action="Index" class="btn btn-glass glass-surface-pill ms-2 px-4 rounded-pill">
                             <i class="fa-solid fa-arrow-left"></i> Back to List
                         </a>
                     </div>
                 </form>
 
-                @* Optional: show a tiny table of up to 3 recent loans *@
                 @if ((Model.BookLoans?.Any() ?? false))
                 {
                     <hr />
@@ -276,9 +276,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var l in Model.BookLoans
-                               .OrderByDescending(x => x.LoanDate)
-                               .Take(3))
+                                @foreach (var l in Model.BookLoans.OrderByDescending(x => x.LoanDate).Take(3))
                                 {
                                     <tr>
                                         <td>@l.LoanId</td>
