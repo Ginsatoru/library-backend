@@ -618,7 +618,17 @@
 
                     var visible = true;
 
-                    if (entityVal !== 'All' && rowEntity !== entityVal)         visible = false;
+                            if (entityVal !== 'All') {
+            if (entityVal === 'Return') {
+                if (rowAction !== 'ReturnHome' && rowAction !== 'ReturnLibrary') visible = false;
+            } else if (entityVal === 'Loan') {
+                if (rowEntity !== 'Loan') visible = false;
+            } else if (entityVal === 'LibraryLog') {
+                if (rowEntity !== 'LibraryLog') visible = false;
+            } else {
+                if (rowEntity !== entityVal) visible = false;
+            }
+        }
                     if (visible && actVal !== 'All' && rowAction !== actVal)    visible = false;
                     if (visible && locVal !== 'All' && rowLoc !== locVal)       visible = false;
                     if (visible && fromDate && rowDate && rowDate < fromDate)   visible = false;

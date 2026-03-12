@@ -4,184 +4,442 @@
     ViewData["Title"] = "Create Member";
 }
 
-<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-    .create-page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: .75rem;
-        margin-bottom: 1rem;
-        flex-wrap: wrap;
+    .mem-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-    .create-member-card {
-        margin: 0 auto;
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--glass-border);
-        background: var(--glass-bg-soft);
-        box-shadow: var(--glass-shadow);
-        backdrop-filter: blur(24px) brightness(1.15);
-        -webkit-backdrop-filter: blur(24px) brightness(1.15);
-        position: relative;
+    .mem-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .mem-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .mem-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .mem-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .mem-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+    .mem-btn-primary {
+        background: #000080;
+        color: #fff;
+        border-color: #000080;
+    }
+
+        .mem-btn-primary:hover {
+            background: #00006a;
+            color: #fff;
+            border-color: #00006a;
+        }
+
+    .mem-form-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
         overflow: hidden;
     }
 
-        .create-member-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            background: radial-gradient(circle at 0 0, rgba(219,234,254,0.85), transparent 55%), radial-gradient(circle at 110% 0, rgba(191,219,254,0.75), transparent 60%);
-            opacity: .7;
+    .mem-form-card-header {
+        padding: 16px 24px;
+        border-bottom: 1px solid #f3f4f6;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f9fafb;
+    }
+
+        .mem-form-card-header h5 {
+            margin: 0;
+            font-size: .95rem;
+            font-weight: 700;
+            color: #111827;
         }
 
-        .create-member-card .card-body {
-            position: relative;
-            z-index: 1;
-        }
+    .mem-form-body {
+        padding: 24px;
+    }
 
-    .avatar-3d {
-        width: 88px;
-        height: 88px;
-        object-fit: cover;
+    .mem-avatar-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0 8px;
+        border-bottom: 1px solid #f3f4f6;
+        margin-bottom: 24px;
+    }
+
+    .mem-avatar {
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
-        border: 3px solid var(--brand-secondary);
-        background: #e0f2fe;
-        box-shadow: 0 8px 22px rgba(37,99,235,0.5);
+        object-fit: cover;
+        border: 2px solid #e5e7eb;
+        background: #f3f4f6;
+        margin-bottom: 10px;
     }
 
-    .filename-label {
-        font-size: 0.95em;
-        color: var(--muted);
-        margin-top: 0.35rem;
+    .mem-avatar-actions {
+        display: flex;
+        gap: 6px;
     }
 
-    .help-hint {
-        font-size: .86rem;
-        color: var(--muted);
+    .mem-label {
+        display: block;
+        font-size: .78rem;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        margin-bottom: 5px;
     }
 
-    .tg-status-box {
+    .mem-input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: .85rem;
+        color: #111827;
+        background: #fff;
+        font-family: 'Inter', sans-serif;
+        transition: border-color .15s;
+        outline: none;
+    }
+
+        .mem-input:focus {
+            border-color: #000080;
+        }
+
+        .mem-input::placeholder {
+            color: #9ca3af;
+        }
+
+    select.mem-input {
+        appearance: none;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C%2Fsvg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 28px;
+    }
+
+    textarea.mem-input {
+        resize: vertical;
+        min-height: 70px;
+    }
+
+    .mem-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    .mem-row-full {
+        grid-template-columns: 1fr;
+    }
+
+    @@media (max-width: 640px) {
+        .mem-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .mem-validation {
+        font-size: .75rem;
+        color: #dc2626;
+        margin-top: 3px;
+        display: block;
+    }
+
+    .mem-section-divider {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 10px 14px;
-        border-radius: 10px;
-        background: #f9fafb;
+        margin: 20px 0 16px;
+        color: #6b7280;
+        font-size: .72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+    }
+
+        .mem-section-divider::before, .mem-section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #f3f4f6;
+        }
+
+    .mem-check-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
         border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #f9fafb;
+        cursor: pointer;
+    }
+
+        .mem-check-row input[type=checkbox] {
+            width: 16px;
+            height: 16px;
+            accent-color: #000080;
+            cursor: pointer;
+        }
+
+    .mem-check-label {
         font-size: .85rem;
+        font-weight: 500;
+        color: #374151;
+        cursor: pointer;
+    }
+
+    .mem-tg-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #f9fafb;
+        font-size: .82rem;
         color: #6b7280;
     }
 
-        .tg-status-box i {
-            font-size: 1rem;
+    .mem-pw-section {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 16px 20px;
+        background: #f9fafb;
+        margin-bottom: 20px;
+    }
+
+    .mem-pw-section-title {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: .82rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 12px;
+    }
+
+    .mem-input-group {
+        display: flex;
+    }
+
+        .mem-input-group .mem-input {
+            border-radius: 8px 0 0 8px;
+            flex: 1;
+        }
+
+    .mem-input-toggle {
+        padding: 8px 12px;
+        border: 1px solid #e5e7eb;
+        border-left: none;
+        border-radius: 0 8px 8px 0;
+        background: #fff;
+        cursor: pointer;
+        color: #6b7280;
+        font-size: .8rem;
+        transition: background .15s;
+    }
+
+        .mem-input-toggle:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+    .mem-pw-hint {
+        font-size: .74rem;
+        color: #6b7280;
+        margin-top: 4px;
+    }
+
+    .mem-form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        padding-top: 20px;
+        border-top: 1px solid #f3f4f6;
+        margin-top: 4px;
+    }
+
+    .mem-btn-success {
+        background: #166534;
+        color: #fff;
+        border-color: #166534;
+    }
+
+        .mem-btn-success:hover {
+            background: #14532d;
+            color: #fff;
+            border-color: #14532d;
+        }
+
+    .validation-summary-errors {
+        font-size: .82rem;
+        color: #dc2626;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 10px 14px;
+        margin-bottom: 16px;
+    }
+
+        .validation-summary-errors ul {
+            margin: 0;
+            padding-left: 18px;
         }
 </style>
 
-<div class="wrap">
-    <div class="create-page-header">
-        <h2 class="page-title mb-0">
-            <span class="logo-dot"></span>
-            Create Member
-        </h2>
-        <div class="d-flex gap-2 flex-wrap">
-            <a asp-action="Index" class="btn btn-glass glass-surface-pill">
-                <i class="fa-solid fa-arrow-left"></i> Back to List
-            </a>
-        </div>
+<div class="mem-page">
+
+    <div class="mem-page-title">Create Member</div>
+
+    <div class="mem-toolbar">
+        <a class="mem-btn" asp-action="Index"><i class="bi bi-arrow-left"></i> Back to List</a>
     </div>
 
-    <div class="card create-member-card mt-5">
-        <div class="card-body p-4">
-            <h4 class="fw-bold text-center mb-3" style="color:#020617;">
-                <i class="fa-solid fa-user-plus"></i> Create New Member
-            </h4>
+    <div class="mem-form-card">
+        <div class="mem-form-card-header">
+            <i class="bi bi-person-plus" style="color:#000080;"></i>
+            <h5>Create New Member</h5>
+        </div>
+        <div class="mem-form-body">
 
             <form asp-action="Create" enctype="multipart/form-data" autocomplete="off" method="post">
                 @Html.AntiForgeryToken()
 
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-                <!-- Avatar (optional) -->
-                <div class="text-center mb-3">
+                <!-- Avatar -->
+                <div class="mem-avatar-wrap">
                     <img id="profilePreview"
                          src="https://ui-avatars.com/api/?name=Member&background=60a5fa&color=fff&size=128"
-                         class="avatar-3d mb-2"
-                         alt="Preview" />
-                    <div class="d-flex justify-content-center flex-wrap gap-2">
-                        <label class="btn btn-glass btn-sm" style="font-size:0.92em;">
-                            <i class="fa fa-upload"></i> Upload/Take Photo
-                            <span class="text-muted">(optional)</span>
+                         class="mem-avatar" alt="Preview" />
+                    <div class="mem-avatar-actions">
+                        <label class="mem-btn" style="cursor:pointer;">
+                            <i class="bi bi-upload"></i> Upload Photo
+                            <span style="color:#9ca3af;font-size:.75rem;">(optional)</span>
                             <input type="file" name="ProfilePicture" accept="image/*" capture="environment" hidden onchange="showPreview(event);" />
                         </label>
-                        <button type="button" onclick="resetPreview()" class="btn btn-glass btn-sm" tabindex="-1">
-                            <i class="fa fa-times"></i> Clear
-                        </button>
+                        <button type="button" onclick="resetPreview()" class="mem-btn"><i class="bi bi-x-circle"></i> Clear</button>
                     </div>
-                    <div id="filenameLabel" class="filename-label"></div>
+                    <div id="filenameLabel" style="font-size:.74rem;color:#9ca3af;margin-top:4px;"></div>
                 </div>
 
-                <!-- Row 1: FullName + Gender -->
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label asp-for="FullName" class="form-label"><i class="fa fa-user"></i> Full Name</label>
-                        <input asp-for="FullName" class="form-control" />
-                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                <!-- Name + Gender -->
+                <div class="mem-section-divider">Basic Info</div>
+                <div class="mem-row">
+                    <div>
+                        <label asp-for="FullName" class="mem-label">Full Name</label>
+                        <input asp-for="FullName" class="mem-input" />
+                        <span asp-validation-for="FullName" class="mem-validation"></span>
                     </div>
-                    <div class="col-md-6">
-                        <label asp-for="Gender" class="form-label"><i class="fa fa-venus-mars"></i> Gender</label>
-                        <select asp-for="Gender" class="form-select">
-                            <option value="">-- Select Gender --</option>
+                    <div>
+                        <label asp-for="Gender" class="mem-label">Gender</label>
+                        <select asp-for="Gender" class="mem-input">
+                            <option value="">— Select Gender —</option>
                             <option>Male</option>
                             <option>Female</option>
                             <option>Other</option>
                         </select>
-                        <span asp-validation-for="Gender" class="text-danger small"></span>
+                        <span asp-validation-for="Gender" class="mem-validation"></span>
                     </div>
                 </div>
 
-                <!-- Row 2: Email + Phone -->
-                <div class="row g-3 mt-1">
-                    <div class="col-md-6">
-                        <label asp-for="Email" class="form-label"><i class="fa fa-envelope"></i> Email</label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger small"></span>
+                <!-- Email + Phone -->
+                <div class="mem-row">
+                    <div>
+                        <label asp-for="Email" class="mem-label">Email</label>
+                        <input asp-for="Email" class="mem-input" />
+                        <span asp-validation-for="Email" class="mem-validation"></span>
                     </div>
-                    <div class="col-md-6">
-                        <label asp-for="Phone" class="form-label"><i class="fa fa-phone"></i> Phone</label>
-                        <input asp-for="Phone" class="form-control" />
-                        <span asp-validation-for="Phone" class="text-danger small"></span>
+                    <div>
+                        <label asp-for="Phone" class="mem-label">Phone</label>
+                        <input asp-for="Phone" class="mem-input" />
+                        <span asp-validation-for="Phone" class="mem-validation"></span>
                     </div>
                 </div>
 
-                <!-- Row 3: Address + MemberType -->
-                <div class="row g-3 mt-1">
-                    <div class="col-md-6">
-                        <label asp-for="Address" class="form-label"><i class="fa fa-location-dot"></i> Address</label>
-                        <input asp-for="Address" class="form-control" />
-                        <span asp-validation-for="Address" class="text-danger small"></span>
+                <!-- Address + MemberType -->
+                <div class="mem-row">
+                    <div>
+                        <label asp-for="Address" class="mem-label">Address</label>
+                        <input asp-for="Address" class="mem-input" />
+                        <span asp-validation-for="Address" class="mem-validation"></span>
                     </div>
-                    <div class="col-md-6">
-                        <label asp-for="MemberType" class="form-label"><i class="fa fa-id-card-clip"></i> Type</label>
-                        <select asp-for="MemberType" class="form-select">
-                            <option value="">-- Select Type --</option>
+                    <div>
+                        <label asp-for="MemberType" class="mem-label">Member Type</label>
+                        <select asp-for="MemberType" class="mem-input">
+                            <option value="">— Select Type —</option>
                             <option>Student</option>
                             <option>Teacher</option>
                             <option>Guest</option>
                             <option>Other</option>
                         </select>
-                        <span asp-validation-for="MemberType" class="text-danger small"></span>
+                        <span asp-validation-for="MemberType" class="mem-validation"></span>
                     </div>
                 </div>
 
-                <!-- Row 4: Faculty + Subject -->
-                <div class="row g-3 mt-1">
-                    <div class="col-md-6">
-                        <label asp-for="Faculty" class="form-label"><i class="fa-solid fa-building-columns"></i> Faculty</label>
-                        <select asp-for="Faculty" class="form-select">
-                            <option value="">-- Select Faculty --</option>
+                <!-- Faculty only (Subject removed) -->
+                <div class="mem-row mem-row-full">
+                    <div>
+                        <label asp-for="Faculty" class="mem-label">Faculty</label>
+                        <select asp-for="Faculty" class="mem-input">
+                            <option value="">— Select Faculty —</option>
                             <option>Business Administration</option>
                             <option>Science and Technology</option>
                             <option>Engineering and Architecture</option>
@@ -191,134 +449,119 @@
                             <option>Arts, Humanities, and Languages</option>
                             <option>School of Doctoral Studies</option>
                         </select>
-                        <span asp-validation-for="Faculty" class="text-danger small"></span>
-                    </div>
-                    <div class="col-md-6">
-                        <label asp-for="Subject" class="form-label"><i class="fa-solid fa-book"></i> Subject</label>
-                        <input asp-for="Subject" class="form-control" placeholder="Optional" />
-                        <span asp-validation-for="Subject" class="text-danger small"></span>
+                        <span asp-validation-for="Faculty" class="mem-validation"></span>
                     </div>
                 </div>
 
-                <!-- Row 5: Library ID + Active -->
-                <div class="row g-3 mt-1">
-                    <div class="col-md-6">
-                        <label asp-for="DICardNumber" class="form-label"><i class="fa-solid fa-id-card"></i> Library Card / Member ID</label>
-                        <input asp-for="DICardNumber" class="form-control" />
-                        <span asp-validation-for="DICardNumber" class="text-danger small"></span>
+                <!-- Library ID + Active -->
+                <div class="mem-row">
+                    <div>
+                        <label asp-for="DICardNumber" class="mem-label">Library Card / Member ID</label>
+                        <input asp-for="DICardNumber" class="mem-input" />
+                        <span asp-validation-for="DICardNumber" class="mem-validation"></span>
                     </div>
-                    <div class="col-md-6 d-flex align-items-center">
-                        <div class="form-check mt-3 mt-md-0">
-                            <input class="form-check-input" asp-for="IsActive" id="IsActive" />
-                            <label class="form-check-label" for="IsActive">
-                                <i class="fa fa-toggle-on"></i> Active
-                            </label>
-                        </div>
+                    <div style="display:flex;align-items:flex-end;padding-bottom:2px;">
+                        <label class="mem-check-row" style="width:100%;">
+                            <input type="checkbox" asp-for="IsActive" />
+                            <span class="mem-check-label">Active</span>
+                        </label>
                     </div>
                 </div>
 
-                <!-- Telegram Status (read-only on create — not yet connected) -->
-                <div class="row g-3 mt-1">
-                    <div class="col-12">
-                        <label class="form-label"><i class="fa-brands fa-telegram"></i> Telegram</label>
-                        <div class="tg-status-box">
-                            <i class="fa-brands fa-telegram" style="color:#9ca3af;"></i>
-                            <span>Not connected — member can link Telegram from their profile after account is created.</span>
-                        </div>
+                <!-- Telegram -->
+                <div class="mem-section-divider">Telegram</div>
+                <div class="mem-tg-info">
+                    <i class="bi bi-telegram" style="color:#9ca3af;font-size:.95rem;"></i>
+                    <span>Not connected — member can link Telegram from their profile after account is created.</span>
+                </div>
+
+                <!-- Notes -->
+                <div class="mem-section-divider">Notes</div>
+                <div class="mem-row mem-row-full">
+                    <div>
+                        <label asp-for="Notes" class="mem-label">Notes</label>
+                        <input asp-for="Notes" class="mem-input" />
+                        <span asp-validation-for="Notes" class="mem-validation"></span>
                     </div>
                 </div>
 
-                <!-- Row 7: Notes -->
-                <div class="row g-3 mt-1">
-                    <div class="col-12">
-                        <label asp-for="Notes" class="form-label"><i class="fa fa-note-sticky"></i> Notes</label>
-                        <input asp-for="Notes" class="form-control" />
-                        <span asp-validation-for="Notes" class="text-danger small"></span>
+                <!-- Linked User + Created By -->
+                <div class="mem-section-divider">Account</div>
+                <div class="mem-row">
+                    <div>
+                        <label asp-for="UserId" class="mem-label">Linked User</label>
+                        <select asp-for="UserId" class="mem-input" asp-items="ViewBag.UserId"></select>
+                    </div>
+                    <div>
+                        <label asp-for="CreatedBy" class="mem-label">Created By</label>
+                        <select asp-for="CreatedBy" class="mem-input" asp-items="ViewBag.CreatedByList"></select>
+                        <span asp-validation-for="CreatedBy" class="mem-validation"></span>
                     </div>
                 </div>
 
-                <!-- Row 8: Linked User + Created By -->
-                <div class="row g-3 mt-1">
-                    <div class="col-md-6">
-                        <label asp-for="UserId" class="form-label"><i class="fa fa-user-tie"></i> Linked User</label>
-                        <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
+                <!-- Password -->
+                <div class="mem-section-divider">Password</div>
+                <div class="mem-pw-section">
+                    <div class="mem-pw-section-title">
+                        <i class="bi bi-lock"></i> Set Password <span style="font-weight:400;color:#9ca3af;">(optional)</span>
                     </div>
-                    <div class="col-md-6">
-                        <label asp-for="CreatedBy" class="form-label"><i class="fa fa-user"></i> Created By</label>
-                        <select asp-for="CreatedBy" class="form-select" asp-items="ViewBag.CreatedByList"></select>
-                        <span asp-validation-for="CreatedBy" class="text-danger small"></span>
-                    </div>
-                </div>
-
-                <!-- Password (optional) -->
-                <div class="card-glass glas-all-style mt-3 mb-3">
-                    <div class="d-flex align-items-center mb-2">
-                        <i class="fa-solid fa-lock me-2"></i>
-                        <strong>Set Password (optional)</strong>
-                    </div>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Password</label>
-                            <div class="input-group">
-                                <input name="NewPassword" id="NewPassword" type="password" class="form-control" placeholder="5 - 20 characters" />
-                                <button class="btn btn-outline-secondary" type="button" onclick="togglePw('NewPassword', this)">
-                                    <i class="fa-regular fa-eye"></i>
+                    <div class="mem-row">
+                        <div>
+                            <label class="mem-label">Password</label>
+                            <div class="mem-input-group">
+                                <input name="NewPassword" id="NewPassword" type="password" class="mem-input" placeholder="5–20 characters" />
+                                <button class="mem-input-toggle" type="button" onclick="togglePw('NewPassword', this)">
+                                    <i class="bi bi-eye"></i>
                                 </button>
                             </div>
-                            <span class="text-muted small">Leave blank if you don't want to set a password now.</span>
+                            <div class="mem-pw-hint">Leave blank to skip.</div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Confirm Password</label>
-                            <div class="input-group">
-                                <input name="ConfirmPassword" id="ConfirmPassword" type="password" class="form-control" />
-                                <button class="btn btn-outline-secondary" type="button" onclick="togglePw('ConfirmPassword', this)">
-                                    <i class="fa-regular fa-eye"></i>
+                        <div>
+                            <label class="mem-label">Confirm Password</label>
+                            <div class="mem-input-group">
+                                <input name="ConfirmPassword" id="ConfirmPassword" type="password" class="mem-input" />
+                                <button class="mem-input-toggle" type="button" onclick="togglePw('ConfirmPassword', this)">
+                                    <i class="bi bi-eye"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-4 text-center">
-                    <button type="submit" class="btn btn-success px-5 py-2 rounded-pill fw-bold">
-                        <i class="fa-solid fa-circle-plus"></i> Create Member
+                <div class="mem-form-actions">
+                    <a asp-action="Index" class="mem-btn"><i class="bi bi-arrow-left"></i> Back</a>
+                    <button type="submit" class="mem-btn mem-btn-success">
+                        <i class="bi bi-person-plus-fill"></i> Create Member
                     </button>
-                    <a asp-action="Index" class="btn btn-glass glass-surface-pill ms-2 rounded-pill px-3">
-                        <i class="fa-solid fa-arrow-left"></i> Back to List
-                    </a>
                 </div>
             </form>
         </div>
     </div>
+
 </div>
 
 @section Scripts {
     <script>
-        function showPreview(event) {
-            var input = event.target;
-            var reader = new FileReader();
-            reader.onload = function () {
-                document.getElementById('profilePreview').src = reader.result;
-            };
-            if (input.files && input.files[0]) {
-                reader.readAsDataURL(input.files[0]);
-                document.getElementById('filenameLabel').innerText = "Selected: " + input.files[0].name;
+        function showPreview(e) {
+            var r = new FileReader();
+            r.onload = function () { document.getElementById('profilePreview').src = r.result; };
+            if (e.target.files && e.target.files[0]) {
+                r.readAsDataURL(e.target.files[0]);
+                document.getElementById('filenameLabel').textContent = 'Selected: ' + e.target.files[0].name;
             }
         }
-
         function resetPreview() {
-            document.getElementById('profilePreview').src = "https://ui-avatars.com/api/?name=Member&background=60a5fa&color=fff&size=128";
-            var fileInput = document.querySelector('input[name="ProfilePicture"]');
-            if (fileInput) fileInput.value = "";
-            document.getElementById('filenameLabel').innerText = "";
+            document.getElementById('profilePreview').src = 'https://ui-avatars.com/api/?name=Member&background=60a5fa&color=fff&size=128';
+            var fi = document.querySelector('input[name="ProfilePicture"]');
+            if (fi) fi.value = '';
+            document.getElementById('filenameLabel').textContent = '';
         }
-
         function togglePw(id, btn) {
-            const input = document.getElementById(id);
-            if (!input) return;
-            const isPw = input.type === "password";
-            input.type = isPw ? "text" : "password";
-            btn.innerHTML = isPw ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>';
+            var inp = document.getElementById(id);
+            if (!inp) return;
+            var isPw = inp.type === 'password';
+            inp.type = isPw ? 'text' : 'password';
+            btn.innerHTML = isPw ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
         }
     </script>
     @{

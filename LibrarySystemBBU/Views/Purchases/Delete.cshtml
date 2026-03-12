@@ -272,7 +272,6 @@
                         }
                         else
                         {
-
                             <span style="color:#9ca3af;">—</span>
                         }
                     </div>
@@ -289,14 +288,14 @@
         </div>
     </div>
 
-    <!-- Line items (if any) -->
+    <!-- Line items -->
     @if (Model?.PurchaseDetails != null && Model.PurchaseDetails.Any())
     {
         <div class="pdel-table-wrap">
             <table class="pdel-table">
                 <thead>
                     <tr>
-                        <th>Book</th>
+                        <th>Catalog</th>
                         <th class="text-end">Quantity</th>
                         <th class="text-end">Unit Price</th>
                         <th class="text-end">Line Total</th>
@@ -305,8 +304,13 @@
                 <tbody>
                     @foreach (var d in Model.PurchaseDetails.OrderBy(x => x.PurchaseDetailId))
                     {
+                        var label = d.Catalog != null
+                        ? (string.IsNullOrWhiteSpace(d.Catalog.ISBN)
+                        ? d.Catalog.Title
+                        : $"{d.Catalog.Title} — {d.Catalog.ISBN}")
+                        : $"Catalog #{d.CatalogId}";
                         <tr>
-                            <td style="font-weight:500;color:#111827;">@d.Book?.Title (@d.BookId)</td>
+                            <td style="font-weight:500;color:#111827;">@label</td>
                             <td class="text-end">@d.Quantity</td>
                             <td class="text-end">@d.UnitPrice.ToString("N2")</td>
                             <td class="text-end">@d.LineTotal.ToString("N2")</td>
@@ -371,8 +375,8 @@
 @section Scripts {
     <script>
         (() => {
-            const chk     = document.getElementById('confirmChk');
-            const btn     = document.getElementById('openConfirm');
+            const chk      = document.getElementById('confirmChk');
+            const btn      = document.getElementById('openConfirm');
             const backdrop = document.getElementById('delBackdrop');
             const modal    = document.getElementById('delModal');
 

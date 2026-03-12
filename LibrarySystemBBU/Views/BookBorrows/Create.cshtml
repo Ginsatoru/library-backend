@@ -10,10 +10,8 @@
     var memberItems = (IEnumerable<SelectListItem>)(ViewBag.MemberId ?? Enumerable.Empty<SelectListItem>());
     var catalogItems = (IEnumerable<SelectListItem>)(ViewBag.CatalogId ?? Enumerable.Empty<SelectListItem>());
 
-    string CATALOG_OPTIONS = string.Join("", catalogItems.Select(o => $"<option value='{o.Value}'>{System.Net.WebUtility.HtmlEncode(o.Text)}</option>"));
-
-    var booksByCatalogRaw = ViewBag.BooksByCatalog ?? new List<object>();
-    string BOOKS_BY_CATALOG_JSON = JsonSerializer.Serialize(booksByCatalogRaw);
+    string CATALOG_OPTIONS = string.Join("", catalogItems.Select(o =>
+        $"<option value='{o.Value}'>{System.Net.WebUtility.HtmlEncode(o.Text)}</option>"));
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
@@ -260,6 +258,12 @@
         color: #9ca3af;
         cursor: not-allowed;
     }
+
+    .book-loading {
+        font-size: .78rem;
+        color: #6b7280;
+        padding: 4px 8px;
+    }
 </style>
 
 <div class="borrow-page">
@@ -395,18 +399,10 @@
     <script>
         let detailIndex = 0;
         const CATALOG_OPTIONS = `@Html.Raw(CATALOG_OPTIONS)`;
-        const BOOKS_BY_CATALOG = @Html.Raw(BOOKS_BY_CATALOG_JSON);
 
-        // Build map: catalogId (string) -> [{value, text}]
-        const mapBooks = {};
-        (BOOKS_BY_CATALOG || []).forEach(b => {
-            const cid = String(b.catalogId ?? b.CatalogId ?? '');
-            const bid = String(b.bookId ?? b.BookId ?? '');
-            const txt = String(b.text ?? b.Text ?? '');
-            if (!cid || !bid) return;
-            if (!mapBooks[cid]) mapBooks[cid] = [];
-            mapBooks[cid].push({ value: bid, text: txt });
-        });
+        // KEY FIX: No longer use pre-baked BOOKS_BY_CATALOG JSON.
+        // Books are always fetched fresh via AJAX when a catalog is selected,
+        // so Lost/Damage/Borrowed books are never shown regardless of page cache.
 
         function recalcSummary() {
             const rows = document.querySelectorAll('#detailsTable tbody tr');
@@ -425,25 +421,46 @@
             document.getElementById('sumDeposit').innerText = (isNaN(dep) ? 0 : dep).toFixed(2);
         }
 
-        function populateBooks(selBook, catalogId) {
-            const list = mapBooks[String(catalogId)] || [];
-            selBook.innerHTML = '<option value="">-- Select Book --</option>';
+        // KEY FIX: Fetch only Available books from server via AJAX every time
+        // a catalog is selected. This guarantees Lost/Damage/Borrowed books
+        // never appear — even if the page was loaded before those statuses changed.
+        async function fetchAndPopulateBooks(selBook, catalogId) {
+            selBook.innerHTML = '<option value="">Loading...</option>';
+            selBook.disabled = true;
 
-            if (list.length === 0) {
+            try {
+                const res = await fetch(`/BookBorrows/GetBooksByCatalog?catalogId=${encodeURIComponent(catalogId)}`);
+                if (!res.ok) throw new Error('Network error');
+
+                const books = await res.json();
+
+                selBook.innerHTML = '<option value="">-- Select Book --</option>';
+
+                if (!books || books.length === 0) {
+                    selBook.innerHTML = '<option value="">No available books</option>';
+                    selBook.disabled = true;
+                    return;
+                }
+
+                books.forEach(b => {
+                    const opt = document.createElement('option');
+                    opt.value = b.bookId;
+                    // Show title + barcode. The endpoint returns barcode; build label from it.
+                    opt.textContent = b.barcode;
+                    selBook.appendChild(opt);
+                });
+
+                selBook.disabled = false;
+                // Auto-select first available book
+                if (books.length > 0) selBook.value = books[0].bookId;
+
+            } catch (err) {
+                selBook.innerHTML = '<option value="">Error loading books</option>';
                 selBook.disabled = true;
-                return;
+                console.error('Failed to load books:', err);
             }
 
-            list.forEach(o => {
-                const opt = document.createElement('option');
-                opt.value = o.value;
-                opt.textContent = o.text;
-                selBook.appendChild(opt);
-            });
-
-            selBook.disabled = false;
-            // Auto-select first book
-            selBook.value = list[0].value;
+            recalcSummary();
         }
 
         function hookRowEvents(row, idx) {
@@ -455,7 +472,7 @@
             const selCatalog = row.querySelector(`select[name='LoanBookDetails[${idx}].CatalogId']`);
             const selBook    = row.querySelector(`select[name='LoanBookDetails[${idx}].BookId']`);
 
-            // Catalog change — native select event (works with and without Select2)
+            // Catalog change — fetch fresh Available-only books from server
             jQuery(selCatalog).on('change', function () {
                 const cid = this.value;
 
@@ -478,7 +495,6 @@
                         confirmButtonColor: '#000080'
                     });
                     this.value = '';
-                    // Reset Select2 display
                     if (window.jQuery && jQuery.fn.select2) {
                         jQuery(selCatalog).val('').trigger('change.select2');
                     }
@@ -488,8 +504,8 @@
                     return;
                 }
 
-                populateBooks(selBook, cid);
-                recalcSummary();
+                // KEY FIX: Always fetch fresh from server — never use cached JS map
+                fetchAndPopulateBooks(selBook, cid);
             });
 
             // Remove row
@@ -556,9 +572,6 @@
             if (window.jQuery && jQuery.fn.select2) {
                 const $sel = jQuery(tr).find('.select2-catalog-row');
                 $sel.select2({ width: '100%' });
-
-                // IMPORTANT: Select2 fires 'change' on the underlying <select>
-                // hookRowEvents already added a native 'change' listener — this works fine.
             }
         }
 

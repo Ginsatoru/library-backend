@@ -87,10 +87,12 @@ namespace LibrarySystemBBU.Data
                 .HasForeignKey(b => b.CatalogId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Book -> PurchaseDetails (legacy nullable BookId on detail)
             modelBuilder.Entity<Book>()
                 .HasMany(b => b.PurchaseDetails)
                 .WithOne(pd => pd.Book)
                 .HasForeignKey(pd => pd.BookId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity(BookBorrowDetailEntity());
@@ -99,8 +101,8 @@ namespace LibrarySystemBBU.Data
             //       BOOK VIEWER
             // ========================
             modelBuilder.Entity<CatalogPdfView>()
-    .HasIndex(v => new { v.CatalogId, v.ViewerKey })
-    .IsUnique();
+                .HasIndex(v => new { v.CatalogId, v.ViewerKey })
+                .IsUnique();
 
             // ========================
             //       BOOK BORROW
@@ -227,10 +229,12 @@ namespace LibrarySystemBBU.Data
                 .HasDefaultValueSql("GETUTCDATE()")
                 .ValueGeneratedOnAddOrUpdate();
 
+            // BookId on Purchase header is now nullable
             modelBuilder.Entity<Purchase>()
                 .HasOne(pu => pu.Book)
                 .WithMany()
                 .HasForeignKey(pu => pu.BookId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Purchase>()
@@ -251,6 +255,10 @@ namespace LibrarySystemBBU.Data
                 .HasColumnType("decimal(18, 2)");
 
             modelBuilder.Entity<PurchaseDetail>()
+                .Property(pd => pd.Barcode)
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<PurchaseDetail>()
                 .Property(pd => pd.Created)
                 .HasDefaultValueSql("GETUTCDATE()");
 
@@ -259,10 +267,19 @@ namespace LibrarySystemBBU.Data
                 .HasDefaultValueSql("GETUTCDATE()")
                 .ValueGeneratedOnAddOrUpdate();
 
+            // CatalogId FK on PurchaseDetail
+            modelBuilder.Entity<PurchaseDetail>()
+                .HasOne(pd => pd.Catalog)
+                .WithMany()
+                .HasForeignKey(pd => pd.CatalogId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // BookId on PurchaseDetail is now nullable (legacy support)
             modelBuilder.Entity<PurchaseDetail>()
                 .HasOne(pd => pd.Book)
                 .WithMany(b => b.PurchaseDetails)
                 .HasForeignKey(pd => pd.BookId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // ========================
@@ -350,7 +367,6 @@ namespace LibrarySystemBBU.Data
                 .Property(l => l.CreatedUtc)
                 .HasDefaultValueSql("GETUTCDATE()");
 
-            // NEW: workflow fields
             modelBuilder.Entity<LibraryLog>()
                 .Property(l => l.Status)
                 .HasMaxLength(20)
@@ -365,14 +381,12 @@ namespace LibrarySystemBBU.Data
                 .Property(l => l.ReturnedUtc)
                 .IsRequired(false);
 
-            // Helpful indexes
             modelBuilder.Entity<LibraryLog>()
                 .HasIndex(l => l.VisitDate);
 
             modelBuilder.Entity<LibraryLog>()
                 .HasIndex(l => l.Status);
 
-            // Items (1..N)
             modelBuilder.Entity<LibraryLogItem>()
                 .Property(i => i.LogItemId)
                 .ValueGeneratedOnAdd();
@@ -389,12 +403,10 @@ namespace LibrarySystemBBU.Data
                 .HasForeignKey(i => i.BookId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // NEW: per-item return time (optional)
             modelBuilder.Entity<LibraryLogItem>()
                 .Property(i => i.ReturnedDate)
                 .IsRequired(false);
 
-            // Prevent duplicate same book in one log
             modelBuilder.Entity<LibraryLogItem>()
                 .HasIndex(i => new { i.LogId, i.BookId })
                 .IsUnique();
@@ -425,7 +437,6 @@ namespace LibrarySystemBBU.Data
             base.OnModelCreating(modelBuilder);
         }
 
-        // helper config for BookBorrowDetail
         private static Action<Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Book>> BookBorrowDetailEntity()
             => _ => { };
 
@@ -443,7 +454,7 @@ namespace LibrarySystemBBU.Data
         public DbSet<Adjustment> Adjustments { get; set; } = null!;
         public DbSet<AdjustmentDetail> AdjustmentDetails { get; set; } = null!;
         public DbSet<Purchase> Purchases { get; set; } = null!;
-        public DbSet<CatalogPdfView> CatalogPdfViews { get; set; }
+        public DbSet<CatalogPdfView> CatalogPdfViews { get; set; } = null!;
         public DbSet<PurchaseDetail> PurchaseDetails { get; set; } = null!;
         public DbSet<LibraryLog> LibraryLogs { get; set; } = null!;
         public DbSet<LibraryLogItem> LibraryLogItems { get; set; } = null!;

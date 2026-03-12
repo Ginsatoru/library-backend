@@ -27,6 +27,12 @@ namespace LibrarySystemBBU.Controllers
             await _context.SaveChangesAsync();
         }
 
+        // Statuses that are never borrowable
+        private static readonly HashSet<string> NonBorrowableStatuses = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "Lost", "Damage", "Borrowed", "Maintenance"
+        };
+
         private async Task<(bool ok, string? error)> TryReserveBooksAsync(IEnumerable<int> bookIds)
         {
             var ids = (bookIds ?? Enumerable.Empty<int>())
@@ -35,6 +41,18 @@ namespace LibrarySystemBBU.Controllers
                 .ToList();
 
             if (ids.Count == 0) return (true, null);
+
+            var blockedBooks = await _context.Books
+                .AsNoTracking()
+                .Where(b => ids.Contains(b.BookId) && NonBorrowableStatuses.Contains(b.Status))
+                .Select(b => new { b.Barcode, b.Status })
+                .ToListAsync();
+
+            if (blockedBooks.Any())
+            {
+                var details = string.Join(", ", blockedBooks.Select(b => $"{b.Barcode} ({b.Status})"));
+                return (false, $"The following book(s) cannot be borrowed: {details}.");
+            }
 
             bool conflict = await _context.BookBorrows
                 .AsNoTracking()
@@ -65,10 +83,68 @@ namespace LibrarySystemBBU.Controllers
                 b.Status = status;
                 b.Modified = DateTime.UtcNow;
             }
+
+            await _context.SaveChangesAsync();
+
+            foreach (var b in books)
+                _context.Entry(b).State = EntityState.Detached;
         }
 
         private Task MarkBooksAsBorrowedAsync(IEnumerable<int> bookIds) => SetBooksStatusAsync(bookIds, "Borrowed");
         private Task MarkBooksAsAvailableAsync(IEnumerable<int> bookIds) => SetBooksStatusAsync(bookIds, "Available");
+
+        // KEY FIX: Query the Books table fresh (AsNoTracking) AFTER book statuses
+        // have already been saved. Never use the EF navigation collection — it
+        // holds stale in-memory data from before the status update.
+        private async Task RecalculateCatalogCountsAsync(IEnumerable<Guid> catalogIds)
+        {
+            var ids = (catalogIds ?? Enumerable.Empty<Guid>()).Distinct().ToList();
+            if (!ids.Any()) return;
+
+            // Load fresh book counts straight from DB — bypasses any stale EF cache
+            var bookCounts = await _context.Books
+                .AsNoTracking()
+                .Where(b => ids.Contains(b.CatalogId))
+                .GroupBy(b => b.CatalogId)
+                .Select(g => new
+                {
+                    CatalogId = g.Key,
+                    Total = g.Count(),
+                    Available = g.Count(b => b.Status == "Available")
+                })
+                .ToListAsync();
+
+            var countMap = bookCounts.ToDictionary(x => x.CatalogId);
+
+            var catalogs = await _context.Catalogs
+                .Where(c => ids.Contains(c.CatalogId))
+                .ToListAsync();
+
+            foreach (var c in catalogs)
+            {
+                if (countMap.TryGetValue(c.CatalogId, out var counts))
+                {
+                    c.TotalCopies = counts.Total;
+                    c.AvailableCopies = counts.Available;
+                }
+                else
+                {
+                    // No books at all for this catalog
+                    c.TotalCopies = 0;
+                    c.AvailableCopies = 0;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        // Wrapper kept for call-site compatibility — deltas param ignored,
+        // we always recalculate from DB now.
+        private async Task UpdateAvailableCopiesAsync(Dictionary<Guid, int> deltas, bool clamp = true)
+        {
+            if (deltas == null || deltas.Count == 0) return;
+            await RecalculateCatalogCountsAsync(deltas.Keys);
+        }
 
         private async Task PopulateLookupsAsync()
         {
@@ -85,6 +161,7 @@ namespace LibrarySystemBBU.Controllers
             var bookLookupRaw = await _context.Books
                 .AsNoTracking()
                 .Include(b => b.Catalog)
+                .Where(b => b.Status == "Available")
                 .Select(b => new
                 {
                     b.BookId,
@@ -143,28 +220,6 @@ namespace LibrarySystemBBU.Controllers
                 .GroupBy(x => x.CatalogId)
                 .ToDictionary(g => g.Key, g => g.Count());
 
-        private async Task UpdateAvailableCopiesAsync(Dictionary<Guid, int> deltas, bool clamp = true)
-        {
-            if (deltas == null || deltas.Count == 0) return;
-
-            var ids = deltas.Keys.ToList();
-            var catalogs = await _context.Catalogs
-                .Where(c => ids.Contains(c.CatalogId))
-                .ToListAsync();
-
-            foreach (var c in catalogs)
-            {
-                if (!deltas.TryGetValue(c.CatalogId, out var delta)) continue;
-                c.AvailableCopies += delta;
-
-                if (clamp)
-                {
-                    if (c.AvailableCopies < 0) c.AvailableCopies = 0;
-                    if (c.AvailableCopies > c.TotalCopies) c.AvailableCopies = c.TotalCopies;
-                }
-            }
-        }
-
         private async Task UpdateBorrowCountsAsync(Dictionary<Guid, int>? adds, Dictionary<Guid, int>? subs = null)
         {
             var keys = new HashSet<Guid>();
@@ -178,12 +233,8 @@ namespace LibrarySystemBBU.Controllers
 
             foreach (var c in catalogs)
             {
-                if (adds != null && adds.TryGetValue(c.CatalogId, out var add))
-                    c.BorrowCount += add;
-
-                if (subs != null && subs.TryGetValue(c.CatalogId, out var sub))
-                    c.BorrowCount -= sub;
-
+                if (adds != null && adds.TryGetValue(c.CatalogId, out var add)) c.BorrowCount += add;
+                if (subs != null && subs.TryGetValue(c.CatalogId, out var sub)) c.BorrowCount -= sub;
                 if (c.BorrowCount < 0) c.BorrowCount = 0;
             }
         }
@@ -193,7 +244,6 @@ namespace LibrarySystemBBU.Controllers
         {
             var oldMap = GetItemCountsByCatalog(oldItems);
             var newMap = GetItemCountsByCatalog(newItems);
-
             var allIds = oldMap.Keys.Union(newMap.Keys);
             var add = new Dictionary<Guid, int>();
             var rel = new Dictionary<Guid, int>();
@@ -207,6 +257,13 @@ namespace LibrarySystemBBU.Controllers
             }
             return (add, rel);
         }
+
+        private static List<Guid> GetCatalogIds(params IEnumerable<BookBorrowDetail>[] detailSets)
+            => detailSets
+                .SelectMany(s => s ?? Enumerable.Empty<BookBorrowDetail>())
+                .Select(d => d.CatalogId)
+                .Distinct()
+                .ToList();
 
         // =========================
         // Pages
@@ -264,8 +321,6 @@ namespace LibrarySystemBBU.Controllers
                     .Distinct()
                     .ToList();
 
-                var titlesJoined = titles.Count > 0 ? string.Join(", ", titles) : string.Empty;
-
                 sb.AppendLine("<tr>");
                 sb.AppendLine($"<td>{loan.LoanId}</td>");
                 sb.AppendLine($"<td>{H(member)}</td>");
@@ -277,7 +332,7 @@ namespace LibrarySystemBBU.Controllers
                 sb.AppendLine($"<td>{(loan.DepositAmount ?? 0m):0.00}</td>");
                 sb.AppendLine($"<td>{(loan.LoanBookDetails?.Count ?? 0)}</td>");
                 sb.AppendLine($"<td>{(loan.BookReturns?.Count ?? 0)}</td>");
-                sb.AppendLine($"<td>{H(titlesJoined)}</td>");
+                sb.AppendLine($"<td>{H(string.Join(", ", titles))}</td>");
                 sb.AppendLine("</tr>");
             }
 
@@ -285,9 +340,8 @@ namespace LibrarySystemBBU.Controllers
 
             var encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: true);
             var bytes = encoding.GetBytes(sb.ToString());
-            var fileName = "BookBorrows_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls";
-
-            return File(bytes, "application/vnd.ms-excel", fileName);
+            return File(bytes, "application/vnd.ms-excel",
+                "BookBorrows_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
         }
 
         [HttpGet("BookBorrows/Create")]
@@ -357,11 +411,14 @@ namespace LibrarySystemBBU.Controllers
                     return View(model);
                 }
 
+                var affectedCatalogIds = GetCatalogIds(validItems);
                 var needMap = GetItemCountsByCatalog(validItems);
-                var take = needMap.ToDictionary(kv => kv.Key, kv => -kv.Value);
-                await UpdateAvailableCopiesAsync(take);
+
                 await UpdateBorrowCountsAsync(needMap);
                 await MarkBooksAsBorrowedAsync(validItems.Select(i => i.BookId));
+
+                // Recalculate from fresh DB state after book status changes are saved
+                await RecalculateCatalogCountsAsync(affectedCatalogIds);
 
                 model.LoanBookDetails = validItems;
                 model.BookReturns = new List<BookReturn>();
@@ -373,8 +430,7 @@ namespace LibrarySystemBBU.Controllers
                 await _context.Entry(model)
                     .Collection(b => b.LoanBookDetails)
                     .Query()
-                    .Include(d => d.Book)
-                        .ThenInclude(b => b.Catalog)
+                    .Include(d => d.Book).ThenInclude(b => b.Catalog)
                     .LoadAsync();
 
                 var titles = model.LoanBookDetails
@@ -421,7 +477,6 @@ namespace LibrarySystemBBU.Controllers
                 .FirstOrDefaultAsync(x => x.LoanId == id);
 
             if (loan == null) return NotFound();
-
             await PopulateLookupsAsync();
             return View(loan);
         }
@@ -524,11 +579,11 @@ namespace LibrarySystemBBU.Controllers
                 var removedIds = oldBookIds.Except(newBookIds).ToList();
                 var addedIds = newBookIds.Except(oldBookIds).ToList();
 
+                var allAffectedCatalogIds = GetCatalogIds(existing.LoanBookDetails, validItems);
+
                 if (willReturn)
                 {
                     await MarkBooksAsAvailableAsync(oldBookIds.Union(newBookIds));
-                    var give = GetItemCountsByCatalog(existing.LoanBookDetails);
-                    await UpdateAvailableCopiesAsync(give);
 
                     var alreadyHasReturn = await _context.BookReturns.AnyAsync(r => r.LoanId == existing.LoanId);
                     if (!alreadyHasReturn)
@@ -548,12 +603,7 @@ namespace LibrarySystemBBU.Controllers
                 else
                 {
                     if (wasReturned && !willReturn)
-                    {
                         await MarkBooksAsBorrowedAsync(newBookIds);
-                        var take = GetItemCountsByCatalog(validItems)
-                            .ToDictionary(kv => kv.Key, kv => -kv.Value);
-                        await UpdateAvailableCopiesAsync(take);
-                    }
                     else
                     {
                         await MarkBooksAsBorrowedAsync(addedIds);
@@ -561,8 +611,22 @@ namespace LibrarySystemBBU.Controllers
                     }
                 }
 
-                _context.RemoveRange(existing.LoanBookDetails);
-                existing.LoanBookDetails = new List<BookBorrowDetail>();
+                // Recalculate from fresh DB state — book statuses are already saved
+                await RecalculateCatalogCountsAsync(allAffectedCatalogIds);
+
+                // Detach old detail entities
+                foreach (var d in existing.LoanBookDetails)
+                    _context.Entry(d).State = EntityState.Detached;
+
+                var detailIds = existing.LoanBookDetails.Select(d => d.LoanBookDetailId).ToList();
+                if (detailIds.Any())
+                {
+                    var idParams = string.Join(",", detailIds);
+                    await _context.Database.ExecuteSqlRawAsync(
+                        $"DELETE FROM dbo.LoanBookDetails WHERE LoanBookDetailId IN ({idParams})");
+                }
+
+                existing.LoanBookDetails.Clear();
 
                 foreach (var it in validItems)
                 {
@@ -632,12 +696,10 @@ namespace LibrarySystemBBU.Controllers
                 if (histories.Any())
                     _context.Histories.RemoveRange(histories);
 
+                var affectedCatalogIds = GetCatalogIds(loan.LoanBookDetails);
+
                 if (!loan.IsReturned && loan.LoanBookDetails.Any())
-                {
-                    var give = GetItemCountsByCatalog(loan.LoanBookDetails);
-                    await UpdateAvailableCopiesAsync(give);
                     await MarkBooksAsAvailableAsync(loan.LoanBookDetails.Select(d => d.BookId));
-                }
 
                 if (loan.LoanBookDetails.Any())
                 {
@@ -647,6 +709,10 @@ namespace LibrarySystemBBU.Controllers
 
                 _context.BookBorrows.Remove(loan);
                 await _context.SaveChangesAsync();
+
+                // Recalculate after deletion — books are already freed above
+                await RecalculateCatalogCountsAsync(affectedCatalogIds);
+
                 await tx.CommitAsync();
 
                 return Ok(new { ok = true, message = "Loan deleted." });
@@ -667,7 +733,7 @@ namespace LibrarySystemBBU.Controllers
         {
             var books = await _context.Books
                 .AsNoTracking()
-                .Where(b => b.CatalogId == catalogId)
+                .Where(b => b.CatalogId == catalogId && b.Status == "Available")
                 .Select(b => new
                 {
                     bookId = b.BookId,
@@ -790,9 +856,13 @@ namespace LibrarySystemBBU.Controllers
                 };
                 _context.BookReturns.Add(bookReturn);
 
-                var give = GetItemCountsByCatalog(loan.LoanBookDetails);
-                await UpdateAvailableCopiesAsync(give);
+                var affectedCatalogIds = GetCatalogIds(loan.LoanBookDetails);
+
+                // Mark books available first — SaveChangesAsync is called inside
                 await MarkBooksAsAvailableAsync(loan.LoanBookDetails.Select(d => d.BookId));
+
+                // NOW recalculate — books are already saved as Available in DB
+                await RecalculateCatalogCountsAsync(affectedCatalogIds);
 
                 await _context.SaveChangesAsync();
 
@@ -868,15 +938,17 @@ namespace LibrarySystemBBU.Controllers
                     ? loan.BookReturns.FirstOrDefault(r => r.ReturnId == model.ReturnId.Value)
                     : loan.BookReturns.OrderByDescending(r => r.ReturnDate).FirstOrDefault();
 
-                if (ret != null)
-                    _context.BookReturns.Remove(ret);
+                if (ret != null) _context.BookReturns.Remove(ret);
 
                 loan.IsReturned = false;
 
-                var take = GetItemCountsByCatalog(loan.LoanBookDetails)
-                    .ToDictionary(kv => kv.Key, kv => -kv.Value);
-                await UpdateAvailableCopiesAsync(take);
+                var affectedCatalogIds = GetCatalogIds(loan.LoanBookDetails);
+
+                // Mark books borrowed first — SaveChangesAsync is called inside
                 await MarkBooksAsBorrowedAsync(loan.LoanBookDetails.Select(d => d.BookId));
+
+                // NOW recalculate — books are already saved as Borrowed in DB
+                await RecalculateCatalogCountsAsync(affectedCatalogIds);
 
                 await _context.SaveChangesAsync();
 
@@ -992,9 +1064,13 @@ namespace LibrarySystemBBU.Controllers
                     });
                 }
 
-                var give = GetItemCountsByCatalog(loan.LoanBookDetails);
-                await UpdateAvailableCopiesAsync(give);
+                var affectedCatalogIds = GetCatalogIds(loan.LoanBookDetails);
+
+                // Mark books available first — SaveChangesAsync is called inside
                 await MarkBooksAsAvailableAsync(loan.LoanBookDetails.Select(d => d.BookId));
+
+                // NOW recalculate — books are already saved as Available in DB
+                await RecalculateCatalogCountsAsync(affectedCatalogIds);
 
                 var titles = loan.LoanBookDetails
                     .Select(d => d.Book?.Catalog?.Title ?? d.Book?.Title)
@@ -1055,10 +1131,13 @@ namespace LibrarySystemBBU.Controllers
 
                 loan.IsReturned = false;
 
-                var take = GetItemCountsByCatalog(loan.LoanBookDetails)
-                    .ToDictionary(kv => kv.Key, kv => -kv.Value);
-                await UpdateAvailableCopiesAsync(take);
+                var affectedCatalogIds = GetCatalogIds(loan.LoanBookDetails);
+
+                // Mark books borrowed first — SaveChangesAsync is called inside
                 await MarkBooksAsBorrowedAsync(loan.LoanBookDetails.Select(d => d.BookId));
+
+                // NOW recalculate — books are already saved as Borrowed in DB
+                await RecalculateCatalogCountsAsync(affectedCatalogIds);
 
                 await AddHistoryAsync(new History
                 {

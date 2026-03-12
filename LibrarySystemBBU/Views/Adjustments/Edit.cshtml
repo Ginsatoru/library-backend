@@ -264,7 +264,10 @@
             <div class="row g-3">
                 <div class="col-md-4">
                     <div class="adj-form-label">Catalog</div>
-                    <select asp-for="CatalogId" class="adj-form-select" id="headerCatalog" asp-items="Model.Catalogs ?? new SelectList(Enumerable.Empty<SelectListItem>())">
+                    <select asp-for="CatalogId"
+                            class="adj-form-select"
+                            id="headerCatalog"
+                            asp-items="Model.Catalogs ?? new SelectList(Enumerable.Empty<SelectListItem>())">
                         <option value="">-- Select catalog --</option>
                     </select>
                     <span asp-validation-for="CatalogId" class="text-danger"></span>
@@ -272,13 +275,13 @@
 
                 <div class="col-md-4">
                     <div class="adj-form-label">Adjustment Type</div>
-                    <select asp-for="AdjustmentType" class="adj-form-select" id="adjType" asp-items="Model.AdjustmentTypes ?? new SelectList(Enumerable.Empty<SelectListItem>())">
+                    <select asp-for="AdjustmentType"
+                            class="adj-form-select"
+                            id="adjType"
+                            asp-items="Model.AdjustmentTypes ?? new SelectList(Enumerable.Empty<SelectListItem>())">
                         <option value="">-- Select type --</option>
                     </select>
                     <span asp-validation-for="AdjustmentType" class="text-danger"></span>
-                    <div class="text-muted mt-1" style="font-size:.75rem;" id="typeHint">
-                        Tip: For <strong>Damage/Decrease/Lost</strong>, enter positive numbers; we'll store them as negative.
-                    </div>
                 </div>
 
                 <div class="col-md-4">
@@ -301,7 +304,9 @@
 
                 <div class="col-md-4">
                     <div class="adj-form-label">Adjusted By</div>
-                    <select asp-for="AdjustedByUserId" class="adj-form-select" asp-items="Model.Users ?? new SelectList(Enumerable.Empty<SelectListItem>())">
+                    <select asp-for="AdjustedByUserId"
+                            class="adj-form-select"
+                            asp-items="Model.Users ?? new SelectList(Enumerable.Empty<SelectListItem>())">
                         <option value="">-- Select user --</option>
                     </select>
                     <span asp-validation-for="AdjustedByUserId" class="text-danger"></span>
@@ -315,26 +320,10 @@
                 <div class="adj-section-title mb-0">
                     <i class="bi bi-list-check"></i> Details
                 </div>
-
                 <button type="button" class="adj-btn" id="addRowBtn">
                     <i class="bi bi-plus-circle"></i> Add row
                 </button>
             </div>
-
-            <!-- Hidden book dropdown template -->
-            <select id="bookOptionsSource" class="d-none">
-                @if (Model.Books != null)
-                {
-                    foreach (var opt in Model.Books)
-                    {
-                        <option value="@opt.Value">@opt.Text</option>
-                    }
-                }
-                else
-                {
-                    <option value="">-- Select book --</option>
-                }
-            </select>
 
             <span asp-validation-for="Details" class="text-danger"></span>
 
@@ -356,7 +345,10 @@
                                 <input type="hidden" asp-for="Details[@i].CatalogId" class="row-catalog" />
 
                                 <td class="book-cell">
-                                    <select asp-for="Details[@i].BookId" class="adj-form-select book-select" asp-items="Model.Books ?? new List<SelectListItem>()">
+                                    <select asp-for="Details[@i].BookId"
+                                            class="adj-form-select book-select"
+                                            data-selected="@Model.Details[i].BookId"
+                                            asp-items="Model.Books ?? new List<SelectListItem>()">
                                         <option value="">-- select book --</option>
                                     </select>
                                     <span asp-validation-for="Details[@i].BookId" class="text-danger"></span>
@@ -396,19 +388,20 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        const detailsBody = document.querySelector('#detailsTable tbody');
-        const addBtn = document.getElementById('addRowBtn');
-        const qtyTotal = document.getElementById('qtyTotal');
-        const adjType = document.getElementById('adjType');
+        const detailsBody   = document.querySelector('#detailsTable tbody');
+        const addBtn        = document.getElementById('addRowBtn');
+        const qtyTotal      = document.getElementById('qtyTotal');
+        const adjType       = document.getElementById('adjType');
         const headerCatalog = document.getElementById('headerCatalog');
-
-        const statQty = document.getElementById('statQty');
-        const statRows = document.getElementById('statRows');
-        const statType = document.getElementById('statType');
+        const statQty       = document.getElementById('statQty');
+        const statRows      = document.getElementById('statRows');
+        const statType      = document.getElementById('statType');
 
         const booksUrl = '@Url.Action("GetBooksForCatalog", "Adjustments")';
 
         let currentBooks = [];
+
+        // ── helpers ────────────────────────────────────────────────────────────
 
         function normalizeByType(v) {
             if (Number.isNaN(v)) return 0;
@@ -432,20 +425,15 @@
         }
 
         function recalcTotal() {
-            let sum = 0;
-            let rows = 0;
-
+            let sum = 0, rows = 0;
             detailsBody.querySelectorAll('.qty-input').forEach(inp => {
                 rows++;
-                const raw = Number(inp.value);
-                sum += normalizeByType(raw);
+                sum += normalizeByType(Number(inp.value));
             });
-
-            if (qtyTotal) qtyTotal.value = sum;
-            if (statQty) statQty.textContent = sum;
-            if (statRows) statRows.textContent = rows;
+            if (qtyTotal)  qtyTotal.value        = sum;
+            if (statQty)   statQty.textContent    = sum;
+            if (statRows)  statRows.textContent   = rows;
             if (statType && adjType) statType.textContent = adjType.value || '—';
-
             updateTypeHint(sum);
         }
 
@@ -456,12 +444,9 @@
         }
 
         function updateBookColumnVisibility() {
-            const t = adjType?.value || '';
-            const showBook = (t === 'Damage' || t === 'Lost');
+            const showBook = ['Damage', 'Lost'].includes(adjType?.value || '');
 
-            document.querySelectorAll('.book-col').forEach(th => {
-                th.style.display = showBook ? '' : 'none';
-            });
+            document.querySelectorAll('.book-col').forEach(th => th.style.display = showBook ? '' : 'none');
             document.querySelectorAll('.book-cell').forEach(td => {
                 td.style.display = showBook ? '' : 'none';
                 const sel = td.querySelector('select');
@@ -469,90 +454,83 @@
             });
 
             document.querySelectorAll('.qty-input').forEach(inp => {
-                if (showBook) {
-                    inp.value = 1;
-                    inp.readOnly = true;
-                } else {
-                    inp.readOnly = false;
-                }
+                if (showBook) { inp.value = 1; inp.readOnly = true; }
+                else          { inp.readOnly = false; }
             });
 
             recalcTotal();
         }
 
-        async function loadBooksForCatalog() {
+        // ── book loading ────────────────────────────────────────────────────────
+
+        async function loadBooksForCatalog(preserveSelected) {
             const catId = headerCatalog?.value;
             if (!catId) {
                 currentBooks = [];
-                updateAllBookSelects();
+                updateAllBookSelects(preserveSelected);
                 return;
             }
-
             try {
-                const response = await fetch(booksUrl + '?catalogId=' + encodeURIComponent(catId));
-                if (!response.ok) return;
-                currentBooks = await response.json();
-                updateAllBookSelects();
+                const resp = await fetch(booksUrl + '?catalogId=' + encodeURIComponent(catId));
+                if (!resp.ok) return;
+                currentBooks = await resp.json();
+                updateAllBookSelects(preserveSelected);
             } catch (e) {
                 console.error('Error loading books', e);
             }
         }
 
-        function updateAllBookSelects() {
-            const selects = detailsBody.querySelectorAll('.book-select');
-            selects.forEach(sel => {
-                const selected = sel.value;
+        function updateAllBookSelects(preserveSelected) {
+            detailsBody.querySelectorAll('.book-select').forEach(sel => {
+                // prefer data-selected (set by Razor on page load), fall back to current value
+                const chosen = sel.dataset.selected || sel.value || '';
+
                 sel.innerHTML = '<option value="">-- select book --</option>';
                 currentBooks.forEach(b => {
                     const opt = document.createElement('option');
                     opt.value = b.id;
                     opt.textContent = b.text;
-                    if (selected && selected === String(b.id)) {
-                        opt.selected = true;
-                    }
+                    if (chosen && String(chosen) === String(b.id)) opt.selected = true;
                     sel.appendChild(opt);
                 });
+
+                // once restored, keep dataset in sync so subsequent reloads work
+                if (sel.value) sel.dataset.selected = sel.value;
             });
 
             const catId = headerCatalog?.value || '';
-            detailsBody.querySelectorAll('.row-catalog').forEach(h => {
-                h.value = catId;
+            detailsBody.querySelectorAll('.row-catalog').forEach(h => h.value = catId);
+        }
+
+        function buildBookOptions(selectedId) {
+            let html = '<option value="">-- select book --</option>';
+            currentBooks.forEach(b => {
+                const sel = selectedId && String(selectedId) === String(b.id) ? ' selected' : '';
+                html += `<option value="${b.id}"${sel}>${b.text}</option>`;
             });
+            return html;
         }
 
-        wireQtyInputs(detailsBody);
-        adjType?.addEventListener('change', () => {
-            updateBookColumnVisibility();
-            recalcTotal();
-        });
-
-        headerCatalog?.addEventListener('change', () => {
-            loadBooksForCatalog();
-        });
-
-        recalcTotal();
-        updateBookColumnVisibility();
-        if (headerCatalog?.value) {
-            loadBooksForCatalog();
-        }
+        // ── add row ─────────────────────────────────────────────────────────────
 
         addBtn.addEventListener('click', function () {
             const index = detailsBody.querySelectorAll('tr.detail-row').length;
+            const catId = headerCatalog?.value || '';
             const row = document.createElement('tr');
             row.className = 'detail-row';
             row.innerHTML = `
-                <input type="hidden" name="Details[${index}].AdjustmentDetailId" />
-                <input type="hidden" name="Details[${index}].CatalogId" class="row-catalog" value="${headerCatalog.value || ''}" />
+                <input type="hidden" name="Details[${index}].AdjustmentDetailId" value="" />
+                <input type="hidden" name="Details[${index}].CatalogId" class="row-catalog" value="${catId}" />
                 <td class="book-cell">
-                    <select name="Details[${index}].BookId" class="adj-form-select book-select">
-                        <option value="">-- select book --</option>
+                    <select name="Details[${index}].BookId" class="adj-form-select book-select" data-selected="">
+                        ${buildBookOptions('')}
                     </select>
                 </td>
                 <td>
-                    <input name="Details[${index}].QuantityChanged" class="adj-form-control qty-input" type="number" />
+                    <input name="Details[${index}].QuantityChanged" class="adj-form-control qty-input" type="number" value="" />
                 </td>
                 <td>
-                    <input name="Details[${index}].Note" class="adj-form-control" />
+                    <input name="Details[${index}].Note" class="adj-form-control" value="" />
                 </td>
                 <td class="text-center">
                     <button type="button" class="adj-btn-sm adj-btn-danger" onclick="removeDetailRow(this)">×</button>
@@ -560,17 +538,51 @@
 
             detailsBody.appendChild(row);
             wireQtyInputs(row);
-            updateAllBookSelects();
             updateBookColumnVisibility();
             recalcTotal();
         });
 
         function removeDetailRow(btn) {
-            const row = btn.closest('tr');
-            row?.parentNode?.removeChild(row);
+            btn.closest('tr')?.remove();
             recalcTotal();
         }
-
         window.removeDetailRow = removeDetailRow;
+
+        // ── event listeners ─────────────────────────────────────────────────────
+
+        adjType?.addEventListener('change', () => {
+            updateBookColumnVisibility();
+            recalcTotal();
+        });
+
+        headerCatalog?.addEventListener('change', () => {
+            // user manually changed catalog — do NOT preserve old book selections
+            detailsBody.querySelectorAll('.book-select').forEach(s => s.dataset.selected = '');
+            loadBooksForCatalog(false);
+        });
+
+                        // ── init ────────────────────────────────────────────────────────────────
+
+        wireQtyInputs(detailsBody);
+        recalcTotal();
+        updateBookColumnVisibility();
+
+        // Pre-populate currentBooks from already-rendered server-side options
+        // so addRow() works without needing a fetch first
+        if (headerCatalog?.value) {
+            fetch(booksUrl + '?catalogId=' + encodeURIComponent(headerCatalog.value))
+                .then(r => r.json())
+                .then(data => {
+                    currentBooks = data;
+                    // DO NOT call updateAllBookSelects() here — server already rendered correct values
+                })
+                .catch(e => console.error(e));
+        }
+
+        // Only reload + repopulate when user manually changes catalog
+        headerCatalog?.addEventListener('change', () => {
+            detailsBody.querySelectorAll('.book-select').forEach(s => s.dataset.selected = '');
+            loadBooksForCatalog(false);
+        });
     </script>
 }

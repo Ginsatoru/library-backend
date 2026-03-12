@@ -17,25 +17,25 @@ namespace LibrarySystemBBU.Controllers
             _reportService = reportService;
         }
 
-        // ================== MONTHLY HTML VIEW ==================
-        public async Task<IActionResult> Monthly(int? year, int? month)
+        public async Task<IActionResult> Monthly(DateTime? startDate, DateTime? endDate)
         {
-            var y = year ?? DateTime.Today.Year;
-            var m = month ?? DateTime.Today.Month;
+            var start = startDate?.Date ?? new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            var end = endDate?.Date ?? DateTime.Today;
 
-            var vm = await _reportService.GetMonthlyReportAsync(y, m);
-            return View(vm);   // Views/Reports/Monthly.cshtml
+            if (end < start) end = start;
+
+            var vm = await _reportService.GetReportAsync(start, end);
+            return View(vm);
         }
 
-        // ================== MONTHLY EXCEL EXPORT (.xls) ==================
-        public async Task<IActionResult> MonthlyExcel(int year, int month)
+        public async Task<IActionResult> MonthlyExcel(DateTime startDate, DateTime endDate)
         {
-            var vm = await _reportService.GetMonthlyReportAsync(year, month);
+            var vm = await _reportService.GetReportAsync(startDate.Date, endDate.Date);
 
             var html = BuildExcelHtml(vm);
             var bytes = AddUtf8Bom(html);
 
-            var fileName = $"MonthlyReport_{year}_{month:00}.xls";
+            var fileName = $"Report_{startDate:yyyyMMdd}_to_{endDate:yyyyMMdd}.xls";
             const string contentType = "application/vnd.ms-excel; charset=utf-8";
             return File(bytes, contentType, fileName);
         }
@@ -46,157 +46,87 @@ namespace LibrarySystemBBU.Controllers
         private static string BuildExcelHtml(MonthlyReportViewModel vm)
         {
             var sb = new StringBuilder();
+            var rangeLabel = $"{vm.StartDate:yyyy-MM-dd} to {vm.EndDate:yyyy-MM-dd}";
+
             sb.AppendLine("<html><head><meta charset=\"UTF-8\"></head><body>");
 
-            // ------------------------------------------------------------------
-            // 1) Borrowed this month (LoanDate in month)
-            // ------------------------------------------------------------------
-            sb.AppendLine($"<h3>Borrow Book (This Month) - {HtmlEncode(vm.MonthName)} {vm.Year}</h3>");
+            // 1) Borrowed
+            sb.AppendLine($"<h3>Borrow Book Report - {HtmlEncode(rangeLabel)}</h3>");
             sb.AppendLine("<table border='1' cellspacing='0' cellpadding='4'>");
             sb.AppendLine(
                 "<tr>" +
-                "<th>Loan Date</th>" +
-                "<th>Due</th>" +
-                "<th>Return</th>" +
-                "<th>Member</th>" +
-                "<th>Type</th>" +
-                "<th>Catalog Title</th>" +
-                "<th>Barcode</th>" +
-                "<th>Deposit (៛)</th>" +
-                "<th>Fine Amount (៛)</th>" +
-                "<th>Extra Charge (៛)</th>" +
-                "</tr>"
-            );
+                "<th>Loan Date</th><th>Due</th><th>Return</th>" +
+                "<th>Member</th><th>Type</th><th>Catalog Title</th><th>Barcode</th>" +
+                "<th>Deposit ($)</th><th>Fine Amount ($)</th><th>Extra Charge ($)</th>" +
+                "</tr>");
 
-            decimal totalDeposit = 0m;
-            decimal totalFine = 0m;
-            decimal totalExtra = 0m;
-
+            decimal totalDeposit = 0, totalFine = 0, totalExtra = 0;
             foreach (var b in vm.StudentBorrowDetails)
             {
                 totalDeposit += b.DepositAmount;
                 totalFine += b.FineAmount;
                 totalExtra += b.ExtraCharge;
-
                 sb.Append("<tr>");
-                sb.Append($"<td>{HtmlEncode(b.LoanDate.ToString("yyyy-MM-dd"))}</td>");
-                sb.Append($"<td>{HtmlEncode(b.DueDate?.ToString("yyyy-MM-dd") ?? string.Empty)}</td>");
-                sb.Append($"<td>{HtmlEncode(b.ReturnDate?.ToString("yyyy-MM-dd") ?? string.Empty)}</td>");
+                sb.Append($"<td>{b.LoanDate:yyyy-MM-dd}</td>");
+                sb.Append($"<td>{b.DueDate?.ToString("yyyy-MM-dd")}</td>");
+                sb.Append($"<td>{b.ReturnDate?.ToString("yyyy-MM-dd")}</td>");
                 sb.Append($"<td>{HtmlEncode(b.MemberName)}</td>");
                 sb.Append($"<td>{HtmlEncode(b.MemberType)}</td>");
                 sb.Append($"<td>{HtmlEncode(b.CatalogTitle)}</td>");
                 sb.Append($"<td>{HtmlEncode(b.Barcode)}</td>");
-                sb.Append($"<td>{b.DepositAmount:0}</td>");
-                sb.Append($"<td>{b.FineAmount:0}</td>");
-                sb.Append($"<td>{b.ExtraCharge:0}</td>");
+                sb.Append($"<td>${b.DepositAmount:0}</td>");
+                sb.Append($"<td>${b.FineAmount:0}</td>");
+                sb.Append($"<td>${b.ExtraCharge:0}</td>");
                 sb.Append("</tr>");
             }
+            var borrowStudents = vm.StudentBorrowDetails.Select(x => x.MemberId).Distinct().Count();
+            sb.Append($"<tr><td colspan='3'><b>Totals</b></td><td><b>{borrowStudents} student(s)</b></td><td></td>");
+            sb.Append($"<td><b>{vm.StudentBorrowDetails.Count} item(s)</b></td><td></td>");
+            sb.Append($"<td><b>${totalDeposit:0}</b></td><td><b>${totalFine:0}</b></td><td><b>${totalExtra:0}</b></td></tr>");
+            sb.AppendLine("</table><br />");
 
-            var totalStudents = vm.StudentBorrowDetails
-                .Select(x => x.MemberId)
-                .Distinct()
-                .Count();
-
-            sb.Append("<tr>");
-            sb.Append("<td colspan='3'><b>Totals</b></td>");
-            sb.Append($"<td><b>{totalStudents} student(s)</b></td>");
-            sb.Append("<td></td>");
-            sb.Append($"<td><b>{vm.StudentBorrowDetails.Count} item(s)</b></td>");
-            sb.Append("<td></td>");
-            sb.Append($"<td><b>{totalDeposit:0}</b></td>");
-            sb.Append($"<td><b>{totalFine:0}</b></td>");
-            sb.Append($"<td><b>{totalExtra:0}</b></td>");
-            sb.Append("</tr>");
-
-            sb.AppendLine("</table>");
-            sb.AppendLine("<br />");
-
-            // ------------------------------------------------------------------
-            // 1b) Returned this month (ReturnDate in month)  ✅ NEW
-            // ------------------------------------------------------------------
-            sb.AppendLine($"<h3>Returned Books (This Month) - {HtmlEncode(vm.MonthName)} {vm.Year}</h3>");
+            // 1b) Returned
+            sb.AppendLine($"<h3>Returned Books Report - {HtmlEncode(rangeLabel)}</h3>");
             sb.AppendLine("<table border='1' cellspacing='0' cellpadding='4'>");
             sb.AppendLine(
                 "<tr>" +
-                "<th>Return Date</th>" +
-                "<th>Loan Date</th>" +
-                "<th>Due</th>" +
-                "<th>Member</th>" +
-                "<th>Type</th>" +
-                "<th>Catalog Title</th>" +
-                "<th>Barcode</th>" +
-                "<th>Fine Amount (៛)</th>" +
-                "<th>Extra Charge (៛)</th>" +
-                "</tr>"
-            );
+                "<th>Return Date</th><th>Loan Date</th><th>Due</th>" +
+                "<th>Member</th><th>Type</th><th>Catalog Title</th><th>Barcode</th>" +
+                "<th>Fine Amount ($)</th><th>Extra Charge ($)</th>" +
+                "</tr>");
 
-            decimal returnTotalFine = 0m;
-            decimal returnTotalExtra = 0m;
-
+            decimal retFine = 0, retExtra = 0;
             foreach (var r in vm.StudentReturnDetails)
             {
-                returnTotalFine += r.FineAmount;
-                returnTotalExtra += r.ExtraCharge;
-
+                retFine += r.FineAmount;
+                retExtra += r.ExtraCharge;
                 sb.Append("<tr>");
-                sb.Append($"<td>{HtmlEncode(r.ReturnDate?.ToString("yyyy-MM-dd") ?? string.Empty)}</td>");
-                sb.Append($"<td>{HtmlEncode(r.LoanDate.ToString("yyyy-MM-dd"))}</td>");
-                sb.Append($"<td>{HtmlEncode(r.DueDate?.ToString("yyyy-MM-dd") ?? string.Empty)}</td>");
+                sb.Append($"<td>{r.ReturnDate?.ToString("yyyy-MM-dd")}</td>");
+                sb.Append($"<td>{r.LoanDate:yyyy-MM-dd}</td>");
+                sb.Append($"<td>{r.DueDate?.ToString("yyyy-MM-dd")}</td>");
                 sb.Append($"<td>{HtmlEncode(r.MemberName)}</td>");
                 sb.Append($"<td>{HtmlEncode(r.MemberType)}</td>");
                 sb.Append($"<td>{HtmlEncode(r.CatalogTitle)}</td>");
                 sb.Append($"<td>{HtmlEncode(r.Barcode)}</td>");
-                sb.Append($"<td>{r.FineAmount:0}</td>");
-                sb.Append($"<td>{r.ExtraCharge:0}</td>");
+                sb.Append($"<td>${r.FineAmount:0}</td>");
+                sb.Append($"<td>${r.ExtraCharge:0}</td>");
                 sb.Append("</tr>");
             }
+            var retStudents = vm.StudentReturnDetails.Select(x => x.MemberId).Distinct().Count();
+            sb.Append($"<tr><td colspan='3'><b>Totals</b></td><td><b>{retStudents} student(s)</b></td><td></td>");
+            sb.Append($"<td><b>{vm.StudentReturnDetails.Count} item(s)</b></td><td></td>");
+            sb.Append($"<td><b>${retFine:0}</b></td><td><b>${retExtra:0}</b></td></tr>");
+            sb.AppendLine("</table><br />");
 
-            var returnedStudents = vm.StudentReturnDetails
-                .Select(x => x.MemberId)
-                .Distinct()
-                .Count();
-
-            sb.Append("<tr>");
-            sb.Append("<td colspan='3'><b>Totals</b></td>");
-            sb.Append($"<td><b>{returnedStudents} student(s)</b></td>");
-            sb.Append("<td></td>");
-            sb.Append($"<td><b>{vm.StudentReturnDetails.Count} item(s) returned</b></td>");
-            sb.Append("<td></td>");
-            sb.Append($"<td><b>{returnTotalFine:0}</b></td>");
-            sb.Append($"<td><b>{returnTotalExtra:0}</b></td>");
-            sb.Append("</tr>");
-
-            sb.AppendLine("</table>");
-            sb.AppendLine("<br />");
-
-            // ------------------------------------------------------------------
-            // 2) In-Library Reading
-            // ------------------------------------------------------------------
-            sb.AppendLine($"<h3>In-Library Reading - {HtmlEncode(vm.MonthName)} {vm.Year}</h3>");
+            // 2) In-Library
+            sb.AppendLine($"<h3>In-Library Reading - {HtmlEncode(rangeLabel)}</h3>");
             sb.AppendLine("<table border='1' cellspacing='0' cellpadding='4'>");
-            sb.AppendLine(
-                "<tr>" +
-                "<th>Visit Date</th>" +
-                "<th>Student</th>" +
-                "<th>Gender</th>" +
-                "<th>Purpose</th>" +
-                "<th>Book Title</th>" +
-                "<th>Catalog Title</th>" +
-                "<th>Barcode</th>" +
-                "<th>Status</th>" +
-                "<th>Returned Date</th>" +
-                "</tr>"
-            );
-
-            var inLibStudents = vm.InLibraryDetails
-                .Select(x => x.StudentName)
-                .Distinct()
-                .Count();
-
+            sb.AppendLine("<tr><th>Visit Date</th><th>Student</th><th>Gender</th><th>Purpose</th>" +
+                          "<th>Book Title</th><th>Catalog Title</th><th>Barcode</th><th>Status</th><th>Returned Date</th></tr>");
             foreach (var r in vm.InLibraryDetails)
             {
                 sb.Append("<tr>");
-                sb.Append($"<td>{HtmlEncode(r.VisitDate.ToString("yyyy-MM-dd"))}</td>");
+                sb.Append($"<td>{r.VisitDate:yyyy-MM-dd}</td>");
                 sb.Append($"<td>{HtmlEncode(r.StudentName)}</td>");
                 sb.Append($"<td>{HtmlEncode(r.Gender)}</td>");
                 sb.Append($"<td>{HtmlEncode(r.Purpose)}</td>");
@@ -204,128 +134,64 @@ namespace LibrarySystemBBU.Controllers
                 sb.Append($"<td>{HtmlEncode(r.CatalogTitle)}</td>");
                 sb.Append($"<td>{HtmlEncode(r.Barcode)}</td>");
                 sb.Append($"<td>{HtmlEncode(r.Status)}</td>");
-                sb.Append($"<td>{HtmlEncode(r.ReturnedDate?.ToString("yyyy-MM-dd") ?? string.Empty)}</td>");
+                sb.Append($"<td>{r.ReturnedDate?.ToString("yyyy-MM-dd")}</td>");
                 sb.Append("</tr>");
             }
+            var inLibStudents = vm.InLibraryDetails.Select(x => x.StudentName).Distinct().Count();
+            sb.Append($"<tr><td colspan='2'><b>{inLibStudents} unique student(s)</b></td>");
+            sb.Append($"<td colspan='7'><b>{vm.InLibraryDetails.Count} item(s) read in library</b></td></tr>");
+            sb.AppendLine("</table><br />");
 
-            sb.Append("<tr>");
-            sb.Append($"<td colspan='2'><b>{inLibStudents} unique student(s)</b></td>");
-            sb.Append($"<td colspan='7'><b>{vm.InLibraryDetails.Count} item(s) read in library</b></td>");
-            sb.Append("</tr>");
-
-            sb.AppendLine("</table>");
-            sb.AppendLine("<br />");
-
-            // ------------------------------------------------------------------
             // 3) Purchases
-            // ------------------------------------------------------------------
-            sb.AppendLine($"<h3>Purchases - {HtmlEncode(vm.MonthName)} {vm.Year}</h3>");
+            sb.AppendLine($"<h3>Purchases - {HtmlEncode(rangeLabel)}</h3>");
             sb.AppendLine("<table border='1' cellspacing='0' cellpadding='4'>");
-            sb.AppendLine(
-                "<tr>" +
-                "<th>Date</th>" +
-                "<th>Supplier</th>" +
-                "<th>Book Title</th>" +
-                "<th>Quantity</th>" +
-                "<th>Cost (៛)</th>" +
-                "<th>Notes</th>" +
-                "</tr>"
-            );
-
-            int totalQty = vm.PurchaseItems.Sum(x => x.Quantity);
-            decimal totalCost = vm.PurchaseItems.Sum(x => x.Cost);
-
+            sb.AppendLine("<tr><th>Date</th><th>Supplier</th><th>Book Title</th><th>Quantity</th><th>Cost ($)</th><th>Notes</th></tr>");
+            int totalQty = 0; decimal totalCost = 0;
             foreach (var p in vm.PurchaseItems)
             {
+                totalQty += p.Quantity; totalCost += p.Cost;
                 sb.Append("<tr>");
-                sb.Append($"<td>{HtmlEncode(p.PurchaseDate.ToString("yyyy-MM-dd"))}</td>");
+                sb.Append($"<td>{p.PurchaseDate:yyyy-MM-dd}</td>");
                 sb.Append($"<td>{HtmlEncode(p.Supplier)}</td>");
                 sb.Append($"<td>{HtmlEncode(p.BookTitle)}</td>");
                 sb.Append($"<td>{p.Quantity}</td>");
-                sb.Append($"<td>{p.Cost:0}</td>");
+                sb.Append($"<td>${p.Cost:0}</td>");
                 sb.Append($"<td>{HtmlEncode(p.Notes)}</td>");
                 sb.Append("</tr>");
             }
+            sb.Append($"<tr><td colspan='3'><b>{vm.PurchaseItems.Count} row(s)</b></td>");
+            sb.Append($"<td><b>{totalQty}</b></td><td><b>${totalCost:0}</b></td><td></td></tr>");
+            sb.AppendLine("</table><br />");
 
-            sb.Append("<tr>");
-            sb.Append($"<td colspan='3'><b>{vm.PurchaseItems.Count} row(s)</b></td>");
-            sb.Append($"<td><b>{totalQty}</b></td>");
-            sb.Append($"<td><b>{totalCost:0}</b></td>");
-            sb.Append("<td></td>");
-            sb.Append("</tr>");
-
-            sb.AppendLine("</table>");
-            sb.AppendLine("<br />");
-
-            // ------------------------------------------------------------------
-            // 4) Adjustments (unchanged)
-            // ------------------------------------------------------------------
-            sb.AppendLine($"<h3>Adjustments - {HtmlEncode(vm.MonthName)} {vm.Year}</h3>");
-
-            sb.AppendLine("<h4>Summary by Type</h4>");
-            sb.AppendLine("<table border='1' cellspacing='0' cellpadding='4'>");
-            sb.AppendLine("<tr><th>Type</th><th>Net Qty</th><th>Count</th></tr>");
-
-            foreach (var s in vm.AdjustmentsByType)
-            {
-                sb.Append("<tr>");
-                sb.Append($"<td>{HtmlEncode(s.AdjustmentType)}</td>");
-                sb.Append($"<td>{s.TotalQuantityChange}</td>");
-                sb.Append($"<td>{s.Count}</td>");
-                sb.Append("</tr>");
-            }
-
-            sb.AppendLine("</table>");
-            sb.AppendLine("<br />");
-
-            sb.AppendLine("<h4>Details</h4>");
+            // 4) Adjustments
+            sb.AppendLine($"<h3>Adjustments - {HtmlEncode(rangeLabel)}</h3>");
             sb.AppendLine("<table border='1' cellspacing='0' cellpadding='4'>");
             sb.AppendLine("<tr><th>Date</th><th>Type</th><th>Catalog Title</th><th>Qty Change</th><th>Reason</th></tr>");
-
-            int totalAdjQty = vm.AdjustmentItems.Sum(x => x.QuantityChanged);
-
+            int totalAdjQty = 0;
             foreach (var d in vm.AdjustmentItems)
             {
+                totalAdjQty += d.QuantityChanged;
                 sb.Append("<tr>");
-                sb.Append($"<td>{HtmlEncode(d.AdjustmentDate.ToString("yyyy-MM-dd"))}</td>");
+                sb.Append($"<td>{d.AdjustmentDate:yyyy-MM-dd}</td>");
                 sb.Append($"<td>{HtmlEncode(d.AdjustmentType)}</td>");
                 sb.Append($"<td>{HtmlEncode(d.CatalogTitle)}</td>");
                 sb.Append($"<td>{d.QuantityChanged}</td>");
                 sb.Append($"<td>{HtmlEncode(d.Reason)}</td>");
                 sb.Append("</tr>");
             }
+            sb.Append($"<tr><td colspan='3'><b>{vm.AdjustmentItems.Count} row(s)</b></td>");
+            sb.Append($"<td><b>{totalAdjQty}</b></td><td></td></tr>");
+            sb.AppendLine("</table><br />");
 
-            sb.Append("<tr>");
-            sb.Append($"<td colspan='3'><b>{vm.AdjustmentItems.Count} row(s)</b></td>");
-            sb.Append($"<td><b>{totalAdjQty}</b></td>");
-            sb.Append("<td></td>");
-            sb.Append("</tr>");
-
-            sb.AppendLine("</table>");
-            sb.AppendLine("<br />");
-
-            // ------------------------------------------------------------------
-            // 5) Financial Summary (use month-based sums already in VM)
-            // ------------------------------------------------------------------
-            sb.AppendLine($"<h3>Financial Summary - {HtmlEncode(vm.MonthName)} {vm.Year}</h3>");
+            // 5) Financial Summary
+            sb.AppendLine($"<h3>Financial Summary - {HtmlEncode(rangeLabel)}</h3>");
             sb.AppendLine("<table border='1' cellspacing='0' cellpadding='4'>");
-            sb.AppendLine("<tr><th>Category</th><th>Type</th><th>Amount (៛)</th></tr>");
-
-            sb.Append("<tr><td>Borrowing fees</td><td>Income</td>");
-            sb.Append($"<td>{vm.IncomeBorrowingFees:0}</td></tr>");
-
-            sb.Append("<tr><td>Late fines</td><td>Income</td>");
-            sb.Append($"<td>{vm.IncomeFines:0}</td></tr>");
-
-            sb.Append("<tr><td>Extra charges (damage, etc.)</td><td>Income</td>");
-            sb.Append($"<td>{vm.IncomeExtraCharges:0}</td></tr>");
-
-            sb.Append("<tr><td>Book purchases</td><td>Expense</td>");
-            sb.Append($"<td>{vm.ExpensePurchases:0}</td></tr>");
-
-            sb.Append("<tr><td colspan='2'><b>Net Cash Flow (Income - Expense)</b></td>");
-            sb.Append($"<td><b>{vm.NetCashFlow:0}</b></td></tr>");
-
+            sb.AppendLine("<tr><th>Category</th><th>Type</th><th>Amount ($)</th></tr>");
+            sb.Append($"<tr><td>Borrowing fees</td><td>Income</td><td>${vm.IncomeBorrowingFees:0}</td></tr>");
+            sb.Append($"<tr><td>Late fines</td><td>Income</td><td>${vm.IncomeFines:0}</td></tr>");
+            sb.Append($"<tr><td>Extra charges</td><td>Income</td><td>${vm.IncomeExtraCharges:0}</td></tr>");
+            sb.Append($"<tr><td>Book purchases</td><td>Expense</td><td>${vm.ExpensePurchases:0}</td></tr>");
+            sb.Append($"<tr><td colspan='2'><b>Net Cash Flow</b></td><td><b>${vm.NetCashFlow:0}</b></td></tr>");
             sb.AppendLine("</table>");
 
             sb.AppendLine("</body></html>");

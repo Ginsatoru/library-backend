@@ -5,20 +5,19 @@ namespace LibrarySystemBBU.ViewModels
 {
     public class MonthlyReportViewModel
     {
-        public int Year { get; set; }
-        public int Month { get; set; }
-        public string MonthName => new DateTime(Year, Month, 1).ToString("MMMM");
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
 
-        // Borrowed in this month (LoanDate in month)
+        public string DateRangeLabel => $"{StartDate:yyyy-MM-dd} – {EndDate:yyyy-MM-dd}";
+
+        // Borrowed in range (LoanDate in range)
         public int StudentTakeHomeLoans { get; set; }
         public int StudentTakeHomeItemsBorrowed { get; set; }
 
-        // Returned in this month (ReturnDate in month)
+        // Returned in range (ReturnDate in range)
         public int StudentTakeHomeReturns { get; set; }
 
         public List<BorrowReportItemDto> StudentBorrowDetails { get; set; } = new();
-
-        // ✅ NEW: Returned details (ReturnDate in month)
         public List<BorrowReportItemDto> StudentReturnDetails { get; set; } = new();
 
         public int InLibraryBorrowCount { get; set; }

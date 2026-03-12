@@ -270,20 +270,35 @@
         height: 36px;
         border-radius: 7px;
         border-color: #e5e7eb;
+        display: flex;
+        align-items: center;
     }
 
     .select2-container--default .select2-selection--single .select2-selection__rendered {
-        line-height: 36px;
+        line-height: normal;
+        padding-top: 0;
+        padding-bottom: 0;
         font-size: .83rem;
         font-family: 'Inter', sans-serif;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__placeholder {
+        color: #9ca3af;
     }
 
     .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 36px;
+        height: 34px;
+        top: 1px;
     }
 
     .select2-container--default.select2-container--focus .select2-selection--single {
         border-color: #000080;
+        box-shadow: 0 0 0 3px rgba(0,0,128,.07);
+        outline: none;
     }
 
     .dr-input {
@@ -475,8 +490,12 @@
             const footerQty  = document.getElementById('footerQty');
             const footerCost = document.getElementById('footerCost');
 
-            function initSelect2(scope) {
-                $(scope).find('select.book-select').select2({
+                    function initSelect2(scope) {
+            $(scope).find('select.book-select').each(function () {
+                const $sel = $(this);
+                const hiddenId = $sel.data('hidden-id');
+
+                $sel.select2({
                     placeholder: 'Search book by title, ISBN, barcode…',
                     width: '100%',
                     minimumInputLength: 1,
@@ -492,7 +511,18 @@
                         }
                     }
                 });
-            }
+
+                // Sync selected catalog GUID into the hidden input
+                $sel.on('select2:select', function (e) {
+                    const val = e.params.data.id || '';
+                    $('#' + hiddenId).val(val);
+                });
+
+                $sel.on('select2:clear select2:unselect', function () {
+                    $('#' + hiddenId).val('');
+                });
+            });
+        }
 
             function parseNum(v, dp) {
                 const n = parseFloat(v);

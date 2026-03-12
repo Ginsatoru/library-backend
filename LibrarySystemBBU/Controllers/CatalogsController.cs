@@ -116,6 +116,8 @@ namespace LibrarySystemBBU.Controllers
         private static bool Filled(CatalogFormVM.BookRow r) =>
             !(string.IsNullOrWhiteSpace(r.Barcode) || string.IsNullOrWhiteSpace(r.Status));
 
+        // Always derive TotalCopies and AvailableCopies
+        // from the actual filled book rows — never trust what the form POSTed.
         private void RecalculateCopiesFromBooks(CatalogFormVM vm)
         {
             vm.Books ??= new();
@@ -125,28 +127,45 @@ namespace LibrarySystemBBU.Controllers
                 string.Equals(b.Status, "Available", StringComparison.OrdinalIgnoreCase));
         }
 
-        private static CatalogFormVM MapToVM(Catalog c) => new CatalogFormVM
+        // Recalculate a saved Catalog entity's counts directly from its Books navigation.
+        // Call this after any add/edit/delete of Book records for a Catalog.
+        private static void RecalculateCatalogCounts(Catalog catalog)
         {
-            CatalogId = c.CatalogId,
-            Title = c.Title,
-            Author = c.Author,
-            ISBN = c.ISBN,
-            Category = c.Category,
-            Faculty = c.Faculty,
-            TotalCopies = c.TotalCopies,
-            AvailableCopies = c.AvailableCopies,
-            ImagePath = c.ImagePath,
-            PdfFilePath = c.PdfFilePath,
-            Books = (c.Books ?? new List<Book>()).OrderBy(b => b.BookId).Select(b => new CatalogFormVM.BookRow
+            catalog.TotalCopies = catalog.Books.Count;
+            catalog.AvailableCopies = catalog.Books.Count(b =>
+                string.Equals(b.Status, "Available", StringComparison.OrdinalIgnoreCase));
+        }
+
+        // KEY FIX: MapToVM now derives TotalCopies and AvailableCopies directly
+        // from the Books collection — never from the potentially stale DB columns.
+        // This ensures the Edit form always shows the correct counts on load.
+        private static CatalogFormVM MapToVM(Catalog c)
+        {
+            var books = (c.Books ?? new List<Book>()).OrderBy(b => b.BookId).ToList();
+            return new CatalogFormVM
             {
-                BookId = b.BookId,
-                CatalogId = b.CatalogId,
-                Barcode = b.Barcode,
-                Status = b.Status,
-                Location = b.Location,
-                AcquisitionDate = b.AcquisitionDate
-            }).ToList()
-        };
+                CatalogId = c.CatalogId,
+                Title = c.Title,
+                Author = c.Author,
+                ISBN = c.ISBN,
+                Category = c.Category,
+                Faculty = c.Faculty,
+                TotalCopies = books.Count,
+                AvailableCopies = books.Count(b =>
+                    string.Equals(b.Status, "Available", StringComparison.OrdinalIgnoreCase)),
+                ImagePath = c.ImagePath,
+                PdfFilePath = c.PdfFilePath,
+                Books = books.Select(b => new CatalogFormVM.BookRow
+                {
+                    BookId = b.BookId,
+                    CatalogId = b.CatalogId,
+                    Barcode = b.Barcode,
+                    Status = b.Status,
+                    Location = b.Location,
+                    AcquisitionDate = b.AcquisitionDate
+                }).ToList()
+            };
+        }
 
         private static string CsvEscape(string? value)
         {
@@ -155,9 +174,6 @@ namespace LibrarySystemBBU.Controllers
             return $"\"{v}\"";
         }
 
-        /// <summary>
-        /// Parse .xlsx / .xls (HTML export) / .csv / .tsv into rows.
-        /// </summary>
         private static List<string[]> ParseExcelFile(Stream stream, string fileName)
         {
             var rows = new List<string[]>();
@@ -245,14 +261,18 @@ namespace LibrarySystemBBU.Controllers
 
             foreach (var c in catalogs)
             {
+                // Use live counts from Books for export too
                 var books = c.Books?.OrderBy(b => b.BookId).ToList() ?? new List<Book>();
+                var totalCopies = books.Count;
+                var availCopies = books.Count(b => string.Equals(b.Status, "Available", StringComparison.OrdinalIgnoreCase));
+
                 if (books.Any())
                 {
                     foreach (var b in books)
                     {
                         sb.AppendLine("<tr>");
                         sb.AppendLine($"<td>{H(c.Title)}</td><td>{H(c.Author)}</td><td>{H(c.ISBN)}</td><td>{H(c.Category)}</td><td>{H(c.Faculty)}</td>");
-                        sb.AppendLine($"<td>{c.TotalCopies}</td><td>{c.AvailableCopies}</td><td>{c.BorrowCount}</td><td>{c.InLibraryCount}</td><td>{c.PdfViewerCount}</td>");
+                        sb.AppendLine($"<td>{totalCopies}</td><td>{availCopies}</td><td>{c.BorrowCount}</td><td>{c.InLibraryCount}</td><td>{c.PdfViewerCount}</td>");
                         sb.AppendLine($"<td>{H(b.Barcode)}</td><td>{H(b.Status)}</td><td>{H(b.Location)}</td><td>{H(b.AcquisitionDate.ToString("yyyy-MM-dd"))}</td>");
                         sb.AppendLine("</tr>");
                     }
@@ -261,7 +281,7 @@ namespace LibrarySystemBBU.Controllers
                 {
                     sb.AppendLine("<tr>");
                     sb.AppendLine($"<td>{H(c.Title)}</td><td>{H(c.Author)}</td><td>{H(c.ISBN)}</td><td>{H(c.Category)}</td><td>{H(c.Faculty)}</td>");
-                    sb.AppendLine($"<td>{c.TotalCopies}</td><td>{c.AvailableCopies}</td><td>{c.BorrowCount}</td><td>{c.InLibraryCount}</td><td>{c.PdfViewerCount}</td>");
+                    sb.AppendLine($"<td>{totalCopies}</td><td>{availCopies}</td><td>{c.BorrowCount}</td><td>{c.InLibraryCount}</td><td>{c.PdfViewerCount}</td>");
                     sb.AppendLine("<td></td><td></td><td></td><td></td>");
                     sb.AppendLine("</tr>");
                 }
@@ -562,6 +582,7 @@ namespace LibrarySystemBBU.Controllers
             {
                 await _context.SaveChangesAsync();
 
+                // Recalculate ALL touched and newly created catalogs from DB
                 var touchedIds = rows
                     .Where(r => r.MatchedCatalogId != null)
                     .Select(r => Guid.Parse(r.MatchedCatalogId!))
@@ -580,11 +601,7 @@ namespace LibrarySystemBBU.Controllers
                     .ToListAsync();
 
                 foreach (var c in touchedCatalogs.Concat(newlyCreatedCatalogs).DistinctBy(c => c.CatalogId))
-                {
-                    c.TotalCopies = c.Books.Count;
-                    c.AvailableCopies = c.Books.Count(b =>
-                        string.Equals(b.Status, "Available", StringComparison.OrdinalIgnoreCase));
-                }
+                    RecalculateCatalogCounts(c);
 
                 await _context.SaveChangesAsync();
                 HttpContext.Session.Remove("ImportRows");
@@ -664,8 +681,29 @@ namespace LibrarySystemBBU.Controllers
             };
             _context.Catalogs.Add(cat);
             foreach (var r in vm.Books.Where(Filled))
-                _context.Books.Add(new Book { CatalogId = cat.CatalogId, Barcode = r.Barcode, Status = r.Status, Location = r.Location, AcquisitionDate = r.AcquisitionDate, Created = DateTime.UtcNow, Modified = DateTime.UtcNow });
+                _context.Books.Add(new Book
+                {
+                    CatalogId = cat.CatalogId,
+                    Barcode = r.Barcode,
+                    Status = r.Status,
+                    Location = r.Location,
+                    AcquisitionDate = r.AcquisitionDate,
+                    Created = DateTime.UtcNow,
+                    Modified = DateTime.UtcNow
+                });
+
             await _context.SaveChangesAsync();
+
+            // After all books are inserted, reload and recalculate counts
+            var savedCatalog = await _context.Catalogs
+                .Include(c => c.Books)
+                .FirstOrDefaultAsync(c => c.CatalogId == cat.CatalogId);
+            if (savedCatalog != null)
+            {
+                RecalculateCatalogCounts(savedCatalog);
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -699,6 +737,12 @@ namespace LibrarySystemBBU.Controllers
             if (id == null) return NotFound();
             var catalog = await _context.Catalogs.Include(c => c.Books).FirstOrDefaultAsync(c => c.CatalogId == id);
             if (catalog == null) return NotFound();
+
+            // KEY FIX: Always sync DB counts before rendering the edit form
+            // so the displayed Total/Available are never stale.
+            RecalculateCatalogCounts(catalog);
+            await _context.SaveChangesAsync();
+
             return View(MapToVM(catalog));
         }
 
@@ -744,8 +788,8 @@ namespace LibrarySystemBBU.Controllers
             catalog.ISBN = vm.ISBN;
             catalog.Category = vm.Category;
             catalog.Faculty = vm.Faculty;
-            catalog.TotalCopies = vm.TotalCopies;
-            catalog.AvailableCopies = vm.AvailableCopies;
+            // TotalCopies and AvailableCopies are NOT set from vm here —
+            // they are recalculated from actual Books after save below.
 
             var pFilled = vm.Books.Where(Filled).ToList();
             var dbBooks = catalog.Books.ToList();
@@ -753,17 +797,83 @@ namespace LibrarySystemBBU.Controllers
             foreach (var row in pFilled.Where(p => p.BookId > 0))
             {
                 var db = dbBooks.FirstOrDefault(b => b.BookId == row.BookId);
-                if (db != null) { db.Barcode = row.Barcode; db.Status = row.Status; db.Location = row.Location; db.AcquisitionDate = row.AcquisitionDate; db.Modified = DateTime.UtcNow; }
+                if (db != null)
+                {
+                    db.Barcode = row.Barcode;
+                    db.Status = row.Status;
+                    db.Location = row.Location;
+                    db.AcquisitionDate = row.AcquisitionDate;
+                    db.Modified = DateTime.UtcNow;
+                }
             }
             foreach (var row in pFilled.Where(p => p.BookId == 0))
-                _context.Books.Add(new Book { CatalogId = catalog.CatalogId, Barcode = row.Barcode, Status = row.Status, Location = row.Location, AcquisitionDate = row.AcquisitionDate, Created = DateTime.UtcNow, Modified = DateTime.UtcNow });
+                _context.Books.Add(new Book
+                {
+                    CatalogId = catalog.CatalogId,
+                    Barcode = row.Barcode,
+                    Status = row.Status,
+                    Location = row.Location,
+                    AcquisitionDate = row.AcquisitionDate,
+                    Created = DateTime.UtcNow,
+                    Modified = DateTime.UtcNow
+                });
 
             var pIds = pFilled.Where(p => p.BookId > 0).Select(p => p.BookId).ToHashSet();
             var toRemove = dbBooks.Where(b => !pIds.Contains(b.BookId)).ToList();
-            if (toRemove.Any()) _context.Books.RemoveRange(toRemove);
+            if (toRemove.Any())
+            {
+                var blocked = toRemove
+                    .Where(b => !string.Equals(b.Status, "Available", StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                if (blocked.Any())
+                {
+                    ModelState.AddModelError("", $"Cannot remove {blocked.Count} book copy(s) with status: {string.Join(", ", blocked.Select(b => $"{b.Barcode} ({b.Status})"))}. Only Available copies can be removed.");
+                    return View(MapToVM(catalog));
+                }
+
+                var removeIds = toRemove.Select(b => b.BookId).ToList();
+
+                var orphanLogItems = await _context.Set<LibraryLogItem>()
+                    .Where(li => removeIds.Contains(li.BookId))
+                    .ToListAsync();
+                if (orphanLogItems.Any())
+                    _context.Set<LibraryLogItem>().RemoveRange(orphanLogItems);
+
+                var orphanAdjDetails = await _context.Set<AdjustmentDetail>()
+                    .Where(ad => ad.BookId != null && removeIds.Contains(ad.BookId!.Value))
+                    .ToListAsync();
+                foreach (var ad in orphanAdjDetails)
+                    ad.BookId = null;
+
+                _context.Books.RemoveRange(toRemove);
+            }
 
             await _context.SaveChangesAsync();
+
+            // KEY FIX: Reload the catalog with fresh Books and recalculate counts
+            var reloaded = await _context.Catalogs
+                .Include(c => c.Books)
+                .FirstOrDefaultAsync(c => c.CatalogId == id);
+            if (reloaded != null)
+            {
+                RecalculateCatalogCounts(reloaded);
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToAction(nameof(Index));
+        }
+
+        // ---------- Admin: Recalculate All Catalogs ----------
+        // Use this once to fix any existing stale data in the database.
+        [HttpPost]
+        public async Task<IActionResult> RecalculateAllCatalogs()
+        {
+            var catalogs = await _context.Catalogs.Include(c => c.Books).ToListAsync();
+            foreach (var c in catalogs)
+                RecalculateCatalogCounts(c);
+            await _context.SaveChangesAsync();
+            return Ok(new { success = true, message = $"Recalculated counts for {catalogs.Count} catalog(s)." });
         }
 
         // ---------- API: List ----------
@@ -771,7 +881,10 @@ namespace LibrarySystemBBU.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> IndexJson()
         {
-            var catalogs = await _context.Catalogs.AsNoTracking().OrderBy(c => c.Title)
+            var catalogs = await _context.Catalogs
+                .Include(c => c.Books)
+                .AsNoTracking()
+                .OrderBy(c => c.Title)
                 .Select(c => new
                 {
                     catalogId = c.CatalogId,
@@ -818,7 +931,7 @@ namespace LibrarySystemBBU.Controllers
             });
         }
 
-        // ---------- Delete ----------
+        // ---------- Delete GET ----------
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null) return NotFound();
@@ -827,6 +940,7 @@ namespace LibrarySystemBBU.Controllers
             return View(MapToVM(catalog));
         }
 
+        // ---------- Delete POST ----------
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
@@ -834,7 +948,17 @@ namespace LibrarySystemBBU.Controllers
             var catalog = await _context.Catalogs.Include(c => c.Books).FirstOrDefaultAsync(c => c.CatalogId == id);
             if (catalog != null)
             {
-                if (catalog.Books.Any()) _context.Books.RemoveRange(catalog.Books);
+                if (catalog.Books.Any())
+                {
+                    var bookIds = catalog.Books.Select(b => b.BookId).ToList();
+                    var orphanLogItems = await _context.Set<LibraryLogItem>()
+                        .Where(li => bookIds.Contains(li.BookId))
+                        .ToListAsync();
+                    if (orphanLogItems.Any())
+                        _context.Set<LibraryLogItem>().RemoveRange(orphanLogItems);
+
+                    _context.Books.RemoveRange(catalog.Books);
+                }
                 _context.Catalogs.Remove(catalog);
                 await _context.SaveChangesAsync();
             }

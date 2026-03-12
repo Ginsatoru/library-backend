@@ -4,27 +4,27 @@
     var idx = ViewData["index"]?.ToString() ?? "0";
     var bookSelect = (SelectList)ViewData["bookSelect"];
 }
-
 <tr class="align-middle">
     <td style="display:none;">
         <input type="hidden" name="PurchaseDetails[@(idx)].PurchaseDetailId" value="@Model.PurchaseDetailId" />
         <input type="hidden" name="PurchaseDetails[@(idx)].PurchaseId" value="@Model.PurchaseId" />
     </td>
-
     <!-- Book -->
     <td style="min-width:240px;">
+        <input type="hidden"
+               name="PurchaseDetails[@(idx)].CatalogId"
+               id="PurchaseDetails_@(idx)__CatalogId"
+               value="@(Model.CatalogId != Guid.Empty ? Model.CatalogId.ToString() : "")" />
         <select class="book-select"
-                name="PurchaseDetails[@(idx)].BookId"
-                id="PurchaseDetails_@(idx)__BookId"
+                id="PurchaseDetails_@(idx)__CatalogSelect"
+                data-hidden-id="PurchaseDetails_@(idx)__CatalogId"
                 style="width:100%;">
-            @if (Model.BookId != 0 && Model.Book != null)
+            @if (Model.CatalogId != Guid.Empty && Model.Catalog != null)
             {
-                var bookTitle = !string.IsNullOrWhiteSpace(Model.Book.Title)
-                ? Model.Book.Title
-                : (Model.Book.Catalog?.Title ?? $"Book #{Model.BookId}");
-                var bookLabel = Model.Book.Catalog?.ISBN != null
-                ? $"{bookTitle} — {Model.Book.Catalog.ISBN}" : bookTitle;
-                <option value="@Model.BookId" selected="selected">@bookLabel</option>
+                var label = string.IsNullOrWhiteSpace(Model.Catalog.ISBN)
+                ? Model.Catalog.Title
+                : $"{Model.Catalog.Title} — {Model.Catalog.ISBN}";
+                <option value="@Model.CatalogId" selected="selected">@label</option>
             }
             else
             {
@@ -32,10 +32,9 @@
             }
         </select>
         <span class="text-danger" style="font-size:.72rem;"
-              data-valmsg-for="PurchaseDetails[@(idx)].BookId"
+              data-valmsg-for="PurchaseDetails[@(idx)].CatalogId"
               data-valmsg-replace="true"></span>
     </td>
-
     <!-- Quantity -->
     <td style="width:110px;">
         <input class="dr-input" type="number" min="1" step="1"
@@ -47,7 +46,6 @@
               data-valmsg-for="PurchaseDetails[@(idx)].Quantity"
               data-valmsg-replace="true"></span>
     </td>
-
     <!-- Unit Price -->
     <td style="width:130px;">
         <input class="dr-input" type="number" min="0" step="0.01"
@@ -59,17 +57,16 @@
               data-valmsg-for="PurchaseDetails[@(idx)].UnitPrice"
               data-valmsg-replace="true"></span>
     </td>
-
     <!-- Line Total (readonly) -->
     <td style="width:130px;">
-        <input class="dr-input" type="number" min="0" step="0.01" readonly
-               name="PurchaseDetails[@(idx)].LineTotal"
-               id="PurchaseDetails_@(idx)__LineTotal"
-               value="@(Model.LineTotal == 0 ? "" : Model.LineTotal.ToString("0.##"))"
-               placeholder="0.00" />
-        <span class="dr-auto-label">auto</span>
+        <div style="position:relative;">
+            <input class="dr-input" type="number" min="0" step="0.01" readonly
+                   name="PurchaseDetails[@(idx)].LineTotal"
+                   id="PurchaseDetails_@(idx)__LineTotal"
+                   value="@(Model.LineTotal == 0 ? "" : Model.LineTotal.ToString("0.##"))"
+                   placeholder="0.00" />
+        </div>
     </td>
-
     <!-- Remove -->
     <td style="width:46px;text-align:center;">
         <button class="btn-remove-row dr-remove-btn" type="button" title="Remove row">
@@ -77,5 +74,3 @@
         </button>
     </td>
 </tr>
-
-

@@ -17,7 +17,7 @@ namespace LibrarySystemBBU.Controllers
     {
         public int? AdjustmentDetailId { get; set; }
 
-        public Guid CatalogId { get; set; }  // this will be auto-filled from header/catalog
+        public Guid CatalogId { get; set; }
 
         [System.ComponentModel.DataAnnotations.Range(-1_000_000, 1_000_000)]
         public int QuantityChanged { get; set; }
@@ -33,7 +33,6 @@ namespace LibrarySystemBBU.Controllers
     {
         public Guid? AdjustmentId { get; set; }
 
-        // Header = which catalog this adjustment is about
         [System.ComponentModel.DataAnnotations.Required]
         public Guid CatalogId { get; set; }
 
@@ -96,9 +95,6 @@ namespace LibrarySystemBBU.Controllers
             return new SelectList(items, "CatalogId", "Display", selected);
         }
 
-        /// <summary>
-        /// Used to populate Book dropdowns (includes all books; filtering by catalog+status is via AJAX).
-        /// </summary>
         private List<SelectListItem> BooksAll()
         {
             var list = _context.Books
@@ -120,7 +116,7 @@ namespace LibrarySystemBBU.Controllers
             new SelectList(_context.Users.AsNoTracking().OrderBy(u => u.UserName), "Id", "UserName", selected);
 
         private SelectList AdjustmentTypes(string? selected = null) =>
-            new SelectList(new[] {  "Damage", "Lost" }, selected);
+            new SelectList(new[] { "Damage", "Lost" }, selected);
 
         private void FillLists(AdjustmentWithDetailsVM vm)
         {
@@ -172,18 +168,16 @@ namespace LibrarySystemBBU.Controllers
             {
                 if (d == null) continue;
 
-                // For Damage/Lost each row = exactly one copy
                 if (isDamageOrLost)
                 {
-                    d.QuantityChanged = -1; // one damaged/lost copy per row
+                    d.QuantityChanged = -1;
                     continue;
                 }
 
                 if (NegativeTypes.Contains(vm.AdjustmentType))
-                    d.QuantityChanged = -Math.Abs(d.QuantityChanged);    // always negative
+                    d.QuantityChanged = -Math.Abs(d.QuantityChanged);
                 else if (vm.AdjustmentType == "Increase")
-                    d.QuantityChanged = Math.Abs(d.QuantityChanged);     // always positive
-                // Correction => leave as user entered (can be + or -)
+                    d.QuantityChanged = Math.Abs(d.QuantityChanged);
             }
         }
 
@@ -195,7 +189,6 @@ namespace LibrarySystemBBU.Controllers
 
             if (isDamageOrLost)
             {
-                // Require BookId for Damage/Lost
                 vm.Details = vm.Details?
                     .Where(d => d != null && d.BookId.HasValue && d.BookId.Value > 0)
                     .ToList() ?? new();
@@ -206,14 +199,11 @@ namespace LibrarySystemBBU.Controllers
                 foreach (var d in vm.Details)
                 {
                     if (!d.BookId.HasValue || d.BookId.Value <= 0)
-                    {
                         ModelState.AddModelError("Details", "Each Damage/Lost row must have a book selected.");
-                    }
                 }
             }
             else
             {
-                // For Increase/Decrease/Correction, keep rows regardless of BookId
                 vm.Details = vm.Details?
                     .Where(d => d != null)
                     .ToList() ?? new();
@@ -222,7 +212,6 @@ namespace LibrarySystemBBU.Controllers
                     ModelState.AddModelError("Details", "Add at least one detail row.");
             }
 
-            // Normalize signs, then compute header total
             NormalizeSigns(vm);
             vm.QuantityChange = vm.Details.Sum(d => d.QuantityChanged);
 
@@ -241,7 +230,6 @@ namespace LibrarySystemBBU.Controllers
                             $"{vm.AdjustmentType} requires a non-positive total.");
                     break;
                 case "Correction":
-                    // can be positive or negative
                     break;
                 default:
                     ModelState.AddModelError(nameof(vm.AdjustmentType), "Unknown adjustment type.");
@@ -249,16 +237,28 @@ namespace LibrarySystemBBU.Controllers
             }
         }
 
+        // ---------- KEY FIX: Recalculate catalog counts from actual Books ----------
+        // Called after ANY operation that changes Book.Status or Book count,
+        // so TotalCopies and AvailableCopies always reflect ground truth.
+        private async Task RecalculateCatalogCountsAsync(IEnumerable<Guid> catalogIds)
+        {
+            var ids = (catalogIds ?? Enumerable.Empty<Guid>()).Distinct().ToList();
+            if (!ids.Any()) return;
+
+            var catalogs = await _context.Catalogs
+                .Include(c => c.Books)
+                .Where(c => ids.Contains(c.CatalogId))
+                .ToListAsync();
+
+            foreach (var c in catalogs)
+            {
+                c.TotalCopies = c.Books.Count;
+                c.AvailableCopies = c.Books.Count(b =>
+                    string.Equals(b.Status, "Available", StringComparison.OrdinalIgnoreCase));
+            }
+        }
+
         // ---------- APPLY IMPACT TO CATALOG + BOOKS ----------
-        /// <summary>
-        /// Increase / Decrease / Correction:
-        ///   - Adjusts Catalog.TotalCopies and Catalog.AvailableCopies (catalog-level).
-        ///
-        /// Damage / Lost:
-        ///   - DOES NOT change TotalCopies
-        ///   - Sets specified Book.Status to "Damage"/"Lost"
-        ///   - Decreases AvailableCopies by number of books actually affected.
-        /// </summary>
         private async Task ApplyImpactOnCreateAsync(AdjustmentWithDetailsVM vm)
         {
             bool isDamageOrLost =
@@ -270,29 +270,29 @@ namespace LibrarySystemBBU.Controllers
 
             if (!isDamageOrLost)
             {
-                // --------- Catalog-level change ----------
+                // --------- Catalog-level change (Increase/Decrease/Correction) ----------
                 var catalog = await _context.Catalogs
+                    .Include(c => c.Books)
                     .FirstOrDefaultAsync(c => c.CatalogId == vm.CatalogId);
 
                 if (catalog == null) return;
 
                 int delta = vm.Details.Sum(d => d.QuantityChanged);
 
+                // For these types, TotalCopies changes (actual physical copies added/removed)
                 catalog.TotalCopies += delta;
-                catalog.AvailableCopies += delta;
-
                 if (catalog.TotalCopies < 0) catalog.TotalCopies = 0;
-                if (catalog.AvailableCopies < 0) catalog.AvailableCopies = 0;
 
                 // Fill detail CatalogId
                 foreach (var d in vm.Details)
-                {
                     d.CatalogId = vm.CatalogId;
-                }
+
+                // Recalculate AvailableCopies from actual book records
+                await RecalculateCatalogCountsAsync(new[] { vm.CatalogId });
             }
             else
             {
-                // --------- Damage / Lost per book ----------
+                // --------- Damage / Lost: mark specific books, then recalculate ----------
                 var bookIds = vm.Details
                     .Where(d => d.BookId.HasValue && d.BookId.Value > 0)
                     .Select(d => d.BookId!.Value)
@@ -306,6 +306,8 @@ namespace LibrarySystemBBU.Controllers
                     .Where(b => bookIds.Contains(b.BookId))
                     .ToListAsync();
 
+                var affectedCatalogIds = new HashSet<Guid>();
+
                 foreach (var row in vm.Details)
                 {
                     if (!row.BookId.HasValue || row.BookId.Value <= 0) continue;
@@ -313,26 +315,27 @@ namespace LibrarySystemBBU.Controllers
                     var book = books.FirstOrDefault(b => b.BookId == row.BookId.Value);
                     if (book == null || book.Catalog == null) continue;
 
-                    var catalog = book.Catalog;
-                    row.CatalogId = catalog.CatalogId;
+                    row.CatalogId = book.Catalog.CatalogId;
+                    affectedCatalogIds.Add(book.Catalog.CatalogId);
 
-                    if (book.Status == "Available")
+                    // KEY FIX: Set the book status to "Lost" or "Damage" regardless of current status.
+                    // This makes the book immediately unavailable for borrowing.
+                    // Only change if not already in that state to avoid double-counting.
+                    if (!string.Equals(book.Status, vm.AdjustmentType, StringComparison.OrdinalIgnoreCase))
                     {
                         book.Status = vm.AdjustmentType; // "Damage" or "Lost"
                         book.Modified = DateTime.UtcNow;
-
-                        catalog.AvailableCopies -= 1;
-                        if (catalog.AvailableCopies < 0) catalog.AvailableCopies = 0;
                     }
                 }
+
+                // KEY FIX: Recalculate TotalCopies + AvailableCopies from actual book statuses.
+                // TotalCopies = all books for that catalog (Lost/Damage books still physically exist).
+                // AvailableCopies = only Available books.
+                await RecalculateCatalogCountsAsync(affectedCatalogIds);
             }
         }
 
-        /// <summary>
-        /// Reverse the impact of a Damage/Lost adjustment when deleted:
-        /// - Set books back to Available
-        /// - Increase AvailableCopies
-        /// </summary>
+        // ---------- UNDO: Reverse Damage/Lost on delete ----------
         private async Task UndoDamageOrLostOnDeleteAsync(Adjustment adjustment)
         {
             if (adjustment.AdjustmentType != "Damage" && adjustment.AdjustmentType != "Lost")
@@ -344,34 +347,37 @@ namespace LibrarySystemBBU.Controllers
                 .Distinct()
                 .ToList();
 
-            if (!detailBookIds.Any())
-                return;
+            if (!detailBookIds.Any()) return;
 
             var books = await _context.Books
                 .Include(b => b.Catalog)
                 .Where(b => detailBookIds.Contains(b.BookId))
                 .ToListAsync();
 
+            var affectedCatalogIds = new HashSet<Guid>();
+
             foreach (var b in books)
             {
                 if (b.Catalog == null) continue;
 
-                // Only flip back if still Damage/Lost
-                if (b.Status == "Damage" || b.Status == "Lost")
+                affectedCatalogIds.Add(b.CatalogId);
+
+                // Only flip back if still Damage/Lost — don't override if manually changed
+                if (string.Equals(b.Status, "Damage", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(b.Status, "Lost", StringComparison.OrdinalIgnoreCase))
                 {
                     b.Status = "Available";
                     b.Modified = DateTime.UtcNow;
-
-                    b.Catalog.AvailableCopies += 1;
-                    if (b.Catalog.AvailableCopies > b.Catalog.TotalCopies)
-                        b.Catalog.AvailableCopies = b.Catalog.TotalCopies;
                 }
             }
+
+            // KEY FIX: Recalculate from actual book statuses after restoring them
+            await RecalculateCatalogCountsAsync(affectedCatalogIds);
         }
 
         // ===================== JSON: Books for Catalog =====================
         /// <summary>
-        /// Returns only AVAILABLE books for a given catalog (for Damage/Lost selection).
+        /// Returns only AVAILABLE books for a given catalog (used by Adjustment detail rows).
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetBooksForCatalog(Guid catalogId)
@@ -419,14 +425,12 @@ namespace LibrarySystemBBU.Controllers
             string H(string? v) => WebUtility.HtmlEncode(v ?? "");
 
             var sb = new StringBuilder();
-
             sb.AppendLine("<html>");
             sb.AppendLine("<head>");
             sb.AppendLine("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
             sb.AppendLine("</head>");
             sb.AppendLine("<body>");
             sb.AppendLine("<table border='1'>");
-
             sb.AppendLine("<thead><tr>");
             sb.AppendLine("<th>Adjustment ID</th>");
             sb.AppendLine("<th>Catalog Title</th>");
@@ -439,7 +443,6 @@ namespace LibrarySystemBBU.Controllers
             sb.AppendLine("<th>Detail Qty Changed</th>");
             sb.AppendLine("<th>Detail Note</th>");
             sb.AppendLine("</tr></thead>");
-
             sb.AppendLine("<tbody>");
 
             foreach (var a in list)
@@ -539,7 +542,7 @@ namespace LibrarySystemBBU.Controllers
                 return View(vm);
             }
 
-            // First apply to catalogs/books (fills row.CatalogId too)
+            // Apply book status changes + recalculate catalog counts
             await ApplyImpactOnCreateAsync(vm);
 
             var entity = new Adjustment
@@ -612,8 +615,6 @@ namespace LibrarySystemBBU.Controllers
 
             if (adjustment == null) return NotFound();
 
-            // NOTE: we still do NOT recalc catalogs/books on Edit, to avoid double-counting
-
             adjustment.CatalogId = vm.CatalogId;
             adjustment.AdjustmentType = vm.AdjustmentType;
             adjustment.QuantityChange = vm.QuantityChange;
@@ -659,6 +660,10 @@ namespace LibrarySystemBBU.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+
+                // KEY FIX: Recalculate catalog counts after edit
+                await RecalculateCatalogCountsAsync(new[] { adjustment.CatalogId });
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -698,13 +703,24 @@ namespace LibrarySystemBBU.Controllers
 
             if (adjustment != null)
             {
-                // Undo Damage/Lost status + AvailableCopies first
+                // Collect affected catalog IDs before deletion
+                var affectedCatalogIds = adjustment.AdjustmentDetails
+                    .Select(d => d.CatalogId)
+                    .Distinct()
+                    .Append(adjustment.CatalogId)
+                    .ToList();
+
+                // Undo Lost/Damage — restore book statuses to Available
                 await UndoDamageOrLostOnDeleteAsync(adjustment);
 
                 if (adjustment.AdjustmentDetails.Any())
                     _context.AdjustmentDetails.RemoveRange(adjustment.AdjustmentDetails);
 
                 _context.Adjustments.Remove(adjustment);
+                await _context.SaveChangesAsync();
+
+                // KEY FIX: Recalculate catalog counts after books are restored
+                await RecalculateCatalogCountsAsync(affectedCatalogIds);
                 await _context.SaveChangesAsync();
             }
 

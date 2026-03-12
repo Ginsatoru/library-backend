@@ -8,297 +8,492 @@
     var tgConnected = !string.IsNullOrWhiteSpace(Model.TelegramChatId);
 }
 
-<link rel="stylesheet" href="~/font-awesome/css/all.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-    .delete-page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: .75rem;
-        margin-bottom: 1rem;
-        flex-wrap: wrap;
+    .mem-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
     }
 
-    .delete-member-card {
-        margin: 0 auto;
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--glass-border);
-        background: var(--glass-bg-soft);
-        box-shadow: var(--glass-shadow);
-        backdrop-filter: blur(24px) brightness(1.15);
-        -webkit-backdrop-filter: blur(24px) brightness(1.15);
-        position: relative;
+    .mem-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .mem-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #dc2626;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .mem-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .mem-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .mem-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+        .mem-btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+    .mem-btn-danger {
+        background: #dc2626;
+        color: #fff;
+        border-color: #dc2626;
+    }
+
+        .mem-btn-danger:hover {
+            background: #b91c1c;
+            color: #fff;
+            border-color: #b91c1c;
+        }
+
+    .mem-delete-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
         overflow: hidden;
     }
 
-        .delete-member-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            background: radial-gradient(circle at 0 0, rgba(254,242,242,0.85), transparent 55%), radial-gradient(circle at 110% 0, rgba(254,226,226,0.75), transparent 60%);
-            opacity: .9;
-        }
+    .mem-delete-profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 28px 24px 20px;
+        border-bottom: 1px solid #f3f4f6;
+        background: #fff8f8;
+    }
 
-        .delete-member-card .card-body {
-            position: relative;
-            z-index: 1;
-        }
-
-    .avatar-3d {
-        width: 96px;
-        height: 96px;
-        object-fit: cover;
+    .mem-delete-avatar {
+        width: 88px;
+        height: 88px;
         border-radius: 50%;
-        border: 3px solid var(--brand-secondary);
-        box-shadow: 0 10px 26px rgba(37,99,235,0.55);
-        margin-bottom: 1.2rem;
-        background: #e0f2fe;
+        object-fit: cover;
+        border: 2px solid #fecaca;
+        background: #f3f4f6;
+        margin-bottom: 12px;
     }
 
-    .stat-pill {
+    .mem-detail-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 6px;
+    }
+
+    .mem-badge {
         display: inline-flex;
         align-items: center;
-        gap: .35rem;
-        padding: .35rem .7rem;
-        border-radius: 999px;
-        font-weight: 600;
-        font-size: .9rem;
-        background: rgba(219,234,254,0.95);
-        color: #1e3a8a;
-        border: 1px solid rgba(191,219,254,0.9);
-        box-shadow: 0 6px 14px rgba(148,163,184,0.35);
+        gap: 4px;
+        font-size: .72rem;
+        font-weight: 500;
+        border-radius: 20px;
+        padding: 3px 10px;
+        border: 1px solid transparent;
     }
 
-        .stat-pill.danger {
-            background: rgba(254,242,242,0.95);
-            color: #b91c1c;
+    .mem-badge-active {
+        background: #dcfce7;
+        color: #166534;
+        border-color: #bbf7d0;
+    }
+
+    .mem-badge-inactive {
+        background: #f3f4f6;
+        color: #6b7280;
+        border-color: #e5e7eb;
+    }
+
+    .mem-badge-type {
+        background: #dbeafe;
+        color: #1e40af;
+        border-color: #bfdbfe;
+    }
+
+    .mem-stat-pills {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .mem-stat-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: .78rem;
+        font-weight: 600;
+        border-radius: 20px;
+        padding: 4px 12px;
+        border: 1px solid #e5e7eb;
+        background: #f9fafb;
+        color: #374151;
+    }
+
+        .mem-stat-pill.danger {
+            background: #fef2f2;
             border-color: #fecaca;
+            color: #b91c1c;
         }
 
-    .tg-badge-connected {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 3px 10px;
-        border-radius: 999px;
-        background: #f0fdf4;
-        border: 1px solid #bbf7d0;
-        color: #166534;
+    .mem-alert {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 16px;
+        border-radius: 8px;
         font-size: .82rem;
-        font-weight: 500;
+        margin: 0 24px 0;
+        border: 1px solid transparent;
     }
 
-    .tg-badge-disconnected {
+    .mem-alert-danger {
+        background: #fef2f2;
+        border-color: #fecaca;
+        color: #991b1b;
+    }
+
+    .mem-delete-body {
+        padding: 24px;
+    }
+
+    .mem-section-divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+        color: #6b7280;
+        font-size: .72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+    }
+
+        .mem-section-divider::before, .mem-section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #f3f4f6;
+        }
+
+    .mem-dl {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 0;
+    }
+
+    .mem-dt {
+        padding: 9px 12px;
+        font-size: .78rem;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        border-bottom: 1px solid #f9fafb;
+    }
+
+    .mem-dd {
+        padding: 9px 12px;
+        font-size: .85rem;
+        color: #374151;
+        border-bottom: 1px solid #f9fafb;
+    }
+
+    @@media (max-width: 540px) {
+        .mem-dl {
+            grid-template-columns: 1fr;
+        }
+
+        .mem-dt {
+            border-bottom: none;
+            padding-bottom: 2px;
+        }
+
+        .mem-dd {
+            padding-top: 2px;
+        }
+    }
+
+    .mem-tg-badge {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 5px;
+        font-size: .8rem;
+        font-weight: 500;
         padding: 3px 10px;
-        border-radius: 999px;
+        border-radius: 20px;
+        border: 1px solid transparent;
+    }
+
+    .mem-tg-connected {
+        background: #f0fdf4;
+        border-color: #bbf7d0;
+        color: #166534;
+    }
+
+    .mem-tg-disconnected {
         background: #f9fafb;
-        border: 1px solid #e5e7eb;
+        border-color: #e5e7eb;
         color: #6b7280;
-        font-size: .82rem;
+    }
+
+    .mem-loans-table-wrap {
+        border: 1px solid #f3f4f6;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 8px;
+    }
+
+    .mem-loans-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .8rem;
+    }
+
+        .mem-loans-table thead th {
+            padding: 8px 12px;
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        .mem-loans-table tbody td {
+            padding: 8px 12px;
+            color: #374151;
+            border-bottom: 1px solid #f9fafb;
+        }
+
+        .mem-loans-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    .mem-delete-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        padding: 16px 24px;
+        border-top: 1px solid #f3f4f6;
+        background: #fff8f8;
     }
 </style>
 
-<div class="dashboard-shell">
-    <div class="wrap">
-        <div class="delete-page-header">
-            <h2 class="page-title mb-0">
-                <span class="logo-dot"></span>
-                Delete Member
-            </h2>
-            <div class="d-flex gap-2 flex-wrap">
-                <a asp-action="Index" class="btn btn-glass glass-surface-pill">
-                    <i class="fa-solid fa-arrow-left"></i> Back to List
-                </a>
-            </div>
-        </div>
+<div class="mem-page">
 
-        <div class="card delete-member-card">
-            <div class="card-body p-4">
-                <h3 class="fw-bold text-center mb-2" style="color:#b91c1c;">
-                    <i class="fa-solid fa-triangle-exclamation"></i> Delete Member
-                </h3>
+    <div class="mem-page-title">Delete Member</div>
 
-                @if (hasActive)
+    <div class="mem-toolbar">
+        <a class="mem-btn" asp-action="Index"><i class="bi bi-arrow-left"></i> Back to List</a>
+    </div>
+
+    <div class="mem-delete-card">
+
+        <!-- Profile Header -->
+        <div class="mem-delete-profile">
+            <img src="@(string.IsNullOrWhiteSpace(Model.ProfilePicturePath)
+                                 ? "https://ui-avatars.com/api/?name=" + Uri.EscapeDataString(Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
+                                 : Model.ProfilePicturePath)"
+                 class="mem-delete-avatar" alt="Profile" />
+            <div class="mem-detail-name">@Model.FullName</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+                <span class="mem-badge mem-badge-type"><i class="bi bi-person-badge"></i> @Model.MemberType</span>
+                @if (Model.IsActive)
                 {
-                    <div class="alert alert-danger d-flex align-items-start glass-surface mt-3" role="alert" style="color:black;">
-                        <i class="fa-solid fa-circle-exclamation mt-1 me-2"></i>
-                        <div>
-                            <strong>Cannot delete while there are active (unreturned) loans.</strong><br />
-                            Please mark all borrowed books as returned before deleting this member.
-                        </div>
-                    </div>
+                    <span class="mem-badge mem-badge-active"><i class="bi bi-check-circle-fill"></i> Active</span>
                 }
                 else
                 {
-                    <p class="text-center text-muted mb-3">
-                        Are you sure you want to delete this member? This action cannot be undone.
-                    </p>
-                }
-
-                <div class="text-center mb-3">
-                    <img src="@(string.IsNullOrWhiteSpace(Model.ProfilePicturePath)
-                                                 ? "https://ui-avatars.com/api/?name=" + (Model.FullName ?? "Member") + "&background=60a5fa&color=fff&size=128"
-                                                 : Model.ProfilePicturePath)"
-                         class="avatar-3d" alt="Profile" />
-
-                    <h5 class="mt-2 fw-bold" style="color:#0f172a;">@Model.FullName</h5>
-
-                    <span class="badge bg-info text-dark">
-                        <i class="fa-solid fa-id-card-clip"></i> @Model.MemberType
-                    </span>
-
-                    <div class="mt-3 d-flex flex-wrap justify-content-center gap-2">
-                        <span class="stat-pill">
-                            <i class="fa-solid fa-book-open"></i> Total Loans: @totalLoans
-                        </span>
-                        <span class="stat-pill @(hasActive ? "danger" : "")">
-                            <i class="fa-solid fa-hourglass-half"></i> Active: @activeLoans
-                        </span>
-                    </div>
-                </div>
-
-                <hr class="my-3" />
-
-                <dl class="row small mb-2">
-                    <dt class="col-5"><i class="fa-solid fa-envelope"></i> Email</dt>
-                    <dd class="col-7">@Model.Email</dd>
-
-                    <dt class="col-5"><i class="fa-solid fa-phone"></i> Phone</dt>
-                    <dd class="col-7">@Model.Phone</dd>
-
-                    <dt class="col-5"><i class="fa-solid fa-venus-mars"></i> Gender</dt>
-                    <dd class="col-7">@Model.Gender</dd>
-
-                    <dt class="col-5"><i class="fa-solid fa-location-dot"></i> Address</dt>
-                    <dd class="col-7">@Model.Address</dd>
-
-                    <dt class="col-5"><i class="fa-solid fa-building-columns"></i> Faculty</dt>
-                    <dd class="col-7">@(Model.Faculty ?? "—")</dd>
-
-                    <dt class="col-5"><i class="fa-solid fa-book"></i> Subject</dt>
-                    <dd class="col-7">@(Model.Subject ?? "—")</dd>
-
-                    <dt class="col-5"><i class="fa-solid fa-id-card"></i> Library ID</dt>
-                    <dd class="col-7">@Model.DICardNumber</dd>
-
-                    <dt class="col-5"><i class="fa-brands fa-telegram"></i> Telegram</dt>
-                    <dd class="col-7">
-                        @if (tgConnected)
-                        {
-                            <span class="tg-badge-connected">
-                                <i class="fa-brands fa-telegram"></i>
-                                Connected
-                                @if (!string.IsNullOrWhiteSpace(Model.TelegramUsername))
-                                {
-                                    <span>— @@@Model.TelegramUsername</span>
-                                }
-                            </span>
-                        }
-                        else
-                        {
-                            <span class="tg-badge-disconnected">
-                                <i class="fa-brands fa-telegram"></i>
-                                Not connected
-                            </span>
-                        }
-                    </dd>
-
-                    <dt class="col-5"><i class="fa-solid fa-calendar-plus"></i> Join Date</dt>
-                    <dd class="col-7">@Model.JoinDate.ToString("yyyy-MM-dd")</dd>
-
-                    <dt class="col-5"><i class="fa-solid fa-clock"></i> Modified</dt>
-                    <dd class="col-7">@Model.Modified.ToString("yyyy-MM-dd HH:mm")</dd>
-
-                    <dt class="col-5"><i class="fa-solid fa-user-check"></i> Active</dt>
-                    <dd class="col-7">
-                        @if (Model.IsActive)
-                        {
-                            <span class="badge bg-success"><i class="fa-solid fa-circle-check"></i> Active</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary"><i class="fa-solid fa-circle-xmark"></i> Inactive</span>
-                        }
-                    </dd>
-
-                    @if (!string.IsNullOrWhiteSpace(Model.Notes))
-                    {
-                        <dt class="col-5"><i class="fa-solid fa-note-sticky"></i> Notes</dt>
-                        <dd class="col-7">@Model.Notes</dd>
-                    }
-
-                    @if (Model.Users != null)
-                    {
-                        <dt class="col-5"><i class="fa-solid fa-user-tie"></i> Linked User</dt>
-                        <dd class="col-7">@Model.Users.UserName</dd>
-                    }
-
-                    <dt class="col-5"><i class="fa-solid fa-user"></i> Created By</dt>
-                    <dd class="col-7">@Model.CreatedBy</dd>
-                </dl>
-
-                <form asp-action="Delete" method="post">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" asp-for="MemberId" />
-
-                    <div class="text-center mt-3">
-                        <button type="submit"
-                                class="btn btn-danger px-4 me-2 rounded-pill fw-bold"
-                                @(hasActive ? "disabled" : "")
-                                title="@(hasActive ? "Cannot delete: active loans exist" : "Delete member")">
-                            <i class="fa-solid fa-trash"></i> Delete
-                        </button>
-                        <a asp-action="Index" class="btn btn-glass glass-surface-pill ms-2 px-4 rounded-pill">
-                            <i class="fa-solid fa-arrow-left"></i> Back to List
-                        </a>
-                    </div>
-                </form>
-
-                @if ((Model.BookLoans?.Any() ?? false))
-                {
-                    <hr />
-                    <h6 class="fw-bold mb-2">
-                        <i class="fa-regular fa-clock me-1"></i> Recent Loans
-                    </h6>
-                    <div class="table-responsive glass-surface">
-                        <table class="table table-sm align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Loan Date</th>
-                                    <th>Due</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var l in Model.BookLoans.OrderByDescending(x => x.LoanDate).Take(3))
-                                {
-                                    <tr>
-                                        <td>@l.LoanId</td>
-                                        <td>@l.LoanDate.ToString("yyyy-MM-dd")</td>
-                                        <td>@l.DueDate.ToString("yyyy-MM-dd")</td>
-                                        <td>
-                                            @if (l.IsReturned)
-                                            {
-                                                <span class="badge bg-success">Returned</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge bg-warning text-dark">Active</span>
-                                            }
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                    <span class="mem-badge mem-badge-inactive"><i class="bi bi-x-circle"></i> Inactive</span>
                 }
             </div>
+            <div class="mem-stat-pills">
+                <span class="mem-stat-pill"><i class="bi bi-book"></i> Total Loans: <strong>@totalLoans</strong></span>
+                <span class="mem-stat-pill @(hasActive ? "danger" : "")">
+                    <i class="bi bi-hourglass-split"></i> Active: <strong>@activeLoans</strong>
+                </span>
+            </div>
+        </div>
+
+        @if (hasActive)
+        {
+            <div style="padding: 16px 24px 0;">
+                <div class="mem-alert mem-alert-danger">
+                    <i class="bi bi-exclamation-triangle-fill" style="flex-shrink:0;margin-top:2px;"></i>
+                    <div>
+                        <strong>Cannot delete while there are active (unreturned) loans.</strong><br />
+                        Please mark all borrowed books as returned before deleting this member.
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- Details Body -->
+        <div class="mem-delete-body">
+
+            <div class="mem-section-divider">Member Info</div>
+            <div class="mem-dl">
+                <div class="mem-dt"><i class="bi bi-gender-ambiguous"></i> Gender</div>
+                <div class="mem-dd">@(Model.Gender ?? "—")</div>
+
+                <div class="mem-dt"><i class="bi bi-envelope"></i> Email</div>
+                <div class="mem-dd">@(Model.Email ?? "—")</div>
+
+                <div class="mem-dt"><i class="bi bi-phone"></i> Phone</div>
+                <div class="mem-dd">@(Model.Phone ?? "—")</div>
+
+                <div class="mem-dt"><i class="bi bi-geo-alt"></i> Address</div>
+                <div class="mem-dd">@(Model.Address ?? "—")</div>
+
+                <div class="mem-dt"><i class="bi bi-building"></i> Faculty</div>
+                <div class="mem-dd">@(Model.Faculty ?? "—")</div>
+
+                <div class="mem-dt"><i class="bi bi-credit-card"></i> Library ID</div>
+                <div class="mem-dd">@(Model.DICardNumber ?? "—")</div>
+
+                <div class="mem-dt"><i class="bi bi-telegram"></i> Telegram</div>
+                <div class="mem-dd">
+                    @if (tgConnected)
+                    {
+                        <span class="mem-tg-badge mem-tg-connected">
+                            <i class="bi bi-telegram"></i> Connected
+                            @if (!string.IsNullOrWhiteSpace(Model.TelegramUsername))
+                            {
+                                <span>— @@@Model.TelegramUsername</span>
+                            }
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="mem-tg-badge mem-tg-disconnected"><i class="bi bi-telegram"></i> Not connected</span>
+                    }
+                </div>
+
+                <div class="mem-dt"><i class="bi bi-calendar-plus"></i> Join Date</div>
+                <div class="mem-dd">@Model.JoinDate.ToString("yyyy-MM-dd")</div>
+
+                <div class="mem-dt"><i class="bi bi-clock-history"></i> Modified</div>
+                <div class="mem-dd">@Model.Modified.ToString("yyyy-MM-dd HH:mm")</div>
+
+                <div class="mem-dt"><i class="bi bi-person"></i> Created By</div>
+                <div class="mem-dd">@(Model.CreatedBy ?? "—")</div>
+
+                @if (Model.Users != null)
+                {
+                    <div class="mem-dt"><i class="bi bi-person-workspace"></i> Linked User</div>
+                    <div class="mem-dd">@Model.Users.UserName</div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.Notes))
+                {
+                    <div class="mem-dt"><i class="bi bi-sticky"></i> Notes</div>
+                    <div class="mem-dd">@Model.Notes</div>
+                }
+            </div>
+
+            @if (Model.BookLoans?.Any() ?? false)
+            {
+                <div class="mem-section-divider" style="margin-top:20px;">Recent Loans</div>
+                <div class="mem-loans-table-wrap">
+                    <table class="mem-loans-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Loan Date</th>
+                                <th>Due</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var l in Model.BookLoans.OrderByDescending(x => x.LoanDate).Take(3))
+                            {
+                                <tr>
+                                    <td>@l.LoanId</td>
+                                    <td>@l.LoanDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@l.DueDate.ToString("yyyy-MM-dd")</td>
+                                    <td>
+                                        @if (l.IsReturned)
+                                        {
+                                            <span class="mem-badge mem-badge-active"><i class="bi bi-check-circle-fill"></i> Returned</span>
+                                        }
+                                        else
+                                        {
+                                            <span style="display:inline-flex;align-items:center;gap:3px;font-size:.72rem;font-weight:500;background:#fef3c7;color:#92400e;border:1px solid #fde68a;border-radius:20px;padding:3px 10px;">
+                                                <i class="bi bi-hourglass-split"></i> Active
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+
+        <div class="mem-delete-actions">
+            <a asp-action="Index" class="mem-btn"><i class="bi bi-arrow-left"></i> Back</a>
+            <form asp-action="Delete" method="post" style="display:inline;">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="MemberId" />
+                <button type="submit"
+                        class="mem-btn mem-btn-danger"
+                        @(hasActive ? "disabled" : "")
+                        title="@(hasActive ? "Cannot delete: active loans exist" : "Delete this member")">
+                    <i class="bi bi-trash3"></i> Delete Member
+                </button>
+            </form>
         </div>
     </div>
+
 </div>

@@ -1,9 +1,8 @@
-﻿@using System.Globalization
-@using System.Linq
+﻿@using System.Linq
 @model LibrarySystemBBU.ViewModels.MonthlyReportViewModel
 
 @{
-    ViewData["Title"] = "Monthly Report - " + Model.MonthName + " " + Model.Year;
+    ViewData["Title"] = "Library Report";
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
@@ -15,7 +14,6 @@
         color: #111827;
     }
 
-    /* ---- page title ---- */
     .rpt-page-title {
         font-size: 1.5rem;
         font-weight: 700;
@@ -42,7 +40,6 @@
         margin-bottom: 1.25rem;
     }
 
-    /* ---- buttons ---- */
     .rpt-btn {
         display: inline-flex;
         align-items: center;
@@ -78,7 +75,6 @@
             border-color: #00006a;
         }
 
-    /* ---- filter card ---- */
     .rpt-card {
         background: #fff;
         border: 1px solid #e5e7eb;
@@ -129,7 +125,6 @@
         overflow: hidden;
     }
 
-    /* ---- filter row ---- */
     .rpt-filter-row {
         display: flex;
         gap: 12px;
@@ -151,8 +146,7 @@
         display: block;
     }
 
-    .rpt-filter-input,
-    .rpt-filter-select {
+    .rpt-filter-input, .rpt-filter-select {
         width: 100%;
         padding: 8px 12px;
         border: 1px solid #e5e7eb;
@@ -162,13 +156,11 @@
         background: #fff;
     }
 
-        .rpt-filter-input:focus,
-        .rpt-filter-select:focus {
+        .rpt-filter-input:focus, .rpt-filter-select:focus {
             outline: none;
             border-color: #000080;
         }
 
-    /* ---- KPI grid ---- */
     .rpt-kpi-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -236,7 +228,6 @@
         color: #9ca3af;
     }
 
-    /* ---- pill badge ---- */
     .rpt-pill {
         font-size: .75rem;
         color: #374151;
@@ -248,14 +239,6 @@
         font-weight: 500;
     }
 
-    /* ---- section description ---- */
-    .rpt-section-desc {
-        font-size: .82rem;
-        color: #6b7280;
-        padding: 0 1.25rem .75rem;
-    }
-
-    /* ---- tables ---- */
     .rpt-table-wrap {
         overflow-x: auto;
         padding: 0 1.25rem 1.25rem;
@@ -314,7 +297,6 @@
             text-align: right;
         }
 
-    /* ---- empty state ---- */
     .rpt-empty {
         padding: 2rem;
         text-align: center;
@@ -341,12 +323,11 @@
     <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
         <div>
             <div class="rpt-page-title">@ViewData["Title"]</div>
-            <div class="rpt-subtitle">Monthly overview of borrowing, returns, in-library reading, purchases, adjustments, and finance.</div>
         </div>
         <div class="d-flex gap-2 flex-wrap">
             <a asp-action="MonthlyExcel"
-               asp-route-year="@Model.Year"
-               asp-route-month="@Model.Month"
+               asp-route-startDate="@Model.StartDate.ToString("yyyy-MM-dd")"
+               asp-route-endDate="@Model.EndDate.ToString("yyyy-MM-dd")"
                class="rpt-btn rpt-btn-primary">
                 <i class="bi bi-file-earmark-excel"></i> Export Excel
             </a>
@@ -360,19 +341,14 @@
     <div class="rpt-card">
         <form method="get" class="rpt-filter-row">
             <div class="rpt-filter-group">
-                <label class="rpt-filter-label">Month</label>
-                <select name="month" class="rpt-filter-select">
-                    @for (int i = 1; i <= 12; i++)
-                    {
-                        <option value="@i" selected="@(i == Model.Month ? "selected" : null)">
-                            @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)
-                        </option>
-                    }
-                </select>
+                <label class="rpt-filter-label">Start Date</label>
+                <input type="date" name="startDate" class="rpt-filter-input"
+                       value="@Model.StartDate.ToString("yyyy-MM-dd")" />
             </div>
             <div class="rpt-filter-group">
-                <label class="rpt-filter-label">Year</label>
-                <input type="number" name="year" class="rpt-filter-input" value="@Model.Year" />
+                <label class="rpt-filter-label">End Date</label>
+                <input type="date" name="endDate" class="rpt-filter-input"
+                       value="@Model.EndDate.ToString("yyyy-MM-dd")" />
             </div>
             <div class="rpt-filter-group">
                 <label class="rpt-filter-label">&nbsp;</label>
@@ -389,13 +365,13 @@
             <div class="rpt-kpi-icon"><i class="bi bi-book"></i></div>
             <div class="rpt-kpi-label">Borrowed (Take Home)</div>
             <div class="rpt-kpi-val">@Model.StudentTakeHomeItemsBorrowed</div>
-            <div class="rpt-kpi-sub">items borrowed this month</div>
+            <div class="rpt-kpi-sub">items borrowed in range</div>
         </a>
         <a href="#return-report" class="rpt-kpi-card">
             <div class="rpt-kpi-icon"><i class="bi bi-arrow-return-left"></i></div>
             <div class="rpt-kpi-label">Returned (Take Home)</div>
             <div class="rpt-kpi-val">@Model.StudentTakeHomeReturns</div>
-            <div class="rpt-kpi-sub">items returned this month</div>
+            <div class="rpt-kpi-sub">items returned in range</div>
         </a>
         <a href="#inlibrary-report" class="rpt-kpi-card">
             <div class="rpt-kpi-icon"><i class="bi bi-building"></i></div>
@@ -409,8 +385,8 @@
             }
             <div class="rpt-kpi-icon"><i class="bi bi-cash-stack"></i></div>
             <div class="rpt-kpi-label">Net Cash Flow</div>
-            <div class="rpt-kpi-val">@Model.NetCashFlow.ToString("N0") &#x17D9;</div>
-            <div class="rpt-kpi-sub">Income: @totalIncome.ToString("N0") &#x17D9;</div>
+            <div class="rpt-kpi-val">$@Model.NetCashFlow.ToString("N0")</div>
+            <div class="rpt-kpi-sub">Income: $@totalIncome.ToString("N0")</div>
         </a>
     </div>
 
@@ -428,7 +404,6 @@
             var totalDeposit = Model.StudentBorrowDetails.Sum(x => x.DepositAmount);
             var totalFine = Model.StudentBorrowDetails.Sum(x => x.FineAmount);
             var totalExtra = Model.StudentBorrowDetails.Sum(x => x.ExtraCharge);
-
             <div class="rpt-table-wrap">
                 <table class="rpt-table">
                     <thead>
@@ -450,15 +425,15 @@
                         {
                             <tr>
                                 <td>@b.LoanDate.ToString("yyyy-MM-dd")</td>
-                                <td>@(b.DueDate.HasValue? b.DueDate.Value.ToString("yyyy-MM-dd") : "-")</td>
-                                <td>@(b.ReturnDate.HasValue? b.ReturnDate.Value.ToString("yyyy-MM-dd") : "-")</td>
+                                <td>@(b.DueDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                                <td>@(b.ReturnDate?.ToString("yyyy-MM-dd") ?? "-")</td>
                                 <td>@b.MemberName</td>
                                 <td>@b.MemberType</td>
                                 <td>@b.CatalogTitle</td>
                                 <td>@b.Barcode</td>
-                                <td class="text-end">@b.DepositAmount.ToString("N0") &#x17D9;</td>
-                                <td class="text-end">@b.FineAmount.ToString("N0") &#x17D9;</td>
-                                <td class="text-end">@b.ExtraCharge.ToString("N0") &#x17D9;</td>
+                                <td class="text-end">$@b.DepositAmount.ToString("N0")</td>
+                                <td class="text-end">$@b.FineAmount.ToString("N0")</td>
+                                <td class="text-end">$@b.ExtraCharge.ToString("N0")</td>
                             </tr>
                         }
                     </tbody>
@@ -469,9 +444,9 @@
                             <th></th>
                             <th>@totalRows item(s)</th>
                             <th></th>
-                            <th class="text-end">@totalDeposit.ToString("N0") &#x17D9;</th>
-                            <th class="text-end">@totalFine.ToString("N0") &#x17D9;</th>
-                            <th class="text-end">@totalExtra.ToString("N0") &#x17D9;</th>
+                            <th class="text-end">$@totalDeposit.ToString("N0")</th>
+                            <th class="text-end">$@totalFine.ToString("N0")</th>
+                            <th class="text-end">$@totalExtra.ToString("N0")</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -479,7 +454,7 @@
         }
         else
         {
-            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No borrowing records for this month.</div></div>
+            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No borrowing records for this range.</div></div>
         }
     </div>
 
@@ -496,7 +471,6 @@
             var totalStudents = Model.StudentReturnDetails.Select(b => b.MemberId).Distinct().Count();
             var totalFine = Model.StudentReturnDetails.Sum(x => x.FineAmount);
             var totalExtra = Model.StudentReturnDetails.Sum(x => x.ExtraCharge);
-
             <div class="rpt-table-wrap">
                 <table class="rpt-table">
                     <thead>
@@ -516,15 +490,15 @@
                         @foreach (var r in Model.StudentReturnDetails)
                         {
                             <tr>
-                                <td>@(r.ReturnDate.HasValue? r.ReturnDate.Value.ToString("yyyy-MM-dd") : "-")</td>
+                                <td>@(r.ReturnDate?.ToString("yyyy-MM-dd") ?? "-")</td>
                                 <td>@r.LoanDate.ToString("yyyy-MM-dd")</td>
-                                <td>@(r.DueDate.HasValue? r.DueDate.Value.ToString("yyyy-MM-dd") : "-")</td>
+                                <td>@(r.DueDate?.ToString("yyyy-MM-dd") ?? "-")</td>
                                 <td>@r.MemberName</td>
                                 <td>@r.MemberType</td>
                                 <td>@r.CatalogTitle</td>
                                 <td>@r.Barcode</td>
-                                <td class="text-end">@r.FineAmount.ToString("N0") &#x17D9;</td>
-                                <td class="text-end">@r.ExtraCharge.ToString("N0") &#x17D9;</td>
+                                <td class="text-end">$@r.FineAmount.ToString("N0")</td>
+                                <td class="text-end">$@r.ExtraCharge.ToString("N0")</td>
                             </tr>
                         }
                     </tbody>
@@ -535,8 +509,8 @@
                             <th></th>
                             <th>@totalRows item(s)</th>
                             <th></th>
-                            <th class="text-end">@totalFine.ToString("N0") &#x17D9;</th>
-                            <th class="text-end">@totalExtra.ToString("N0") &#x17D9;</th>
+                            <th class="text-end">$@totalFine.ToString("N0")</th>
+                            <th class="text-end">$@totalExtra.ToString("N0")</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -544,7 +518,7 @@
         }
         else
         {
-            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No return records for this month.</div></div>
+            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No return records for this range.</div></div>
         }
     </div>
 
@@ -559,7 +533,6 @@
         {
             var totalRows = Model.InLibraryDetails.Count;
             var totalStudents = Model.InLibraryDetails.Select(x => x.StudentName).Distinct().Count();
-
             <div class="rpt-table-wrap">
                 <table class="rpt-table">
                     <thead>
@@ -587,7 +560,7 @@
                                 <td>@r.CatalogTitle</td>
                                 <td>@r.Barcode</td>
                                 <td>@r.Status</td>
-                                <td>@(r.ReturnedDate.HasValue? r.ReturnedDate.Value.ToString("yyyy-MM-dd") : "-")</td>
+                                <td>@(r.ReturnedDate?.ToString("yyyy-MM-dd") ?? "-")</td>
                             </tr>
                         }
                     </tbody>
@@ -602,7 +575,7 @@
         }
         else
         {
-            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No in-library reading records for this month.</div></div>
+            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No in-library reading records for this range.</div></div>
         }
     </div>
 
@@ -618,7 +591,6 @@
             var totalRows = Model.PurchaseItems.Count;
             var totalQty = Model.PurchaseItems.Sum(x => x.Quantity);
             var totalCost = Model.PurchaseItems.Sum(x => x.Cost);
-
             <div class="rpt-table-wrap">
                 <table class="rpt-table">
                     <thead>
@@ -639,7 +611,7 @@
                                 <td>@p.Supplier</td>
                                 <td>@p.BookTitle</td>
                                 <td class="text-end">@p.Quantity</td>
-                                <td class="text-end">@p.Cost.ToString("N0") &#x17D9;</td>
+                                <td class="text-end">$@p.Cost.ToString("N0")</td>
                                 <td>@p.Notes</td>
                             </tr>
                         }
@@ -648,7 +620,7 @@
                         <tr>
                             <th colspan="3">@totalRows Purchases</th>
                             <th class="text-end">@totalQty</th>
-                            <th class="text-end">@totalCost.ToString("N0") &#x17D9;</th>
+                            <th class="text-end">$@totalCost.ToString("N0")</th>
                             <th></th>
                         </tr>
                     </tfoot>
@@ -657,7 +629,7 @@
         }
         else
         {
-            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No purchases recorded for this month.</div></div>
+            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No purchases recorded for this range.</div></div>
         }
     </div>
 
@@ -672,7 +644,6 @@
         {
             var totalRows = Model.AdjustmentItems.Count;
             var totalQty = Model.AdjustmentItems.Sum(x => x.QuantityChanged);
-
             <div class="rpt-table-wrap">
                 <table class="rpt-table">
                     <thead>
@@ -708,7 +679,7 @@
         }
         else
         {
-            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No adjustment details for this month.</div></div>
+            <div class="rpt-empty"><i class="bi bi-inbox"></i><div class="mt-1">No adjustment details for this range.</div></div>
         }
     </div>
 
@@ -721,38 +692,18 @@
         <div class="rpt-table-wrap">
             <table class="rpt-table">
                 <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Type</th>
-                        <th class="text-end">Amount</th>
-                    </tr>
+                    <tr><th>Category</th><th>Type</th><th class="text-end">Amount</th></tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Borrowing fees</td>
-                        <td>Income</td>
-                        <td class="text-end">@Model.IncomeBorrowingFees.ToString("N0") &#x17D9;</td>
-                    </tr>
-                    <tr>
-                        <td>Late fines</td>
-                        <td>Income</td>
-                        <td class="text-end">@Model.IncomeFines.ToString("N0") &#x17D9;</td>
-                    </tr>
-                    <tr>
-                        <td>Extra charges (damage, etc.)</td>
-                        <td>Income</td>
-                        <td class="text-end">@Model.IncomeExtraCharges.ToString("N0") &#x17D9;</td>
-                    </tr>
-                    <tr>
-                        <td>Book purchases</td>
-                        <td>Expense</td>
-                        <td class="text-end">@Model.ExpensePurchases.ToString("N0") &#x17D9;</td>
-                    </tr>
+                    <tr><td>Borrowing fees</td><td>Income</td><td class="text-end">$@Model.IncomeBorrowingFees.ToString("N0")</td></tr>
+                    <tr><td>Late fines</td><td>Income</td><td class="text-end">$@Model.IncomeFines.ToString("N0")</td></tr>
+                    <tr><td>Extra charges (damage, etc.)</td><td>Income</td><td class="text-end">$@Model.IncomeExtraCharges.ToString("N0")</td></tr>
+                    <tr><td>Book purchases</td><td>Expense</td><td class="text-end">$@Model.ExpensePurchases.ToString("N0")</td></tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th colspan="2">Net Cash Flow (Income - Expense)</th>
-                        <th class="text-end">@Model.NetCashFlow.ToString("N0") &#x17D9;</th>
+                        <th class="text-end">$@Model.NetCashFlow.ToString("N0")</th>
                     </tr>
                 </tfoot>
             </table>

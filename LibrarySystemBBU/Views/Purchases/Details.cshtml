@@ -7,17 +7,12 @@
 }
 
 @functions {
-    string BookLabel(LibrarySystemBBU.Models.Book? b)
+    string CatalogLabel(LibrarySystemBBU.Models.Catalog? c)
     {
-        if (b == null) return string.Empty;
-        var baseTitle = !string.IsNullOrWhiteSpace(b.Title)
-            ? b.Title
-            : (!string.IsNullOrWhiteSpace(b.Catalog?.Title) ? b.Catalog!.Title : $"Book #{b.BookId}");
-        var text = !string.IsNullOrWhiteSpace(b.Catalog?.ISBN)
-            ? $"{baseTitle} — {b.Catalog!.ISBN}" : baseTitle;
-        if (text.StartsWith("Book #") && !string.IsNullOrWhiteSpace(b.Barcode))
-            text = $"{text} — {b.Barcode}";
-        return text;
+        if (c == null) return "—";
+        return string.IsNullOrWhiteSpace(c.ISBN)
+            ? (c.Title ?? "—")
+            : $"{c.Title} — {c.ISBN}";
     }
 }
 
@@ -125,9 +120,6 @@
         .pd-kv-grid {
             grid-template-columns: 1fr;
         }
-    }
-
-    .pd-kv-item {
     }
 
     .pd-kv-key {
@@ -291,15 +283,11 @@
     <div class="pd-card">
         <div class="pd-card-title"><i class="bi bi-receipt"></i> Purchase Information</div>
         <div class="pd-kv-grid">
-            <div class="pd-kv-item">
+            <div>
                 <div class="pd-kv-key"><i class="bi bi-calendar3"></i> Purchase Date</div>
                 <div class="pd-kv-val">@Model.PurchaseDate.ToString("yyyy-MM-dd")</div>
             </div>
-            <div class="pd-kv-item">
-                <div class="pd-kv-key"><i class="bi bi-book"></i> Book</div>
-                <div class="pd-kv-val">@BookLabel(Model.Book)</div>
-            </div>
-            <div class="pd-kv-item">
+            <div>
                 <div class="pd-kv-key"><i class="bi bi-truck"></i> Supplier</div>
                 <div class="pd-kv-val">
                     @if (!string.IsNullOrWhiteSpace(Model.Supplier))
@@ -308,16 +296,19 @@
                     }
                     else
                     {
-
                         <span class="muted">—</span>
                     }
                 </div>
             </div>
-            <div class="pd-kv-item">
+            <div>
+                <div class="pd-kv-key"><i class="bi bi-123"></i> Total Quantity</div>
+                <div class="pd-kv-val">@Model.Quantity</div>
+            </div>
+            <div>
                 <div class="pd-kv-key"><i class="bi bi-cash-coin"></i> Total Cost</div>
                 <div class="pd-kv-val">@Model.Cost.ToString("N2")</div>
             </div>
-            <div class="pd-kv-item" style="grid-column:1/-1;">
+            <div style="grid-column:1/-1;">
                 <div class="pd-kv-key"><i class="bi bi-stickies"></i> Notes</div>
                 <div class="pd-kv-val">@(string.IsNullOrWhiteSpace(Model.Notes) ? "—" : Model.Notes)</div>
             </div>
@@ -334,8 +325,7 @@
         </div>
         <div class="pd-search-wrap">
             <i class="bi bi-search"></i>
-            <input id="lineSearch" class="pd-search-input"
-                   placeholder="Search book, qty, price…" />
+            <input id="lineSearch" class="pd-search-input" placeholder="Search catalog, qty, price…" />
         </div>
     </div>
 
@@ -343,7 +333,7 @@
         <table class="pd-table" id="detailsTbl">
             <thead>
                 <tr>
-                    <th>Book</th>
+                    <th>Catalog</th>
                     <th class="text-end">Quantity</th>
                     <th class="text-end">Unit Price</th>
                     <th class="text-end">Line Total</th>
@@ -353,7 +343,7 @@
                 @foreach (var d in details)
                 {
                     <tr>
-                        <td style="font-weight:500;color:#111827;">@BookLabel(d.Book)</td>
+                        <td style="font-weight:500;color:#111827;">@CatalogLabel(d.Catalog)</td>
                         <td class="text-end">@d.Quantity</td>
                         <td class="text-end">@d.UnitPrice.ToString("N2")</td>
                         <td class="text-end">@d.LineTotal.ToString("N2")</td>
@@ -380,14 +370,14 @@
 @section Scripts {
     <script>
         (() => {
-            const input  = document.getElementById('lineSearch');
-            const tbl    = document.getElementById('detailsTbl');
-            const rows   = Array.from(tbl.querySelectorAll('tbody tr'));
-            const badge  = document.getElementById('rowsCountBadge');
-            const tQty   = document.getElementById('tQty');
-            const tCost  = document.getElementById('tCost');
+            const input = document.getElementById('lineSearch');
+            const tbl   = document.getElementById('detailsTbl');
+            const rows  = Array.from(tbl.querySelectorAll('tbody tr'));
+            const badge = document.getElementById('rowsCountBadge');
+            const tQty  = document.getElementById('tQty');
+            const tCost = document.getElementById('tCost');
 
-            const norm = s => (s || '').toString().toLowerCase();
+            const norm     = s => (s || '').toString().toLowerCase();
             const parseNum = v => {
                 const n = parseFloat((v || '').toString().replace(/,/g, ''));
                 return Number.isFinite(n) ? n : 0;

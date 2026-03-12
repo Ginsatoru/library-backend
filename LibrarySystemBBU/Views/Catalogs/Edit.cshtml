@@ -150,9 +150,11 @@
             outline: none;
         }
 
-        .form-control[readonly], .form-control:disabled {
+        .form-control[readonly], .form-control:disabled,
+        .form-select:disabled {
             background: #f9fafb;
             color: #6b7280;
+            cursor: not-allowed;
         }
 
     .text-danger {
@@ -190,7 +192,7 @@
     .cat-table-wrap {
         border: 1px solid #e5e7eb;
         border-radius: 10px;
-        overflow: hidden;
+        overflow: visible;
         margin-bottom: 12px;
     }
 
@@ -239,6 +241,49 @@
         .cat-remove-btn:hover {
             color: #ef4444;
             background: #fef2f2;
+        }
+
+    /* Locked remove button — looks same as normal but shows tooltip and does nothing */
+    .cat-remove-btn-locked {
+        background: none;
+        border: none;
+        color: #d1d5db;
+        cursor: not-allowed;
+        font-size: .85rem;
+        padding: 3px 7px;
+        border-radius: 6px;
+        transition: color .15s, background .15s;
+        position: relative;
+    }
+
+        .cat-remove-btn-locked:hover {
+            color: #d1d5db;
+            background: #f9fafb;
+        }
+
+        /* Tooltip on hover */
+        .cat-remove-btn-locked::after {
+            content: 'Managed via Adjustments / Borrows';
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: #fff;
+            font-size: .7rem;
+            white-space: nowrap;
+            padding: 4px 9px;
+            border-radius: 6px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .15s;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            z-index: 20;
+        }
+
+        .cat-remove-btn-locked:hover::after {
+            opacity: 1;
         }
 </style>
 
@@ -321,7 +366,9 @@
                         @if (!string.IsNullOrWhiteSpace(Model.ImagePath))
                         {
                             <img src="@Model.ImagePath" class="preview-img" alt="current cover" />
-                            <a href="@Model.ImagePath" target="_blank" class="cat-btn" style="padding:4px 10px;font-size:.75rem;"><i class="bi bi-box-arrow-up-right"></i> Current</a>
+                            <a href="@Model.ImagePath" target="_blank" class="cat-btn" style="padding:4px 10px;font-size:.75rem;">
+                                <i class="bi bi-box-arrow-up-right"></i> Current
+                            </a>
                         }
                         <img id="imgPreviewNew" class="preview-img d-none" alt="new preview" />
                     </div>
@@ -333,7 +380,9 @@
                     <div class="mt-2 d-flex align-items-center gap-2 flex-wrap">
                         @if (!string.IsNullOrWhiteSpace(Model.PdfFilePath))
                         {
-                            <a href="@Model.PdfFilePath" target="_blank" class="cat-btn" style="padding:4px 10px;font-size:.75rem;"><i class="bi bi-box-arrow-up-right"></i> Current PDF</a>
+                            <a href="@Model.PdfFilePath" target="_blank" class="cat-btn" style="padding:4px 10px;font-size:.75rem;">
+                                <i class="bi bi-box-arrow-up-right"></i> Current PDF
+                            </a>
                             <iframe class="embed-pdf" src="@Model.PdfFilePath"></iframe>
                         }
                         <span id="pdfNewName" class="file-pill d-none"><i class="bi bi-filetype-pdf"></i><span></span></span>
@@ -359,27 +408,54 @@
                     <tbody>
                         @for (int i = 0; i < (Model.Books?.Count ?? 0); i++)
                         {
+                            var bookStatus = Model.Books[i].Status ?? "Available";
+                            var isLocked = string.Equals(bookStatus, "Lost", StringComparison.OrdinalIgnoreCase)
+                            || string.Equals(bookStatus, "Damage", StringComparison.OrdinalIgnoreCase)
+                            || string.Equals(bookStatus, "Borrowed", StringComparison.OrdinalIgnoreCase);
+
                             <tr>
                                 <td>
                                     <input asp-for="Books[i].BookId" type="hidden" />
                                     <input asp-for="Books[i].CatalogId" type="hidden" />
-                                    <input asp-for="Books[i].Barcode" class="form-control" />
+                                    <input asp-for="Books[i].Barcode" class="form-control" readonly="@isLocked" />
                                     <span asp-validation-for="Books[i].Barcode" class="text-danger"></span>
                                 </td>
                                 <td>
-                                    <select asp-for="Books[i].Status" class="form-select">
-                                        <option value="Available">Available</option>
-                                        <option value="Borrowed">Borrowed</option>
-                                        <option value="Lost">Lost</option>
-                                        <option value="Damaged">Damaged</option>
-                                    </select>
-                                    <span asp-validation-for="Books[i].Status" class="text-danger"></span>
+                                    @if (isLocked)
+                                    {
+                                        <!-- Hidden input posts the real value; disabled select is display only -->
+                                        <input type="hidden" name="Books[@i].Status" value="@bookStatus" />
+                                        <select class="form-select" disabled>
+                                            <option selected>@bookStatus</option>
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <select asp-for="Books[i].Status" class="form-select book-status-select">
+                                            <option value="Available">Available</option>
+                                        </select>
+                                        <span asp-validation-for="Books[i].Status" class="text-danger"></span>
+                                    }
                                 </td>
                                 <td><input asp-for="Books[i].Location" class="form-control" /></td>
                                 <td>
-                                    <input asp-for="Books[i].AcquisitionDate" type="date" class="form-control" value="@Model.Books[i].AcquisitionDate.ToString("yyyy-MM-dd")" />
+                                    <input asp-for="Books[i].AcquisitionDate" type="date" class="form-control"
+                                           value="@Model.Books[i].AcquisitionDate.ToString("yyyy-MM-dd")" />
                                 </td>
-                                <td class="text-center"><button type="button" class="cat-remove-btn" onclick="removeBookRow(this)"><i class="bi bi-x-lg"></i></button></td>
+                                <td class="text-center">
+                                    @if (!isLocked)
+                                    {
+                                        <button type="button" class="cat-remove-btn" onclick="removeBookRow(this)">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="cat-remove-btn-locked">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    }
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -408,7 +484,7 @@
             document.getElementById('ImageFile')?.addEventListener('change', e => {
                 const f = e.target.files?.[0];
                 const el = document.getElementById('imgPreviewNew');
-                if (!f) { el.classList.add('d-none'); el.src=''; return; }
+                if (!f) { el.classList.add('d-none'); el.src = ''; return; }
                 el.src = URL.createObjectURL(f); el.classList.remove('d-none');
             });
 
@@ -426,23 +502,40 @@
             const tbody = document.querySelector('#booksTable tbody');
             const idx   = tbody.querySelectorAll('tr').length;
             const catId = document.querySelector('input[name=CatalogId]').value;
-            const today = new Date().toISOString().slice(0,10);
+            const today = new Date().toISOString().slice(0, 10);
             const tr    = document.createElement('tr');
+
             tr.innerHTML = `
-                <td><input name="Books[${idx}].BookId" value="0" type="hidden"/><input name="Books[${idx}].CatalogId" value="${catId}" type="hidden"/><input name="Books[${idx}].Barcode" class="form-control"/></td>
-                <td><input name="Books[${idx}].Status" class="form-control" value="Available"/></td>
+                <td>
+                    <input name="Books[${idx}].BookId" value="0" type="hidden"/>
+                    <input name="Books[${idx}].CatalogId" value="${catId}" type="hidden"/>
+                    <input name="Books[${idx}].Barcode" class="form-control"/>
+                </td>
+                <td>
+                    <select name="Books[${idx}].Status" class="form-select book-status-select">
+                        <option value="Available">Available</option>
+                    </select>
+                </td>
                 <td><input name="Books[${idx}].Location" class="form-control"/></td>
                 <td><input name="Books[${idx}].AcquisitionDate" type="date" class="form-control" value="${today}"/></td>
-                <td class="text-center"><button type="button" class="cat-remove-btn" onclick="removeBookRow(this)"><i class="bi bi-x-lg"></i></button></td>`;
-            tbody.appendChild(tr); syncPills();
+                <td class="text-center">
+                    <button type="button" class="cat-remove-btn" onclick="removeBookRow(this)">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </td>`;
+
+            tbody.appendChild(tr);
+            syncPills();
         }
 
         function removeBookRow(btn) {
             btn.closest('tr').remove();
-            document.querySelectorAll('#booksTable tbody tr').forEach((row,i) => {
-                row.querySelectorAll('input').forEach(inp => {
+            document.querySelectorAll('#booksTable tbody tr').forEach((row, i) => {
+                row.querySelectorAll('input, select').forEach(inp => {
                     const n = inp.getAttribute('name');
-                    if (n?.startsWith('Books[')) inp.setAttribute('name',`Books[${i}].${n.substring(n.indexOf('].')+2)}`);
+                    if (n?.startsWith('Books[')) {
+                        inp.setAttribute('name', `Books[${i}].${n.substring(n.indexOf('.]') + 2)}`);
+                    }
                 });
             });
             syncPills();
@@ -451,17 +544,22 @@
         function autoCount() {
             const rows = document.querySelectorAll('#booksTable tbody tr');
             let avail  = 0;
-            rows.forEach(r => { if ((r.querySelector('input[name*=".Status"]')?.value||'').trim().toLowerCase()==='available') avail++; });
+            rows.forEach(r => {
+                const selectEl = r.querySelector('select[name*=".Status"]');
+                const hiddenEl = r.querySelector('input[type="hidden"][name*=".Status"]');
+                const status   = (selectEl?.value || hiddenEl?.value || '').trim().toLowerCase();
+                if (status === 'available') avail++;
+            });
             document.getElementById('TotalCopies').value     = rows.length;
             document.getElementById('AvailableCopies').value = avail;
             syncPills();
         }
 
         function syncPills() {
-            const t = parseInt(document.getElementById('TotalCopies')?.value||'0');
-            const a = parseInt(document.getElementById('AvailableCopies')?.value||'0');
-            document.getElementById('statTotal').textContent = isNaN(t)?'0':t;
-            document.getElementById('statAvail').textContent = isNaN(a)?'0':a;
+            const t = parseInt(document.getElementById('TotalCopies')?.value || '0');
+            const a = parseInt(document.getElementById('AvailableCopies')?.value || '0');
+            document.getElementById('statTotal').textContent = isNaN(t) ? '0' : t;
+            document.getElementById('statAvail').textContent = isNaN(a) ? '0' : a;
         }
     </script>
 }

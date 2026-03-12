@@ -16,20 +16,19 @@ namespace LibrarySystemBBU.Services
             _context = context;
         }
 
-        public async Task<MonthlyReportViewModel> GetMonthlyReportAsync(int year, int month)
+        public async Task<MonthlyReportViewModel> GetReportAsync(DateTime start, DateTime end)
         {
-            var start = new DateTime(year, month, 1);
-            var end = start.AddMonths(1);
+            // end is inclusive date — shift to next day for < comparison
+            var endExclusive = end.Date.AddDays(1);
 
             var vm = new MonthlyReportViewModel
             {
-                Year = year,
-                Month = month
+                StartDate = start.Date,
+                EndDate = end.Date
             };
 
             // -------------------------------------------------
-            // 1) Student take-home borrowing (header + detail)
-            //    Borrowed THIS MONTH = LoanDate in month
+            // 1) Student take-home borrowing
             // -------------------------------------------------
             var studentLoans = _context.BookBorrows
                 .AsNoTracking()
@@ -38,30 +37,26 @@ namespace LibrarySystemBBU.Services
                     .ThenInclude(d => d.Book)
                         .ThenInclude(b => b.Catalog)
                 .Include(l => l.BookReturns)
-                .Where(l => l.LoanDate >= start && l.LoanDate < end)
+                .Where(l => l.LoanDate >= start && l.LoanDate < endExclusive)
                 .Where(l => l.LibraryMember != null &&
                             l.LibraryMember.MemberType == "Student");
 
-            // how many loans happened this month
             vm.StudentTakeHomeLoans = await studentLoans.CountAsync();
 
-            // how many items borrowed this month (rows in LoanBookDetails)
             vm.StudentTakeHomeItemsBorrowed = await _context.LoanBookDetails
                 .AsNoTracking()
                 .Include(d => d.Loan)
                     .ThenInclude(l => l.LibraryMember)
                 .Where(d => d.Loan != null &&
-                            d.Loan.LoanDate >= start && d.Loan.LoanDate < end)
+                            d.Loan.LoanDate >= start && d.Loan.LoanDate < endExclusive)
                 .Where(d => d.Loan.LibraryMember != null &&
                             d.Loan.LibraryMember.MemberType == "Student")
                 .CountAsync();
 
             // -------------------------------------------------
-            // ✅ Student take-home returns THIS MONTH (header)
-            //    Returned THIS MONTH = ReturnDate in month
-            //    IMPORTANT: filter by Student also
+            // 2) Student take-home returns
             // -------------------------------------------------
-            var studentReturnsInMonth = _context.BookReturns
+            var studentReturnsInRange = _context.BookReturns
                 .AsNoTracking()
                 .Include(r => r.Loan)
                     .ThenInclude(l => l.LibraryMember)
@@ -69,16 +64,15 @@ namespace LibrarySystemBBU.Services
                     .ThenInclude(l => l.LoanBookDetails)
                         .ThenInclude(d => d.Book)
                             .ThenInclude(b => b.Catalog)
-                .Where(r => r.ReturnDate >= start && r.ReturnDate < end)
+                .Where(r => r.ReturnDate >= start && r.ReturnDate < endExclusive)
                 .Where(r => r.Loan != null &&
                             r.Loan.LibraryMember != null &&
                             r.Loan.LibraryMember.MemberType == "Student");
 
-            vm.StudentTakeHomeReturns = await studentReturnsInMonth.CountAsync();
+            vm.StudentTakeHomeReturns = await studentReturnsInRange.CountAsync();
 
             // -------------------------------------------------
-            // Borrow detail rows (Borrowed THIS MONTH)
-            // One row per item (LoanBookDetail)
+            // Borrow detail rows
             // -------------------------------------------------
             vm.StudentBorrowDetails = await _context.LoanBookDetails
                 .AsNoTracking()
@@ -89,7 +83,7 @@ namespace LibrarySystemBBU.Services
                 .Include(d => d.Loan)
                     .ThenInclude(l => l.BookReturns)
                 .Where(d => d.Loan != null &&
-                            d.Loan.LoanDate >= start && d.Loan.LoanDate < end)
+                            d.Loan.LoanDate >= start && d.Loan.LoanDate < endExclusive)
                 .Where(d => d.Loan.LibraryMember != null &&
                             d.Loan.LibraryMember.MemberType == "Student")
                 .OrderBy(d => d.Loan!.LoanDate)
@@ -101,29 +95,17 @@ namespace LibrarySystemBBU.Services
                         .OrderBy(r => r.ReturnDate)
                         .Select(r => (DateTime?)r.ReturnDate)
                         .FirstOrDefault(),
-
                     MemberId = d.Loan.MemberId,
                     MemberName = d.Loan.LibraryMember!.FullName,
                     MemberType = d.Loan.LibraryMember.MemberType,
-
-                    BookTitle = d.Book != null
-                        ? (d.Book.Title ?? d.Book.Catalog.Title)
-                        : "(Unknown)",
-
-                    // NOTE: your code used d.Catalog (not in Include); safer to use Book.Catalog
-                    CatalogTitle = d.Book != null
-                        ? d.Book.Catalog.Title
-                        : "(Unknown)",
-
+                    BookTitle = d.Book != null ? (d.Book.Title ?? d.Book.Catalog.Title) : "(Unknown)",
+                    CatalogTitle = d.Book != null ? d.Book.Catalog.Title : "(Unknown)",
                     Barcode = d.Book != null ? d.Book.Barcode : string.Empty,
-
                     DepositAmount = d.Loan.DepositAmount ?? 0m,
-
                     FineAmount = d.Loan.BookReturns
                         .OrderBy(r => r.ReturnDate)
                         .Select(r => (decimal?)r.FineAmount)
                         .FirstOrDefault() ?? 0m,
-
                     ExtraCharge = d.Loan.BookReturns
                         .OrderBy(r => r.ReturnDate)
                         .Select(r => (decimal?)r.ExtraCharge)
@@ -132,9 +114,7 @@ namespace LibrarySystemBBU.Services
                 .ToListAsync();
 
             // -------------------------------------------------
-            // ✅ Return detail rows (Returned THIS MONTH)
-            // One row per returned item
-            // - If a loan returns multiple items, you want row per item
+            // Return detail rows
             // -------------------------------------------------
             vm.StudentReturnDetails = await _context.BookReturns
                 .AsNoTracking()
@@ -144,61 +124,47 @@ namespace LibrarySystemBBU.Services
                     .ThenInclude(l => l.LoanBookDetails)
                         .ThenInclude(d => d.Book)
                             .ThenInclude(b => b.Catalog)
-                .Where(r => r.ReturnDate >= start && r.ReturnDate < end)
+                .Where(r => r.ReturnDate >= start && r.ReturnDate < endExclusive)
                 .Where(r => r.Loan != null &&
                             r.Loan.LibraryMember != null &&
                             r.Loan.LibraryMember.MemberType == "Student")
                 .OrderBy(r => r.ReturnDate)
-                // Flatten: BookReturn -> LoanBookDetails
                 .SelectMany(r => r.Loan!.LoanBookDetails.Select(d => new BorrowReportItemDto
                 {
-                    // show both return + loan info
                     LoanDate = r.Loan.LoanDate,
                     DueDate = r.Loan.DueDate,
                     ReturnDate = r.ReturnDate,
-
                     MemberId = r.Loan.MemberId,
                     MemberName = r.Loan.LibraryMember!.FullName,
                     MemberType = r.Loan.LibraryMember.MemberType,
-
-                    BookTitle = d.Book != null
-                        ? (d.Book.Title ?? d.Book.Catalog.Title)
-                        : "(Unknown)",
-
-                    CatalogTitle = d.Book != null
-                        ? d.Book.Catalog.Title
-                        : "(Unknown)",
-
+                    BookTitle = d.Book != null ? (d.Book.Title ?? d.Book.Catalog.Title) : "(Unknown)",
+                    CatalogTitle = d.Book != null ? d.Book.Catalog.Title : "(Unknown)",
                     Barcode = d.Book != null ? d.Book.Barcode : string.Empty,
-
-                    // usually deposit is from loan; keep for reference
                     DepositAmount = r.Loan.DepositAmount ?? 0m,
-
-                    // ✅ return financial values must come from BookReturn (NOT Loan)
                     FineAmount = r.FineAmount,
                     ExtraCharge = r.ExtraCharge
                 }))
                 .ToListAsync();
 
             // -------------------------------------------------
-            // 2) In-library reading (LibraryLog header + detail)
+            // 3) In-library reading
             // -------------------------------------------------
-            var logsInMonth = _context.LibraryLogs
+            var logsInRange = _context.LibraryLogs
                 .AsNoTracking()
                 .Include(l => l.Items)
                     .ThenInclude(i => i.Book)
                         .ThenInclude(b => b.Catalog)
-                .Where(l => l.VisitDate >= start && l.VisitDate < end);
+                .Where(l => l.VisitDate >= start && l.VisitDate < endExclusive);
 
-            vm.InLibraryBorrowCount = await logsInMonth.CountAsync();
+            vm.InLibraryBorrowCount = await logsInRange.CountAsync();
 
             vm.InLibraryItemsRead = await _context.LibraryLogItems
                 .AsNoTracking()
                 .Include(i => i.Log)
-                .Where(i => i.Log.VisitDate >= start && i.Log.VisitDate < end)
+                .Where(i => i.Log.VisitDate >= start && i.Log.VisitDate < endExclusive)
                 .CountAsync();
 
-            vm.InLibraryReturnCount = await logsInMonth
+            vm.InLibraryReturnCount = await logsInRange
                 .Where(l => l.Status == "Returned")
                 .CountAsync();
 
@@ -207,7 +173,7 @@ namespace LibrarySystemBBU.Services
                 .Include(i => i.Log)
                 .Include(i => i.Book)
                     .ThenInclude(b => b.Catalog)
-                .Where(i => i.Log.VisitDate >= start && i.Log.VisitDate < end)
+                .Where(i => i.Log.VisitDate >= start && i.Log.VisitDate < endExclusive)
                 .OrderBy(i => i.Log.VisitDate)
                 .Select(i => new InLibraryReportItemDto
                 {
@@ -215,44 +181,34 @@ namespace LibrarySystemBBU.Services
                     StudentName = i.Log.StudentName,
                     Gender = i.Log.Gender,
                     Purpose = i.Log.Purpose,
-
-                    BookTitle = i.Book != null
-                        ? (i.Book.Title ?? i.Book.Catalog.Title)
-                        : "(Unknown)",
-                    CatalogTitle = i.Book != null
-                        ? i.Book.Catalog.Title
-                        : "(Unknown)",
+                    BookTitle = i.Book != null ? (i.Book.Title ?? i.Book.Catalog.Title) : "(Unknown)",
+                    CatalogTitle = i.Book != null ? i.Book.Catalog.Title : "(Unknown)",
                     Barcode = i.Book != null ? i.Book.Barcode : string.Empty,
-
                     Status = i.Log.Status,
                     ReturnedDate = i.ReturnedDate ?? i.Log.ReturnedUtc
                 })
                 .ToListAsync();
 
             // -------------------------------------------------
-            // 3) Purchases (summary + details)
+            // 4) Purchases
             // -------------------------------------------------
-            var purchasesInMonth = _context.Purchases
+            var purchasesInRange = _context.Purchases
                 .AsNoTracking()
                 .Include(p => p.Book)
                     .ThenInclude(b => b.Catalog)
-                .Where(p => p.PurchaseDate >= start && p.PurchaseDate < end);
+                .Where(p => p.PurchaseDate >= start && p.PurchaseDate < endExclusive);
 
-            vm.PurchaseTransactions = await purchasesInMonth.CountAsync();
-            vm.PurchaseTotalQuantity = await purchasesInMonth
-                .SumAsync(p => (int?)p.Quantity) ?? 0;
-            vm.PurchaseTotalCost = await purchasesInMonth
-                .SumAsync(p => (decimal?)p.Cost) ?? 0m;
+            vm.PurchaseTransactions = await purchasesInRange.CountAsync();
+            vm.PurchaseTotalQuantity = await purchasesInRange.SumAsync(p => (int?)p.Quantity) ?? 0;
+            vm.PurchaseTotalCost = await purchasesInRange.SumAsync(p => (decimal?)p.Cost) ?? 0m;
 
-            vm.PurchaseItems = await purchasesInMonth
+            vm.PurchaseItems = await purchasesInRange
                 .OrderBy(p => p.PurchaseDate)
                 .Select(p => new PurchaseReportItemDto
                 {
                     PurchaseDate = p.PurchaseDate,
                     Supplier = p.Supplier,
-                    BookTitle = p.Book != null
-                        ? (p.Book.Title ?? p.Book.Catalog.Title)
-                        : "(Unknown)",
+                    BookTitle = p.Book != null ? (p.Book.Title ?? p.Book.Catalog.Title) : "(Unknown)",
                     Quantity = p.Quantity,
                     Cost = p.Cost,
                     Notes = p.Notes
@@ -260,17 +216,16 @@ namespace LibrarySystemBBU.Services
                 .ToListAsync();
 
             // -------------------------------------------------
-            // 4) Adjustments (summary + details)
+            // 5) Adjustments
             // -------------------------------------------------
-            var adjustmentsInMonth = _context.Adjustments
+            var adjustmentsInRange = _context.Adjustments
                 .AsNoTracking()
-                .Where(a => a.AdjustmentDate >= start && a.AdjustmentDate < end);
+                .Where(a => a.AdjustmentDate >= start && a.AdjustmentDate < endExclusive);
 
-            vm.TotalAdjustments = await adjustmentsInMonth.CountAsync();
-            vm.TotalAdjustmentQtyChange = await adjustmentsInMonth
-                .SumAsync(a => (int?)a.QuantityChange) ?? 0;
+            vm.TotalAdjustments = await adjustmentsInRange.CountAsync();
+            vm.TotalAdjustmentQtyChange = await adjustmentsInRange.SumAsync(a => (int?)a.QuantityChange) ?? 0;
 
-            vm.AdjustmentsByType = await adjustmentsInMonth
+            vm.AdjustmentsByType = await adjustmentsInRange
                 .GroupBy(a => a.AdjustmentType)
                 .Select(g => new AdjustmentSummaryDto
                 {
@@ -287,7 +242,7 @@ namespace LibrarySystemBBU.Services
                 .Include(d => d.Catalog)
                 .Where(d => d.Adjustment != null &&
                             d.Adjustment.AdjustmentDate >= start &&
-                            d.Adjustment.AdjustmentDate < end)
+                            d.Adjustment.AdjustmentDate < endExclusive)
                 .OrderBy(d => d.Adjustment!.AdjustmentDate)
                 .Select(d => new AdjustmentReportItemDto
                 {
@@ -300,25 +255,24 @@ namespace LibrarySystemBBU.Services
                 .ToListAsync();
 
             // -------------------------------------------------
-            // 5) Financial summary
+            // 6) Financial summary
             // -------------------------------------------------
             vm.IncomeBorrowingFees = await studentLoans
-                .Where(l => l.IsPaid) // remove if you want all loans
+                .Where(l => l.IsPaid)
                 .SumAsync(l => (decimal?)l.BorrowingFee) ?? 0m;
 
-            // ✅ Use Student returns only, to match your report
-            vm.IncomeFines = await studentReturnsInMonth
+            vm.IncomeFines = await studentReturnsInRange
                 .SumAsync(r => (decimal?)r.FineAmount) ?? 0m;
 
-            vm.IncomeExtraCharges = await studentReturnsInMonth
+            vm.IncomeExtraCharges = await studentReturnsInRange
                 .SumAsync(r => (decimal?)r.ExtraCharge) ?? 0m;
 
             vm.ExpensePurchases = vm.PurchaseTotalCost;
 
             vm.NetCashFlow = vm.IncomeBorrowingFees
-                             + vm.IncomeFines
-                             + vm.IncomeExtraCharges
-                             - vm.ExpensePurchases;
+                           + vm.IncomeFines
+                           + vm.IncomeExtraCharges
+                           - vm.ExpensePurchases;
 
             return vm;
         }

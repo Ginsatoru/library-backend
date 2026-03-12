@@ -2,7 +2,6 @@
 using LibrarySystemBBU.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,34 +22,32 @@ namespace LibrarySystemBBU.Controllers
         }
 
         // --------------------------
-        // AJAX book search for Select2
+        // AJAX catalog search for Select2
         // --------------------------
         [HttpGet]
         public async Task<IActionResult> SearchBooks(string term, int page = 1)
         {
             const int pageSize = 20;
 
-            var query = _context.Books
+            var query = _context.Catalogs
                 .AsNoTracking()
-                .Include(b => b.Catalog)
-                .Where(b =>
+                .Where(c =>
                     string.IsNullOrEmpty(term) ||
-                    (b.Title != null && b.Title.Contains(term)) ||
-                    (b.Catalog != null && b.Catalog.Title != null && b.Catalog.Title.Contains(term)) ||
-                    (b.Catalog != null && b.Catalog.ISBN != null && b.Catalog.ISBN.Contains(term)) ||
-                    (b.Barcode != null && b.Barcode.Contains(term)));
+                    (c.Title != null && c.Title.Contains(term)) ||
+                    (c.ISBN != null && c.ISBN.Contains(term)) ||
+                    (c.Author != null && c.Author.Contains(term)));
 
             var total = await query.CountAsync();
 
             var items = await query
-                .OrderBy(b => b.Title ?? b.Catalog.Title)
+                .OrderBy(c => c.Title)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(b => new
+                .Select(c => new
                 {
-                    id = b.BookId,
-                    text = (b.Title ?? b.Catalog.Title ?? "Book #" + b.BookId)
-                           + (b.Catalog.ISBN != null ? " — " + b.Catalog.ISBN : "")
+                    id = c.CatalogId,
+                    text = (c.Title ?? "Catalog #" + c.CatalogId)
+                           + (!string.IsNullOrWhiteSpace(c.ISBN) ? " — " + c.ISBN : "")
                 })
                 .ToListAsync();
 
@@ -67,18 +64,10 @@ namespace LibrarySystemBBU.Controllers
         private static void RecalculateFromDetails(Purchase purchase)
         {
             purchase.PurchaseDetails ??= new List<PurchaseDetail>();
-
             foreach (var d in purchase.PurchaseDetails)
                 d.LineTotal = Math.Round(d.UnitPrice * d.Quantity, 2, MidpointRounding.AwayFromZero);
-
             purchase.Cost = purchase.PurchaseDetails.Sum(d => d.LineTotal);
             purchase.Quantity = purchase.PurchaseDetails.Sum(d => d.Quantity);
-        }
-
-        private static void SatisfyHeaderRequirementsFromDetails(Purchase purchase)
-        {
-            if (purchase.PurchaseDetails.Any())
-                purchase.BookId = purchase.PurchaseDetails.First().BookId;
         }
 
         private static void ClearHeaderValidation(ModelStateDictionary modelState)
@@ -88,24 +77,12 @@ namespace LibrarySystemBBU.Controllers
             modelState.Remove(nameof(Purchase.Cost));
         }
 
-        private string BookLabel(Book? b)
+        private string CatalogLabel(Catalog? c)
         {
-            if (b == null) return string.Empty;
-
-            var baseTitle = !string.IsNullOrWhiteSpace(b.Title)
-                ? b.Title
-                : (!string.IsNullOrWhiteSpace(b.Catalog?.Title)
-                    ? b.Catalog!.Title
-                    : $"Book #{b.BookId}");
-
-            var text = !string.IsNullOrWhiteSpace(b.Catalog?.ISBN)
-                ? $"{baseTitle} — {b.Catalog!.ISBN}"
-                : baseTitle;
-
-            if (text.StartsWith("Book #") && !string.IsNullOrWhiteSpace(b.Barcode))
-                text = $"{text} — {b.Barcode}";
-
-            return text;
+            if (c == null) return string.Empty;
+            return string.IsNullOrWhiteSpace(c.ISBN)
+                ? c.Title
+                : $"{c.Title} — {c.ISBN}";
         }
 
         // --------------------------
@@ -115,8 +92,7 @@ namespace LibrarySystemBBU.Controllers
         {
             var data = await _context.Purchases
                 .AsNoTracking()
-                .Include(p => p.Book).ThenInclude(b => b.Catalog)
-                .Include(p => p.PurchaseDetails)
+                .Include(p => p.PurchaseDetails).ThenInclude(d => d.Catalog)
                 .OrderByDescending(p => p.PurchaseDate)
                 .ThenByDescending(p => p.Created)
                 .ToListAsync();
@@ -132,8 +108,7 @@ namespace LibrarySystemBBU.Controllers
         {
             var data = await _context.Purchases
                 .AsNoTracking()
-                .Include(p => p.Book).ThenInclude(b => b.Catalog)
-                .Include(p => p.PurchaseDetails)
+                .Include(p => p.PurchaseDetails).ThenInclude(d => d.Catalog)
                 .OrderByDescending(p => p.PurchaseDate)
                 .ThenByDescending(p => p.Created)
                 .ToListAsync();
@@ -143,26 +118,28 @@ namespace LibrarySystemBBU.Controllers
             var sb = new StringBuilder();
             sb.AppendLine("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body>");
             sb.AppendLine("<table border='1'><thead><tr>");
-            sb.AppendLine("<th>Purchase Date</th><th>Book</th><th>Supplier</th><th>Quantity</th><th>Cost</th><th>Notes</th>");
+            sb.AppendLine("<th>Purchase Date</th><th>Catalog</th><th>Supplier</th><th>Quantity</th><th>Cost</th><th>Notes</th>");
             sb.AppendLine("</tr></thead><tbody>");
 
             foreach (var p in data)
             {
-                sb.AppendLine("<tr>");
-                sb.AppendLine($"<td>{H(p.PurchaseDate.ToString("yyyy-MM-dd"))}</td>");
-                sb.AppendLine($"<td>{H(BookLabel(p.Book))}</td>");
-                sb.AppendLine($"<td>{H(p.Supplier)}</td>");
-                sb.AppendLine($"<td>{p.Quantity}</td>");
-                sb.AppendLine($"<td>{p.Cost:0.00}</td>");
-                sb.AppendLine($"<td>{H(p.Notes)}</td>");
-                sb.AppendLine("</tr>");
+                foreach (var d in p.PurchaseDetails)
+                {
+                    sb.AppendLine("<tr>");
+                    sb.AppendLine($"<td>{H(p.PurchaseDate.ToString("yyyy-MM-dd"))}</td>");
+                    sb.AppendLine($"<td>{H(CatalogLabel(d.Catalog))}</td>");
+                    sb.AppendLine($"<td>{H(p.Supplier)}</td>");
+                    sb.AppendLine($"<td>{d.Quantity}</td>");
+                    sb.AppendLine($"<td>{d.LineTotal:0.00}</td>");
+                    sb.AppendLine($"<td>{H(p.Notes)}</td>");
+                    sb.AppendLine("</tr>");
+                }
             }
 
             sb.AppendLine("</tbody></table></body></html>");
 
             var bytes = new UTF8Encoding(encoderShouldEmitUTF8Identifier: true).GetBytes(sb.ToString());
             var fileName = "Purchases_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls";
-
             return File(bytes, "application/vnd.ms-excel", fileName);
         }
 
@@ -174,14 +151,11 @@ namespace LibrarySystemBBU.Controllers
             if (id == null) return NotFound();
 
             var purchase = await _context.Purchases
-                .Include(p => p.Book).ThenInclude(b => b.Catalog)
-                .Include(p => p.PurchaseDetails)
-                    .ThenInclude(d => d.Book).ThenInclude(b => b.Catalog)
+                .Include(p => p.PurchaseDetails).ThenInclude(d => d.Catalog)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.PurchaseId == id);
 
             if (purchase == null) return NotFound();
-
             return View(purchase);
         }
 
@@ -203,7 +177,7 @@ namespace LibrarySystemBBU.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("BookId,Quantity,PurchaseDate,Supplier,Cost,Notes,PurchaseDetails")] Purchase purchase)
+            [Bind("Quantity,PurchaseDate,Supplier,Cost,Notes,PurchaseDetails")] Purchase purchase)
         {
             purchase.PurchaseDetails ??= new List<PurchaseDetail>();
 
@@ -211,35 +185,47 @@ namespace LibrarySystemBBU.Controllers
                 ModelState.AddModelError(string.Empty, "Please add at least one line item.");
 
             RecalculateFromDetails(purchase);
-            SatisfyHeaderRequirementsFromDetails(purchase);
             ClearHeaderValidation(ModelState);
+
+            foreach (var key in ModelState.Keys.Where(k => k.Contains("BookId")).ToList())
+                ModelState.Remove(key);
 
             if (!ModelState.IsValid)
                 return View(purchase);
 
-            using var tx = await _context.Database.BeginTransactionAsync();
+            var validLines = purchase.PurchaseDetails
+                .Where(d => d.CatalogId != Guid.Empty && d.Quantity > 0)
+                .ToList();
+
+            if (!validLines.Any())
+            {
+                ModelState.AddModelError(string.Empty, "Please add at least one valid line item with a catalog selected.");
+                return View(purchase);
+            }
+
             try
             {
                 purchase.PurchaseId = Guid.NewGuid();
                 purchase.Created = DateTime.UtcNow;
                 purchase.Modified = DateTime.UtcNow;
+                purchase.BookId = null;
 
-                foreach (var d in purchase.PurchaseDetails)
+                foreach (var d in validLines)
                 {
                     d.PurchaseId = purchase.PurchaseId;
                     d.Created = DateTime.UtcNow;
                     d.Modified = DateTime.UtcNow;
+                    d.BookId = null;
                 }
 
+                purchase.PurchaseDetails = validLines;
                 _context.Purchases.Add(purchase);
                 await _context.SaveChangesAsync();
-                await tx.CommitAsync();
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                await tx.RollbackAsync();
                 ModelState.AddModelError(string.Empty, "Could not save the purchase. Please try again.");
                 return View(purchase);
             }
@@ -253,12 +239,10 @@ namespace LibrarySystemBBU.Controllers
             if (id == null) return NotFound();
 
             var purchase = await _context.Purchases
-                .Include(p => p.PurchaseDetails)
-                    .ThenInclude(d => d.Book).ThenInclude(b => b.Catalog)
+                .Include(p => p.PurchaseDetails).ThenInclude(d => d.Catalog)
                 .FirstOrDefaultAsync(p => p.PurchaseId == id);
 
             if (purchase == null) return NotFound();
-
             return View(purchase);
         }
 
@@ -269,7 +253,7 @@ namespace LibrarySystemBBU.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
             Guid id,
-            [Bind("PurchaseId,BookId,Quantity,PurchaseDate,Supplier,Cost,Notes,PurchaseDetails")] Purchase incoming)
+            [Bind("PurchaseId,Quantity,PurchaseDate,Supplier,Cost,Notes,PurchaseDetails")] Purchase incoming)
         {
             if (id != incoming.PurchaseId) return NotFound();
 
@@ -279,8 +263,10 @@ namespace LibrarySystemBBU.Controllers
                 ModelState.AddModelError(string.Empty, "Please add at least one line item.");
 
             RecalculateFromDetails(incoming);
-            SatisfyHeaderRequirementsFromDetails(incoming);
             ClearHeaderValidation(ModelState);
+
+            foreach (var key in ModelState.Keys.Where(k => k.Contains("BookId")).ToList())
+                ModelState.Remove(key);
 
             if (!ModelState.IsValid)
                 return View(incoming);
@@ -294,7 +280,6 @@ namespace LibrarySystemBBU.Controllers
 
                 if (dbPurchase == null) return NotFound();
 
-                dbPurchase.BookId = incoming.BookId;
                 dbPurchase.PurchaseDate = incoming.PurchaseDate;
                 dbPurchase.Supplier = incoming.Supplier;
                 dbPurchase.Notes = incoming.Notes;
@@ -304,12 +289,13 @@ namespace LibrarySystemBBU.Controllers
 
                 _context.PurchaseDetails.RemoveRange(dbPurchase.PurchaseDetails);
 
-                foreach (var d in incoming.PurchaseDetails)
+                foreach (var d in incoming.PurchaseDetails.Where(d => d.CatalogId != Guid.Empty && d.Quantity > 0))
                 {
                     _context.PurchaseDetails.Add(new PurchaseDetail
                     {
                         PurchaseId = dbPurchase.PurchaseId,
-                        BookId = d.BookId,
+                        CatalogId = d.CatalogId,
+                        Barcode = d.Barcode,
                         Quantity = d.Quantity,
                         UnitPrice = d.UnitPrice,
                         LineTotal = Math.Round(d.UnitPrice * d.Quantity, 2, MidpointRounding.AwayFromZero),
@@ -345,13 +331,11 @@ namespace LibrarySystemBBU.Controllers
             if (id == null) return NotFound();
 
             var purchase = await _context.Purchases
-                .Include(p => p.Book)
-                .Include(p => p.PurchaseDetails).ThenInclude(d => d.Book)
+                .Include(p => p.PurchaseDetails).ThenInclude(d => d.Catalog)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.PurchaseId == id);
 
             if (purchase == null) return NotFound();
-
             return View(purchase);
         }
 
