@@ -1099,7 +1099,7 @@ namespace LibrarySystemBBU.Controllers
                 await _context.SaveChangesAsync();
                 await tx.CommitAsync();
 
-                return Ok(new { success = true, message = "Returned successfully.", returnDate = DateTime.Now });
+                return Ok(new { success = true, message = "Returned successfully.", loanId = id, returnDate = DateTime.Now });
             }
             catch
             {

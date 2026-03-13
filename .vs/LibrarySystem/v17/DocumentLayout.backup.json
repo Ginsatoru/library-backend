@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\bookborrows\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\bookborrows\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\controllers\\bookborrowscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\bookborrowscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\controllers\\catalogscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\controllers\\catalogscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\bookborrows\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|solutionrelative:librarysystembbu\\views\\bookborrows\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{29FDDB3A-932C-4EA2-A397-4099B0D9D1B5}|LibrarySystemBBU\\LibrarySystemBBU.csproj|c:\\users\\nettech-store\\onedrive - aaapos\\web projects\\school\\backend\\librarysystem\\librarysystem\\librarysystembbu\\views\\bookborrows\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -302,7 +302,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
@@ -332,7 +332,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "CatalogsController.cs",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\CatalogsController.cs",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\CatalogsController.cs",
@@ -383,12 +383,12 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "BookBorrowsController.cs",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\BookBorrowsController.cs",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Controllers\\BookBorrowsController.cs",
-              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\BookBorrowsController.cs*",
-              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\BookBorrowsController.cs*",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Controllers\\BookBorrowsController.cs",
+              "RelativeToolTip": "LibrarySystemBBU\\Controllers\\BookBorrowsController.cs",
               "ViewState": "AgIAAMgBAAAAAAAAAAAawNUBAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-11T23:26:06.436Z",
@@ -409,13 +409,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Edit.cshtml",
               "DocumentMoniker": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\BookBorrows\\Edit.cshtml",
               "RelativeDocumentMoniker": "LibrarySystemBBU\\Views\\BookBorrows\\Edit.cshtml",
-              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\BookBorrows\\Edit.cshtml",
-              "RelativeToolTip": "LibrarySystemBBU\\Views\\BookBorrows\\Edit.cshtml",
-              "ViewState": "AgIAAA0CAAAAAAAAAAAqwCECAAArAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\NETTECH-STORE\\OneDrive - AAAPOS\\Web Projects\\School\\Backend\\LibrarySystem\\LibrarySystem\\LibrarySystemBBU\\Views\\BookBorrows\\Edit.cshtml*",
+              "RelativeToolTip": "LibrarySystemBBU\\Views\\BookBorrows\\Edit.cshtml*",
+              "ViewState": "AgIAABMCAAAAAAAAAAAqwCUCAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-03-10T05:12:36.423Z",
               "EditorCaption": ""
