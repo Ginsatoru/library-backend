@@ -1,0 +1,1161 @@
+﻿@{
+    ViewData["Title"] = "Help & User Manual";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+<style>
+    .help-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+        display: flex;
+        gap: 0;
+        height: calc(100vh - 76px);
+        overflow: hidden;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        margin: 8px;
+    }
+
+    /* ── Left Nav ── */
+    .help-nav {
+        width: 260px;
+        flex-shrink: 0;
+        background: #fff;
+        border-right: 1px solid #e5e7eb;
+        padding: 24px 0;
+        height: 100%;
+        overflow-y: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        border-radius: 16px 0 0 16px;
+    }
+
+        .help-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+    .help-nav-title {
+        font-size: .68rem;
+        font-weight: 700;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        padding: 0 20px;
+        margin-bottom: 6px;
+        margin-top: 18px;
+    }
+
+        .help-nav-title:first-child {
+            margin-top: 0;
+        }
+
+    .help-nav-link {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 20px;
+        font-size: .82rem;
+        font-weight: 500;
+        color: #374151;
+        text-decoration: none !important;
+        border-left: 3px solid transparent;
+        transition: background .12s, color .12s, border-color .12s;
+        cursor: pointer;
+    }
+
+        .help-nav-link i {
+            font-size: .85rem;
+            color: #9ca3af;
+            width: 16px;
+            flex-shrink: 0;
+            transition: color .12s;
+        }
+
+        .help-nav-link:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none !important;
+        }
+
+            .help-nav-link:hover i {
+                color: #000080;
+            }
+
+        .help-nav-link.active {
+            background: #f0f0ff;
+            color: #000080;
+            border-left-color: #000080;
+            font-weight: 600;
+        }
+
+            .help-nav-link.active i {
+                color: #000080;
+            }
+
+    /* ── Main Content ── */
+    .help-content {
+        flex: 1;
+        padding: 36px 48px;
+        max-width: 860px;
+        min-width: 0;
+        height: 100%;
+        overflow-y: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        border-radius: 0 16px 16px 0;
+        background: #fff;
+    }
+
+        .help-content::-webkit-scrollbar {
+            display: none;
+        }
+
+    /* ── Page header ── */
+    .help-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .help-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .help-page-subtitle {
+        font-size: .88rem;
+        color: #6b7280;
+        margin-bottom: 32px;
+    }
+
+    /* ── Search ── */
+    .help-search-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 10px 16px;
+        margin-bottom: 32px;
+        transition: border-color .15s;
+    }
+
+        .help-search-wrap:focus-within {
+            border-color: #000080;
+        }
+
+        .help-search-wrap i {
+            color: #9ca3af;
+            font-size: .9rem;
+        }
+
+    .help-search-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: .88rem;
+        color: #111827;
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .help-search-input::placeholder {
+            color: #9ca3af;
+        }
+
+    /* ── Section ── */
+    .help-section {
+        margin-bottom: 48px;
+        scroll-margin-top: 80px;
+    }
+
+    .help-section-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .help-section-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 9px;
+        background: #f0f0ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000080;
+        font-size: .9rem;
+        flex-shrink: 0;
+    }
+
+    .help-section-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .help-section-desc {
+        font-size: .82rem;
+        color: #6b7280;
+        margin-top: 1px;
+    }
+
+    /* ── Cards (step groups) ── */
+    .help-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        overflow: hidden;
+    }
+
+    .help-card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 18px;
+        cursor: pointer;
+        user-select: none;
+        transition: background .12s;
+        gap: 12px;
+    }
+
+        .help-card-head:hover {
+            background: #f9fafb;
+        }
+
+    .help-card-head-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+    }
+
+    .help-card-num {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        background: #000080;
+        color: #fff;
+        font-size: .72rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .help-card-label {
+        font-size: .85rem;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .help-card-chevron {
+        color: #9ca3af;
+        font-size: .8rem;
+        transition: transform .2s;
+        flex-shrink: 0;
+    }
+
+    .help-card.open .help-card-chevron {
+        transform: rotate(180deg);
+    }
+
+    .help-card-body {
+        display: none;
+        padding: 0 18px 16px 52px;
+        font-size: .83rem;
+        color: #374151;
+        line-height: 1.7;
+    }
+
+    .help-card.open .help-card-body {
+        display: block;
+    }
+
+    .help-card-body p {
+        margin-bottom: 8px;
+    }
+
+        .help-card-body p:last-child {
+            margin-bottom: 0;
+        }
+
+    /* ── Tips ── */
+    .help-tip {
+        display: flex;
+        gap: 10px;
+        background: #f0f0ff;
+        border: 1px solid #e0e0ff;
+        border-radius: 8px;
+        padding: 11px 14px;
+        font-size: .81rem;
+        color: #1e1e8f;
+        margin-top: 10px;
+        line-height: 1.5;
+    }
+
+        .help-tip i {
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+    .help-warn {
+        display: flex;
+        gap: 10px;
+        background: #fffbeb;
+        border: 1px solid #fef3c7;
+        border-radius: 8px;
+        padding: 11px 14px;
+        font-size: .81rem;
+        color: #92400e;
+        margin-top: 10px;
+        line-height: 1.5;
+    }
+
+        .help-warn i {
+            flex-shrink: 0;
+            margin-top: 1px;
+            color: #f59e0b;
+        }
+
+    /* ── Badge pill ── */
+    .help-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: .72rem;
+        font-weight: 600;
+    }
+
+    .help-badge-blue {
+        background: #e0e7ff;
+        color: #3730a3;
+    }
+
+    .help-badge-green {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .help-badge-yellow {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .help-badge-red {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    /* ── Key shortcut ── */
+    kbd {
+        display: inline-block;
+        padding: 2px 7px;
+        font-size: .75rem;
+        font-family: 'Inter', sans-serif;
+        background: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: 5px;
+        color: #374151;
+        font-weight: 600;
+    }
+
+    /* ── Table ── */
+    .help-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .81rem;
+        margin-top: 10px;
+    }
+
+        .help-table th {
+            background: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        .help-table td {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+            vertical-align: top;
+        }
+
+        .help-table tr:nth-child(even) td {
+            background: #f9fafb;
+        }
+
+    /* ── No results ── */
+    .help-no-results {
+        text-align: center;
+        padding: 48px 20px;
+        color: #9ca3af;
+        font-size: .85rem;
+        display: none;
+    }
+
+        .help-no-results i {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            display: block;
+            color: #d1d5db;
+        }
+
+    /* ── Responsive ── */
+    @@media (max-width: 900px) {
+        .help-nav {
+            display: none;
+        }
+
+        .help-content {
+            padding: 24px 20px;
+            max-width: 100%;
+        }
+    }
+</style>
+
+<div class="help-page">
+
+    <!-- ── Left Nav ── -->
+    <nav class="help-nav" id="helpNav">
+        <div class="help-nav-title">Getting Started</div>
+        <a class="help-nav-link active" data-target="sec-overview" href="#">
+            <i class="bi bi-grid-1x2"></i> Overview
+        </a>
+        <a class="help-nav-link" data-target="sec-dashboard" href="#">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+
+        <div class="help-nav-title">Catalog & Books</div>
+        <a class="help-nav-link" data-target="sec-catalog" href="#">
+            <i class="bi bi-collection"></i> Managing Catalogs
+        </a>
+
+        <div class="help-nav-title">Members</div>
+        <a class="help-nav-link" data-target="sec-members" href="#">
+            <i class="bi bi-people"></i> Managing Members
+        </a>
+
+        <div class="help-nav-title">Borrowing</div>
+        <a class="help-nav-link" data-target="sec-borrows" href="#">
+            <i class="bi bi-journal-text"></i> Book Borrows
+        </a>
+        <a class="help-nav-link" data-target="sec-returns" href="#">
+            <i class="bi bi-arrow-return-left"></i> Returns & Receipts
+        </a>
+        <a class="help-nav-link" data-target="sec-reminders" href="#">
+            <i class="bi bi-bell"></i> Loan Reminders
+        </a>
+
+        <div class="help-nav-title">Operations</div>
+        <a class="help-nav-link" data-target="sec-purchases" href="#">
+            <i class="bi bi-cart3"></i> Purchases
+        </a>
+        <a class="help-nav-link" data-target="sec-adjustments" href="#">
+            <i class="bi bi-sliders"></i> Adjustments
+        </a>
+        <a class="help-nav-link" data-target="sec-logs" href="#">
+            <i class="bi bi-journal-bookmark"></i> Library Logs
+        </a>
+
+        <div class="help-nav-title">Administration</div>
+        <a class="help-nav-link" data-target="sec-users" href="#">
+            <i class="bi bi-person-gear"></i> Users & Roles
+        </a>
+        <a class="help-nav-link" data-target="sec-reports" href="#">
+            <i class="bi bi-bar-chart-line"></i> Reports
+        </a>
+        <a class="help-nav-link" data-target="sec-account" href="#">
+            <i class="bi bi-shield-lock"></i> Account & Security
+        </a>
+    </nav>
+
+    <!-- ── Content ── -->
+    <div class="help-content">
+
+        <div class="help-page-title">Help & User Manual</div>
+        <div class="help-page-subtitle">Complete reference guide for admin and staff users of the BBU Library System.</div>
+
+        <!-- Search -->
+        <div class="help-search-wrap">
+            <i class="bi bi-search"></i>
+            <input class="help-search-input" id="helpSearch" placeholder="Search the manual…" autocomplete="off" />
+        </div>
+
+        <div id="helpNoResults" class="help-no-results">
+            <i class="bi bi-search"></i>
+            No results found. Try a different keyword.
+        </div>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- OVERVIEW -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <div class="help-section" id="sec-overview">
+            <div class="help-section-header">
+                <div class="help-section-icon"><i class="bi bi-grid-1x2"></i></div>
+                <div>
+                    <div class="help-section-title">System Overview</div>
+                    <div class="help-section-desc">What the BBU Library System does and how to navigate it.</div>
+                </div>
+            </div>
+
+            <div class="help-card open">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">1</div>
+                        <div class="help-card-label">What is the BBU Library System?</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>The BBU Library System is a web-based library management platform for staff and administrators. It handles the full lifecycle of library operations: cataloging books, registering members, issuing and returning borrows, tracking purchases, and generating reports.</p>
+                    <div class="help-tip"><i class="bi bi-lightbulb-fill"></i> All actions are logged in the History module so you can audit any change at any time.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">2</div>
+                        <div class="help-card-label">Navigation & Layout</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>The left sidebar contains all main modules. The top navbar gives quick access to notifications, settings, and your profile. Each module follows the same pattern: <strong>Index</strong> (list) → <strong>Create</strong> → <strong>Edit</strong> → <strong>Details</strong> → <strong>Delete</strong>.</p>
+                    <table class="help-table">
+                        <thead><tr><th>Area</th><th>Purpose</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Dashboard</strong></td><td>At-a-glance KPIs and monthly chart</td></tr>
+                            <tr><td><strong>Catalogs</strong></td><td>Book titles, ISBN, stock management</td></tr>
+                            <tr><td><strong>Members</strong></td><td>Library member registration and profiles</td></tr>
+                            <tr><td><strong>Book Borrows</strong></td><td>Issuing, returning, and tracking loans</td></tr>
+                            <tr><td><strong>Purchases</strong></td><td>Recording new book acquisitions</td></tr>
+                            <tr><td><strong>Adjustments</strong></td><td>Manual stock corrections</td></tr>
+                            <tr><td><strong>Library Logs</strong></td><td>In-library reading sessions</td></tr>
+                            <tr><td><strong>Reports</strong></td><td>Monthly statistics and Excel export</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">3</div>
+                        <div class="help-card-label">Notifications</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>The bell icon <span class="help-badge help-badge-blue"><i class="bi bi-bell"></i> Bell</span> in the top navbar shows real-time notifications via SignalR. Unread notifications appear with a navy left border and bold text. The red badge count clears automatically when you open the dropdown. Notifications persist across page refreshes until you click <strong>Clear all</strong>.</p>
+                    <div class="help-tip"><i class="bi bi-lightbulb-fill"></i> Click any individual notification to mark it as read without clearing it.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- DASHBOARD -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <div class="help-section" id="sec-dashboard">
+            <div class="help-section-header">
+                <div class="help-section-icon"><i class="bi bi-speedometer2"></i></div>
+                <div>
+                    <div class="help-section-title">Dashboard</div>
+                    <div class="help-section-desc">KPI cards, charts, and the global search.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">1</div>
+                        <div class="help-card-label">Reading KPI Cards</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>The 8 KPI cards show live counts for Catalogs, Members, Total Borrows, Returned, Not Returned, Overdue, Purchases, and Adjustments. Click any card to navigate directly to that module.</p>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">2</div>
+                        <div class="help-card-label">Monthly Chart & Excel Export</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>The line chart shows monthly borrow trends. To export data to Excel: check the columns you want, select a <strong>Start</strong> and <strong>End</strong> date, then click <strong>Export Excel</strong>. The file downloads immediately.</p>
+                    <div class="help-tip"><i class="bi bi-lightbulb-fill"></i> Green segments mean borrowing increased; red segments mean it decreased month-over-month.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">3</div>
+                        <div class="help-card-label">Global Search</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>The search bar in the toolbar searches across Books, Members, and Book Borrows simultaneously. Type at least 2 characters to trigger results. Click a result to jump to that module's index page.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- CATALOGS -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <div class="help-section" id="sec-catalog">
+            <div class="help-section-header">
+                <div class="help-section-icon"><i class="bi bi-collection"></i></div>
+                <div>
+                    <div class="help-section-title">Managing Catalogs</div>
+                    <div class="help-section-desc">Adding and managing book titles, copies, and stock.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">1</div>
+                        <div class="help-card-label">Creating a Catalog Entry</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Go to <strong>Catalogs → Create</strong>. Fill in the Title (required), Author, ISBN (optional), Category, Faculty, and upload a cover image. The system will track available and total copies automatically based on book records linked to this catalog.</p>
+                    <div class="help-tip"><i class="bi bi-lightbulb-fill"></i> You can also import multiple catalogs at once using the <strong>Import</strong> button and the provided Excel template.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">2</div>
+                        <div class="help-card-label">Available vs Total Copies</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p><strong>Total Copies</strong> = all physical books linked to this catalog. <strong>Available Copies</strong> = books with status <span class="help-badge help-badge-green">Available</span>. When a book is borrowed, its status changes to <span class="help-badge help-badge-yellow">Borrowed</span> and the available count decreases automatically. It increases again upon return.</p>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">3</div>
+                        <div class="help-card-label">PDF Viewer</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Each catalog can have a PDF attached for in-system reading. The system tracks how many times the PDF has been viewed via the <strong>PDF View Count</strong> field. Upload or update the PDF from the catalog's Edit page.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- MEMBERS -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <div class="help-section" id="sec-members">
+            <div class="help-section-header">
+                <div class="help-section-icon"><i class="bi bi-people"></i></div>
+                <div>
+                    <div class="help-section-title">Managing Members</div>
+                    <div class="help-section-desc">Registering, editing, and managing library members.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">1</div>
+                        <div class="help-card-label">Creating a Member</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Go to <strong>Members → Create</strong>. Enter the member's full name, phone, email, faculty, and subject. Upload a profile photo. Set the membership type (Student, Staff, etc.) and expiry date.</p>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">2</div>
+                        <div class="help-card-label">Telegram Pairing</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Members can pair their Telegram account to receive overdue loan reminders automatically. From the member's profile, a pairing code is generated. The member sends this code to the library's Telegram bot to complete linking.</p>
+                    <div class="help-tip"><i class="bi bi-lightbulb-fill"></i> Once paired, the system sends automatic reminders when a loan is due today or 1 day overdue.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">3</div>
+                        <div class="help-card-label">Resetting a Member Password</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Go to <strong>Members → Details</strong> and click <strong>Reset Password</strong>. You can set a new password directly for the member. The member can also reset their own password via the forgot-password OTP flow on the member portal.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- BORROWS -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <div class="help-section" id="sec-borrows">
+            <div class="help-section-header">
+                <div class="help-section-icon"><i class="bi bi-journal-text"></i></div>
+                <div>
+                    <div class="help-section-title">Book Borrows</div>
+                    <div class="help-section-desc">Creating, tracking, filtering, and managing loans.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">1</div>
+                        <div class="help-card-label">Creating a Borrow</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Go to <strong>Book Borrows → Create Borrow</strong>. Select the member, set loan and due dates, enter the borrowing fee and deposit amount, then add book items. Each item requires selecting a catalog and a specific book copy (barcode), and noting the condition of the book on checkout.</p>
+                    <div class="help-warn"><i class="bi bi-exclamation-triangle-fill"></i> A member can only have one active (unreturned) loan at a time. Creating a second loan for the same member will be blocked.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">2</div>
+                        <div class="help-card-label">Filtering & Searching Loans</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Use the segmented buttons to filter by <span class="help-badge help-badge-green">Returned</span>, <span class="help-badge help-badge-yellow">Not Returned</span>, or <span class="help-badge help-badge-red">Due / Overdue</span>. Use the search box to find by member name, date, or status. Stats at the top right update live as you filter.</p>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">3</div>
+                        <div class="help-card-label">Exporting Loans</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Click the <strong>Export</strong> button in the toolbar to download all loan records as an Excel file. The export includes member name, dates, status, fees, and book titles.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- RETURNS -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <div class="help-section" id="sec-returns">
+            <div class="help-section-header">
+                <div class="help-section-icon"><i class="bi bi-arrow-return-left"></i></div>
+                <div>
+                    <div class="help-section-title">Returns & Receipts</div>
+                    <div class="help-section-desc">Processing returns, fines, and printing receipts.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">1</div>
+                        <div class="help-card-label">Processing a Return</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>On the Book Borrows list, click <strong>Return</strong> on any active loan. A dialog will appear where you enter the return date, number of late days, fine amount, and any extra charges. The summary shows the calculated refund from the deposit. Click <strong>Confirm Return</strong> to finalize.</p>
+                    <div class="help-tip"><i class="bi bi-lightbulb-fill"></i> After confirming, you'll be prompted to print the return receipt. You can also print it anytime from the <strong>Return Receipt</strong> button on the loan row.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">2</div>
+                        <div class="help-card-label">UnReturn a Loan</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>If a return was recorded by mistake, click <strong>UnReturn</strong> on the loan row. This removes the return record, marks the loan as active again, and sets the books back to <span class="help-badge help-badge-yellow">Borrowed</span> status.</p>
+                    <div class="help-warn"><i class="bi bi-exclamation-triangle-fill"></i> UnReturn should only be used to correct mistakes. It cannot be done if the member has already started a new loan.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">3</div>
+                        <div class="help-card-label">Borrow vs Return Receipt</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p><strong>Borrow Receipt</strong> is available for every loan and shows the loan details, books, and fees at time of checkout. <strong>Return Receipt</strong> is only available once a return has been processed and shows fine, refund, and return date. Both open in a new tab for printing.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- REMINDERS -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <div class="help-section" id="sec-reminders">
+            <div class="help-section-header">
+                <div class="help-section-icon"><i class="bi bi-bell"></i></div>
+                <div>
+                    <div class="help-section-title">Loan Reminders</div>
+                    <div class="help-section-desc">Automatic overdue alerts sent to members via Telegram.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">1</div>
+                        <div class="help-card-label">How Reminders Work</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>The system runs a background service daily that checks for loans due today or 1 day overdue. If the member has linked their Telegram account, a message is sent automatically. The <strong>Loan Reminders</strong> module shows a log of all reminders sent.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- PURCHASES -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <div class="help-section" id="sec-purchases">
+            <div class="help-section-header">
+                <div class="help-section-icon"><i class="bi bi-cart3"></i></div>
+                <div>
+                    <div class="help-section-title">Purchases</div>
+                    <div class="help-section-desc">Recording new book acquisitions and supplier invoices.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">1</div>
+                        <div class="help-card-label">Creating a Purchase</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Go to <strong>Purchases → Create</strong>. Enter the supplier, invoice number, and purchase date. Add line items for each catalog being purchased, specifying quantity and unit price. Saving a purchase automatically increases the stock counts in the related catalogs.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- ADJUSTMENTS -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <div class="help-section" id="sec-adjustments">
+            <div class="help-section-header">
+                <div class="help-section-icon"><i class="bi bi-sliders"></i></div>
+                <div>
+                    <div class="help-section-title">Adjustments</div>
+                    <div class="help-section-desc">Manual stock corrections for lost, damaged, or miscounted books.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">1</div>
+                        <div class="help-card-label">When to Use Adjustments</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Use adjustments when the physical stock doesn't match the system — for example, a book is confirmed lost, damaged beyond repair, or found after being marked missing. Adjustments record the reason and the quantity change, updating catalog stock counts immediately.</p>
+                    <div class="help-warn"><i class="bi bi-exclamation-triangle-fill"></i> Adjustments cannot be undone. Double-check quantities and catalog selection before saving.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- LIBRARY LOGS -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <div class="help-section" id="sec-logs">
+            <div class="help-section-header">
+                <div class="help-section-icon"><i class="bi bi-journal-bookmark"></i></div>
+                <div>
+                    <div class="help-section-title">Library Logs</div>
+                    <div class="help-section-desc">Tracking in-library reading sessions (no checkout required).</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">1</div>
+                        <div class="help-card-label">Creating a Library Log</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Library logs record when a student or visitor reads a book inside the library without borrowing it. Go to <strong>Library Logs → Create</strong>, select the student, add the books read, and save. The log goes through an Approval → Return workflow managed by staff.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- USERS & ROLES -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <div class="help-section" id="sec-users">
+            <div class="help-section-header">
+                <div class="help-section-icon"><i class="bi bi-person-gear"></i></div>
+                <div>
+                    <div class="help-section-title">Users & Roles</div>
+                    <div class="help-section-desc">Managing staff accounts and access permissions.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">1</div>
+                        <div class="help-card-label">Creating a Staff User</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Go to <strong>Users → Create</strong>. Enter the full name, email, and password, then assign a role. Roles control which modules the user can access. Only admins can create or modify users.</p>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">2</div>
+                        <div class="help-card-label">Roles & Permissions</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <table class="help-table">
+                        <thead><tr><th>Role</th><th>Access Level</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Admin</strong></td><td>Full access to all modules including Users and Roles</td></tr>
+                            <tr><td><strong>Librarian</strong></td><td>Catalogs, Members, Borrows, Returns, Logs, Purchases</td></tr>
+                            <tr><td><strong>Staff</strong></td><td>Read access + limited write access based on permissions</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- REPORTS -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <div class="help-section" id="sec-reports">
+            <div class="help-section-header">
+                <div class="help-section-icon"><i class="bi bi-bar-chart-line"></i></div>
+                <div>
+                    <div class="help-section-title">Reports</div>
+                    <div class="help-section-desc">Monthly statistics and data export.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">1</div>
+                        <div class="help-card-label">Monthly Report</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Go to <strong>Reports → Monthly</strong>. Select a month and year to view a breakdown of borrows, returns, overdue loans, purchases, and adjustments for that period. The report can be exported to Excel or printed directly from the browser.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- ACCOUNT -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <div class="help-section" id="sec-account">
+            <div class="help-section-header">
+                <div class="help-section-icon"><i class="bi bi-shield-lock"></i></div>
+                <div>
+                    <div class="help-section-title">Account & Security</div>
+                    <div class="help-section-desc">Managing your profile and password.</div>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">1</div>
+                        <div class="help-card-label">Updating Your Profile</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>Click your profile photo in the top navbar and select <strong>Profile</strong>. You can update your full name, email, and profile picture. Changes take effect immediately after saving.</p>
+                </div>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-head">
+                    <div class="help-card-head-left">
+                        <div class="help-card-num">2</div>
+                        <div class="help-card-label">Changing Your Password</div>
+                    </div>
+                    <i class="bi bi-chevron-down help-card-chevron"></i>
+                </div>
+                <div class="help-card-body">
+                    <p>From your Profile page, scroll to the <strong>Change Password</strong> section. Enter your current password and your new password twice to confirm. If you've forgotten your password, use the <strong>Forgot Password</strong> link on the login page — a reset OTP will be sent to your registered email.</p>
+                    <div class="help-tip"><i class="bi bi-lightbulb-fill"></i> Use a strong password with at least 8 characters including numbers and symbols.</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    (function () {
+        // ── Accordion ──────────────────────────────────────────
+        document.querySelectorAll('.help-card-head').forEach(function (head) {
+            head.addEventListener('click', function () {
+                var card = this.closest('.help-card');
+                card.classList.toggle('open');
+            });
+        });
+
+        // ── Left nav scroll spy + click ───────────────────────
+        var navLinks    = document.querySelectorAll('.help-nav-link[data-target]');
+        var contentPane = document.querySelector('.help-content');
+
+        navLinks.forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                var target = document.getElementById(this.dataset.target);
+                if (!target) return;
+                // offsetTop relative to contentPane
+                var top = target.getBoundingClientRect().top
+                        - contentPane.getBoundingClientRect().top
+                        + contentPane.scrollTop - 20;
+                contentPane.scrollTo({ top: top, behavior: 'smooth' });
+                setActive(this);
+            });
+        });
+
+        function setActive(el) {
+            navLinks.forEach(function (l) { l.classList.remove('active'); });
+            el.classList.add('active');
+        }
+
+        // Scroll spy — watch content pane scroll, not window
+        var sections = Array.from(document.querySelectorAll('.help-section[id]'));
+
+        contentPane.addEventListener('scroll', function () {
+            var paneTop = contentPane.getBoundingClientRect().top;
+            var current = null;
+
+            sections.forEach(function (s) {
+                var sTop = s.getBoundingClientRect().top - paneTop;
+                if (sTop <= 80) current = s;
+            });
+
+            if (current) {
+                var link = document.querySelector('.help-nav-link[data-target="' + current.id + '"]');
+                if (link) setActive(link);
+            }
+        });
+
+        // ── Search ────────────────────────────────────────────
+        var searchInput  = document.getElementById('helpSearch');
+        var noResults    = document.getElementById('helpNoResults');
+        var allSections  = document.querySelectorAll('.help-section');
+        var allCards     = document.querySelectorAll('.help-card');
+
+        searchInput.addEventListener('input', function () {
+            var q = this.value.trim().toLowerCase();
+
+            if (!q) {
+                allSections.forEach(function (s) { s.style.display = ''; });
+                allCards.forEach(function (c) { c.style.display = ''; });
+                noResults.style.display = 'none';
+                return;
+            }
+
+            var anyVisible = false;
+
+            allSections.forEach(function (section) {
+                var sectionText = section.innerText.toLowerCase();
+                var sectionMatch = sectionText.includes(q);
+                var anyCardMatch = false;
+
+                section.querySelectorAll('.help-card').forEach(function (card) {
+                    var cardText = card.innerText.toLowerCase();
+                    var match = cardText.includes(q);
+                    card.style.display = match ? '' : 'none';
+                    if (match) {
+                        anyCardMatch = true;
+                        card.classList.add('open'); // auto-expand matched cards
+                    }
+                });
+
+                var show = sectionMatch || anyCardMatch;
+                section.style.display = show ? '' : 'none';
+                if (show) anyVisible = true;
+            });
+
+            noResults.style.display = anyVisible ? 'none' : 'block';
+        });
+    })();
+</script>

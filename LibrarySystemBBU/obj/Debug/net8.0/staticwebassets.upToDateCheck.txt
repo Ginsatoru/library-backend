@@ -275,3 +275,4 @@ wwwroot\uploads\profiles\fc442c56-3441-4255-af65-e036e331a22f.jpg
 wwwroot\uploads\members\6ffae53f-991b-4e2e-a2ef-2396d929d843.png
 wwwroot\templates\CatalogImportTemplate.xlsx
 wwwroot\uploads\members\69836b02-4f66-434e-9943-b464bfd3163e.jpg
+wwwroot\uploads\members\18412831-6de9-4a8f-839e-ecea7797dd8c.png

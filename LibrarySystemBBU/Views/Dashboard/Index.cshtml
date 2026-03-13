@@ -3,589 +3,629 @@
     ViewData["Title"] = "Dashboard";
 }
 
-@* Bootstrap and Font Awesome are already loaded in _Layout.cshtml — do NOT re-add them here *@
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
 <style>
-    /* Remove all box shadows from every element and hover states */
-    *,
-    *::before,
-    *::after,
-    :focus,
-    :hover,
-    :active,
-    .card,
-    .card:hover,
-    .kpi,
-    .kpi:hover,
-    .chip,
-    .chip:hover,
-    .btn,
-    .btn:hover,
-    .search input,
-    .search input:hover,
-    .search input:focus,
-    #search-results,
-    #search-results .result,
-    #search-results .result:hover,
-    .head,
-    .quick,
-    .wrap > *,
-    .card-body-glass,
-    .card-head,
-    .opts button,
-    .opts button:hover,
-    input[type="date"],
-    input[type="date"]:hover,
-    input[type="date"]:focus {
-        box-shadow: none !important;
-        outline: none !important;
+    .dash-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+        max-width: 100%;
     }
 
-        /* Remove all gradients */
-        .card,
-        .kpi,
-        .chip,
-        .btn,
-        .search input,
-        #search-results,
-        #search-results .result,
-        .card-body-glass,
-        .card-head,
-        .opts button,
-        input[type="date"],
-        .head,
-        .quick,
-        .wrap {
-            background: transparent !important;
-            background-image: none !important;
+    /* ── Page title ── */
+    .dash-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .dash-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
-    /* Set light gray background for cards and KPI boxes */
-    .card {
-        background-color: #f8f9fa !important;
-        border: 1px solid #e9ecef;
+    /* ── Toolbar ── */
+    .dash-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
     }
 
-    .kpi {
-        background-color: #f8f9fa !important;
-        border: 1px solid #e9ecef;
+    .dash-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none !important;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
     }
 
-    /* Remove gradient from chart background */
-    #monthlyChart {
-        background-color: transparent !important;
-    }
-
-    /* Remove any border that might look like a shadow */
-    .kpi,
-    .card,
-    .search input,
-    #search-results .result,
-    .chip,
-    .btn {
-        border: 1px solid #e9ecef;
-    }
-
-        /* Ensure focus states are visible but without shadows */
-        .search input:focus,
-        .btn:focus,
-        .chip:focus,
-        input[type="date"]:focus {
-            border-color: #00b3ff;
-            background-color: #ffffff !important;
+        .dash-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none !important;
         }
 
-    /* Keep the card head subtle separation */
-    .card-head {
-        border-bottom: 1px solid #e9ecef;
-        background-color: #f8f9fa !important;
+    .dash-btn-primary {
+        background: #000080;
+        color: #fff !important;
+        border-color: #000080;
     }
 
-    /* Card body glass style - now solid light gray */
-    .card-body-glass {
-        background-color: #f8f9fa !important;
-        padding: 1.25rem;
-    }
-
-    /* Search results background */
-    #search-results {
-        background-color: #ffffff !important;
-    }
-
-        #search-results .result:hover {
-            background-color: #f1f3f5 !important;
+        .dash-btn-primary:hover {
+            background: #00006a;
+            color: #fff !important;
+            border-color: #00006a;
         }
 
-    /* Chip buttons */
-    .chip {
-        background-color: #f8f9fa !important;
-    }
-
-        .chip:hover {
-            background-color: #e9ecef !important;
-        }
-
-    /* Buttons */
-    .btn {
-        background-color: #f8f9fa !important;
-    }
-
-        .btn:hover {
-            background-color: #e9ecef !important;
-        }
-
-    /* Date inputs */
-    input[type="date"] {
-        background-color: #ffffff !important;
-        border: 1px solid #e9ecef;
-    }
-
-    /* Search container styling */
-    .search {
+    /* Search */
+    .dash-search-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 6px 12px;
+        background: #fff;
+        flex: 1;
+        min-width: 200px;
+        max-width: 320px;
+        transition: border-color .15s;
         position: relative;
-        width: 300px;
-        margin-top: 4px;
-        margin-bottom: 4px;
     }
 
-        .search .search-icon {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6c757d;
-            z-index: 10;
-            pointer-events: none;
-            font-size: 0.9rem;
+        .dash-search-wrap:focus-within {
+            border-color: #000080;
         }
 
-        .search input {
-            background-color: #ffffff !important;
-            width: 100%;
-            padding: 0.5rem 1rem 0.5rem 2.2rem !important;
-            border-radius: 32px;
-            font-size: 0.9rem;
-            height: 38px;
+        .dash-search-wrap i {
+            color: #9ca3af;
+            font-size: .85rem;
+            flex-shrink: 0;
         }
 
-    /* Head section */
-    .head {
-        background-color: transparent !important;
+    .dash-search-input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: .83rem;
+        color: #111827;
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .dash-search-input::placeholder {
+            color: #9ca3af;
+        }
+
+    #search-results {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        right: 0;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        z-index: 1000;
+        max-height: 340px;
+        overflow-y: auto;
+        display: none;
+    }
+
+    .search-result-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 14px;
+        font-size: .82rem;
+        color: #374151;
+        cursor: pointer;
+        border-bottom: 1px solid #f3f4f6;
+        transition: background .1s;
+    }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-item:hover {
+            background: #f9fafb;
+            color: #111827;
+        }
+
+        .search-result-item i {
+            color: #000080;
+            font-size: .85rem;
+            width: 16px;
+            flex-shrink: 0;
+        }
+
+        .search-result-item b {
+            color: #111827;
+            font-weight: 600;
+        }
+
+    /* ── KPI grid ── */
+    .dash-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-bottom: 1.5rem;
+    }
+
+    @@media (max-width: 1200px) {
+        .dash-kpi-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media (max-width: 640px) {
+        .dash-kpi-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .dash-kpi-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 18px 20px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        transition: border-color .15s;
+        text-decoration: none !important;
+        color: inherit;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .dash-kpi-card:hover {
+            border-color: #000080;
+            text-decoration: none !important;
+            color: inherit;
+        }
+
+
+
+    .dash-kpi-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 9px;
+        background: #f0f0ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 4px;
+        font-size: .9rem;
+        color: #000080;
+        flex-shrink: 0;
+    }
+
+        .dash-kpi-icon.warn {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .dash-kpi-icon.danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .dash-kpi-icon.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .dash-kpi-icon.muted {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+    .dash-kpi-label {
+        font-size: .74rem;
+        font-weight: 500;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+    }
+
+    .dash-kpi-value {
+        font-size: 1.9rem;
+        font-weight: 700;
+        color: #111827;
+        line-height: 1.1;
+    }
+
+    .dash-kpi-link {
+        font-size: .75rem;
+        color: #000080;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: auto;
+        padding-top: 4px;
+        text-decoration: none !important;
+    }
+
+        .dash-kpi-link i {
+            transition: transform .15s;
+        }
+
+    .dash-kpi-card:hover .dash-kpi-link i {
+        transform: translateX(3px);
+    }
+
+    /* ── Chart card ── */
+    .dash-chart-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .dash-chart-head {
         display: flex;
         align-items: center;
         justify-content: space-between;
         flex-wrap: wrap;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
+        gap: 12px;
+        padding: 12px 20px;
+        border-bottom: 1px solid #e5e7eb;
+        background: #f9fafb;
+        min-height: 56px;
     }
 
-        .head .title {
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: 500;
-            line-height: 1.2;
-        }
-
-            .head .title .dot {
-                display: inline-block;
-                width: 8px;
-                height: 8px;
-                background-color: #00b3ff;
-                border-radius: 50%;
-                margin-right: 12px;
-            }
-
-        .head .quick {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-    .quick .chip {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
-        height: 38px;
-    }
-
-    .head-right {
+    .dash-chart-title {
+        font-size: .9rem;
+        font-weight: 600;
+        color: #111827;
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 7px;
     }
 
-    canvas {
-        background-color: transparent !important;
-    }
-
-    .bg-primary, .bg-secondary, .bg-success, .bg-info, .bg-warning, .bg-danger {
-        background-image: none !important;
-    }
-
-    body {
-        background-color: #ffffff;
-    }
-
-    /* REMOVE UNDERLINES ON TEXT HOVER */
-    a,
-    a:hover,
-    a:focus,
-    a:active,
-    .kpi a,
-    .kpi a:hover,
-    .kpi a:focus,
-    .kpi a:active,
-    .chip,
-    .chip:hover,
-    .chip:focus,
-    .chip:active,
-    .btn,
-    .btn:hover,
-    .btn:focus,
-    .btn:active,
-    .quick a,
-    .quick a:hover,
-    .quick a:focus,
-    .quick a:active,
-    #search-results .result,
-    #search-results .result:hover,
-    #search-results .result:focus,
-    #search-results .result:active,
-    .card a,
-    .card a:hover,
-    .card a:focus,
-    .card a:active {
-        text-decoration: none !important;
-        border-bottom: none !important;
-        outline: none !important;
-    }
-
-        .kpi a i {
-            display: inline-block;
-            transition: transform 0.2s ease;
+        .dash-chart-title i {
+            color: #000080;
         }
 
-        .kpi a:hover i {
-            transform: translateX(4px);
+    .dash-chart-controls {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        flex: 1;
+        justify-content: flex-end;
+    }
+
+    .dash-check-group {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px 12px;
+    }
+
+    .dash-check-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: .76rem;
+        color: #374151;
+        font-weight: 500;
+        cursor: pointer;
+        white-space: nowrap;
+        line-height: 1;
+        height: 32px;
+        margin: 0;
+    }
+
+        .dash-check-label input[type="checkbox"] {
+            accent-color: #000080;
+            width: 13px;
+            height: 13px;
+            cursor: pointer;
+            margin: 0;
+            flex-shrink: 0;
         }
 
-    .text-decoration-none {
-        text-decoration: none !important;
+    .dash-date-input {
+        padding: 0 10px;
+        height: 32px;
+        border: 1px solid #e5e7eb;
+        border-radius: 7px;
+        font-size: .78rem;
+        font-family: 'Inter', sans-serif;
+        color: #374151;
+        background: #fff;
+        outline: none;
+        transition: border-color .15s;
     }
 
-    #search-results .result span,
-    #search-results .result b {
-        text-decoration: none !important;
-        border-bottom: none !important;
+        .dash-date-input:focus {
+            border-color: #000080;
+        }
+
+    .dash-chart-body {
+        padding: 20px 20px 16px;
     }
 
+    /* ── Responsive toolbar ── */
     @@media (max-width: 768px) {
-        .head {
-            flex-direction: column;
-            align-items: flex-start;
+        .dash-toolbar {
+            gap: 8px;
         }
 
-        .head-right {
-            width: 100%;
-            flex-direction: column;
-            align-items: stretch;
+        .dash-search-wrap {
+            max-width: 100%;
+            min-width: 0;
+            flex: 1 1 100%;
+            order: 10;
         }
-
-        .search {
-            width: 100%;
-            margin-top: 0;
-        }
-    }
-
-    #search-results {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        max-height: 400px;
-        overflow-y: auto;
-        border: 1px solid #e9ecef;
-        border-radius: 8px;
-        margin-top: 4px;
     }
 </style>
 
-<div class="wrap">
+<div class="dash-page">
 
-    <!-- HEADER -->
-    <div class="head">
-        <div class="title">Dashboard</div>
+    <!-- Page Title -->
+    <div class="dash-page-title">Dashboard</div>
 
-        <div class="head-right">
-            <div class="search" role="search">
-                <i class="fas fa-search search-icon" aria-hidden="true"></i>
-                <label class="sr-only" for="q">Search</label>
-                <input id="q" placeholder="Search anything..." autocomplete="off"
-                       aria-autocomplete="list" aria-controls="search-results" aria-expanded="false">
-                <div id="search-results" role="listbox" tabindex="-1"></div>
-            </div>
+    <!-- Toolbar -->
+    <div class="dash-toolbar">
+        <a href="@Url.Action("Create", "Catalogs")" class="dash-btn dash-btn-primary">
+            <i class="bi bi-plus-circle"></i> Add Catalog
+        </a>
+        <a href="@Url.Action("Create", "Members")" class="dash-btn">
+            <i class="bi bi-person-plus"></i> Add Member
+        </a>
+        <a href="@Url.Action("Create", "BookBorrows")" class="dash-btn">
+            <i class="bi bi-journal-plus"></i> New Borrow
+        </a>
 
-            <div class="quick">
-                <a class="chip" href="@Url.Action("Create", "Catalogs")"><i class="fas fa-plus"></i> Add Catalog</a>
-                <a class="chip" href="@Url.Action("Create", "Members")"><i class="fas fa-user-plus"></i> Add Member</a>
-                <a class="chip" href="@Url.Action("Create", "BookBorrows")"><i class="fas fa-file-signature"></i> New Borrow</a>
-            </div>
+        <div class="dash-search-wrap" style="position:relative;">
+            <i class="bi bi-search"></i>
+            <input id="q" class="dash-search-input" placeholder="Search catalog, member, borrow…" autocomplete="off" />
+            <div id="search-results"></div>
         </div>
     </div>
 
-    <!-- KPI GRID -->
-    <div class="row g-3 g-md-4 mb-1">
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="kpi">
-                <span class="ico"><i class="fas fa-layer-group"></i></span>
-                <div class="label">Total Catalog</div>
-                <div class="val">@Model.TotalCatalog</div>
-                <a href="@Url.Action("Index", "Catalogs")">View <i class="fas fa-arrow-right"></i></a>
-            </div>
+    <!-- KPI Grid -->
+    <div class="dash-kpi-grid">
+
+        <div class="dash-kpi-card" href="@Url.Action("Index", "Catalogs")" onclick="window.location='@Url.Action("Index", "Catalogs")'" style="cursor:pointer;">
+            <div class="dash-kpi-icon"><i class="bi bi-collection"></i></div>
+            <div class="dash-kpi-label">Total Catalog</div>
+            <div class="dash-kpi-value">@Model.TotalCatalog</div>
+            <span class="dash-kpi-link">View <i class="bi bi-arrow-right"></i></span>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="kpi">
-                <span class="ico"><i class="fas fa-users"></i></span>
-                <div class="label">Total Members</div>
-                <div class="val">@Model.TotalMembers</div>
-                <a href="@Url.Action("Index", "Members")">View <i class="fas fa-arrow-right"></i></a>
-            </div>
+        <div class="dash-kpi-card" onclick="window.location='@Url.Action("Index", "Members")'" style="cursor:pointer;">
+            <div class="dash-kpi-icon"><i class="bi bi-people"></i></div>
+            <div class="dash-kpi-label">Total Members</div>
+            <div class="dash-kpi-value">@Model.TotalMembers</div>
+            <span class="dash-kpi-link">View <i class="bi bi-arrow-right"></i></span>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="kpi">
-                <span class="ico"><i class="fas fa-file-signature"></i></span>
-                <div class="label">Total Book Borrows</div>
-                <div class="val">@Model.TotalBorrows</div>
-                <a href="@Url.Action("Index", "BookBorrows")">View <i class="fas fa-arrow-right"></i></a>
-            </div>
+        <div class="dash-kpi-card" onclick="window.location='@Url.Action("Index", "BookBorrows")'" style="cursor:pointer;">
+            <div class="dash-kpi-icon"><i class="bi bi-journal-text"></i></div>
+            <div class="dash-kpi-label">Total Book Borrows</div>
+            <div class="dash-kpi-value">@Model.TotalBorrows</div>
+            <span class="dash-kpi-link">View <i class="bi bi-arrow-right"></i></span>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="kpi">
-                <span class="ico"><i class="fas fa-undo"></i></span>
-                <div class="label">Total Returned</div>
-                <div class="val">@Model.ReturnedBorrows</div>
-                <a href="@Url.Action("Index", "BookBorrows")#returned">View <i class="fas fa-arrow-right"></i></a>
-            </div>
+        <div class="dash-kpi-card" onclick="window.location='@Url.Action("Index", "BookBorrows")'" style="cursor:pointer;">
+            <div class="dash-kpi-icon success"><i class="bi bi-check2-circle"></i></div>
+            <div class="dash-kpi-label">Total Returned</div>
+            <div class="dash-kpi-value">@Model.ReturnedBorrows</div>
+            <span class="dash-kpi-link">View <i class="bi bi-arrow-right"></i></span>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="kpi">
-                <span class="ico"><i class="fas fa-times-circle"></i></span>
-                <div class="label">Total Not Return</div>
-                <div class="val">@Model.NotReturn</div>
-                <a href="@Url.Action("Index", "BookBorrows")#notreturned">View <i class="fas fa-arrow-right"></i></a>
-            </div>
+        <div class="dash-kpi-card" onclick="window.location='@Url.Action("Index", "BookBorrows")'" style="cursor:pointer;">
+            <div class="dash-kpi-icon warn"><i class="bi bi-arrow-counterclockwise"></i></div>
+            <div class="dash-kpi-label">Total Not Returned</div>
+            <div class="dash-kpi-value">@Model.NotReturn</div>
+            <span class="dash-kpi-link">View <i class="bi bi-arrow-right"></i></span>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="kpi">
-                <span class="ico"><i class="fas fa-exclamation-triangle"></i></span>
-                <div class="label">Overdue Book Borrows</div>
-                <div class="val">@Model.OverdueBorrows</div>
-                <a href="@Url.Action("Index", "BookBorrows")#due">View <i class="fas fa-arrow-right"></i></a>
-            </div>
+        <div class="dash-kpi-card" onclick="window.location='@Url.Action("Index", "BookBorrows")'" style="cursor:pointer;">
+            <div class="dash-kpi-icon danger"><i class="bi bi-exclamation-octagon"></i></div>
+            <div class="dash-kpi-label">Overdue Borrows</div>
+            <div class="dash-kpi-value">@Model.OverdueBorrows</div>
+            <span class="dash-kpi-link">View <i class="bi bi-arrow-right"></i></span>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="kpi">
-                <span class="ico"><i class="fas fa-cart-shopping"></i></span>
-                <div class="label">Total Purchases</div>
-                <div class="val">@Model.Purchases</div>
-                <a href="@Url.Action("Index", "Purchases")">View <i class="fas fa-arrow-right"></i></a>
-            </div>
+        <div class="dash-kpi-card" onclick="window.location='@Url.Action("Index", "Purchases")'" style="cursor:pointer;">
+            <div class="dash-kpi-icon muted"><i class="bi bi-cart3"></i></div>
+            <div class="dash-kpi-label">Total Purchases</div>
+            <div class="dash-kpi-value">@Model.Purchases</div>
+            <span class="dash-kpi-link">View <i class="bi bi-arrow-right"></i></span>
         </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="kpi">
-                <span class="ico"><i class="fas fa-sliders-h"></i></span>
-                <div class="label">Total Adjustments</div>
-                <div class="val">@Model.Adjustments</div>
-                <a href="@Url.Action("Index", "Adjustments")">View <i class="fas fa-arrow-right"></i></a>
-            </div>
+        <div class="dash-kpi-card" onclick="window.location='@Url.Action("Index", "Adjustments")'" style="cursor:pointer;">
+            <div class="dash-kpi-icon muted"><i class="bi bi-sliders"></i></div>
+            <div class="dash-kpi-label">Total Adjustments</div>
+            <div class="dash-kpi-value">@Model.Adjustments</div>
+            <span class="dash-kpi-link">View <i class="bi bi-arrow-right"></i></span>
         </div>
+
     </div>
 
-    <!-- CHART -->
-    <div class="card mt-3" style="border-radius: var(--radius-lg);">
-        <div class="card-head">
-            <div class="card-title">
-                <i class="fas fa-chart-line"></i>
+    <!-- Chart Card -->
+    <div class="dash-chart-card">
+        <div class="dash-chart-head">
+            <div class="dash-chart-title">
+                <i class="bi bi-graph-up-arrow"></i>
                 Monthly Book Borrow Statistics
             </div>
-            <form id="excelForm" class="opts" method="get" action="@Url.Action("DownloadExcel", "Dashboard")">
-                <label class="sr-only" for="startDate">Start</label>
-                <input id="startDate" name="start" type="date" required>
-                <label class="sr-only" for="endDate">End</label>
-                <input id="endDate" name="end" type="date" required>
 
-                <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <label class="me-2"><input type="checkbox" name="totals" value="TotalBorrows" checked> Book Borrows</label>
-                    <label class="me-2"><input type="checkbox" name="totals" value="ReturnedBorrows" checked> Returned</label>
-                    <label class="me-2"><input type="checkbox" name="totals" value="NotReturn" checked> Not Return</label>
-                    <label class="me-2"><input type="checkbox" name="totals" value="OverdueBorrows"> Overdue</label>
-                    <label class="me-2"><input type="checkbox" name="totals" value="Purchases"> Purchases</label>
-                    <label class="me-2"><input type="checkbox" name="totals" value="Adjustments"> Adjustments</label>
-                    <label class="me-2"><input type="checkbox" name="totals" value="TotalBooks"> Books</label>
-                    <label class="me-2"><input type="checkbox" name="totals" value="TotalMembers"> Members</label>
+            <form id="excelForm" class="dash-chart-controls" method="get" action="@Url.Action("DownloadExcel", "Dashboard")">
+                <div class="dash-check-group">
+                    <label class="dash-check-label"><input type="checkbox" name="totals" value="TotalBorrows" checked /> Borrows</label>
+                    <label class="dash-check-label"><input type="checkbox" name="totals" value="ReturnedBorrows" checked /> Returned</label>
+                    <label class="dash-check-label"><input type="checkbox" name="totals" value="NotReturn" checked /> Not Returned</label>
+                    <label class="dash-check-label"><input type="checkbox" name="totals" value="OverdueBorrows" /> Overdue</label>
+                    <label class="dash-check-label"><input type="checkbox" name="totals" value="Purchases" /> Purchases</label>
+                    <label class="dash-check-label"><input type="checkbox" name="totals" value="Adjustments" /> Adjustments</label>
+                    <label class="dash-check-label"><input type="checkbox" name="totals" value="TotalBooks" /> Books</label>
+                    <label class="dash-check-label"><input type="checkbox" name="totals" value="TotalMembers" /> Members</label>
                 </div>
 
-                <button type="submit" class="btn btn-sm px-3">
-                    <i class="fas fa-download me-1"></i> Download Excel
+                <input name="start" type="date" class="dash-date-input" required />
+                <input name="end" type="date" class="dash-date-input" required />
+
+                <button type="submit" class="dash-btn dash-btn-primary">
+                    <i class="bi bi-download"></i> Export Excel
                 </button>
             </form>
         </div>
-        <div class="card-body-glass">
-            <canvas id="monthlyChart" height="76" aria-label="Monthly book borrow chart" role="img"></canvas>
+
+        <div class="dash-chart-body">
+            <canvas id="monthlyChart" height="72" aria-label="Monthly book borrow chart" role="img"></canvas>
         </div>
     </div>
 
 </div>
 
-@* jQuery is already loaded in _Layout.cshtml — do NOT re-add it here *@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    // ---- Chart ----
-    const ctx = document.getElementById('monthlyChart').getContext('2d');
-    const labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthlyLabels));
-    const series = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthlyBorrowStats));
+    // ── Chart ──
+    (function () {
+        const ctx = document.getElementById('monthlyChart').getContext('2d');
+        const labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthlyLabels));
+        const series = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MonthlyBorrowStats));
 
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels,
-            datasets: [{
-                label: 'Book Borrows',
-                data: series,
-                fill: true,
-                backgroundColor: 'rgba(0, 179, 255, 0.1)',
-                borderColor: '#00b3ff',
-                borderWidth: 2,
-                tension: 0.35,
-                pointBackgroundColor: '#ffffff',
-                pointBorderColor: '#00007a',
-                pointRadius: 4,
-                pointHoverRadius: 5,
-                segment: {
-                    borderColor: s => s.p0.parsed.y > s.p1.parsed.y ? '#f97373' : '#22c55e'
-                }
-            }]
-        },
-        options: {
-            interaction: { intersect: false, mode: 'index' },
-            plugins: {
-                legend: { display: false }
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Book Borrows',
+                    data: series,
+                    fill: true,
+                    backgroundColor: 'rgba(0, 0, 128, 0.07)',
+                    borderColor: '#000080',
+                    borderWidth: 2,
+                    tension: 0.35,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#000080',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    segment: {
+                        borderColor: s => s.p0.parsed.y > s.p1.parsed.y ? '#ef4444' : '#22c55e'
+                    }
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: { precision: 0, color: '#6c757d' },
-                    grid: { color: 'rgba(108, 117, 125, 0.2)' }
+            options: {
+                interaction: { intersect: false, mode: 'index' },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#fff',
+                        titleColor: '#111827',
+                        bodyColor: '#374151',
+                        borderColor: '#e5e7eb',
+                        borderWidth: 1,
+                        padding: 10,
+                        titleFont: { family: 'Inter', weight: '600', size: 12 },
+                        bodyFont: { family: 'Inter', size: 12 }
+                    }
                 },
-                x: {
-                    ticks: { color: '#6c757d' },
-                    grid: { display: false }
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { precision: 0, color: '#6b7280', font: { family: 'Inter', size: 11 } },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: {
+                        ticks: { color: '#6b7280', font: { family: 'Inter', size: 11 } },
+                        grid: { display: false }
+                    }
                 }
             }
-        }
-    });
+        });
+    })();
 
-    // ---- Universal Search ----
+    // ── Search ──
     (function () {
-        const $box = $('#q');
-        const $res = $('#search-results');
-        let activeIndex = -1;
+        const input  = document.getElementById('q');
+        const box    = document.getElementById('search-results');
+        let timer;
+
+        function iconFor(type) {
+            if (type === 'Book')       return 'bi-book';
+            if (type === 'Member')     return 'bi-person';
+            if (type === 'BookBorrow') return 'bi-journal-text';
+            return 'bi-search';
+        }
+
+        function labelFor(r) {
+            if (r.type === 'Book')
+                return `<b>${r.title || ''}</b>${r.author ? ' — ' + r.author : ''}${r.isbn ? ' <span style="color:#9ca3af">' + r.isbn + '</span>' : ''}`;
+            if (r.type === 'Member')
+                return `<b>${r.fullName || ''}</b>${r.phone ? ' — ' + r.phone : ''}`;
+            return `Borrow #${r.loanId} — <b>${r.member || ''}</b> <span style="color:#9ca3af">(${(r.loanDate||'').toString().slice(0,10)})</span>`;
+        }
 
         function render(items) {
-            $res.empty();
-            if (!items.length) {
-                $res.hide();
-                $box.attr('aria-expanded', 'false');
-                return;
-            }
-            items.forEach((r, i) => {
-                const icon = r.type === 'Book'
-                    ? 'fa-book'
-                    : r.type === 'Member'
-                        ? 'fa-user'
-                        : 'fa-file-signature';
+            box.innerHTML = '';
+            if (!items.length) { box.style.display = 'none'; return; }
 
-                const label = r.type === 'Book'
-                    ? `<b>${r.title}</b>${r.author ? ' — ' + r.author : ''}${r.isbn ? ' — ' + r.isbn : ''}${r.barcode ? ' — ' + r.barcode : ''}`
-                    : r.type === 'Member'
-                        ? `<b>${r.fullName || ''}</b>${r.phone ? ' — ' + r.phone : ''}${r.email ? ' — ' + r.email : ''}`
-                        : `Book Borrow #${r.loanId} — <b>${r.member || ''}</b> (${(r.loanDate || '').toString().substring(0, 10)} → ${(r.dueDate || '').toString().substring(0, 10)})`;
-
-                $res.append(
-                    `<div class="result" role="option" id="r-${i}" tabindex="-1" aria-selected="false"
-                           data-type="${r.type}" data-id="${r.loanId || r.bookId || r.memberId}">
-                        <i class="fas ${icon}"></i>
-                        <span>${label}</span>
-                     </div>`
-                );
+            items.forEach(r => {
+                const div = document.createElement('div');
+                div.className = 'search-result-item';
+                div.innerHTML = `<i class="bi ${iconFor(r.type)}"></i><span>${labelFor(r)}</span>`;
+                div.addEventListener('mousedown', () => {
+                    if (r.type === 'Book')       window.location = '@Url.Action("Index", "Catalogs")';
+                    if (r.type === 'Member')     window.location = '@Url.Action("Index", "Members")';
+                    if (r.type === 'BookBorrow') window.location = '@Url.Action("Index", "BookBorrows")';
+                    box.style.display = 'none';
+                });
+                box.appendChild(div);
             });
-            $res.show();
-            $box.attr('aria-expanded', 'true');
+
+            box.style.display = 'block';
         }
 
-        function move(sel) {
-            const items = $res.find('.result');
-            if (!items.length) return;
-            items.attr('aria-selected', 'false');
-            activeIndex = (sel + items.length) % items.length;
-            const $active = $(items[activeIndex]);
-            $active.attr('aria-selected', 'true');
-            $active[0].scrollIntoView({ block: 'nearest' });
-        }
-
-        $box.on('input', function () {
-            const q = $(this).val().trim();
-            if (q.length < 2) {
-                $res.hide();
-                $(this).attr('aria-expanded', 'false');
-                return;
-            }
-            $.getJSON('@Url.Action("Search", "Dashboard")', { q }, function (data) {
-                render(data.results || []);
-                activeIndex = -1;
-            });
+        input.addEventListener('input', function () {
+            clearTimeout(timer);
+            const q = this.value.trim();
+            if (q.length < 2) { box.style.display = 'none'; return; }
+            timer = setTimeout(() => {
+                fetch('@Url.Action("Search", "Dashboard")?q=' + encodeURIComponent(q))
+                    .then(r => r.json())
+                    .then(d => render(d.results || []));
+            }, 200);
         });
 
-        $box.on('keydown', function (e) {
-            if (!$res.is(':visible')) return;
-            if (e.key === 'ArrowDown') { e.preventDefault(); move(activeIndex + 1); }
-            if (e.key === 'ArrowUp')   { e.preventDefault(); move(activeIndex - 1); }
-            if (e.key === 'Enter' && activeIndex >= 0) {
-                e.preventDefault();
-                $('#r-' + activeIndex).trigger('mousedown');
-            }
-            if (e.key === 'Escape') {
-                $res.hide();
-                $box.attr('aria-expanded', 'false');
-            }
-        });
-
-        $res.on('mousedown', '.result', function () {
-            const type = $(this).data('type');
-            if (type === 'Book')       { window.location = '@Url.Action("Index", "Books")'; }
-            if (type === 'Member')     { window.location = '@Url.Action("Index", "Members")'; }
-            if (type === 'BookBorrow') { window.location = '@Url.Action("Index", "BookBorrows")'; }
-            $res.hide();
-            $box.attr('aria-expanded', 'false');
-        });
-
-        $box.on('blur', function () {
-            setTimeout(() => {
-                $res.hide();
-                $box.attr('aria-expanded', 'false');
-            }, 160);
+        input.addEventListener('blur', () => {
+            setTimeout(() => { box.style.display = 'none'; }, 160);
         });
     })();
 </script>

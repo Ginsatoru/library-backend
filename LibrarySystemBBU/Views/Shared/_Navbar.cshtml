@@ -34,67 +34,66 @@
     }
 
         .bbu-navbar .nav-icon {
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
-            background: #fff;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #6b7280;
-            font-size: .9rem;
-            text-decoration: none;
-            transition: background .15s, border-color .15s;
-            cursor: pointer;
-            position: relative;
+            width: 34px !important;
+            height: 34px !important;
+            border-radius: 8px !important;
+            border: 1px solid #e5e7eb !important;
+            background: #fff !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: #6b7280 !important;
+            font-size: .9rem !important;
+            text-decoration: none !important;
+            transition: background .15s, border-color .15s !important;
+            cursor: pointer !important;
+            position: relative !important;
+            padding: 0 !important;
+            vertical-align: middle !important;
+            flex-shrink: 0 !important;
         }
 
             .bbu-navbar .nav-icon:hover {
-                background: #f9fafb;
-                border-color: #d1d5db;
-                color: #111827;
-                text-decoration: none;
+                background: #f9fafb !important;
+                border-color: #d1d5db !important;
+                color: #111827 !important;
+                text-decoration: none !important;
             }
 
         .bbu-navbar .profile-trigger {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 10px 5px 5px;
-            border-radius: 10px;
-            border: 1px solid #e5e7eb;
-            background: #fff;
-            cursor: pointer;
-            transition: background .15s, border-color .15s;
-            text-decoration: none;
+            width: 34px !important;
+            height: 34px !important;
+            border-radius: 8px !important;
+            border: 1px solid #e5e7eb !important;
+            background: #fff !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            cursor: pointer !important;
+            transition: background .15s, border-color .15s !important;
+            text-decoration: none !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            flex-shrink: 0 !important;
+            vertical-align: middle !important;
         }
 
             .bbu-navbar .profile-trigger:hover {
-                background: #f9fafb;
-                border-color: #d1d5db;
-                text-decoration: none;
+                background: #f9fafb !important;
+                border-color: #d1d5db !important;
+                text-decoration: none !important;
             }
 
         .bbu-navbar .profile-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-
-        .bbu-navbar .profile-name {
-            font-size: .82rem;
-            font-weight: 600;
-            color: #111827;
-            white-space: nowrap;
-        }
-
-        .bbu-navbar .profile-role {
-            font-size: .72rem;
-            color: #6b7280;
-            white-space: nowrap;
+            width: 34px !important;
+            height: 34px !important;
+            max-height: 34px !important;
+            border-radius: 8px !important;
+            object-fit: cover !important;
+            display: block !important;
+            flex-shrink: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
 
     .bbu-dropdown {
@@ -223,7 +222,7 @@
     }
 
     .notif-dropdown {
-        min-width: 320px;
+        min-width: 340px;
         border: 1px solid #e5e7eb;
         border-radius: 12px;
         box-shadow: 0 8px 30px rgba(0,0,0,.12);
@@ -241,45 +240,72 @@
         border-bottom: 1px solid #f3f4f6;
     }
 
-        .notif-header span {
+    .notif-header-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .notif-header-left span {
             font-size: .85rem;
             font-weight: 600;
             color: #111827;
         }
 
-        .notif-header button {
-            font-size: .72rem;
-            color: #6b7280;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
+    .notif-unread-pill {
+        font-size: .68rem;
+        font-weight: 600;
+        background: #000080;
+        color: #fff;
+        border-radius: 99px;
+        padding: 1px 7px;
+        display: none;
+    }
+
+    .notif-header button {
+        font-size: .72rem;
+        color: #6b7280;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .notif-header button:hover {
+            color: #111827;
         }
 
-            .notif-header button:hover {
-                color: #111827;
-            }
-
     .notif-list {
-        max-height: 320px;
+        max-height: 360px;
         overflow-y: auto;
     }
 
     .notif-empty {
-        padding: 28px 14px;
+        padding: 32px 14px;
         text-align: center;
         color: #9ca3af;
         font-size: .82rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
     }
+
+        .notif-empty i {
+            font-size: 1.6rem;
+            color: #d1d5db;
+        }
 
     .notif-item {
         display: flex;
         align-items: flex-start;
         gap: 10px;
-        padding: 10px 14px;
+        padding: 11px 14px;
         border-bottom: 1px solid #f9fafb;
         transition: background .15s;
+        cursor: pointer;
+        position: relative;
     }
 
         .notif-item:last-child {
@@ -290,6 +316,21 @@
             background: #f9fafb;
         }
 
+        /* Unread state — soft left border + light bg */
+        .notif-item.is-unread {
+            background: #f5f5ff;
+            border-left: 3px solid #000080;
+        }
+
+            .notif-item.is-unread:hover {
+                background: #ebebff;
+            }
+
+        /* Read state */
+        .notif-item.is-read {
+            border-left: 3px solid transparent;
+        }
+
         .notif-item .notif-dot {
             width: 8px;
             height: 8px;
@@ -298,19 +339,45 @@
             margin-top: 5px;
         }
 
+        .notif-item .notif-body {
+            flex: 1;
+            min-width: 0;
+        }
+
         .notif-item .notif-text {
             font-size: .8rem;
             color: #374151;
-            line-height: 1.4;
-            flex: 1;
+            line-height: 1.45;
+        }
+
+        .notif-item.is-unread .notif-text {
+            color: #111827;
+            font-weight: 500;
         }
 
         .notif-item .notif-time {
             font-size: .7rem;
             color: #9ca3af;
-            white-space: nowrap;
-            margin-top: 2px;
+            margin-top: 3px;
         }
+
+    /* Unread indicator dot (top-right) */
+    .notif-unread-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #000080;
+        flex-shrink: 0;
+        margin-top: 6px;
+    }
+
+    .notif-item.is-read .notif-unread-dot {
+        visibility: hidden;
+    }
+
+    .notif-item.is-read .notif-dot {
+        display: none;
+    }
 
     .notif-dot-info {
         background: #0ea5e9;
@@ -323,12 +390,35 @@
     .notif-dot-warning {
         background: #f59e0b;
     }
+
+    .notif-footer {
+        padding: 8px 14px;
+        border-top: 1px solid #f3f4f6;
+        text-align: center;
+    }
+
+        .notif-footer button {
+            font-size: .75rem;
+            color: #6b7280;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            padding: 4px 10px;
+            border-radius: 6px;
+            transition: background .15s, color .15s;
+        }
+
+            .notif-footer button:hover {
+                background: #fee2e2;
+                color: #dc2626;
+            }
 </style>
 
 <nav class="main-header bbu-navbar">
     @if (isAuth)
     {
-        <div class="ms-auto d-flex align-items-center gap-2">
+        <div class="ms-auto d-flex gap-2" style="align-items:center !important;">
 
             <!-- Notification Bell -->
             <div class="dropdown">
@@ -340,30 +430,33 @@
 
                 <div class="dropdown-menu dropdown-menu-end notif-dropdown mt-2" id="notifDropdown">
                     <div class="notif-header">
-                        <span>Notifications</span>
-                        <button type="button" id="notifClearAll">Clear all</button>
+                        <div class="notif-header-left">
+                            <span>Notifications</span>
+                            <span class="notif-unread-pill" id="notifUnreadPill"></span>
+                        </div>
+                        <button type="button" id="notifMarkAllRead">Mark all read</button>
                     </div>
                     <div class="notif-list" id="notifList">
-                        <div class="notif-empty" id="notifEmpty">No new notifications</div>
+                        <div class="notif-empty" id="notifEmpty">
+                            <i class="bi bi-bell-slash"></i>
+                            No notifications
+                        </div>
+                    </div>
+                    <div class="notif-footer">
+                        <button type="button" id="notifClearAll">
+                            <i class="bi bi-trash3"></i> Clear all
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <a class="nav-icon" href="#" title="Help"><i class="bi bi-question-circle"></i></a>
+            <a class="nav-icon" href="/Account/Help" title="Help"><i class="bi bi-question-circle"></i></a>
             <a class="nav-icon" href="#" title="Settings"><i class="bi bi-gear"></i></a>
 
             <div class="dropdown">
-                <a class="profile-trigger" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="profile-trigger" href="#" data-bs-toggle="dropdown" aria-expanded="false" title="@fullName">
                     <img src="@avatar" onerror="this.onerror=null;this.src='@avatarFallback';"
                          class="profile-avatar" alt="Profile" />
-                    <div class="d-none d-md-block">
-                        <div class="profile-name">@fullName</div>
-                        @if (!string.IsNullOrWhiteSpace(role))
-                        {
-                            <div class="profile-role">@role</div>
-                        }
-                    </div>
-                    <i class="bi bi-chevron-down" style="font-size:.7rem;color:#9ca3af;margin-left:2px;"></i>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end bbu-dropdown mt-2">
@@ -406,91 +499,164 @@
 </nav>
 
 <script>
-    // Define notification UI logic immediately (no SignalR dependency yet)
     (function () {
-        var STORAGE_KEY = 'adminNotifications';
-        var badge    = document.getElementById('notifBadge');
-        var list     = document.getElementById('notifList');
-        var empty    = document.getElementById('notifEmpty');
-        var clearBtn = document.getElementById('notifClearAll');
+        var STORAGE_KEY = 'adminNotifications_v2';
 
-        function loadStored() {
+        var badge        = document.getElementById('notifBadge');
+        var list         = document.getElementById('notifList');
+        var empty        = document.getElementById('notifEmpty');
+        var unreadPill   = document.getElementById('notifUnreadPill');
+        var markAllBtn   = document.getElementById('notifMarkAllRead');
+        var clearBtn     = document.getElementById('notifClearAll');
+        var bellEl       = document.getElementById('notifBell');
+        var dropdownEl   = document.getElementById('notifDropdown');
+
+        // ── Storage ──────────────────────────────────────────────
+        function load() {
             try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
             catch { return []; }
         }
 
-        function saveStored(items) {
+        function save(items) {
             try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch {}
         }
 
-        function updateBadge(count) {
+        // ── Counts ───────────────────────────────────────────────
+        function unreadCount(items) {
+            return items.filter(function (n) { return !n.read; }).length;
+        }
+
+        // ── Badge ────────────────────────────────────────────────
+        function updateBadge() {
+            var items = load();
+            var count = unreadCount(items);
+
             if (count > 0) {
                 badge.textContent = count > 99 ? '99+' : count;
                 badge.style.display = 'inline-flex';
             } else {
                 badge.style.display = 'none';
             }
+
+            // Unread pill inside dropdown header
+            if (count > 0) {
+                unreadPill.textContent = count + ' new';
+                unreadPill.style.display = 'inline-block';
+            } else {
+                unreadPill.style.display = 'none';
+            }
         }
 
-        function renderItem(n) {
-            var dotClass = {
-                info:    'notif-dot-info',
-                success: 'notif-dot-success',
-                warning: 'notif-dot-warning'
-            }[n.type] || 'notif-dot-info';
+        // ── Render ───────────────────────────────────────────────
+        function dotClass(type) {
+            return { info: 'notif-dot-info', success: 'notif-dot-success', warning: 'notif-dot-warning' }[type] || 'notif-dot-info';
+        }
 
-            var item = document.createElement('div');
-            item.className = 'notif-item';
-            item.innerHTML =
-                '<span class="notif-dot ' + dotClass + '"></span>' +
-                '<div style="flex:1">' +
+        function renderItem(n, index) {
+            var div = document.createElement('div');
+            div.className = 'notif-item ' + (n.read ? 'is-read' : 'is-unread');
+            div.dataset.index = index;
+            div.innerHTML =
+                '<span class="notif-dot ' + dotClass(n.type) + '"></span>' +
+                '<div class="notif-body">' +
                     '<div class="notif-text">' + n.message + '</div>' +
                     '<div class="notif-time">' + n.time + '</div>' +
-                '</div>';
-            return item;
-        }
+                '</div>' +
+                '<span class="notif-unread-dot"></span>';
 
-        // Restore on page load
-        var stored = loadStored();
-        if (stored.length > 0) {
-            if (empty) empty.style.display = 'none';
-            stored.forEach(function (n) {
-                list.appendChild(renderItem(n));
+            // Click → mark this item as read
+            div.addEventListener('click', function () {
+                var items = load();
+                if (items[index] && !items[index].read) {
+                    items[index].read = true;
+                    save(items);
+                    div.classList.remove('is-unread');
+                    div.classList.add('is-read');
+                    updateBadge();
+                }
             });
-            updateBadge(stored.length);
-        } else {
-            updateBadge(0);
+
+            return div;
         }
 
+        function renderAll() {
+            var items = load();
+            // Clear everything except the empty placeholder
+            Array.from(list.children).forEach(function (c) {
+                if (c.id !== 'notifEmpty') list.removeChild(c);
+            });
+
+            if (items.length === 0) {
+                empty.style.display = 'flex';
+                updateBadge();
+                return;
+            }
+
+            empty.style.display = 'none';
+            items.forEach(function (n, i) {
+                list.appendChild(renderItem(n, i));
+            });
+
+            updateBadge();
+        }
+
+        // ── Mark all read when dropdown opens ────────────────────
+        // Badge clears on open; items stay visible; only cleared on "Clear all"
+        bellEl.addEventListener('click', function () {
+            // Wait for dropdown to open, then mark all as read
+            setTimeout(function () {
+                var items = load();
+                var changed = false;
+                items.forEach(function (n) {
+                    if (!n.read) { n.read = true; changed = true; }
+                });
+                if (changed) {
+                    save(items);
+                    renderAll(); // re-render with read styles
+                }
+            }, 80);
+        });
+
+        // ── Mark all read button ─────────────────────────────────
+        if (markAllBtn) {
+            markAllBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var items = load();
+                items.forEach(function (n) { n.read = true; });
+                save(items);
+                renderAll();
+            });
+        }
+
+        // ── Clear all button ─────────────────────────────────────
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                localStorage.removeItem(STORAGE_KEY);
+                renderAll();
+            });
+        }
+
+        // ── Public API ───────────────────────────────────────────
         window.addNotification = function (message, type) {
             type = type || 'info';
             var n = {
                 message: message,
                 type:    type,
+                read:    false,
                 time:    new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
 
-            var stored = loadStored();
-            stored.unshift(n);
-            saveStored(stored);
-
-            if (empty) empty.style.display = 'none';
-            list.insertBefore(renderItem(n), list.firstChild);
-            updateBadge(stored.length);
+            var items = load();
+            items.unshift(n);
+            save(items);
+            renderAll();
         };
 
-        if (clearBtn) {
-            clearBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                localStorage.removeItem(STORAGE_KEY);
-                list.innerHTML = '';
-                list.appendChild(empty);
-                empty.style.display = 'block';
-                updateBadge(0);
-            });
-        }
+        // ── Init on load ─────────────────────────────────────────
+        renderAll();
 
-        // Called by _Layout after SignalR script is loaded
+        // ── SignalR hub (called by _Layout after script loads) ───
         window._initAdminHub = function () {
             if (typeof signalR === 'undefined') {
                 console.warn('[SignalR] signalR is not defined. Hub not initialized.');
@@ -507,65 +673,45 @@
                 .build();
 
             window._adminHub.on('NewUserCreated', function (d) {
-                console.log('[SignalR] NewUserCreated', d);
                 window.addNotification(
                     '<i class="bi bi-person-plus-fill" style="color:#0ea5e9"></i> New user created: <strong>' + d.fullName + '</strong>' +
-                    (d.role ? ' (' + d.role + ')' : ''),
-                    'info'
-                );
+                    (d.role ? ' (' + d.role + ')' : ''), 'info');
             });
 
             window._adminHub.on('NewMemberRegistered', function (d) {
-                console.log('[SignalR] NewMemberRegistered', d);
                 window.addNotification(
                     '<i class="bi bi-person-check-fill" style="color:#0ea5e9"></i> New member: <strong>' + d.fullName + '</strong>' +
-                    (d.memberType ? ' (' + d.memberType + ')' : ''),
-                    'info'
-                );
+                    (d.memberType ? ' (' + d.memberType + ')' : ''), 'info');
             });
 
             window._adminHub.on('OverdueLoanAlert', function (d) {
-                console.log('[SignalR] OverdueLoanAlert', d);
                 var label = d.reminderType === 'DueToday' ? 'due today' : '1 day overdue';
                 window.addNotification(
                     '<i class="bi bi-exclamation-triangle-fill" style="color:#f59e0b"></i> <strong>' + d.memberName + '</strong> — ' + label +
-                    ' (due ' + d.dueDate + ')',
-                    'warning'
-                );
+                    ' (due ' + d.dueDate + ')', 'warning');
             });
 
             window._adminHub.on('LibraryLogCreated', function (d) {
-                console.log('[SignalR] LibraryLogCreated', d);
                 window.addNotification(
                     '<i class="bi bi-journal-text" style="color:#0ea5e9"></i> New library log: <strong>' + d.studentName + '</strong> (' +
-                    d.bookCount + ' book' + (d.bookCount !== 1 ? 's' : '') + ')',
-                    'info'
-                );
+                    d.bookCount + ' book' + (d.bookCount !== 1 ? 's' : '') + ')', 'info');
             });
 
             window._adminHub.on('LibraryLogApproved', function (d) {
-                console.log('[SignalR] LibraryLogApproved', d);
                 window.addNotification(
                     '<i class="bi bi-check-circle-fill" style="color:#22c55e"></i> Log #' + d.logId + ' approved — <strong>' + d.studentName + '</strong>',
-                    'success'
-                );
+                    'success');
             });
 
             window._adminHub.on('LibraryLogReturned', function (d) {
-                console.log('[SignalR] LibraryLogReturned', d);
                 window.addNotification(
                     '<i class="bi bi-arrow-return-left" style="color:#22c55e"></i> Log #' + d.logId + ' returned — <strong>' + d.studentName + '</strong>',
-                    'success'
-                );
+                    'success');
             });
 
             window._adminHub.start()
-                .then(function () {
-                    console.log('[SignalR] Connected, ID:', window._adminHub.connectionId);
-                })
-                .catch(function (err) {
-                    console.warn('[SignalR] Connection failed:', err);
-                });
+                .then(function () { console.log('[SignalR] Connected, ID:', window._adminHub.connectionId); })
+                .catch(function (err) { console.warn('[SignalR] Connection failed:', err); });
         };
     })();
 </script>

@@ -64,6 +64,12 @@ namespace LibrarySystemBBU.Controllers
             return RedirectToLocal(returnUrl);
         }
 
+        //===========================
+        //Help menu
+        //===========================
+        [HttpGet]
+        public IActionResult Help() => View();
+
         // ==========================
         // MVC: REGISTER — DISABLED
         // Admin accounts are created by existing admins only via the Users panel.
