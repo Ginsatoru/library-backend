@@ -945,23 +945,43 @@ namespace LibrarySystemBBU.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var catalog = await _context.Catalogs.Include(c => c.Books).FirstOrDefaultAsync(c => c.CatalogId == id);
-            if (catalog != null)
-            {
-                if (catalog.Books.Any())
-                {
-                    var bookIds = catalog.Books.Select(b => b.BookId).ToList();
-                    var orphanLogItems = await _context.Set<LibraryLogItem>()
-                        .Where(li => bookIds.Contains(li.BookId))
-                        .ToListAsync();
-                    if (orphanLogItems.Any())
-                        _context.Set<LibraryLogItem>().RemoveRange(orphanLogItems);
+            var catalog = await _context.Catalogs
+                .Include(c => c.Books)
+                .FirstOrDefaultAsync(c => c.CatalogId == id);
 
-                    _context.Books.RemoveRange(catalog.Books);
+            if (catalog == null) return NotFound();
+
+            var bookIds = catalog.Books.Select(b => b.BookId).ToList();
+
+            if (bookIds.Any())
+            {
+                bool hasAdjustments = await _context.AdjustmentDetails
+                    .AnyAsync(ad => ad.BookId != null && bookIds.Contains(ad.BookId.Value));
+
+                bool hasBorrows = await _context.BookBorrows
+    .AnyAsync(bb => bb.LoanBookDetails.Any(d => bookIds.Contains(d.BookId)));
+
+                if (hasAdjustments || hasBorrows)
+                {
+                    TempData["Error"] = "This catalog cannot be deleted because one or more of its books are linked to adjustment or borrow records.";
+                    return RedirectToAction(nameof(Delete), new { id });
                 }
-                _context.Catalogs.Remove(catalog);
-                await _context.SaveChangesAsync();
+
+                // Safe to delete — clean up orphan log items first
+                var orphanLogItems = await _context.Set<LibraryLogItem>()
+                    .Where(li => bookIds.Contains(li.BookId))
+                    .ToListAsync();
+
+                if (orphanLogItems.Any())
+                    _context.Set<LibraryLogItem>().RemoveRange(orphanLogItems);
+
+                _context.Books.RemoveRange(catalog.Books);
             }
+
+            _context.Catalogs.Remove(catalog);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Catalog deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
 

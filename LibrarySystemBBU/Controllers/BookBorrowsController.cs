@@ -472,6 +472,8 @@ namespace LibrarySystemBBU.Controllers
         {
             var loan = await _context.BookBorrows
                 .Include(b => b.LoanBookDetails)
+                    .ThenInclude(d => d.Book)
+                        .ThenInclude(b => b.Catalog)
                 .Include(b => b.BookReturns)
                 .Include(b => b.LibraryMember)
                 .FirstOrDefaultAsync(x => x.LoanId == id);

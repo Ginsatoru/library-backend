@@ -31,8 +31,6 @@ namespace LibrarySystemBBU.Models
         [Column(TypeName = "decimal(10, 2)")]
         public decimal BorrowingFee { get; set; } = 0.00m; 
 
-        public Book? Book { get; set; } 
-
         [Required(ErrorMessage = "Payment status is required.")]
         public bool IsPaid { get; set; } = false; 
 

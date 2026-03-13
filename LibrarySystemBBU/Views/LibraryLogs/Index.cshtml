@@ -220,7 +220,7 @@
         background: #fff;
         border: 1px solid #e5e7eb;
         border-radius: 14px;
-        padding: 1.25rem;
+        padding: 1rem 1.25rem;
         margin-bottom: 1rem;
     }
 
@@ -284,7 +284,7 @@
         gap: 12px;
         align-items: flex-end;
         flex-wrap: wrap;
-        margin-top: 1rem;
+        margin-top: 0;
     }
 
     .logs-filter-group {
@@ -475,6 +475,17 @@
             <div class="logs-filter-group">
                 <div class="logs-filter-label">To</div>
                 <input name="to" value="@to" type="date" class="logs-filter-input" />
+            </div>
+            <div class="logs-filter-group" style="align-self: flex-end;">
+                <button type="submit" class="logs-btn logs-btn-primary">
+                    <i class="bi bi-funnel"></i> Apply
+                </button>
+                @if (!string.IsNullOrEmpty(from) || !string.IsNullOrEmpty(to))
+                {
+                    <a asp-action="Index" asp-route-status="@selStatus" class="logs-btn" style="margin-left:6px;">
+                        <i class="bi bi-x-circle"></i> Clear
+                    </a>
+                }
             </div>
         </form>
     </div>

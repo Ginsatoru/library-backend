@@ -248,6 +248,21 @@
 <div class="cat-page">
     <div class="cat-page-title">Delete Catalog</div>
 
+    @if (TempData["Error"] != null)
+    {
+        <div class="cat-alert" style="background:#fef2f2; border-color:#fecaca; color:#7f1d1d;">
+            <i class="bi bi-x-octagon-fill" style="color:#ef4444;"></i>
+            <span>@TempData["Error"]</span>
+        </div>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <div class="cat-alert" style="background:#f0fdf4; border-color:#bbf7d0; color:#14532d;">
+            <i class="bi bi-check-circle-fill" style="color:#22c55e;"></i>
+            <span>@TempData["Success"]</span>
+        </div>
+    }
+
     <div class="cat-alert">
         <i class="bi bi-exclamation-triangle-fill"></i>
         <span>Are you sure you want to delete this catalog? <strong>All @booksCount book(s) under this catalog will also be deleted.</strong> This action cannot be undone.</span>
