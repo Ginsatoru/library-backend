@@ -180,11 +180,11 @@
         <table class="finance-table">
             <tr>
                 <td>Borrowing Fee</td>
-                <td>@Model.BorrowingFee.ToString("0.00") ៛</td>
+                <td>$@Model.BorrowingFee.ToString("0.00")</td>
             </tr>
             <tr>
                 <td>Deposit</td>
-                <td>@(Model.DepositAmount?.ToString("0.00") ?? "0.00") ៛</td>
+                <td>$@(Model.DepositAmount?.ToString("0.00") ?? "0.00")</td>
             </tr>
         </table>
 

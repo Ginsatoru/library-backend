@@ -191,11 +191,11 @@
         <table class="finance-table">
             <tr>
                 <td>Borrowing Fee</td>
-                <td>@Model.BorrowingFee.ToString("0.00") ៛</td>
+                <td>$@Model.BorrowingFee.ToString("0.00")</td>
             </tr>
             <tr>
                 <td>Deposit</td>
-                <td>@(Model.DepositAmount?.ToString("0.00") ?? "0.00") ៛</td>
+                <td>$@(Model.DepositAmount?.ToString("0.00") ?? "0.00")</td>
             </tr>
             <tr>
                 <td>Late Days</td>
@@ -203,19 +203,19 @@
             </tr>
             <tr>
                 <td>Fine Amount</td>
-                <td>@Model.FineAmount.ToString("0.00") ៛</td>
+                <td>$@Model.FineAmount.ToString("0.00")</td>
             </tr>
             <tr>
                 <td>Extra Charge</td>
-                <td>@Model.ExtraCharge.ToString("0.00") ៛</td>
+                <td>$@Model.ExtraCharge.ToString("0.00")</td>
             </tr>
             <tr>
                 <td>Total Paid (Fine + Extra)</td>
-                <td>@Model.AmountPaid.ToString("0.00") ៛</td>
+                <td>$@Model.AmountPaid.ToString("0.00")</td>
             </tr>
             <tr>
                 <td style="color:#000080;">Refund Amount</td>
-                <td style="color:#000080;">@(Model.RefundAmount?.ToString("0.00") ?? "0.00") ៛</td>
+                <td style="color:#000080;">$@(Model.RefundAmount?.ToString("0.00") ?? "0.00")</td>
             </tr>
         </table>
 

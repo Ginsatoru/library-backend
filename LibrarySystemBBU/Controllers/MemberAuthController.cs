@@ -41,21 +41,16 @@ namespace LibrarySystemBBU.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> AdminContact()
         {
-            var admin = await _context.Users
-                .OrderBy(u => u.Created)
-                .Select(u => new
-                {
-                    fullName = (u.FirstName + " " + u.LastName).Trim(),
-                    email = u.Email,
-                    phone = u.Phone,
-                    address = u.Address
-                })
-                .FirstOrDefaultAsync();
+            var settings = await _context.LibrarySettings.FirstOrDefaultAsync();
 
-            if (admin == null)
-                return NotFound(new { success = false, message = "No admin found." });
-
-            return Json(admin);
+            return Json(new
+            {
+                address = settings?.Address ?? "Siem Reap, Cambodia",
+                email = settings?.Email ?? "info@bbusr.library.edu.com.kh",
+                phone = settings?.Phone ?? "087968850",
+                weekdayHours = settings?.WeekdayHours ?? "Mon-Fri: 8AM - 8:30PM",
+                weekendHours = settings?.WeekendHours ?? "Sat-Sun: 8AM - 5PM",
+            });
         }
 
         // ----------------------------------------

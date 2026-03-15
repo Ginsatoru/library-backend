@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LibrarySystemBBU")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b14c5794e8145f9c6cc0a187b0a535415b5f840b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae270ced370de0e6fb5a1e7008cc66e645a0cf49")]
 [assembly: System.Reflection.AssemblyProductAttribute("LibrarySystemBBU")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LibrarySystemBBU")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

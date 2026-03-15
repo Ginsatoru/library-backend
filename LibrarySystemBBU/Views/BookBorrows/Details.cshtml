@@ -302,15 +302,13 @@
         </div>
         <div class="borrow-info-grid">
             <div class="borrow-info-item">
-                <span class="borrow-info-label">Member</span>
-                <span class="borrow-info-value">
-                    @if (Model.LibraryMember != null)
-                    {
-                        <a asp-controller="Members" asp-action="Details" asp-route-id="@Model.MemberId" style="color:#000080; text-decoration:none;">
-                            @Model.LibraryMember.FullName
-                        </a>
-                    }
-                </span>
+                <span class="borrow-info-label">Borrowing Fee</span>
+                <span class="borrow-info-value">$@Model.BorrowingFee.ToString("0.00")</span>
+            </div>
+            ...
+            <div class="borrow-info-item">
+                <span class="borrow-info-label">Deposit</span>
+                <span class="borrow-info-value">$@(Model.DepositAmount?.ToString("0.00") ?? "-")</span>
             </div>
             <div class="borrow-info-item">
                 <span class="borrow-info-label">Borrow Date</span>
@@ -432,10 +430,10 @@
                             <tr>
                                 <td>@r.ReturnDate.ToString("yyyy-MM-dd")</td>
                                 <td>@r.LateDays</td>
-                                <td>@r.FineAmount.ToString("0.00") ៛</td>
-                                <td>@r.ExtraCharge.ToString("0.00") ៛</td>
-                                <td>@r.AmountPaid.ToString("0.00") ៛</td>
-                                <td>@(r.RefundAmount?.ToString("0.00") ?? "-") ៛</td>
+                                <td>$@r.FineAmount.ToString("0.00")</td>
+                                <td>$@r.ExtraCharge.ToString("0.00")</td>
+                                <td>$@r.AmountPaid.ToString("0.00")</td>
+                                <td>$@(r.RefundAmount?.ToString("0.00") ?? "-")</td>
                                 <td>@r.ConditionOnReturn</td>
                                 <td>@r.Notes</td>
                             </tr>

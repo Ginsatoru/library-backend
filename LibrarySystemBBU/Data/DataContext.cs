@@ -457,6 +457,7 @@ namespace LibrarySystemBBU.Data
         public DbSet<CatalogPdfView> CatalogPdfViews { get; set; } = null!;
         public DbSet<PurchaseDetail> PurchaseDetails { get; set; } = null!;
         public DbSet<LibraryLog> LibraryLogs { get; set; } = null!;
+        public DbSet<LibrarySettings> LibrarySettings { get; set; } = null!;
         public DbSet<LibraryLogItem> LibraryLogItems { get; set; } = null!;
         public DbSet<History> Histories { get; set; } = null!;
         public DbSet<MemberWishlist> MemberWishlists { get; set; } = null!;

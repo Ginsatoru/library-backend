@@ -1,0 +1,537 @@
+﻿@model LibrarySystemBBU.Models.LibrarySettings
+@{
+    ViewData["Title"] = "Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var backupFiles = ViewBag.BackupFiles as List<System.IO.FileInfo> ?? new();
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+<style>
+    .dash-page {
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+        max-width: 100%;
+    }
+
+    .dash-page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .dash-page-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #000080;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+    .dash-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .dash-card-head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border-bottom: 1px solid #e5e7eb;
+        background: #f9fafb;
+        min-height: 52px;
+    }
+
+    .dash-card-title {
+        font-size: .9rem;
+        font-weight: 600;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+        .dash-card-title i {
+            color: #000080;
+        }
+
+    .dash-card-body {
+        padding: 20px;
+    }
+
+    .dash-form-group {
+        margin-bottom: 1rem;
+    }
+
+        .dash-form-group label {
+            display: block;
+            font-size: .78rem;
+            font-weight: 500;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            margin-bottom: 6px;
+        }
+
+        .dash-form-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: .85rem;
+            font-family: 'Inter', sans-serif;
+            color: #111827;
+            background: #fff;
+            outline: none;
+            transition: border-color .15s;
+        }
+
+            .dash-form-group input:focus {
+                border-color: #000080;
+            }
+
+            .dash-form-group input::placeholder {
+                color: #9ca3af;
+            }
+
+    .dash-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #374151;
+        text-decoration: none !important;
+        transition: background .15s, border-color .15s;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .dash-btn:hover {
+            background: #f9fafb;
+            color: #111827;
+            text-decoration: none !important;
+        }
+
+    .dash-btn-primary {
+        background: #000080;
+        color: #fff !important;
+        border-color: #000080;
+    }
+
+        .dash-btn-primary:hover {
+            background: #00006a;
+            color: #fff !important;
+            border-color: #00006a;
+        }
+
+    .dash-btn-success {
+        background: #16a34a;
+        color: #fff !important;
+        border-color: #16a34a;
+    }
+
+        .dash-btn-success:hover {
+            background: #15803d;
+            color: #fff !important;
+        }
+
+    .dash-btn-warning {
+        background: #f59e0b;
+        color: #fff !important;
+        border-color: #f59e0b;
+        padding: 4px 10px;
+        font-size: .75rem;
+    }
+
+        .dash-btn-warning:hover {
+            background: #d97706;
+            color: #fff !important;
+        }
+
+    .dash-btn-danger {
+        background: #ef4444;
+        color: #fff !important;
+        border-color: #ef4444;
+        padding: 4px 10px;
+        font-size: .75rem;
+    }
+
+        .dash-btn-danger:hover {
+            background: #dc2626;
+            color: #fff !important;
+        }
+
+    .dash-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .82rem;
+        font-family: 'Inter', sans-serif;
+    }
+
+        .dash-table thead tr {
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+        }
+
+        .dash-table th {
+            padding: 9px 14px;
+            font-size: .73rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .dash-table td {
+            padding: 10px 14px;
+            color: #374151;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: middle;
+        }
+
+        .dash-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .dash-table tbody tr:hover td {
+            background: #f9fafb;
+        }
+
+    .empty-state {
+        padding: 32px 20px;
+        text-align: center;
+        color: #9ca3af;
+        font-size: .83rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .empty-state i {
+            font-size: 1.8rem;
+            color: #d1d5db;
+        }
+
+    .alert-bbu {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-size: .83rem;
+        font-family: 'Inter', sans-serif;
+        margin-bottom: 1.25rem;
+        border: 1px solid transparent;
+    }
+
+    .alert-success-bbu {
+        background: #f0fdf4;
+        border-color: #bbf7d0;
+        color: #166534;
+    }
+
+    .alert-danger-bbu {
+        background: #fef2f2;
+        border-color: #fecaca;
+        color: #991b1b;
+    }
+
+    /* ── Modal ── */
+    .bbu-modal-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.45);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bbu-modal {
+        background: #fff;
+        border-radius: 14px;
+        padding: 28px 24px;
+        max-width: 400px;
+        width: 90%;
+        font-family: 'Inter', sans-serif;
+        box-shadow: 0 20px 60px rgba(0,0,0,.15);
+    }
+
+    .bbu-modal-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .bbu-modal-file {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 10px 14px;
+        margin-bottom: 18px;
+    }
+
+    .bbu-modal-file-label {
+        font-size: .73rem;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        margin-bottom: 3px;
+    }
+
+    .bbu-modal-file-name {
+        font-size: .83rem;
+        font-weight: 600;
+        color: #111827;
+        word-break: break-all;
+    }
+</style>
+
+<div class="dash-page">
+
+    <div class="dash-page-title">Settings</div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert-bbu alert-success-bbu">
+            <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert-bbu alert-danger-bbu">
+            <i class="bi bi-exclamation-circle-fill"></i> @TempData["Error"]
+        </div>
+    }
+
+    <div class="row g-4">
+
+        <!-- Contact & Hours -->
+        <div class="col-md-6">
+            <div class="dash-card">
+                <div class="dash-card-head">
+                    <div class="dash-card-title">
+                        <i class="bi bi-geo-alt"></i> Contact & Hours
+                    </div>
+                </div>
+                <div class="dash-card-body">
+                    <form asp-action="" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="dash-form-group">
+                            <label asp-for="Address">Address</label>
+                            <input asp-for="Address" placeholder="Siem Reap, Cambodia" />
+                        </div>
+                        <div class="dash-form-group">
+                            <label asp-for="Email">Email</label>
+                            <input asp-for="Email" placeholder="info@bbusr.library.edu.com.kh" />
+                        </div>
+                        <div class="dash-form-group">
+                            <label asp-for="Phone">Phone</label>
+                            <input asp-for="Phone" placeholder="087968850" />
+                        </div>
+                        <div class="dash-form-group">
+                            <label asp-for="WeekdayHours">Weekday Hours</label>
+                            <input asp-for="WeekdayHours" placeholder="Mon-Fri: 8AM - 8:30PM" />
+                        </div>
+                        <div class="dash-form-group">
+                            <label asp-for="WeekendHours">Weekend Hours</label>
+                            <input asp-for="WeekendHours" placeholder="Sat-Sun: 8AM - 5PM" />
+                        </div>
+                        <button type="submit" class="dash-btn dash-btn-primary mt-1">
+                            <i class="bi bi-save"></i> Save Settings
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Backup & Restore -->
+        <div class="col-md-6">
+            <div class="dash-card">
+                <div class="dash-card-head">
+                    <div class="dash-card-title">
+                        <i class="bi bi-database"></i> Database Backup & Restore
+                    </div>
+                </div>
+                <div class="dash-card-body">
+                    <p style="font-size:.8rem;color:#6b7280;margin-bottom:14px;">
+                        Backups saved to <code>C:\LibraryBackups\</code>
+                    </p>
+                    <form asp-action="Backup" method="post" class="mb-4">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="dash-btn dash-btn-success">
+                            <i class="bi bi-cloud-arrow-down"></i> Create Backup Now
+                        </button>
+                    </form>
+
+                    @if (!backupFiles.Any())
+                    {
+                        <div class="empty-state">
+                            <i class="bi bi-database-slash"></i>
+                            No backups found.
+                        </div>
+                    }
+                    else
+                    {
+                        <table class="dash-table">
+                            <thead>
+                                <tr>
+                                    <th>File</th>
+                                    <th>Size</th>
+                                    <th>Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var file in backupFiles)
+                                {
+                                    <tr>
+                                        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="@file.Name">
+                                            @file.Name
+                                        </td>
+                                        <td>@((file.Length / 1024.0 / 1024.0).ToString("0.00")) MB</td>
+                                        <td>@file.CreationTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td>
+                                            <div style="display:flex;gap:6px;">
+                                                <button type="button"
+                                                        class="dash-btn dash-btn-warning"
+                                                        onclick="confirmRestore('@file.Name')">
+                                                    <i class="bi bi-arrow-counterclockwise"></i>
+                                                </button>
+                                                <button type="button"
+                                                        class="dash-btn dash-btn-danger"
+                                                        onclick="confirmDelete('@file.Name')">
+                                                    <i class="bi bi-trash3"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Restore Modal -->
+<div id="restoreModal" class="bbu-modal-backdrop">
+    <div class="bbu-modal">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div class="bbu-modal-icon" style="background:#fef3c7;">
+                <i class="bi bi-exclamation-triangle-fill" style="color:#d97706;font-size:1.1rem;"></i>
+            </div>
+            <div>
+                <div style="font-size:.95rem;font-weight:700;color:#111827;">Restore Database?</div>
+                <div style="font-size:.78rem;color:#6b7280;margin-top:2px;">This action cannot be undone.</div>
+            </div>
+        </div>
+        <div class="bbu-modal-file">
+            <div class="bbu-modal-file-label">Selected File</div>
+            <div id="restoreFileName" class="bbu-modal-file-name"></div>
+        </div>
+        <p style="font-size:.82rem;color:#374151;margin-bottom:20px;line-height:1.6;">
+            The current database will be <strong>overwritten</strong> with this backup.
+            All changes made after this backup was created will be lost.
+        </p>
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+            <button onclick="closeRestoreModal()" class="dash-btn">Cancel</button>
+            <form id="restoreForm" asp-action="Restore" method="post" style="margin:0;">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="restoreFileInput" name="fileName" value="" />
+                <button type="submit" class="dash-btn dash-btn-warning" style="padding:7px 14px;font-size:.82rem;">
+                    <i class="bi bi-arrow-counterclockwise"></i> Yes, Restore
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div id="deleteModal" class="bbu-modal-backdrop">
+    <div class="bbu-modal">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div class="bbu-modal-icon" style="background:#fee2e2;">
+                <i class="bi bi-trash3-fill" style="color:#dc2626;font-size:1.1rem;"></i>
+            </div>
+            <div>
+                <div style="font-size:.95rem;font-weight:700;color:#111827;">Delete Backup?</div>
+                <div style="font-size:.78rem;color:#6b7280;margin-top:2px;">This file will be permanently removed.</div>
+            </div>
+        </div>
+        <div class="bbu-modal-file">
+            <div class="bbu-modal-file-label">Selected File</div>
+            <div id="deleteFileName" class="bbu-modal-file-name"></div>
+        </div>
+        <p style="font-size:.82rem;color:#374151;margin-bottom:20px;line-height:1.6;">
+            This backup file will be <strong>permanently deleted</strong> and cannot be recovered.
+        </p>
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+            <button onclick="closeDeleteModal()" class="dash-btn">Cancel</button>
+            <form id="deleteForm" asp-action="DeleteBackup" method="post" style="margin:0;">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="deleteFileInput" name="fileName" value="" />
+                <button type="submit" class="dash-btn dash-btn-danger" style="padding:7px 14px;font-size:.82rem;">
+                    <i class="bi bi-trash3"></i> Yes, Delete
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmRestore(fileName) {
+        document.getElementById('restoreFileName').textContent = fileName;
+        document.getElementById('restoreFileInput').value = fileName;
+        document.getElementById('restoreModal').style.display = 'flex';
+    }
+
+    function closeRestoreModal() {
+        document.getElementById('restoreModal').style.display = 'none';
+    }
+
+    function confirmDelete(fileName) {
+        document.getElementById('deleteFileName').textContent = fileName;
+        document.getElementById('deleteFileInput').value = fileName;
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    document.getElementById('restoreModal').addEventListener('click', function (e) {
+        if (e.target === this) closeRestoreModal();
+    });
+
+    document.getElementById('deleteModal').addEventListener('click', function (e) {
+        if (e.target === this) closeDeleteModal();
+    });
+</script>

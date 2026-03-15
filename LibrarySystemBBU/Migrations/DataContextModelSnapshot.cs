@@ -171,9 +171,6 @@ namespace LibrarySystemBBU.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LoanId"));
 
-                    b.Property<int?>("BookId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("BorrowingFee")
                         .HasColumnType("decimal(10, 2)");
 
@@ -200,8 +197,6 @@ namespace LibrarySystemBBU.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("LoanId");
-
-                    b.HasIndex("BookId");
 
                     b.HasIndex("MemberId");
 
@@ -564,6 +559,39 @@ namespace LibrarySystemBBU.Migrations
                         .IsUnique();
 
                     b.ToTable("LibraryLogItems");
+                });
+
+            modelBuilder.Entity("LibrarySystemBBU.Models.LibrarySettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("WeekdayHours")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("WeekendHours")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LibrarySettings");
                 });
 
             modelBuilder.Entity("LibrarySystemBBU.Models.LoanReminder", b =>
@@ -1057,17 +1085,11 @@ namespace LibrarySystemBBU.Migrations
 
             modelBuilder.Entity("LibrarySystemBBU.Models.BookBorrow", b =>
                 {
-                    b.HasOne("LibrarySystemBBU.Models.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId");
-
                     b.HasOne("LibrarySystemBBU.Models.Member", "LibraryMember")
                         .WithMany("BookLoans")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Book");
 
                     b.Navigation("LibraryMember");
                 });
