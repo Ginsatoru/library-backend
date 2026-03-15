@@ -528,13 +528,13 @@
             syncPills();
         }
 
-        function removeBookRow(btn) {
+                function removeBookRow(btn) {
             btn.closest('tr').remove();
             document.querySelectorAll('#booksTable tbody tr').forEach((row, i) => {
                 row.querySelectorAll('input, select').forEach(inp => {
                     const n = inp.getAttribute('name');
                     if (n?.startsWith('Books[')) {
-                        inp.setAttribute('name', `Books[${i}].${n.substring(n.indexOf('.]') + 2)}`);
+                        inp.setAttribute('name', `Books[${i}].${n.substring(n.indexOf('].') + 2)}`);
                     }
                 });
             });

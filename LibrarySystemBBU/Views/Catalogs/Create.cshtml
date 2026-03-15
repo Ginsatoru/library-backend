@@ -425,10 +425,15 @@
             syncPills();
         }
 
-        function autoCount() {
+                function autoCount() {
             const rows = document.querySelectorAll('#booksTable tbody tr');
             let avail  = 0;
-            rows.forEach(r => { if ((r.querySelector('input[name*=".Status"]')?.value||'').trim().toLowerCase()==='available') avail++; });
+            rows.forEach(r => {
+                const selectEl = r.querySelector('select[name*=".Status"]');
+                const inputEl  = r.querySelector('input[name*=".Status"]');
+                const status   = (selectEl?.value || inputEl?.value || '').trim().toLowerCase();
+                if (status === 'available') avail++;
+            });
             document.getElementById('TotalCopies').value     = rows.length;
             document.getElementById('AvailableCopies').value = avail;
             syncPills();
