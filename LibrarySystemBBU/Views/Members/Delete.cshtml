@@ -358,7 +358,7 @@
                 }
             </div>
             <div class="mem-stat-pills">
-                <span class="mem-stat-pill"><i class="bi bi-book"></i> Total Loans: <strong>@totalLoans</strong></span>
+                <span class="mem-stat-pill"><i class="bi bi-book"></i> Total Borrows: <strong>@totalLoans</strong></span>
                 <span class="mem-stat-pill @(hasActive ? "danger" : "")">
                     <i class="bi bi-hourglass-split"></i> Active: <strong>@activeLoans</strong>
                 </span>
@@ -371,7 +371,7 @@
                 <div class="mem-alert mem-alert-danger">
                     <i class="bi bi-exclamation-triangle-fill" style="flex-shrink:0;margin-top:2px;"></i>
                     <div>
-                        <strong>Cannot delete while there are active (unreturned) loans.</strong><br />
+                        <strong>Cannot delete while there are active (unreturned) borrows.</strong><br />
                         Please mark all borrowed books as returned before deleting this member.
                     </div>
                 </div>
@@ -443,13 +443,13 @@
 
             @if (Model.BookLoans?.Any() ?? false)
             {
-                <div class="mem-section-divider" style="margin-top:20px;">Recent Loans</div>
+                <div class="mem-section-divider" style="margin-top:20px;">Recent Borrows</div>
                 <div class="mem-loans-table-wrap">
                     <table class="mem-loans-table">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Loan Date</th>
+                                <th>Borrow Date</th>
                                 <th>Due</th>
                                 <th>Status</th>
                             </tr>
@@ -489,7 +489,7 @@
                 <button type="submit"
                         class="mem-btn mem-btn-danger"
                         @(hasActive ? "disabled" : "")
-                        title="@(hasActive ? "Cannot delete: active loans exist" : "Delete this member")">
+                        title="@(hasActive ? "Cannot delete: active borrows exist" : "Delete this member")">
                     <i class="bi bi-trash3"></i> Delete Member
                 </button>
             </form>

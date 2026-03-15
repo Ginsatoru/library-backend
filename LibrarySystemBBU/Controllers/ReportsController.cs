@@ -55,7 +55,7 @@ namespace LibrarySystemBBU.Controllers
             sb.AppendLine("<table border='1' cellspacing='0' cellpadding='4'>");
             sb.AppendLine(
                 "<tr>" +
-                "<th>Loan Date</th><th>Due</th><th>Return</th>" +
+                "<th>Borrow Date</th><th>Due</th><th>Return</th>" +
                 "<th>Member</th><th>Type</th><th>Catalog Title</th><th>Barcode</th>" +
                 "<th>Deposit ($)</th><th>Fine Amount ($)</th><th>Extra Charge ($)</th>" +
                 "</tr>");
@@ -90,7 +90,7 @@ namespace LibrarySystemBBU.Controllers
             sb.AppendLine("<table border='1' cellspacing='0' cellpadding='4'>");
             sb.AppendLine(
                 "<tr>" +
-                "<th>Return Date</th><th>Loan Date</th><th>Due</th>" +
+                "<th>Return Date</th><th>Borrow Date</th><th>Due</th>" +
                 "<th>Member</th><th>Type</th><th>Catalog Title</th><th>Barcode</th>" +
                 "<th>Fine Amount ($)</th><th>Extra Charge ($)</th>" +
                 "</tr>");

@@ -452,7 +452,7 @@ namespace LibrarySystemBBU.Controllers
                     Quantity = model.LoanBookDetails.Count,
                     BookTitle = titles.Count > 0 ? string.Join(", ", titles) : null,
                     LocationType = "Home",
-                    Notes = "Created home loan (MVC form)."
+                    Notes = "Created home borrow (MVC form)."
                 });
 
                 await tx.CommitAsync();
