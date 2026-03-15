@@ -688,7 +688,7 @@
                 btn.addEventListener('click', function() {
                     const r = this.closest('tr');
                     Swal.fire({
-                        title: `Delete Loan #${r.dataset.loanid}?`,
+                        title: `Delete Borrow #${r.dataset.loanid}?`,
                         text: 'This will permanently remove the borrow and related details.',
                         icon: 'warning',
                         showCancelButton: true,
@@ -727,7 +727,7 @@
                     const deposit = parseFloat(depositStr === "-" ? "0" : depositStr) || 0;
 
                     Swal.fire({
-                        title: `Return Loan #${r.dataset.loanid}`,
+                        title: `Return Borrow #${r.dataset.loanid}`,
                         html: `
                             <div class="borrow-dialog">
                                 <div>
@@ -850,7 +850,7 @@
                 btn.addEventListener('click', function() {
                     const r = this.closest('tr');
                     Swal.fire({
-                        title: `UnReturn Loan #${r.dataset.loanid}?`,
+                        title: `UnReturn Borrow #${r.dataset.loanid}?`,
                         text: 'This will mark the borrow as Not Returned and remove return records.',
                         icon: 'warning',
                         showCancelButton: true,
@@ -867,7 +867,7 @@
                             rsp.ok
                                 ? Swal.fire({
                                     title: 'Done',
-                                    text: 'Loan is now Not Returned.',
+                                    text: 'Borrow is now Not Returned.',
                                     icon: 'success',
                                     ...swalTheme
                                 }).then(() => location.reload())

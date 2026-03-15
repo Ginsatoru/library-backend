@@ -381,7 +381,7 @@ namespace LibrarySystemBBU.Controllers
                     .AnyAsync(x => x.MemberId == model.MemberId && !x.IsReturned);
 
                 if (hasActive)
-                    ModelState.AddModelError(string.Empty, "This member already has an active loan. Please return it first.");
+                    ModelState.AddModelError(string.Empty, "This member already has an active borrow. Please return it first.");
             }
 
             if (validItems.Count == 0)

@@ -3,7 +3,7 @@
 @using System.Text.Json
 
 @{
-    ViewData["Title"] = "Create Loan";
+    ViewData["Title"] = "Create Borrow";
     var today = DateTime.Today.ToString("yyyy-MM-dd");
     var next7 = DateTime.Today.AddDays(7).ToString("yyyy-MM-dd");
 
@@ -672,7 +672,7 @@
                 });
 
                 Swal.fire({
-                    title: 'Create Loan?',
+                    title: 'Create Borrow?',
                     html: `<div style="text-align:left;">
                         <div><b>Items:</b> ${document.getElementById('sumItems').innerText}</div>
                         <div><b>Fine Total:</b> ${document.getElementById('sumFine').innerText}</div>

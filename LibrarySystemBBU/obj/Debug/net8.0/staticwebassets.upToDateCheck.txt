@@ -214,6 +214,7 @@ wwwroot\uploads\images\9208b196964c446da560b4f89fec42e7.jpg
 wwwroot\uploads\images\9c7aa808ae6749ee9884312a095b492b.jpg
 wwwroot\uploads\images\a4c6d7c7ea494271abf383c201abf1ac.png
 wwwroot\uploads\images\c732c5a446f145e0bb1b6821d8d7905f.jpg
+wwwroot\uploads\images\de2f3ce35d8f4e648dc0a93e6dd82b0e.png
 wwwroot\uploads\images\eb825f19fd8347eb949023c696b622fb.webp
 wwwroot\uploads\images\eff5c714f8dc4b1c8d704693b3e5349e.png
 wwwroot\uploads\images\f4c926c3302c4812b90636dc336914c9.jpg
@@ -238,6 +239,7 @@ wwwroot\uploads\pdfs\1f6bf411ccc84da1ba6787c5c47dd184.pdf
 wwwroot\uploads\pdfs\472d5ff471dd4ccaaccc97bc638e8d38.pdf
 wwwroot\uploads\pdfs\4a1901412f4e49deae8e07cab7c682a9.pdf
 wwwroot\uploads\pdfs\62ff944c9a104f10be97ba10d45d7208.pdf
+wwwroot\uploads\pdfs\67ad52dce3d04589b4759fae5ed984eb.pdf
 wwwroot\uploads\pdfs\8a1f856da18043f6bbb498601198aec2.pdf
 wwwroot\uploads\pdfs\8a4515916d8b49aa80415add574d45d9.pdf
 wwwroot\uploads\pdfs\98e8f4d601f64c8db9e31e836afdc9d5.pdf
